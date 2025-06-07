@@ -6,6 +6,9 @@ function compile(src: string) {
   const tokens: Token[] = [];
   let prevScr = src;
   while (src) {
+    if (src.length === 0) {
+      break;
+    }
     const space = tokenizer.space(src);
     if (space) {
       tokens.push(space);
@@ -15,7 +18,7 @@ function compile(src: string) {
     const list = tokenizer.list(src);
     if (list) {
       tokens.push(list);
-      src = src.slice(list.raw.length);
+      src = src.slice(list.noTrimEndRaw.length);
       continue;
     }
     const fence = tokenizer.fence(src);

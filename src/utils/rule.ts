@@ -52,13 +52,16 @@ const list = edit(/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/)
  */
 const fences = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/;
 // 一个块
-const _segment = /^([^\n]+(?:\n(?!fences|list|hr| +\n)[^\n]+)*)/;
+// const _segment = /^([^\n]+(?:\n(?!fences|list|hr| +\n)[^\n]+)*)/;
+const _segment = /^([^\n]+(?:\n(?!fences|list|hr| +\n|\n)[^\n]+)*\n?)/;
 
 const segment = edit(_segment)
   .replace(/fences/, fences)
   .replace(/list/, list)
   .replace(/hr/, hr)
   .getRegex();
+
+console.log(segment.source);
 
 const blockNormal = {
   newline,

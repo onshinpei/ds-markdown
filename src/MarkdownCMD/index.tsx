@@ -281,7 +281,10 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     startTyped(true);
   };
 
-  const lastSegmentRaw = useRef('');
+  const lastSegmentRawRef = useRef({
+    thinking: '',
+    answer: '',
+  });
 
   useImperativeHandle(ref, () => ({
     /**
@@ -290,41 +293,81 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      * @param answerType 回答类型 {AnswerType}
      */
     push: (content: string, answerType: AnswerType) => {
+      const lastSegmentRaw = lastSegmentRawRef.current[answerType];
       if (isWholeTypedEndRef.current) {
         if (__DEV__) {
           console.warn('打字已经完全结束，不能再添加新的内容');
         }
         return;
       }
-      if (!lastSegmentRaw.current) {
-        lastSegmentRaw.current = content;
+      let currentLastSegmentRaw = '';
+      if (!lastSegmentRaw) {
+        currentLastSegmentRaw = content;
       } else {
-        lastSegmentRaw.current += content;
+        currentLastSegmentRaw = lastSegmentRaw + content;
       }
 
-      let resetLastSegmentRaw = false;
-      const tokens = compiler(lastSegmentRaw.current);
+      debugger;
 
-      // 如果最后一个token是segment，则把最后一个token的raw赋值给lastSegmentRaw
-      if (['segment'].includes(tokens[tokens.length - 1].type)) {
-        // todo: 处理segment
-      } else if (tokens[tokens.length - 1].type === 'space') {
-        lastSegmentRaw.current = '';
-        resetLastSegmentRaw = true;
+      let isResetLastSegmentRaw = false;
+      const tokens = compiler(currentLastSegmentRaw);
+
+      // 如果最后一个token是space，则把lastSegmentRaw设置为空
+      if (tokens[tokens.length - 1].type === 'space') {
+        currentLastSegmentRaw = '';
+        isResetLastSegmentRaw = true;
       } else {
-        lastSegmentRaw.current = tokens[tokens.length - 1].raw;
-        resetLastSegmentRaw = true;
+        currentLastSegmentRaw = tokens[tokens.length - 1].raw;
+        isResetLastSegmentRaw = true;
       }
 
-      console.log(lastSegmentRaw.current);
+      if (!lastSegmentRaw) {
+        tokens.forEach((token) => {
+          if (token.type === 'space') {
+            charsRef.current.push({ content: token.raw, answerType, contentType: 'space' });
+          } else {
+            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+          }
+        });
+      } else {
+        let str = '';
+        let firstSpaceIndex = -1;
+        let nextTokenIndex = lastSegmentRaw.length;
+        for (let i = 0; i < tokens.length; i++) {
+          const token = tokens[i];
 
-      tokens.forEach((token) => {
-        if (token.type === 'space') {
-          charsRef.current.push({ content: content, answerType, contentType: 'space' });
-        } else if (token.type === 'segment') {
-          charsRef.current.push(...(content.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+          if (token.type === 'space') {
+            if (firstSpaceIndex === -1) {
+              firstSpaceIndex = str.length;
+            }
+            str += token.raw;
+            if (lastSegmentRaw.length > firstSpaceIndex) {
+              // 如果lastSegmentRaw的长度大于firstSpaceIndex，则需要将当前设置为 segment
+              charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+            } else {
+              charsRef.current.push({ content: token.raw, answerType, contentType: 'space' });
+            }
+          } else {
+            str += token.noTrimEndRaw || token.raw;
+            const realRaw = str.slice(nextTokenIndex);
+            if (realRaw.length > 0) {
+              charsRef.current.push(...(realRaw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+            }
+          }
+
+          nextTokenIndex = str.length - 1;
         }
-      });
+      }
+
+      // tokens.forEach((token) => {
+      //   if (token.type === 'space') {
+      //     charsRef.current.push({ content: content, answerType, contentType: 'space' });
+      //   } else if (token.type === 'segment') {
+      //     charsRef.current.push(...(content.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+      //   }
+      // });
+
+      lastSegmentRawRef.current[answerType] = currentLastSegmentRaw;
 
       if (!isTypedRef.current) {
         startTypedTask();
@@ -339,6 +382,10 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       setStableSegments([]);
       setCurrentSegment(undefined);
       isWholeTypedEndRef.current = false;
+      lastSegmentRawRef.current = {
+        thinking: '',
+        answer: '',
+      };
     },
     /**
      * 主动触发打字结束
