@@ -5,6 +5,7 @@ function compile(src: string) {
 
   const tokens: Token[] = [];
   let prevScr = src;
+
   while (src) {
     if (src.length === 0) {
       break;

@@ -72,6 +72,7 @@ export class Tokenizer {
   /** 列表 */
   list(src: string): List | undefined {
     let cap = rules.block.list.exec(src);
+
     if (cap) {
       let bull = cap[1].trim();
       const isordered = bull.length > 1;
@@ -82,7 +83,6 @@ export class Tokenizer {
         noTrimEndRaw: '',
         items: [],
         loose: false,
-        tailOffset: 0,
       };
 
       bull = isordered ? `\\d{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
@@ -122,8 +122,9 @@ export class Tokenizer {
           itemContents = line.slice(indent);
           indent += cap[1].length;
         }
-
-        if (blankLine && rules.other.blankLine.test(nextLine)) {
+        if (blankLine && src === '') {
+          endEarly = true;
+        } else if (blankLine && rules.other.blankLine.test(nextLine)) {
           // Items begin with at most one blank line
           raw += nextLine + '\n';
           noTrimEndRaw += nextLine + '\n';

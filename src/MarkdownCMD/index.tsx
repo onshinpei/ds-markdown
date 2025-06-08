@@ -11,7 +11,10 @@ type MarkdownCMDProps = MarkdownProps;
 interface IChar {
   content: string;
   answerType: AnswerType;
-  contentType: 'space' | 'segment';
+  /**
+   * split_segment 两个连续的段落，需要做分割
+   */
+  contentType: 'space' | 'segment' | 'split_segment';
 }
 
 export interface MarkdownRef {
@@ -211,20 +214,22 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       }
 
       const currentSegment = currentParagraphRef.current;
-      /** 如果碰到 space 则需要处理成两个段落 */
-      if (char.contentType === 'space') {
+      /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
+      if (char.contentType === 'space' || char.contentType === 'split_segment') {
         if (currentSegment) {
           setStableSegments((prev) => {
             const newParagraphs = [...prev];
             if (currentSegment) {
               newParagraphs.push({ ...currentSegment, isTyped: false });
             }
-            newParagraphs.push({
-              content: '',
-              isTyped: false,
-              type: 'br',
-              answerType: char.answerType,
-            });
+            if (char.contentType === 'space') {
+              newParagraphs.push({
+                content: '',
+                isTyped: false,
+                type: 'br',
+                answerType: char.answerType,
+              });
+            }
             return newParagraphs;
           });
           setCurrentSegment(undefined);
@@ -317,16 +322,27 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
         currentLastSegmentRaw = '';
         isResetLastSegmentRaw = true;
       } else {
-        currentLastSegmentRaw = tokens[tokens.length - 1].raw;
+        currentLastSegmentRaw = tokens[tokens.length - 1].noTrimEndRaw || tokens[tokens.length - 1].raw;
         isResetLastSegmentRaw = true;
       }
 
+      const pushAndSplitSegment = (raw: string, currenIndex: number) => {
+        if (currenIndex > 0) {
+          const prevToken = tokens[currenIndex - 1];
+          if (prevToken.type !== 'space' && tokens[currenIndex].type !== 'space') {
+            charsRef.current.push({ content: '', answerType, contentType: 'split_segment' });
+          }
+        }
+
+        charsRef.current.push(...(raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+      };
+
       if (!lastSegmentRaw) {
-        tokens.forEach((token) => {
+        tokens.forEach((token, i) => {
           if (token.type === 'space') {
             charsRef.current.push({ content: token.raw, answerType, contentType: 'space' });
           } else {
-            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+            pushAndSplitSegment(token.raw, i);
           }
         });
       } else {
@@ -351,7 +367,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
             str += token.noTrimEndRaw || token.raw;
             const realRaw = str.slice(nextTokenIndex);
             if (realRaw.length > 0) {
-              charsRef.current.push(...(realRaw.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
+              pushAndSplitSegment(realRaw, i);
             }
           }
 
