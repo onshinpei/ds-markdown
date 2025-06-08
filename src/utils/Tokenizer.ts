@@ -2,19 +2,31 @@
 
 import { rules } from './rule.js';
 
+let id = 0;
+
+const getTokenId = () => {
+  return id++;
+};
+
 interface Space {
   type: 'space';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface Fence {
   type: 'fence';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface Segment {
   type: 'segment';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface List {
@@ -23,6 +35,7 @@ interface List {
   noTrimEndRaw: string;
   items: ListItem[];
   loose: boolean;
+  id: number;
 }
 
 interface ListItem {
@@ -34,6 +47,7 @@ interface ListItem {
   loose: boolean;
   text: string;
   tokens: Token[];
+  id: number;
 }
 export type Token = Space | Fence | Segment | List | ListItem;
 
@@ -45,6 +59,7 @@ export class Tokenizer {
       return {
         type: 'space',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -55,6 +70,7 @@ export class Tokenizer {
       return {
         type: 'fence',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -65,6 +81,7 @@ export class Tokenizer {
       return {
         type: 'segment',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -83,6 +100,7 @@ export class Tokenizer {
         noTrimEndRaw: '',
         items: [],
         loose: false,
+        id: getTokenId(),
       };
 
       bull = isordered ? `\\d{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
@@ -225,6 +243,7 @@ export class Tokenizer {
           loose: false,
           text: itemContents,
           tokens: [],
+          id: getTokenId(),
         });
 
         list.raw += raw;

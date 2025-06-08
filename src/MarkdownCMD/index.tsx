@@ -314,16 +314,13 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
       debugger;
 
-      let isResetLastSegmentRaw = false;
       const tokens = compiler(currentLastSegmentRaw);
 
       // 如果最后一个token是space，则把lastSegmentRaw设置为空
       if (tokens[tokens.length - 1].type === 'space') {
         currentLastSegmentRaw = '';
-        isResetLastSegmentRaw = true;
       } else {
         currentLastSegmentRaw = tokens[tokens.length - 1].noTrimEndRaw || tokens[tokens.length - 1].raw;
-        isResetLastSegmentRaw = true;
       }
 
       const pushAndSplitSegment = (raw: string, currenIndex: number) => {
@@ -371,17 +368,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
             }
           }
 
-          nextTokenIndex = str.length - 1;
+          nextTokenIndex = str.length;
         }
       }
-
-      // tokens.forEach((token) => {
-      //   if (token.type === 'space') {
-      //     charsRef.current.push({ content: content, answerType, contentType: 'space' });
-      //   } else if (token.type === 'segment') {
-      //     charsRef.current.push(...(content.split('').map((char) => ({ content: char, answerType, contentType: 'segment' })) as IChar[]));
-      //   }
-      // });
 
       lastSegmentRawRef.current[answerType] = currentLastSegmentRaw;
 

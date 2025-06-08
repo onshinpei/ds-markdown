@@ -45,7 +45,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     }
 
     pushData();
-    // cmdRef.current.push(' ', 'thinking');
+    // cmdRef.current.push(data.thinking_content, 'thinking');
     // cmdRef.current.push(data.content, 'answer');
   }, []);
 
