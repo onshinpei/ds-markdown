@@ -4,6 +4,7 @@ import { MarkdownCMD } from '../../src';
 // 导入 ./cozeData.text
 
 import { cozeData } from './cozeData';
+import data from '../basic/data.json';
 import { MarkdownRef } from '../../src/MarkdownCMD';
 
 interface CMDDemoProps {
@@ -24,25 +25,28 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     }
     mountedRef.current = true;
 
-    // async function pushData() {
-    //   while (true) {
-    //     await new Promise((resolve) => setTimeout(resolve, Math.random() * 30));
+    async function pushData() {
+      while (true) {
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 30));
 
-    //     const data = cozeData.shift();
+        const data = cozeData.shift();
 
-    //     if (data) {
-    //       cmdRef.current.push(data.content, data.answerType);
-    //     }
+        if (data) {
+          if (data.answerType === 'thinking') {
+            continue;
+          }
+          cmdRef.current.push(data.content, data.answerType);
+        }
 
-    //     if (!data || cozeData.length === 0) {
-    //       break;
-    //     }
-    //   }
-    // }
+        if (!data || cozeData.length === 0) {
+          break;
+        }
+      }
+    }
 
-    // pushData();
-
-    cmdRef.current.push(input, 'answer');
+    pushData();
+    // cmdRef.current.push(data.thinking_content, 'thinking');
+    // cmdRef.current.push(data.content, 'answer');
   }, []);
 
   return (

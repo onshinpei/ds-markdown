@@ -2,36 +2,52 @@
 
 import { rules } from './rule.js';
 
+let id = 0;
+
+export const getTokenId = () => {
+  return id++;
+};
+
 interface Space {
   type: 'space';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface Fence {
   type: 'fence';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface Segment {
   type: 'segment';
   raw: string;
+  noTrimEndRaw?: string;
+  id: number;
 }
 
 interface List {
   type: 'list';
   raw: string;
+  noTrimEndRaw: string;
   items: ListItem[];
   loose: boolean;
+  id: number;
 }
 
 interface ListItem {
   type: 'list_item';
   raw: string;
+  noTrimEndRaw: string;
   task: boolean;
   checked: boolean | undefined;
   loose: boolean;
   text: string;
   tokens: Token[];
+  id: number;
 }
 export type Token = Space | Fence | Segment | List | ListItem;
 
@@ -43,6 +59,7 @@ export class Tokenizer {
       return {
         type: 'space',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -53,6 +70,7 @@ export class Tokenizer {
       return {
         type: 'fence',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -63,6 +81,7 @@ export class Tokenizer {
       return {
         type: 'segment',
         raw: cap[0],
+        id: getTokenId(),
       };
     }
   }
@@ -70,15 +89,18 @@ export class Tokenizer {
   /** 列表 */
   list(src: string): List | undefined {
     let cap = rules.block.list.exec(src);
+
     if (cap) {
       let bull = cap[1].trim();
       const isordered = bull.length > 1;
 
       const list: List = {
         type: 'list',
-        raw: cap[0],
+        raw: '',
+        noTrimEndRaw: '',
         items: [],
         loose: false,
+        id: getTokenId(),
       };
 
       bull = isordered ? `\\d{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
@@ -89,6 +111,7 @@ export class Tokenizer {
       while (src) {
         let endEarly = false;
         let raw = '';
+        let noTrimEndRaw = '';
         let itemContents = '';
         if (!(cap = itemRegex.exec(src))) {
           break;
@@ -99,7 +122,7 @@ export class Tokenizer {
           break;
         }
 
-        raw = cap[0];
+        raw = noTrimEndRaw = cap[0];
         src = src.substring(raw.length);
 
         /** 获取列表项 */
@@ -117,10 +140,12 @@ export class Tokenizer {
           itemContents = line.slice(indent);
           indent += cap[1].length;
         }
-
-        if (blankLine && rules.other.blankLine.test(nextLine)) {
+        if (blankLine && src === '') {
+          endEarly = true;
+        } else if (blankLine && rules.other.blankLine.test(nextLine)) {
           // Items begin with at most one blank line
           raw += nextLine + '\n';
+          noTrimEndRaw += nextLine + '\n';
           src = src.substring(nextLine.length + 1);
           endEarly = true;
         }
@@ -195,6 +220,7 @@ export class Tokenizer {
             }
 
             raw += rawLine + '\n';
+            noTrimEndRaw += rawLine + '\n';
             src = src.substring(rawLine.length + 1);
             line = nextLineWithoutTabs.slice(indent);
           }
@@ -211,18 +237,22 @@ export class Tokenizer {
         list.items.push({
           type: 'list_item',
           raw,
+          noTrimEndRaw,
           task: !!istask,
           checked: ischecked,
           loose: false,
           text: itemContents,
           tokens: [],
+          id: getTokenId(),
         });
 
         list.raw += raw;
+        list.noTrimEndRaw += noTrimEndRaw;
       }
 
       // Do not consume newlines at end of final item. Alternatively, make itemRegex *start* with any newlines to simplify/speed up endsWithBlankLine logic
       const lastItem = list.items.at(-1);
+
       if (lastItem) {
         lastItem.raw = lastItem.raw.trimEnd();
         lastItem.text = lastItem.text.trimEnd();
@@ -230,7 +260,12 @@ export class Tokenizer {
         // not a list since there were no items
         return;
       }
+
       list.raw = list.raw.trimEnd();
+
+      if (src !== '') {
+        list.noTrimEndRaw = list.noTrimEndRaw.trimEnd();
+      }
 
       return list;
     }
