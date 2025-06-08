@@ -18,6 +18,14 @@ export interface IParagraph {
   type: 'br' | 'text';
   /** 回答类型 */
   answerType: AnswerType;
+
+  /** token 参考 */
+  tokensReference: Record<string, ITokensReference>;
+}
+
+export interface ITokensReference {
+  startIndex: number;
+  raw: string;
 }
 
 export interface MarkdownProps {
