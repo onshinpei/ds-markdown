@@ -1,4 +1,4 @@
-import { Token, Tokenizer } from './Tokenizer.js';
+import { getTokenId, Token, Tokenizer } from './Tokenizer.js';
 
 function compile(src: string) {
   const tokenizer = new Tokenizer();
@@ -40,6 +40,7 @@ function compile(src: string) {
       tokens.push({
         type: 'segment',
         raw: src,
+        id: getTokenId(),
       });
       src = '';
     }

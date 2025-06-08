@@ -4,7 +4,7 @@ import { rules } from './rule.js';
 
 let id = 0;
 
-const getTokenId = () => {
+export const getTokenId = () => {
   return id++;
 };
 

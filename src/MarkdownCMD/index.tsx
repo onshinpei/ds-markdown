@@ -6,6 +6,7 @@ import { AnswerType, IParagraph, MarkdownProps } from '../defined.js';
 import { compiler } from '../utils/compiler.js';
 import { __DEV__ } from '../constant.js';
 import deepClone from '../utils/methods/deepClone.js';
+import { Token } from '../utils/Tokenizer.js';
 
 type MarkdownCMDProps = MarkdownProps;
 
@@ -314,9 +315,16 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     startTyped(true);
   };
 
-  const lastSegmentRawRef = useRef({
+  const lastSegmentRawRef = useRef<{
+    thinking: string;
+    answer: string;
+    thinkingReference: Token | null;
+    answerReference: Token | null;
+  }>({
     thinking: '',
     answer: '',
+    thinkingReference: null,
+    answerReference: null,
   });
 
   useImperativeHandle(ref, () => ({
@@ -326,18 +334,22 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      * @param answerType 回答类型 {AnswerType}
      */
     push: (content: string, answerType: AnswerType) => {
-      const lastSegmentRaw = lastSegmentRawRef.current[answerType];
+      const lastSegmentReference = lastSegmentRawRef.current[`${answerType}Reference`];
+
       if (isWholeTypedEndRef.current) {
         if (__DEV__) {
           console.warn('打字已经完全结束，不能再添加新的内容');
         }
         return;
       }
+      let currentLastSegmentReference: Token | null = null;
       let currentLastSegmentRaw = '';
-      if (!lastSegmentRaw) {
-        currentLastSegmentRaw = content;
-      } else {
+      let lastSegmentRaw = '';
+      if (lastSegmentReference) {
+        lastSegmentRaw = lastSegmentReference.noTrimEndRaw || lastSegmentReference.raw;
         currentLastSegmentRaw = lastSegmentRaw + content;
+      } else {
+        currentLastSegmentRaw = content;
       }
 
       // debugger;
@@ -346,9 +358,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
       // 如果最后一个token是space，则把lastSegmentRaw设置为空
       if (tokens[tokens.length - 1].type === 'space') {
-        currentLastSegmentRaw = '';
+        currentLastSegmentReference = null;
       } else {
-        currentLastSegmentRaw = tokens[tokens.length - 1].noTrimEndRaw || tokens[tokens.length - 1].raw;
+        currentLastSegmentReference = tokens[tokens.length - 1];
       }
 
       const pushAndSplitSegment = (raw: string, currenIndex: number) => {
@@ -364,7 +376,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
         charsRef.current.push(...(raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: currentToken.id })) as IChar[]));
       };
 
-      if (!lastSegmentRaw) {
+      if (!lastSegmentReference) {
         tokens.forEach((token, i) => {
           if (token.type === 'space') {
             charsRef.current.push({ content: token.raw, answerType, contentType: 'space', tokenId: token.id });
@@ -402,7 +414,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
         }
       }
 
-      lastSegmentRawRef.current[answerType] = currentLastSegmentRaw;
+      lastSegmentRawRef.current[`${answerType}Reference`] = currentLastSegmentReference;
 
       if (!isTypedRef.current) {
         startTypedTask();
@@ -420,6 +432,8 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       lastSegmentRawRef.current = {
         thinking: '',
         answer: '',
+        thinkingReference: null,
+        answerReference: null,
       };
     },
     /**
