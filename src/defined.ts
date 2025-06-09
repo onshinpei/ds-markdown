@@ -29,6 +29,8 @@ export interface ITokensReference {
 }
 
 export interface MarkdownProps {
+  /** 计时类型： 支持setTimeout和requestAnimationFrame */
+  timerType?: 'setTimeout' | 'requestAnimationFrame';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭匀速打字机效果 */

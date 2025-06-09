@@ -25,7 +25,7 @@ export interface MarkdownRef {
   clear: () => void;
   triggerWholeEnd: () => void;
 }
-const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, isClosePrettyTyped = false, onEnd, onStart, onTypedChar }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
@@ -41,6 +41,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   const isUnmountRef = useRef(false);
   /** 是否正在打字 */
   const isTypedRef = useRef(false);
+
+  /** 上次打字的时间戳 */
+  const lastTypedTimeRef = useRef<number>(Date.now());
 
   /** 打字结束回调, */
   const onEndRef = useRef(onEnd);
@@ -74,8 +77,106 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     isTypedRef.current = false;
   };
 
+  /**
+   * 处理字符显示逻辑
+   */
+  const processCharDisplay = (char: IChar) => {
+    const currentSegment = currentParagraphRef.current;
+    /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
+    if (char.contentType === 'space' || char.contentType === 'split_segment') {
+      if (currentSegment) {
+        setStableSegments((prev) => {
+          const newParagraphs = [...prev];
+          // 放入到稳定队列
+          if (currentSegment) {
+            newParagraphs.push({ ...currentSegment, isTyped: false });
+          }
+          if (char.contentType === 'space') {
+            newParagraphs.push({
+              content: '',
+              isTyped: false,
+              type: 'br',
+              answerType: char.answerType,
+              tokensReference: {
+                [char.tokenId]: {
+                  startIndex: 0,
+                  raw: char.content,
+                },
+              },
+            });
+          }
+          return newParagraphs;
+        });
+        setCurrentSegment(undefined);
+      } else {
+        setStableSegments((prev) => {
+          const newParagraphs = [...prev];
+          newParagraphs.push({
+            content: '',
+            isTyped: false,
+            type: 'br',
+            answerType: char.answerType,
+            tokensReference: {
+              [char.tokenId]: {
+                startIndex: 0,
+                raw: char.content,
+              },
+            },
+          });
+          return newParagraphs;
+        });
+      }
+      return;
+    }
+
+    // 处理当前段落
+    let _currentParagraph = currentSegment;
+    const newCurrentParagraph: IParagraph = {
+      content: '',
+      isTyped: false,
+      type: 'text',
+      answerType: char.answerType,
+      tokensReference: {},
+    };
+
+    if (!_currentParagraph) {
+      // 如果当前没有段落，则直接设置为当前段落
+      _currentParagraph = newCurrentParagraph;
+    } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
+      // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
+      setStableSegments((prev) => {
+        const newParagraphs = [...prev];
+        newParagraphs.push({ ...currentSegment, isTyped: false });
+        return newParagraphs;
+      });
+      _currentParagraph = newCurrentParagraph;
+      setCurrentSegment(_currentParagraph);
+    }
+
+    setCurrentSegment((prev) => {
+      const tokensReference = deepClone(_currentParagraph.tokensReference);
+      if (tokensReference[char.tokenId]) {
+        tokensReference[char.tokenId].raw += char.content;
+        tokensReference[char.tokenId].startIndex = prev?.content?.length || 0;
+      } else {
+        tokensReference[char.tokenId] = {
+          startIndex: prev?.content?.length || 0,
+          raw: char.content,
+        };
+      }
+
+      return {
+        ..._currentParagraph,
+        tokensReference,
+        content: (prev?.content || '') + char.content,
+        isTyped: true,
+      };
+    });
+  };
+
   useEffect(() => {
     isUnmountRef.current = false;
+
     return () => {
       isUnmountRef.current = true;
     };
@@ -184,12 +285,15 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       triggerOnEnd();
     };
 
-    /** 打下一个字 */
+    /**
+     * 打下一个字
+     */
     const nextTyped = () => {
       if (chars.length === 0) {
         stopTyped();
         return;
       }
+      lastTypedTimeRef.current = Date.now();
       timerRef.current = setTimeout(startTyped, interval);
     };
 
@@ -216,99 +320,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
         triggerOnTypedChar(char);
       }
 
-      const currentSegment = currentParagraphRef.current;
-      /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
-      if (char.contentType === 'space' || char.contentType === 'split_segment') {
-        if (currentSegment) {
-          setStableSegments((prev) => {
-            const newParagraphs = [...prev];
-            // 放入到稳定队列
-            if (currentSegment) {
-              newParagraphs.push({ ...currentSegment, isTyped: false });
-            }
-            if (char.contentType === 'space') {
-              newParagraphs.push({
-                content: '',
-                isTyped: false,
-                type: 'br',
-                answerType: char.answerType,
-                tokensReference: {
-                  [char.tokenId]: {
-                    startIndex: 0,
-                    raw: char.content,
-                  },
-                },
-              });
-            }
-            return newParagraphs;
-          });
-          setCurrentSegment(undefined);
-        } else {
-          setStableSegments((prev) => {
-            const newParagraphs = [...prev];
-            newParagraphs.push({
-              content: '',
-              isTyped: false,
-              type: 'br',
-              answerType: char.answerType,
-              tokensReference: {
-                [char.tokenId]: {
-                  startIndex: 0,
-                  raw: char.content,
-                },
-              },
-            });
-            return newParagraphs;
-          });
-        }
-        nextTyped();
-        return;
-      }
-
-      // 处理当前段落
-      let _currentParagraph = currentSegment;
-      const newCurrentParagraph: IParagraph = {
-        content: '',
-        isTyped: false,
-        type: 'text',
-        answerType: char.answerType,
-        tokensReference: {},
-      };
-
-      if (!_currentParagraph) {
-        // 如果当前没有段落，则直接设置为当前段落
-        _currentParagraph = newCurrentParagraph;
-      } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
-        // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
-        setStableSegments((prev) => {
-          const newParagraphs = [...prev];
-          newParagraphs.push({ ...currentSegment, isTyped: false });
-          return newParagraphs;
-        });
-        _currentParagraph = newCurrentParagraph;
-        setCurrentSegment(_currentParagraph);
-      }
-
-      setCurrentSegment((prev) => {
-        const tokensReference = deepClone(_currentParagraph.tokensReference);
-        if (tokensReference[char.tokenId]) {
-          tokensReference[char.tokenId].raw += char.content;
-          tokensReference[char.tokenId].startIndex = prev?.content?.length || 0;
-        } else {
-          tokensReference[char.tokenId] = {
-            startIndex: prev?.content?.length || 0,
-            raw: char.content,
-          };
-        }
-
-        return {
-          ..._currentParagraph,
-          tokensReference,
-          content: (prev?.content || '') + char.content,
-          isTyped: true,
-        };
-      });
-
+      processCharDisplay(char);
       nextTyped();
     }
 
@@ -355,7 +367,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       // debugger;
 
       const tokens = compiler(currentLastSegmentRaw);
-
       // 如果最后一个token是space，则把lastSegmentRaw设置为空
       if (tokens[tokens.length - 1].type === 'space') {
         currentLastSegmentReference = null;
