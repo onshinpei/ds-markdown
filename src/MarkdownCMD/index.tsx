@@ -35,7 +35,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   const [currentSegment, setCurrentSegment] = useState<IParagraph | undefined>(undefined);
   /** 当前段落引用 */
   const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
-  currentParagraphRef.current = currentSegment;
+  // currentParagraphRef.current = currentSegment;
 
   /**
    * 处理字符显示逻辑
@@ -67,7 +67,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           }
           return newParagraphs;
         });
-        setCurrentSegment(undefined);
+        setCurrentSegment(() => undefined);
         currentParagraphRef.current = undefined;
       } else {
         setStableSegments((prev) => {
@@ -99,41 +99,39 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       tokensReference: {},
     };
 
-    setCurrentSegment((currentSegment) => {
-      let _currentParagraph = currentSegment;
-      if (!_currentParagraph) {
-        // 如果当前没有段落，则直接设置为新当前段落
-        _currentParagraph = newCurrentParagraph;
-      } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
-        // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
-        setStableSegments((prev) => {
-          const newParagraphs = [...prev];
-          newParagraphs.push({ ...currentSegment, isTyped: false });
-          return newParagraphs;
-        });
-        _currentParagraph = newCurrentParagraph;
-      }
+    let _currentParagraph = currentSegment;
+    if (!_currentParagraph) {
+      // 如果当前没有段落，则直接设置为新当前段落
+      _currentParagraph = newCurrentParagraph;
+    } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
+      // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
+      setStableSegments((prev) => {
+        const newParagraphs = [...prev];
+        newParagraphs.push({ ...currentSegment, isTyped: false });
+        return newParagraphs;
+      });
+      _currentParagraph = newCurrentParagraph;
+    }
 
-      const tokensReference = deepClone(_currentParagraph.tokensReference);
-      if (tokensReference[char.tokenId]) {
-        tokensReference[char.tokenId].raw += char.content;
-        tokensReference[char.tokenId].startIndex = currentSegment?.content?.length || 0;
-      } else {
-        tokensReference[char.tokenId] = {
-          startIndex: currentSegment?.content?.length || 0,
-          raw: char.content,
-        };
-      }
-
-      const newCurrentSegment = {
-        ..._currentParagraph,
-        tokensReference,
-        content: (currentSegment?.content || '') + char.content,
-        isTyped: true,
+    const tokensReference = deepClone(_currentParagraph.tokensReference);
+    if (tokensReference[char.tokenId]) {
+      tokensReference[char.tokenId].raw += char.content;
+      tokensReference[char.tokenId].startIndex = currentSegment?.content?.length || 0;
+    } else {
+      tokensReference[char.tokenId] = {
+        startIndex: currentSegment?.content?.length || 0,
+        raw: char.content,
       };
-      currentParagraphRef.current = newCurrentSegment;
-      return newCurrentSegment;
-    });
+    }
+
+    const newCurrentSegment = {
+      ..._currentParagraph,
+      tokensReference,
+      content: (currentSegment?.content || '') + char.content,
+      isTyped: true,
+    };
+    currentParagraphRef.current = newCurrentSegment;
+    setCurrentSegment(() => newCurrentSegment);
   };
 
   /** 思考段落 */
@@ -266,6 +264,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       setStableSegments([]);
       setCurrentSegment(undefined);
       isWholeTypedEndRef.current = false;
+      currentParagraphRef.current = undefined;
       typingTask.clear();
       lastSegmentRawRef.current = {
         thinking: '',

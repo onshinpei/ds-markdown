@@ -63,6 +63,10 @@ const BasicDemo = () => {
     }, 50);
   }, []);
 
+  const interval = 16.67;
+  const flag = true;
+  const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
+
   return (
     <>
       <div className="ds-message-actions">
@@ -71,7 +75,7 @@ const BasicDemo = () => {
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
           <Markdown
-            interval={5}
+            interval={interval}
             answerType="thinking"
             onEnd={(args) => {
               // console.log('思考完成', args);
@@ -87,14 +91,14 @@ const BasicDemo = () => {
             // }}
             onTypedChar={throttleOnTypedChar}
             // timerType="setTimeout"
-            timerType="requestAnimationFrame"
+            timerType={timerType}
           >
             {thinkingContent}
           </Markdown>
 
           {answerContent && (
             <Markdown
-              interval={2}
+              interval={interval}
               answerType="answer"
               // onEnd={(args) => {
               //   console.log('思考完成', args);
@@ -110,7 +114,7 @@ const BasicDemo = () => {
               // }}
               onTypedChar={throttleOnTypedChar}
               // timerType="setTimeout"
-              timerType="requestAnimationFrame"
+              timerType={timerType}
             >
               {answerContent}
             </Markdown>
