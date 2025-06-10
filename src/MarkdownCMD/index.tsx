@@ -2,23 +2,14 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState }
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, IParagraph, MarkdownProps } from '../defined.js';
+import { AnswerType, IParagraph, MarkdownProps, IChar } from '../defined.js';
 import { compiler } from '../utils/compiler.js';
 import { __DEV__ } from '../constant.js';
 import deepClone from '../utils/methods/deepClone.js';
 import { Token } from '../utils/Tokenizer.js';
+import { useTypingTask } from '../hooks/useTypingTask.js';
 
 type MarkdownCMDProps = MarkdownProps;
-
-interface IChar {
-  content: string;
-  answerType: AnswerType;
-  /**
-   * split_segment 两个连续的段落，需要做分割
-   */
-  contentType: 'space' | 'segment' | 'split_segment';
-  tokenId: number;
-}
 
 export interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
@@ -35,33 +26,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    */
   const isWholeTypedEndRef = useRef(false);
 
-  /** 已经打过的字 */
-  const typedCharsRef = useRef<{ typedContent: string; answerType: AnswerType; prevStr: string } | undefined>(undefined);
-  /** 是否卸载 */
-  const isUnmountRef = useRef(false);
-  /** 是否正在打字 */
-  const isTypedRef = useRef(false);
-
-  // 时间戳驱动相关状态
-  /** 打字开始时间 */
-  const startTimeRef = useRef<number | null>(null);
-  /** 已经打出的字符数量 */
-  const typedCountRef = useRef<number>(0);
-  /** 动画帧ID */
-  const animationFrameRef = useRef<number | null>(null);
-  /** 传统定时器（兼容模式） */
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  /** 打字结束回调, */
-  const onEndRef = useRef(onEnd);
-  onEndRef.current = onEnd;
-  /** 打字开始回调 */
-  const onStartRef = useRef(onStart);
-  onStartRef.current = onStart;
-  /** 打字过程中回调 */
-  const onTypedCharRef = useRef(onTypedChar);
-  onTypedCharRef.current = onTypedChar;
-
   /**
    * 稳定段落
    * 稳定段落是已经打过字，并且不会再变化的段落
@@ -72,30 +36,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   /** 当前段落引用 */
   const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
   currentParagraphRef.current = currentSegment;
-
-  /** 清除打字定时器 */
-  const clearTimer = () => {
-    if (timerType === 'timestamp') {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
-    } else if (timerType === 'requestAnimationFrame') {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
-    } else {
-      // setTimeout mode
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    }
-    isTypedRef.current = false;
-    startTimeRef.current = null;
-    typedCountRef.current = 0;
-  };
 
   /**
    * 处理字符显示逻辑
@@ -128,6 +68,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           return newParagraphs;
         });
         setCurrentSegment(undefined);
+        currentParagraphRef.current = undefined;
       } else {
         setStableSegments((prev) => {
           const newParagraphs = [...prev];
@@ -150,7 +91,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
 
     // 处理当前段落
-    let _currentParagraph = currentSegment;
     const newCurrentParagraph: IParagraph = {
       content: '',
       isTyped: false,
@@ -159,323 +99,58 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       tokensReference: {},
     };
 
-    if (!_currentParagraph) {
-      // 如果当前没有段落，则直接设置为当前段落
-      _currentParagraph = newCurrentParagraph;
-    } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
-      // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
-      setStableSegments((prev) => {
-        const newParagraphs = [...prev];
-        newParagraphs.push({ ...currentSegment, isTyped: false });
-        return newParagraphs;
-      });
-      _currentParagraph = newCurrentParagraph;
-      setCurrentSegment(_currentParagraph);
-    }
+    setCurrentSegment((currentSegment) => {
+      let _currentParagraph = currentSegment;
+      if (!_currentParagraph) {
+        // 如果当前没有段落，则直接设置为新当前段落
+        _currentParagraph = newCurrentParagraph;
+      } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
+        // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
+        setStableSegments((prev) => {
+          const newParagraphs = [...prev];
+          newParagraphs.push({ ...currentSegment, isTyped: false });
+          return newParagraphs;
+        });
+        _currentParagraph = newCurrentParagraph;
+      }
 
-    setCurrentSegment((prev) => {
       const tokensReference = deepClone(_currentParagraph.tokensReference);
       if (tokensReference[char.tokenId]) {
         tokensReference[char.tokenId].raw += char.content;
-        tokensReference[char.tokenId].startIndex = prev?.content?.length || 0;
+        tokensReference[char.tokenId].startIndex = currentSegment?.content?.length || 0;
       } else {
         tokensReference[char.tokenId] = {
-          startIndex: prev?.content?.length || 0,
+          startIndex: currentSegment?.content?.length || 0,
           raw: char.content,
         };
       }
 
-      return {
+      const newCurrentSegment = {
         ..._currentParagraph,
         tokensReference,
-        content: (prev?.content || '') + char.content,
+        content: (currentSegment?.content || '') + char.content,
         isTyped: true,
       };
+      currentParagraphRef.current = newCurrentSegment;
+      return newCurrentSegment;
     });
   };
-
-  useEffect(() => {
-    isUnmountRef.current = false;
-
-    return () => {
-      isUnmountRef.current = true;
-    };
-  }, []);
 
   /** 思考段落 */
   const thinkingParagraphs = useMemo(() => stableSegments.filter((paragraph) => paragraph.answerType === 'thinking'), [stableSegments]);
   /** 回答段落 */
   const answerParagraphs = useMemo(() => stableSegments.filter((paragraph) => paragraph.answerType === 'answer'), [stableSegments]);
 
-  /**
-   * 记录打过的字
-   * @param char 当前字符
-   * @returns
-   */
-  const recordTypedChars = (char: IChar) => {
-    let prevStr = '';
-    if (!typedCharsRef.current || typedCharsRef.current.answerType !== char.answerType) {
-      typedCharsRef.current = {
-        typedContent: char.content,
-        answerType: char.answerType,
-        prevStr: '',
-      };
-    } else {
-      prevStr = typedCharsRef.current.typedContent;
-      typedCharsRef.current.typedContent += char.content;
-      typedCharsRef.current.prevStr = prevStr;
-    }
-
-    return {
-      prevStr,
-      nextStr: typedCharsRef.current?.typedContent || '',
-    };
-  };
-
-  /**
-   * 触发打字开始回调
-   * @param char 当前字符
-   */
-  const triggerOnStart = (char: IChar) => {
-    const onStartFn = onStartRef.current;
-    if (!onStartFn) {
-      return;
-    }
-    const { prevStr } = recordTypedChars(char);
-    onStartRef.current?.({
-      currentIndex: prevStr.length,
-      currentChar: char.content,
-      answerType: char.answerType,
-      prevStr,
-    });
-  };
-
-  /**
-   * 触发打字结束回调
-   */
-  const triggerOnEnd = () => {
-    const onEndFn = onEndRef.current;
-    if (!onEndFn) {
-      return;
-    }
-
-    onEndFn({
-      str: typedCharsRef.current?.typedContent,
-      answerType: typedCharsRef.current?.answerType,
-    });
-  };
-
-  /**
-   * 触发打字过程中回调
-   * @param char 当前字符
-   * @param isStartPoint 是否是开始打字(第一个字)
-   */
-  const triggerOnTypedChar = (char: IChar, isStartPoint = false) => {
-    const onTypedCharFn = onTypedCharRef.current;
-    if (!isStartPoint) {
-      recordTypedChars(char);
-    }
-    if (!onTypedCharFn) {
-      return;
-    }
-
-    onTypedCharFn({
-      currentIndex: typedCharsRef.current?.prevStr.length || 0,
-      currentChar: char.content,
-      answerType: char.answerType,
-      prevStr: typedCharsRef.current?.prevStr || '',
-    });
-  };
-
-  /**
-   * 处理下一个字符（用于时间戳驱动模式）
-   */
-  const processNextChar = (): boolean => {
-    const chars = charsRef.current;
-    if (chars.length === 0) {
-      return false;
-    }
-
-    const char = chars.shift();
-    if (char === undefined) {
-      return false;
-    }
-
-    // 第一个字符需要触发开始回调
-    if (typedCountRef.current === 0) {
-      triggerOnStart(char);
-      triggerOnTypedChar(char, true);
-    } else {
-      triggerOnTypedChar(char);
-    }
-
-    processCharDisplay(char);
-    typedCountRef.current++;
-    return true;
-  };
-
-  /** 开始打字任务 */
-  const startTypedTask = () => {
-    if (isTypedRef.current) {
-      return;
-    }
-
-    if (timerType === 'timestamp') {
-      // 时间戳驱动模式 - 能在后台继续运行
-      startTimeRef.current = Date.now();
-      typedCountRef.current = 0;
-      isTypedRef.current = true;
-
-      /** 时间戳驱动的打字循环 */
-      const timestampLoop = (currentTime: number) => {
-        if (isUnmountRef.current || !isTypedRef.current) {
-          return;
-        }
-
-        const chars = charsRef.current;
-        if (chars.length === 0) {
-          // 打字完成
-          isTypedRef.current = false;
-          triggerOnEnd();
-          return;
-        }
-
-        if (!startTimeRef.current) {
-          startTimeRef.current = currentTime;
-        }
-
-        const elapsed = currentTime - startTimeRef.current;
-        const expectedChars = Math.floor(elapsed / interval);
-        const actualChars = typedCountRef.current;
-
-        // 如果需要追赶进度，一次性打出多个字符
-        if (expectedChars > actualChars) {
-          const charsToType = Math.min(expectedChars - actualChars, chars.length);
-
-          for (let i = 0; i < charsToType; i++) {
-            if (!processNextChar()) {
-              break;
-            }
-          }
-        }
-
-        // 继续下一帧
-        if (chars.length > 0) {
-          animationFrameRef.current = requestAnimationFrame(timestampLoop);
-        } else {
-          isTypedRef.current = false;
-          triggerOnEnd();
-        }
-      };
-
-      animationFrameRef.current = requestAnimationFrame(timestampLoop);
-    } else if (timerType === 'requestAnimationFrame') {
-      // requestAnimationFrame 模式 - 会在后台暂停
-      const chars = charsRef.current;
-      let lastFrameTime = 0;
-
-      /** 停止打字 */
-      const stopTyped = () => {
-        isTypedRef.current = false;
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
-        triggerOnEnd();
-      };
-
-      /**
-       * requestAnimationFrame 循环
-       */
-      const frameLoop = (currentTime: number) => {
-        if (isUnmountRef.current) {
-          return;
-        }
-
-        if (chars.length === 0) {
-          stopTyped();
-          return;
-        }
-
-        // 控制间隔时间
-        if (currentTime - lastFrameTime >= interval) {
-          const char = chars.shift();
-          if (char === undefined) {
-            stopTyped();
-            return;
-          }
-
-          if (!isTypedRef.current) {
-            // 第一个字符
-            isTypedRef.current = true;
-            triggerOnStart(char);
-            triggerOnTypedChar(char, true);
-          } else {
-            triggerOnTypedChar(char);
-          }
-
-          processCharDisplay(char);
-          lastFrameTime = currentTime;
-        }
-
-        // 继续下一帧
-        animationFrameRef.current = requestAnimationFrame(frameLoop);
-      };
-
-      animationFrameRef.current = requestAnimationFrame(frameLoop);
-    } else {
-      // 传统 setTimeout 模式 - 会在后台暂停
-      const chars = charsRef.current;
-
-      /** 停止打字 */
-      const stopTyped = () => {
-        isTypedRef.current = false;
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-          timerRef.current = null;
-        }
-        triggerOnEnd();
-      };
-
-      /** 打下一个字 */
-      const nextTyped = () => {
-        if (chars.length === 0) {
-          stopTyped();
-          return;
-        }
-        timerRef.current = setTimeout(startTyped, interval);
-      };
-
-      /**
-       * 开始打字
-       * @param isStartPoint 是否是开始打字
-       */
-      function startTyped(isStartPoint = false) {
-        if (isUnmountRef.current) {
-          return;
-        }
-        isTypedRef.current = true;
-
-        const char = chars.shift();
-        if (char === undefined) {
-          stopTyped();
-          return;
-        }
-
-        if (isStartPoint) {
-          triggerOnStart(char);
-          triggerOnTypedChar(char, isStartPoint);
-        } else {
-          triggerOnTypedChar(char);
-        }
-
-        processCharDisplay(char);
-        nextTyped();
-      }
-
-      startTyped(true);
-    }
-  };
+  // 使用新的打字任务 hook
+  const typingTask = useTypingTask({
+    timerType,
+    interval,
+    charsRef,
+    onEnd,
+    onStart,
+    onTypedChar,
+    processCharDisplay,
+  });
 
   const lastSegmentRawRef = useRef<{
     thinking: string;
@@ -516,8 +191,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       } else {
         currentLastSegmentRaw = content;
       }
-
-      // debugger;
 
       const tokens = compiler(currentLastSegmentRaw);
       // 如果最后一个token是space，则把lastSegmentRaw设置为空
@@ -580,22 +253,20 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
       lastSegmentRawRef.current[`${answerType}Reference`] = currentLastSegmentReference;
 
-      if (!isTypedRef.current) {
-        startTypedTask();
+      if (!typingTask.isTyping()) {
+        typingTask.start();
       }
     },
     /**
      * 清除打字任务
      */
     clear: () => {
-      clearTimer();
+      typingTask.stop();
       charsRef.current = [];
       setStableSegments([]);
       setCurrentSegment(undefined);
       isWholeTypedEndRef.current = false;
-      typedCharsRef.current = undefined;
-      startTimeRef.current = null;
-      typedCountRef.current = 0;
+      typingTask.clear();
       lastSegmentRawRef.current = {
         thinking: '',
         answer: '',
@@ -608,8 +279,12 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      */
     triggerWholeEnd: () => {
       isWholeTypedEndRef.current = true;
-      if (!isTypedRef.current) {
-        triggerOnEnd();
+      if (!typingTask.isTyping()) {
+        // 这里需要手动触发结束回调，因为 hook 中的 triggerOnEnd 不能直接调用
+        onEnd?.({
+          str: undefined,
+          answerType: undefined,
+        });
       }
     },
   }));

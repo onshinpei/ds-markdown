@@ -71,7 +71,7 @@ const BasicDemo = () => {
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
           <Markdown
-            interval={10}
+            interval={5}
             answerType="thinking"
             onEnd={(args) => {
               // console.log('思考完成', args);
@@ -86,13 +86,15 @@ const BasicDemo = () => {
             //   console.log('打字中', args);
             // }}
             onTypedChar={throttleOnTypedChar}
+            // timerType="setTimeout"
+            timerType="requestAnimationFrame"
           >
             {thinkingContent}
           </Markdown>
 
           {answerContent && (
             <Markdown
-              interval={10}
+              interval={2}
               answerType="answer"
               // onEnd={(args) => {
               //   console.log('思考完成', args);
@@ -107,6 +109,8 @@ const BasicDemo = () => {
               //   console.log('打字中', args);
               // }}
               onTypedChar={throttleOnTypedChar}
+              // timerType="setTimeout"
+              timerType="requestAnimationFrame"
             >
               {answerContent}
             </Markdown>
