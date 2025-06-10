@@ -61,8 +61,6 @@ const segment = edit(_segment)
   .replace(/hr/, hr)
   .getRegex();
 
-console.log(segment.source);
-
 const blockNormal = {
   newline,
   fences,

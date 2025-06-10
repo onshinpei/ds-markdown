@@ -25,7 +25,7 @@ export interface MarkdownRef {
   clear: () => void;
   triggerWholeEnd: () => void;
 }
-const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'requestAnimationFrame' }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
@@ -42,8 +42,15 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   /** 是否正在打字 */
   const isTypedRef = useRef(false);
 
-  /** 上次打字的时间戳 */
-  const lastTypedTimeRef = useRef<number>(Date.now());
+  // 时间戳驱动相关状态
+  /** 打字开始时间 */
+  const startTimeRef = useRef<number | null>(null);
+  /** 已经打出的字符数量 */
+  const typedCountRef = useRef<number>(0);
+  /** 动画帧ID */
+  const animationFrameRef = useRef<number | null>(null);
+  /** 传统定时器（兼容模式） */
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   /** 打字结束回调, */
   const onEndRef = useRef(onEnd);
@@ -55,8 +62,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   const onTypedCharRef = useRef(onTypedChar);
   onTypedCharRef.current = onTypedChar;
 
-  /** 打字定时器 */
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   /**
    * 稳定段落
    * 稳定段落是已经打过字，并且不会再变化的段落
@@ -70,11 +75,26 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
   /** 清除打字定时器 */
   const clearTimer = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
+    if (timerType === 'timestamp') {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    } else if (timerType === 'requestAnimationFrame') {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    } else {
+      // setTimeout mode
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     }
     isTypedRef.current = false;
+    startTimeRef.current = null;
+    typedCountRef.current = 0;
   };
 
   /**
@@ -267,64 +287,194 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     });
   };
 
+  /**
+   * 处理下一个字符（用于时间戳驱动模式）
+   */
+  const processNextChar = (): boolean => {
+    const chars = charsRef.current;
+    if (chars.length === 0) {
+      return false;
+    }
+
+    const char = chars.shift();
+    if (char === undefined) {
+      return false;
+    }
+
+    // 第一个字符需要触发开始回调
+    if (typedCountRef.current === 0) {
+      triggerOnStart(char);
+      triggerOnTypedChar(char, true);
+    } else {
+      triggerOnTypedChar(char);
+    }
+
+    processCharDisplay(char);
+    typedCountRef.current++;
+    return true;
+  };
+
   /** 开始打字任务 */
   const startTypedTask = () => {
     if (isTypedRef.current) {
       return;
     }
 
-    const chars = charsRef.current;
-
-    /** 停止打字 */
-    const stopTyped = () => {
-      isTypedRef.current = false;
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-      triggerOnEnd();
-    };
-
-    /**
-     * 打下一个字
-     */
-    const nextTyped = () => {
-      if (chars.length === 0) {
-        stopTyped();
-        return;
-      }
-      lastTypedTimeRef.current = Date.now();
-      timerRef.current = setTimeout(startTyped, interval);
-    };
-
-    /**
-     * 开始打字
-     * @param isStartPoint 是否是开始打字
-     */
-    function startTyped(isStartPoint = false) {
-      if (isUnmountRef.current) {
-        return;
-      }
+    if (timerType === 'timestamp') {
+      // 时间戳驱动模式 - 能在后台继续运行
+      startTimeRef.current = Date.now();
+      typedCountRef.current = 0;
       isTypedRef.current = true;
 
-      const char = chars.shift();
-      if (char === undefined) {
-        stopTyped();
-        return;
+      /** 时间戳驱动的打字循环 */
+      const timestampLoop = (currentTime: number) => {
+        if (isUnmountRef.current || !isTypedRef.current) {
+          return;
+        }
+
+        const chars = charsRef.current;
+        if (chars.length === 0) {
+          // 打字完成
+          isTypedRef.current = false;
+          triggerOnEnd();
+          return;
+        }
+
+        if (!startTimeRef.current) {
+          startTimeRef.current = currentTime;
+        }
+
+        const elapsed = currentTime - startTimeRef.current;
+        const expectedChars = Math.floor(elapsed / interval);
+        const actualChars = typedCountRef.current;
+
+        // 如果需要追赶进度，一次性打出多个字符
+        if (expectedChars > actualChars) {
+          const charsToType = Math.min(expectedChars - actualChars, chars.length);
+
+          for (let i = 0; i < charsToType; i++) {
+            if (!processNextChar()) {
+              break;
+            }
+          }
+        }
+
+        // 继续下一帧
+        if (chars.length > 0) {
+          animationFrameRef.current = requestAnimationFrame(timestampLoop);
+        } else {
+          isTypedRef.current = false;
+          triggerOnEnd();
+        }
+      };
+
+      animationFrameRef.current = requestAnimationFrame(timestampLoop);
+    } else if (timerType === 'requestAnimationFrame') {
+      // requestAnimationFrame 模式 - 会在后台暂停
+      const chars = charsRef.current;
+      let lastFrameTime = 0;
+
+      /** 停止打字 */
+      const stopTyped = () => {
+        isTypedRef.current = false;
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        triggerOnEnd();
+      };
+
+      /**
+       * requestAnimationFrame 循环
+       */
+      const frameLoop = (currentTime: number) => {
+        if (isUnmountRef.current) {
+          return;
+        }
+
+        if (chars.length === 0) {
+          stopTyped();
+          return;
+        }
+
+        // 控制间隔时间
+        if (currentTime - lastFrameTime >= interval) {
+          const char = chars.shift();
+          if (char === undefined) {
+            stopTyped();
+            return;
+          }
+
+          if (!isTypedRef.current) {
+            // 第一个字符
+            isTypedRef.current = true;
+            triggerOnStart(char);
+            triggerOnTypedChar(char, true);
+          } else {
+            triggerOnTypedChar(char);
+          }
+
+          processCharDisplay(char);
+          lastFrameTime = currentTime;
+        }
+
+        // 继续下一帧
+        animationFrameRef.current = requestAnimationFrame(frameLoop);
+      };
+
+      animationFrameRef.current = requestAnimationFrame(frameLoop);
+    } else {
+      // 传统 setTimeout 模式 - 会在后台暂停
+      const chars = charsRef.current;
+
+      /** 停止打字 */
+      const stopTyped = () => {
+        isTypedRef.current = false;
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
+        }
+        triggerOnEnd();
+      };
+
+      /** 打下一个字 */
+      const nextTyped = () => {
+        if (chars.length === 0) {
+          stopTyped();
+          return;
+        }
+        timerRef.current = setTimeout(startTyped, interval);
+      };
+
+      /**
+       * 开始打字
+       * @param isStartPoint 是否是开始打字
+       */
+      function startTyped(isStartPoint = false) {
+        if (isUnmountRef.current) {
+          return;
+        }
+        isTypedRef.current = true;
+
+        const char = chars.shift();
+        if (char === undefined) {
+          stopTyped();
+          return;
+        }
+
+        if (isStartPoint) {
+          triggerOnStart(char);
+          triggerOnTypedChar(char, isStartPoint);
+        } else {
+          triggerOnTypedChar(char);
+        }
+
+        processCharDisplay(char);
+        nextTyped();
       }
 
-      if (isStartPoint) {
-        triggerOnStart(char);
-        triggerOnTypedChar(char, isStartPoint);
-      } else {
-        triggerOnTypedChar(char);
-      }
-
-      processCharDisplay(char);
-      nextTyped();
+      startTyped(true);
     }
-
-    startTyped(true);
   };
 
   const lastSegmentRawRef = useRef<{
@@ -346,6 +496,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      * @param answerType 回答类型 {AnswerType}
      */
     push: (content: string, answerType: AnswerType) => {
+      if (content.length === 0) {
+        return;
+      }
       const lastSegmentReference = lastSegmentRawRef.current[`${answerType}Reference`];
 
       if (isWholeTypedEndRef.current) {
@@ -440,6 +593,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       setStableSegments([]);
       setCurrentSegment(undefined);
       isWholeTypedEndRef.current = false;
+      typedCharsRef.current = undefined;
+      startTimeRef.current = null;
+      typedCountRef.current = 0;
       lastSegmentRawRef.current = {
         thinking: '',
         answer: '',
