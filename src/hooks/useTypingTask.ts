@@ -24,10 +24,6 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   const isUnmountRef = useRef(false);
   /** 是否正在打字 */
   const isTypedRef = useRef(false);
-  /** 打字开始时间 */
-  const startTimeRef = useRef<number | null>(null);
-  /** 已经打出的字符数量 */
-  const typedCountRef = useRef<number>(0);
   /** 动画帧ID */
   const animationFrameRef = useRef<number | null>(null);
   /** 传统定时器（兼容模式） */
@@ -121,33 +117,6 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     });
   };
 
-  /**
-   * 处理下一个字符（用于时间戳驱动模式）
-   */
-  const processNextChar = (): boolean => {
-    const chars = charsRef.current;
-    if (chars.length === 0) {
-      return false;
-    }
-
-    const char = chars.shift();
-    if (char === undefined) {
-      return false;
-    }
-
-    // 第一个字符需要触发开始回调
-    if (typedCountRef.current === 0) {
-      triggerOnStart(char);
-      triggerOnTypedChar(char, true);
-    } else {
-      triggerOnTypedChar(char);
-    }
-
-    processCharDisplay(char);
-    typedCountRef.current++;
-    return true;
-  };
-
   /** 清除定时器 */
   const clearTimer = () => {
     // 清理 requestAnimationFrame
@@ -163,8 +132,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     }
 
     isTypedRef.current = false;
-    startTimeRef.current = null;
-    typedCountRef.current = 0;
+    typedCharsRef.current = undefined;
   };
 
   /** 开始打字任务 */
@@ -173,77 +141,10 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       return;
     }
 
-    switch (timerType) {
-      case 'timestamp':
-        startTimestampMode();
-        break;
-      case 'requestAnimationFrame':
-        startAnimationFrameMode();
-        break;
-      default:
-        startTimeoutMode();
-        break;
-    }
-  };
-
-  /** 时间戳驱动模式 */
-  const startTimestampMode = () => {
-    startTimeRef.current = Date.now();
-    typedCountRef.current = 0;
-    isTypedRef.current = true;
-
-    const timestampLoop = (currentTime: number) => {
-      if (isUnmountRef.current || !isTypedRef.current) {
-        return;
-      }
-
-      const chars = charsRef.current;
-      if (chars.length === 0) {
-        isTypedRef.current = false;
-        triggerOnEnd();
-        return;
-      }
-
-      if (!startTimeRef.current) {
-        startTimeRef.current = currentTime;
-      }
-
-      const elapsed = currentTime - startTimeRef.current;
-      const expectedChars = Math.floor(elapsed / interval);
-      const actualChars = typedCountRef.current;
-
-      // 如果需要追赶进度，一次性打出多个字符
-      if (expectedChars > actualChars) {
-        const charsToType = Math.min(expectedChars - actualChars, chars.length);
-        for (let i = 0; i < charsToType; i++) {
-          if (!processNextChar()) break;
-        }
-      }
-
-      // 继续下一帧
-      if (chars.length > 0) {
-        scheduleNextTimestampFrame(timestampLoop);
-      } else {
-        isTypedRef.current = false;
-        triggerOnEnd();
-      }
-    };
-
-    animationFrameRef.current = requestAnimationFrame(timestampLoop);
-  };
-
-  /** 调度下一个时间戳帧 */
-  const scheduleNextTimestampFrame = (timestampLoop: (time: number) => void) => {
-    if (interval < 16) {
-      // 使用 setTimeout 来实现更精确的时间控制
-      const nextCheckDelay = Math.max(1, Math.min(interval, 16));
-      setTimeout(() => {
-        if (!isUnmountRef.current && isTypedRef.current) {
-          animationFrameRef.current = requestAnimationFrame(timestampLoop);
-        }
-      }, nextCheckDelay);
+    if (timerType === 'requestAnimationFrame') {
+      startAnimationFrameMode();
     } else {
-      animationFrameRef.current = requestAnimationFrame(timestampLoop);
+      startTimeoutMode();
     }
   };
 
@@ -360,8 +261,6 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     stop: clearTimer,
     clear: () => {
       clearTimer();
-      startTimeRef.current = null;
-      typedCountRef.current = 0;
       typedCharsRef.current = undefined;
     },
     isTyping: () => isTypedRef.current,

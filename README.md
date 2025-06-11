@@ -24,13 +24,49 @@ npm install ds-markdown
 
 ### 默认导出
 
-| 属性名        | 类型                                                                                                     | 说明                                                                         | 默认值   |
-| ------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------- |
-| `interval`    | `number`                                                                                                 | 打字的速度`ms`                                                               | `30`     |
-| `answerType`  | `thinking` \| `answer`                                                                                   | `markdown`类型                                                               | `answer` |
-| `onEnd`       | `(data: { str: string; answerType: AnswerType }) => void`                                                | 打字结束后回调，**可能会触发多次，因为AI的响应可能是一段一段，间隔可能较久** | -        |
-| `onStart`     | `(data: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void` | 打字开始回调 **可能会触发多次**                                              | -        |
-| `onTypedChar` | `(data: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void` | 当前正在打字的回调                                                           | -        |
+| 属性名        | 类型                                                                                                     | 说明                                                                         | 默认值                    |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
+| `interval`    | `number`                                                                                                 | 打字的速度`ms`                                                               | `30`                      |
+| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'`                                                              | 计时器类型，详见下方说明                                                     | `'requestAnimationFrame'` |
+| `answerType`  | `thinking` \| `answer`                                                                                   | `markdown`类型                                                               | `answer`                  |
+| `onEnd`       | `(data: { str: string; answerType: AnswerType }) => void`                                                | 打字结束后回调，**可能会触发多次，因为AI的响应可能是一段一段，间隔可能较久** | -                         |
+| `onStart`     | `(data: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void` | 打字开始回调 **可能会触发多次**                                              | -                         |
+| `onTypedChar` | `(data: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void` | 当前正在打字的回调                                                           | -                         |
+
+#### timerType 模式说明
+
+##### `requestAnimationFrame` 模式 (推荐)
+
+- **🎯 时间驱动**: 基于实际经过的时间计算字符数量
+- **📊 批量处理**: 单帧内可以处理多个字符，适合高频间隔
+- **🎬 帧同步**: 与浏览器刷新率（60fps）同步，动画更流畅
+- **适用场景**: 追求流畅动画效果，特别是`interval < 16ms`的高频打字
+
+```typescript
+// 高频示例：interval = 5ms
+// 每帧(16.67ms)会打印 3-4 个字符，视觉效果流畅连续
+```
+
+##### `setTimeout` 模式 (传统)
+
+- **⚡ 单字符处理**: 每次调用只处理一个字符
+- **🕐 固定间隔**: 严格按照设定的interval执行
+- **🎵 节拍感**: 精确的时间控制，传统打字机效果
+- **适用场景**: 需要精确时间控制，营造传统打字机的节拍感
+
+```typescript
+// 示例：interval = 100ms
+// 精确每100ms打印一个字符，有明显的节拍感
+```
+
+##### 性能对比
+
+| 特性         | requestAnimationFrame        | setTimeout       |
+| ------------ | ---------------------------- | ---------------- |
+| **字符处理** | 每帧可处理多个字符           | 每次处理一个字符 |
+| **高频间隔** | ✅ 优秀 (5ms → 每帧3字符)    | ❌ 可能卡顿      |
+| **低频间隔** | ✅ 正常 (100ms → 6帧后1字符) | ✅ 精确          |
+| **视觉效果** | 🎬 流畅动画感                | ⚡ 精确节拍感    |
 
 ## 使用示例 - default export
 
