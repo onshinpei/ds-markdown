@@ -287,7 +287,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
     const tokens = compiler(currentLastSegmentRaw);
 
-    // debugger;
     // 如果最后一个token是space，则把lastSegmentRaw设置为空
     if (tokens[tokens.length - 1].type === 'space') {
       currentLastSegmentReference = null;
