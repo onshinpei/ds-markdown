@@ -63,9 +63,9 @@ const BasicDemo = () => {
     }, 50);
   }, []);
 
-  const interval = 16.67;
+  const interval = 8;
   const flag = true;
-  const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
+  const timerType = flag ? 'timestamp' : 'setTimeout';
 
   return (
     <>

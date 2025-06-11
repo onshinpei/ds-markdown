@@ -275,7 +275,6 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
         for (let i = 0; i < actualCharsToType; i++) {
           const char = chars.shift();
-          console.log(char?.content);
           if (char === undefined) {
             break;
           }

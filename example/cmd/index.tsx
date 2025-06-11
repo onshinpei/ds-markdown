@@ -25,34 +25,38 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     }
     mountedRef.current = true;
 
-    // async function pushData() {
-    //   while (true) {
-    //     await new Promise((resolve) => setTimeout(resolve, Math.random() * 30));
+    async function pushData() {
+      while (true) {
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 30));
 
-    //     const data = cozeData.shift();
+        const data = cozeData.shift();
 
-    //     if (data) {
-    //       if (data.answerType === 'thinking') {
-    //         continue;
-    //       }
-    //       cmdRef.current.push(data.content, data.answerType);
-    //     }
+        if (data) {
+          if (data.answerType === 'thinking') {
+            continue;
+          }
+          cmdRef.current.push(data.content, data.answerType);
+        }
 
-    //     if (!data || cozeData.length === 0) {
-    //       break;
-    //     }
-    //   }
-    // }
+        if (!data || cozeData.length === 0) {
+          break;
+        }
+      }
+    }
 
-    // pushData();
-    cmdRef.current.push(data.thinking_content, 'thinking');
-    cmdRef.current.push(data.content, 'answer');
+    pushData();
+    // cmdRef.current.push(data.thinking_content, 'thinking');
+    // cmdRef.current.push(data.content, 'answer');
   }, []);
+
+  const interval = 8;
+  const flag = true;
+  const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
     <div className="ds-message-box">
       <div className="ds-message-list">
-        <MarkdownCMD interval={1} ref={cmdRef} timerType="requestAnimationFrame" />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} />
       </div>
     </div>
   );
