@@ -173,188 +173,186 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       return;
     }
 
-    if (timerType === 'timestamp') {
-      // 时间戳驱动模式 - 能在后台继续运行
-      startTimeRef.current = Date.now();
-      typedCountRef.current = 0;
-      isTypedRef.current = true;
+    switch (timerType) {
+      case 'timestamp':
+        startTimestampMode();
+        break;
+      case 'requestAnimationFrame':
+        startAnimationFrameMode();
+        break;
+      default:
+        startTimeoutMode();
+        break;
+    }
+  };
 
-      /** 时间戳驱动的打字循环 */
-      const timestampLoop = (currentTime: number) => {
-        if (isUnmountRef.current || !isTypedRef.current) {
-          return;
-        }
+  /** 时间戳驱动模式 */
+  const startTimestampMode = () => {
+    startTimeRef.current = Date.now();
+    typedCountRef.current = 0;
+    isTypedRef.current = true;
 
-        const chars = charsRef.current;
-        if (chars.length === 0) {
-          // 打字完成
-          isTypedRef.current = false;
-          triggerOnEnd();
-          return;
-        }
+    const timestampLoop = (currentTime: number) => {
+      if (isUnmountRef.current || !isTypedRef.current) {
+        return;
+      }
 
-        if (!startTimeRef.current) {
-          startTimeRef.current = currentTime;
-        }
-
-        const elapsed = currentTime - startTimeRef.current;
-        const expectedChars = Math.floor(elapsed / interval);
-        const actualChars = typedCountRef.current;
-
-        // 如果需要追赶进度，一次性打出多个字符
-        if (expectedChars > actualChars) {
-          const charsToType = Math.min(expectedChars - actualChars, chars.length);
-
-          for (let i = 0; i < charsToType; i++) {
-            if (!processNextChar()) {
-              break;
-            }
-          }
-        }
-
-        // 继续下一帧，但如果 interval 很小，我们需要更频繁地检查
-        if (chars.length > 0) {
-          // 如果 interval 小于 16ms（60fps），使用更频繁的检查
-          if (interval < 16) {
-            // 使用 setTimeout 来实现更精确的时间控制
-            const nextCheckDelay = Math.max(1, Math.min(interval, 16));
-            setTimeout(() => {
-              if (!isUnmountRef.current && isTypedRef.current) {
-                animationFrameRef.current = requestAnimationFrame(timestampLoop);
-              }
-            }, nextCheckDelay);
-          } else {
-            animationFrameRef.current = requestAnimationFrame(timestampLoop);
-          }
-        } else {
-          isTypedRef.current = false;
-          triggerOnEnd();
-        }
-      };
-
-      animationFrameRef.current = requestAnimationFrame(timestampLoop);
-    } else if (timerType === 'requestAnimationFrame') {
-      // requestAnimationFrame 模式 - 会在后台暂停
       const chars = charsRef.current;
-      let lastFrameTime = 0;
-
-      /** 停止打字 */
-      const stopTyped = () => {
+      if (chars.length === 0) {
         isTypedRef.current = false;
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-          animationFrameRef.current = null;
-        }
         triggerOnEnd();
-      };
+        return;
+      }
 
-      /**
-       * requestAnimationFrame 循环
-       */
-      const frameLoop = (currentTime: number) => {
-        if (isUnmountRef.current) {
-          return;
+      if (!startTimeRef.current) {
+        startTimeRef.current = currentTime;
+      }
+
+      const elapsed = currentTime - startTimeRef.current;
+      const expectedChars = Math.floor(elapsed / interval);
+      const actualChars = typedCountRef.current;
+
+      // 如果需要追赶进度，一次性打出多个字符
+      if (expectedChars > actualChars) {
+        const charsToType = Math.min(expectedChars - actualChars, chars.length);
+        for (let i = 0; i < charsToType; i++) {
+          if (!processNextChar()) break;
         }
+      }
 
-        if (chars.length === 0) {
-          stopTyped();
-          return;
+      // 继续下一帧
+      if (chars.length > 0) {
+        scheduleNextTimestampFrame(timestampLoop);
+      } else {
+        isTypedRef.current = false;
+        triggerOnEnd();
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(timestampLoop);
+  };
+
+  /** 调度下一个时间戳帧 */
+  const scheduleNextTimestampFrame = (timestampLoop: (time: number) => void) => {
+    if (interval < 16) {
+      // 使用 setTimeout 来实现更精确的时间控制
+      const nextCheckDelay = Math.max(1, Math.min(interval, 16));
+      setTimeout(() => {
+        if (!isUnmountRef.current && isTypedRef.current) {
+          animationFrameRef.current = requestAnimationFrame(timestampLoop);
         }
-
-        // 计算这一帧应该打多少个字符
-        if (lastFrameTime === 0) {
-          lastFrameTime = currentTime;
-        }
-
-        const deltaTime = currentTime - lastFrameTime;
-
-        const charsToType = Math.max(1, Math.floor(deltaTime / interval));
-
-        // 打字符，但不超过剩余字符数
-        const actualCharsToType = Math.min(charsToType, chars.length);
-
-        for (let i = 0; i < actualCharsToType; i++) {
-          const char = chars.shift();
-          if (char === undefined) {
-            break;
-          }
-
-          if (!isTypedRef.current) {
-            // 第一个字符
-            isTypedRef.current = true;
-            triggerOnStart(char);
-            triggerOnTypedChar(char, true);
-          } else {
-            triggerOnTypedChar(char);
-          }
-
-          processCharDisplay(char);
-        }
-
-        lastFrameTime = currentTime;
-
-        // 继续下一帧
-        if (chars.length > 0) {
-          animationFrameRef.current = requestAnimationFrame(frameLoop);
-        } else {
-          isTypedRef.current = false;
-          triggerOnEnd();
-        }
-      };
-
-      animationFrameRef.current = requestAnimationFrame(frameLoop);
+      }, nextCheckDelay);
     } else {
-      // 传统 setTimeout 模式 - 会在后台暂停
-      const chars = charsRef.current;
+      animationFrameRef.current = requestAnimationFrame(timestampLoop);
+    }
+  };
 
-      /** 停止打字 */
-      const stopTyped = () => {
-        isTypedRef.current = false;
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-          timerRef.current = null;
-        }
-        triggerOnEnd();
-      };
+  /** requestAnimationFrame 模式 */
+  const startAnimationFrameMode = () => {
+    const chars = charsRef.current;
+    let lastFrameTime = 0;
 
-      /** 打下一个字 */
-      const nextTyped = () => {
-        if (chars.length === 0) {
-          stopTyped();
-          return;
-        }
-        timerRef.current = setTimeout(startTyped, interval);
-      };
+    const frameLoop = (currentTime: number) => {
+      if (isUnmountRef.current) return;
 
-      /**
-       * 开始打字
-       * @param isStartPoint 是否是开始打字
-       */
-      function startTyped(isStartPoint = false) {
-        if (isUnmountRef.current) {
-          return;
-        }
-        isTypedRef.current = true;
+      if (chars.length === 0) {
+        stopAnimationFrame();
+        return;
+      }
 
+      // 计算这一帧应该打多少个字符
+      if (lastFrameTime === 0) {
+        lastFrameTime = currentTime;
+      }
+
+      const deltaTime = currentTime - lastFrameTime;
+      const charsToType = Math.max(1, Math.floor(deltaTime / interval));
+      const actualCharsToType = Math.min(charsToType, chars.length);
+
+      // 处理字符
+      for (let i = 0; i < actualCharsToType; i++) {
         const char = chars.shift();
-        if (char === undefined) {
-          stopTyped();
-          return;
-        }
+        if (char === undefined) break;
 
-        if (isStartPoint) {
+        if (!isTypedRef.current) {
+          isTypedRef.current = true;
           triggerOnStart(char);
-          triggerOnTypedChar(char, isStartPoint);
+          triggerOnTypedChar(char, true);
         } else {
           triggerOnTypedChar(char);
         }
-
         processCharDisplay(char);
-        nextTyped();
       }
 
-      startTyped(true);
+      lastFrameTime = currentTime;
+
+      // 继续下一帧
+      if (chars.length > 0) {
+        animationFrameRef.current = requestAnimationFrame(frameLoop);
+      } else {
+        isTypedRef.current = false;
+        triggerOnEnd();
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(frameLoop);
+  };
+
+  /** 停止动画帧模式 */
+  const stopAnimationFrame = () => {
+    isTypedRef.current = false;
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
     }
+    triggerOnEnd();
+  };
+
+  /** setTimeout 模式 */
+  const startTimeoutMode = () => {
+    const chars = charsRef.current;
+
+    const nextTyped = () => {
+      if (chars.length === 0) {
+        stopTimeout();
+        return;
+      }
+      timerRef.current = setTimeout(startTyped, interval);
+    };
+
+    const startTyped = (isStartPoint = false) => {
+      if (isUnmountRef.current) return;
+
+      isTypedRef.current = true;
+      const char = chars.shift();
+
+      if (char === undefined) {
+        stopTimeout();
+        return;
+      }
+
+      if (isStartPoint) {
+        triggerOnStart(char);
+        triggerOnTypedChar(char, isStartPoint);
+      } else {
+        triggerOnTypedChar(char);
+      }
+
+      processCharDisplay(char);
+      nextTyped();
+    };
+
+    startTyped(true);
+  };
+
+  /** 停止超时模式 */
+  const stopTimeout = () => {
+    isTypedRef.current = false;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    triggerOnEnd();
   };
 
   return {
