@@ -17,7 +17,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"技能","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\n\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"1","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
