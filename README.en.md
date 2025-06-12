@@ -2,7 +2,7 @@
 
 > 🚀 High-performance React Markdown typing animation component, perfectly replicating DeepSeek chat interface effects
 
-**[🇨🇳 中文文档](./README.md) | 🇺🇸 English**
+**[🇨🇳 中文](./README.md) | 🇺🇸 English | [🇯🇵 日本語](./README.ja.md) | [🇰🇷 한국어](./README.ko.md)**
 
 A React component designed specifically for modern AI applications, providing smooth real-time typing animations and complete Markdown rendering capabilities.
 
