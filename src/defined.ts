@@ -5,6 +5,19 @@
 export type AnswerType = 'answer' | 'thinking';
 
 /**
+ * 字符接口
+ */
+export interface IChar {
+  content: string;
+  answerType: AnswerType;
+  /**
+   * split_segment 两个连续的段落，需要做分割
+   */
+  contentType: 'space' | 'segment' | 'split_segment';
+  tokenId: number;
+}
+
+/**
  * 段落类型
  * 段落类型为br时，表示换行
  * 段落类型为text时，表示文本
@@ -29,6 +42,8 @@ export interface ITokensReference {
 }
 
 export interface MarkdownProps {
+  /** 计时类型： 支持setTimeout和requestAnimationFrame */
+  timerType?: 'setTimeout' | 'requestAnimationFrame';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭匀速打字机效果 */

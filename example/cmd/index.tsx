@@ -49,10 +49,14 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     // cmdRef.current.push(data.content, 'answer');
   }, []);
 
+  const interval = 8;
+  const flag = true;
+  const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
+
   return (
     <div className="ds-message-box">
       <div className="ds-message-list">
-        <MarkdownCMD interval={10} ref={cmdRef} />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} />
       </div>
     </div>
   );
