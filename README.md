@@ -122,14 +122,14 @@ React 19 带来了许多激动人心的新特性：
 
 ### 声明式 API (推荐新手)
 
-| 属性          | 类型                                        | 说明                    | 默认值                    |
-| ------------- | ------------------------------------------- | ----------------------- | ------------------------- |
-| `interval`    | `number`                                    | 打字间隔 (毫秒)         | `30`                      |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | `'requestAnimationFrame'` |
-| `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                |
-| `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                         |
-| `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                         |
-| `onTypedChar` | `(data: CharData) => void`                  | 每字符打字回调          | -                         |
+| 属性          | 类型                                        | 说明                    | 默认值                                                      |
+| ------------- | ------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
+| `interval`    | `number`                                    | 打字间隔 (毫秒)         | `30`                                                        |
+| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
+| `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                                                  |
+| `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
+| `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
+| `onTypedChar` | `(data: CharData) => void`                  | 每字符打字回调          | -                                                           |
 
 ### 命令式 API (推荐流式场景)
 
@@ -195,6 +195,8 @@ interface MarkdownRef {
 | **低频间隔** | ✅ 正常 (100ms → 6帧后1字符) | ✅ 精确          |
 | **视觉效果** | 🎬 流畅动画感                | ⚡ 精确节拍感    |
 | **性能开销** | 🟢 低 (帧同步)               | 🟡 中等 (定时器) |
+
+高频推荐`requestAnimationFrame`,低频推荐 `setTimeout`
 
 ---
 

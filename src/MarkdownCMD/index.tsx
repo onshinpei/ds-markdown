@@ -17,7 +17,7 @@ export interface MarkdownRef {
   triggerWholeEnd: () => void;
   flushBuffer: (answerType?: AnswerType) => void;
 }
-const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'requestAnimationFrame' }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout' }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
