@@ -2,6 +2,8 @@
 
 > 🚀 高性能 React Markdown 打字动画组件，完美复刻 DeepSeek 聊天界面效果
 
+**🇨🇳 中文 | [🇺🇸 English](./README.en.md)**
+
 一个专为现代 AI 应用设计的 React 组件，提供流畅的实时打字动画和完整的 Markdown 渲染能力。
 
 [![npm version](https://img.shields.io/npm/v/ds-markdown)](https://www.npmjs.com/package/ds-markdown)
