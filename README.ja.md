@@ -57,6 +57,46 @@ yarn add ds-markdown
 pnpm add ds-markdown
 ```
 
+### ESM CDN での使用
+
+インストール不要、ブラウザで直接使用できます：
+
+```html
+<!-- スタイルのインポート -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/style.css" />
+
+<!-- コンポーネントのインポート -->
+<script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.1.0",
+      "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+      "ds-markdown": "https://esm.sh/ds-markdown@0.0.10"
+    }
+  }
+</script>
+<script type="module" src="https://esm.sh/tsx"></script>
+
+<script type="text/babel">
+  import { createRoot } from 'react-dom/client';
+  import DsMarkdown from 'ds-markdown';
+
+  const markdown = `
+# Hello ds-markdown
+
+これは**高性能**なタイピングアニメーションコンポーネントです！
+
+## 特徴
+- ⚡ 遅延ゼロのストリーミング
+- 🎬 スムーズなタイピングアニメーション
+- 🎯 完璧なシンタックスサポート
+  `;
+
+  const root = createRoot(document.getElementById('root'));
+  root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
+</script>
+```
+
 ## 🚀 5分クイックスタート
 
 ### 基本的な使用法

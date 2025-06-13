@@ -57,6 +57,46 @@ yarn add ds-markdown
 pnpm add ds-markdown
 ```
 
+### Using via ESM CDN
+
+No installation required, use directly in browser:
+
+```html
+<!-- Import styles -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/style.css" />
+
+<!-- Import component -->
+<script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.1.0",
+      "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+      "ds-markdown": "https://esm.sh/ds-markdown@0.0.10"
+    }
+  }
+</script>
+<script type="module" src="https://esm.sh/tsx"></script>
+
+<script type="text/babel">
+  import { createRoot } from 'react-dom/client';
+  import DsMarkdown from 'ds-markdown';
+
+  const markdown = `
+# Hello ds-markdown
+
+This is a **high-performance** typing animation component!
+
+## Features
+- ⚡ Zero-delay streaming
+- 🎬 Smooth typing animation
+- 🎯 Perfect syntax support
+  `;
+
+  const root = createRoot(document.getElementById('root'));
+  root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
+</script>
+```
+
 ## 🚀 5-Minute Quick Start
 
 ### Basic Usage
