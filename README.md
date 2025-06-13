@@ -71,7 +71,7 @@ pnpm add ds-markdown
     "imports": {
       "react": "https://esm.sh/react@19.1.0",
       "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-      "ds-markdown": "https://esm.sh/ds-markdown@0.0.11-beta.0"
+      "ds-markdown": "https://esm.sh/ds-markdown"
     }
   }
 </script>
