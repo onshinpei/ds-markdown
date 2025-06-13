@@ -63,7 +63,7 @@ No installation required, use directly in browser:
 
 ```html
 <!-- Import styles -->
-<link rel="stylesheet" href="https://esm.sh/ds-markdown/style.css" />
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
 
 <!-- Import component -->
 <script type="importmap">
@@ -71,7 +71,7 @@ No installation required, use directly in browser:
     "imports": {
       "react": "https://esm.sh/react@19.1.0",
       "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-      "ds-markdown": "https://esm.sh/ds-markdown@0.0.10"
+      "ds-markdown": "https://esm.sh/ds-markdown"
     }
   }
 </script>

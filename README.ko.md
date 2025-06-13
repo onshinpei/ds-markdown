@@ -63,7 +63,7 @@ pnpm add ds-markdown
 
 ```html
 <!-- 스타일 가져오기 -->
-<link rel="stylesheet" href="https://esm.sh/ds-markdown/style.css" />
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
 
 <!-- 컴포넌트 가져오기 -->
 <script type="importmap">
@@ -71,7 +71,7 @@ pnpm add ds-markdown
     "imports": {
       "react": "https://esm.sh/react@19.1.0",
       "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-      "ds-markdown": "https://esm.sh/ds-markdown@0.0.10"
+      "ds-markdown": "https://esm.sh/ds-markdown"
     }
   }
 </script>
