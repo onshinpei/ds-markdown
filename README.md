@@ -57,6 +57,46 @@ yarn add ds-markdown
 pnpm add ds-markdown
 ```
 
+### 通过 ESM CDN 使用
+
+无需安装，直接在浏览器中使用：
+
+```html
+<!-- 导入样式 -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- 导入组件 -->
+<script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.1.0",
+      "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+      "ds-markdown": "https://esm.sh/ds-markdown@0.0.11-beta.0"
+    }
+  }
+</script>
+<script type="module" src="https://esm.sh/tsx"></script>
+
+<script type="text/babel">
+  import { createRoot } from 'react-dom/client';
+  import DsMarkdown from 'ds-markdown';
+
+  const markdown = `
+# Hello ds-markdown
+
+这是一个**高性能**的 Markdown 打字动画组件！
+
+## 特性
+- ⚡ 零延迟流式处理
+- 🎬 流畅的打字动画
+- 🎯 完美的语法支持
+  `;
+
+  const root = createRoot(document.getElementById('root'));
+  root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
+</script>
+```
+
 ## 🚀 5分钟上手
 
 ### 基础用法
