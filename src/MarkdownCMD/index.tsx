@@ -15,7 +15,6 @@ export interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
-  flushBuffer: (answerType?: AnswerType) => void;
 }
 const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout' }, ref) => {
   /** 当前需要打字的内容 */
@@ -43,6 +42,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    */
   const processCharDisplay = (char: IChar) => {
     const currentSegment = currentParagraphRef.current;
+    // debugger;
     /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
     if (char.contentType === 'space' || char.contentType === 'split_segment') {
       if (currentSegment) {
@@ -169,97 +169,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   });
 
   /**
-   * 检测当前内容是否在安全的 Markdown 边界
-   */
-  const isAtSafeMarkdownBoundary = (content: string): boolean => {
-    if (!content.trim()) return true;
-
-    const lines = content.split('\n');
-    const lastLine = lines[lines.length - 1];
-
-    // 如果以换行符结尾，通常是安全的
-    if (content.endsWith('\n')) return true;
-
-    // 检查最后一行是否是完整的语法结构
-    const patterns = [
-      /^#+\s+.+$/, // 完整标题: "## 标题"
-      /^\s*(\d+\.|\*|\+|-)\s+.+$/, // 完整列表项: "1. 项目" 或 "- 项目"
-      /^\s*```\s*$/, // 代码块结束: "```"
-      /^\s*```\w*\s*$/, // 代码块开始: "```js"
-      /^\s*>.*$/, // 引用: "> 内容"
-      /^\s*\|.*\|\s*$/, // 完整表格行: "| 列1 | 列2 |"
-      /^.*[.!?。！？]\s*$/, // 以句号等结尾的句子
-    ];
-
-    return patterns.some((pattern) => pattern.test(lastLine));
-  };
-
-  /**
-   * 查找最近的安全分割点
-   */
-  const findLastSafeBoundary = (content: string): number => {
-    const lines = content.split('\n');
-
-    // 从后往前找最后一个完整的行
-    for (let i = lines.length - 1; i >= 0; i--) {
-      const currentContent = lines.slice(0, i + 1).join('\n');
-
-      if (i < lines.length - 1) {
-        // 有后续行，说明当前行以换行结尾，通常是安全的
-        return currentContent.length + 1; // +1 for \n
-      }
-
-      const line = lines[i];
-
-      // 检查当前行是否是完整的结构
-      if (
-        /^#+\s+.+$/.test(line) || // 完整标题
-        /^\s*(\d+\.|\*|\+|-)\s+.+$/.test(line) || // 完整列表项
-        /^\s*```\s*$/.test(line) || // 代码块标记
-        /^\s*>.*$/.test(line) || // 引用行
-        /^.*[.!?。！？]\s*$/.test(line)
-      ) {
-        // 完整句子
-        return currentContent.length;
-      }
-    }
-
-    return 0; // 没找到安全点
-  };
-
-  /**
-   * 同步处理带缓冲的内容推送
-   */
-  const processBufferedPush = (content: string, answerType: AnswerType) => {
-    const bufferKey = `${answerType}Buffer` as const;
-    const lastSegmentRef = lastSegmentRawRef.current;
-
-    // 将内容添加到缓冲区
-    lastSegmentRef[bufferKey] += content;
-
-    // 检查当前是否在安全边界
-    if (isAtSafeMarkdownBoundary(lastSegmentRef[bufferKey])) {
-      // 在安全边界，直接处理所有内容
-      const bufferedContent = lastSegmentRef[bufferKey];
-      lastSegmentRef[bufferKey] = '';
-      processPushInternal(bufferedContent, answerType);
-    } else {
-      // 不在安全边界，找到最后一个安全分割点
-      const safeBoundary = findLastSafeBoundary(lastSegmentRef[bufferKey]);
-
-      if (safeBoundary > 0) {
-        // 有安全分割点，处理安全部分，保留其余部分
-        const safeContent = lastSegmentRef[bufferKey].substring(0, safeBoundary);
-        const remainingContent = lastSegmentRef[bufferKey].substring(safeBoundary);
-
-        lastSegmentRef[bufferKey] = remainingContent;
-        processPushInternal(safeContent, answerType);
-      }
-      // 如果没有安全分割点，继续缓冲等待更多内容
-    }
-  };
-
-  /**
    * 内部推送处理逻辑
    */
   const processPushInternal = (content: string, answerType: AnswerType) => {
@@ -286,19 +195,24 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
 
     const tokens = compiler(currentLastSegmentRaw);
-
     // 如果最后一个token是space，则把lastSegmentRaw设置为空
     if (tokens[tokens.length - 1].type === 'space') {
       currentLastSegmentReference = null;
     } else {
-      currentLastSegmentReference = tokens[tokens.length - 1];
+      // 如果上一个segment存在并且当前只有一个token，则说明是同一个segment
+      if (lastSegmentReference !== null && tokens.length === 1) {
+        const newCurrentLastSegmentReference = lastSegmentReference;
+        newCurrentLastSegmentReference.raw = newCurrentLastSegmentReference.raw + content;
+        currentLastSegmentReference = newCurrentLastSegmentReference;
+      } else {
+        currentLastSegmentReference = tokens[tokens.length - 1];
+      }
     }
 
     const pushAndSplitSegment = (raw: string, currenIndex: number, segmentTokenId: number) => {
       const currentToken = tokens[currenIndex];
       if (currenIndex > 0) {
         const prevToken = tokens[currenIndex - 1];
-
         if (prevToken.type !== 'space' && currentToken.type !== 'space') {
           charsRef.current.push({ content: '', answerType, contentType: 'split_segment', tokenId: currentToken.id });
         }
@@ -352,35 +266,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
   };
 
-  /**
-   * 强制刷新缓冲区内容
-   */
-  const flushBuffer = (answerType?: AnswerType) => {
-    const lastSegmentRef = lastSegmentRawRef.current;
-
-    if (answerType) {
-      // 刷新指定类型的缓冲区
-      const bufferKey = `${answerType}Buffer` as const;
-      const bufferedContent = lastSegmentRef[bufferKey];
-      if (bufferedContent) {
-        lastSegmentRef[bufferKey] = '';
-        processPushInternal(bufferedContent, answerType);
-      }
-    } else {
-      // 刷新所有缓冲区
-      if (lastSegmentRef.thinkingBuffer) {
-        const content = lastSegmentRef.thinkingBuffer;
-        lastSegmentRef.thinkingBuffer = '';
-        processPushInternal(content, 'thinking');
-      }
-      if (lastSegmentRef.answerBuffer) {
-        const content = lastSegmentRef.answerBuffer;
-        lastSegmentRef.answerBuffer = '';
-        processPushInternal(content, 'answer');
-      }
-    }
-  };
-
   useImperativeHandle(ref, () => ({
     /**
      * 添加内容
@@ -388,7 +273,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      * @param answerType 回答类型 {AnswerType}
      */
     push: (content: string, answerType: AnswerType) => {
-      processBufferedPush(content, answerType);
+      processPushInternal(content, answerType);
     },
     /**
      * 清除打字任务
@@ -413,9 +298,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      * 主动触发打字结束
      */
     triggerWholeEnd: () => {
-      // 先刷新所有缓冲区内容
-      flushBuffer();
-
       isWholeTypedEndRef.current = true;
       if (!typingTask.isTyping()) {
         // 这里需要手动触发结束回调，因为 hook 中的 triggerOnEnd 不能直接调用
@@ -428,7 +310,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     /**
      * 刷新缓冲区 (新增方法)
      */
-    flushBuffer,
   }));
 
   const getParagraphs = (paragraphs: IParagraph[], answerType: AnswerType) => {
