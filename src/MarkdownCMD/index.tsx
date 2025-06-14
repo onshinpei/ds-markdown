@@ -188,13 +188,14 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     let currentLastSegmentRaw = '';
     let lastSegmentRaw = '';
     if (lastSegmentReference) {
-      lastSegmentRaw = lastSegmentReference.noTrimEndRaw || lastSegmentReference.raw;
+      lastSegmentRaw = lastSegmentReference.raw;
       currentLastSegmentRaw = lastSegmentRaw + content;
     } else {
       currentLastSegmentRaw = content;
     }
 
     const tokens = compiler(currentLastSegmentRaw);
+
     // 如果最后一个token是space，则把lastSegmentRaw设置为空
     if (tokens[tokens.length - 1].type === 'space') {
       currentLastSegmentReference = null;
@@ -248,7 +249,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
             charsRef.current.push({ content: token.raw, answerType, contentType: 'space', tokenId: token.id });
           }
         } else {
-          str += token.noTrimEndRaw || token.raw;
+          str += token.raw;
           const realRaw = str.slice(nextTokenIndex);
           if (realRaw.length > 0) {
             pushAndSplitSegment(realRaw, i, lastSegmentReference.id);

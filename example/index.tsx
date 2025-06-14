@@ -9,7 +9,7 @@ import CDMDemo from './cmd';
 const App = () => {
   return (
     <div className="ds-message">
-      <BasicDemo />
+      <CDMDemo />
     </div>
   );
 };
