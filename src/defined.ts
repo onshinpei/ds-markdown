@@ -15,6 +15,8 @@ export interface IChar {
    */
   contentType: 'space' | 'segment' | 'split_segment';
   tokenId: number;
+  /** 字符索引 */
+  index: number;
 }
 
 /**

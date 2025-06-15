@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState }
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, IParagraph, MarkdownProps, IChar } from '../defined.js';
+import { AnswerType, IParagraph, MarkdownProps, IChar, ITokensReference } from '../defined.js';
 import { compiler } from '../utils/compiler.js';
 import { __DEV__ } from '../constant.js';
 import deepClone from '../utils/methods/deepClone.js';
@@ -35,12 +35,12 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   const [currentSegment, setCurrentSegment] = useState<IParagraph | undefined>(undefined);
   /** 当前段落引用 */
   const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
-  // currentParagraphRef.current = currentSegment;
 
   /**
    * 处理字符显示逻辑
    */
   const processCharDisplay = (char: IChar) => {
+    console.log('processCharDisplay', char);
     const currentSegment = currentParagraphRef.current;
     // debugger;
     /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
@@ -50,43 +50,13 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           const newParagraphs = [...prev];
           // 放入到稳定队列
           if (currentSegment) {
+            debugger;
             newParagraphs.push({ ...currentSegment, isTyped: false });
-          }
-          if (char.contentType === 'space') {
-            newParagraphs.push({
-              content: '',
-              isTyped: false,
-              type: 'br',
-              answerType: char.answerType,
-              tokensReference: {
-                [char.tokenId]: {
-                  startIndex: 0,
-                  raw: char.content,
-                },
-              },
-            });
           }
           return newParagraphs;
         });
         setCurrentSegment(() => undefined);
         currentParagraphRef.current = undefined;
-      } else {
-        setStableSegments((prev) => {
-          const newParagraphs = [...prev];
-          newParagraphs.push({
-            content: '',
-            isTyped: false,
-            type: 'br',
-            answerType: char.answerType,
-            tokensReference: {
-              [char.tokenId]: {
-                startIndex: 0,
-                raw: char.content,
-              },
-            },
-          });
-          return newParagraphs;
-        });
       }
       return;
     }
@@ -152,20 +122,31 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   });
 
   const lastSegmentRawRef = useRef<{
-    thinking: string;
-    answer: string;
     thinkingReference: Token | null;
     answerReference: Token | null;
-    // 同步缓冲区，不使用定时器
-    thinkingBuffer: string;
-    answerBuffer: string;
   }>({
-    thinking: '',
-    answer: '',
     thinkingReference: null,
     answerReference: null,
-    thinkingBuffer: '',
-    answerBuffer: '',
+  });
+
+  const wholeContentRef = useRef<{
+    thinking: {
+      content: string;
+      length: number;
+    };
+    answer: {
+      content: string;
+      length: number;
+    };
+  }>({
+    thinking: {
+      content: '',
+      length: 0,
+    },
+    answer: {
+      content: '',
+      length: 0,
+    },
   });
 
   /**
@@ -184,6 +165,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       }
       return;
     }
+    const wholeContent = wholeContentRef.current[`${answerType}`] || '';
+    let currentIndex = wholeContent.length;
+
     let currentLastSegmentReference: Token | null = null;
     let currentLastSegmentRaw = '';
     let lastSegmentRaw = '';
@@ -210,27 +194,28 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       }
     }
 
-    const pushAndSplitSegment = (raw: string, currenIndex: number, segmentTokenId: number) => {
-      const currentToken = tokens[currenIndex];
-      if (currenIndex > 0) {
-        const prevToken = tokens[currenIndex - 1];
+    const pushAndSplitSegment = (raw: string, tokenIndex: number, segmentTokenId: number) => {
+      const currentToken = tokens[tokenIndex];
+      if (tokenIndex > 0) {
+        const prevToken = tokens[tokenIndex - 1];
         if (prevToken.type !== 'space' && currentToken.type !== 'space') {
-          charsRef.current.push({ content: '', answerType, contentType: 'split_segment', tokenId: currentToken.id });
+          charsRef.current.push({ content: '', answerType, contentType: 'split_segment', tokenId: currentToken.id, index: currentIndex++ });
         }
       }
 
-      charsRef.current.push(...(raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: segmentTokenId })) as IChar[]));
+      charsRef.current.push(...(raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: segmentTokenId, index: currentIndex++ })) as IChar[]));
     };
 
     if (!lastSegmentReference) {
       tokens.forEach((token, i) => {
         if (token.type === 'space') {
-          charsRef.current.push({ content: token.raw, answerType, contentType: 'space', tokenId: token.id });
+          charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
         } else {
           pushAndSplitSegment(token.raw, i, token.id);
         }
       });
     } else {
+      // debugger;
       let str = '';
       let firstSpaceIndex = -1;
       let nextTokenIndex = lastSegmentRaw.length;
@@ -244,12 +229,26 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           str += token.raw;
           if (lastSegmentRaw.length > firstSpaceIndex) {
             // 如果lastSegmentRaw的长度大于firstSpaceIndex，则需要将当前设置为 segment
-            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: token.id })) as IChar[]));
+            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: token.id, index: currentIndex++ })) as IChar[]));
           } else {
-            charsRef.current.push({ content: token.raw, answerType, contentType: 'space', tokenId: token.id });
+            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
           }
         } else {
           str += token.raw;
+          if (str.length < nextTokenIndex && i == 0) {
+            /** 如果当前字符串长度小于下一个token的索引，则需要将当前段落更新, 以修正不完整的token */
+            const lastSegmentReferenceId = lastSegmentReference.id;
+            const currentSegment = currentParagraphRef.current;
+            const tokensReference = currentSegment?.tokensReference || {};
+            const lastTokenReference = tokensReference[lastSegmentReferenceId];
+            if (lastTokenReference) {
+              const newTokensReference: Record<string, ITokensReference> = { ...tokensReference, [lastSegmentReferenceId]: { startIndex: lastTokenReference.startIndex, raw: token.raw } };
+              const newCurrentSegment: IParagraph = { ...currentSegment, tokensReference: newTokensReference, isTyped: false, type: 'text', answerType };
+              newCurrentSegment.content = Object.values(newTokensReference).reduce((acc, curr) => acc + curr.raw, '');
+              setCurrentSegment(newCurrentSegment);
+              currentParagraphRef.current = newCurrentSegment;
+            }
+          }
           const realRaw = str.slice(nextTokenIndex);
           if (realRaw.length > 0) {
             pushAndSplitSegment(realRaw, i, lastSegmentReference.id);
@@ -261,6 +260,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
 
     lastSegmentRawRef.current[`${answerType}Reference`] = currentLastSegmentReference;
+
+    wholeContent.content = wholeContent.content + content;
+    wholeContent.length = wholeContent.content.length;
 
     if (!typingTask.isTyping()) {
       typingTask.start();
@@ -290,10 +292,13 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
 
       // 清理缓冲区
       const lastSegmentRef = lastSegmentRawRef.current;
-      lastSegmentRef.thinkingBuffer = '';
-      lastSegmentRef.answerBuffer = '';
       lastSegmentRef.thinkingReference = null;
       lastSegmentRef.answerReference = null;
+
+      wholeContentRef.current.thinking.content = '';
+      wholeContentRef.current.thinking.length = 0;
+      wholeContentRef.current.answer.content = '';
+      wholeContentRef.current.answer.length = 0;
     },
     /**
      * 主动触发打字结束
