@@ -16,7 +16,7 @@ export interface MarkdownRef {
   clear: () => void;
   triggerWholeEnd: () => void;
 }
-const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout' }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light' }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
@@ -40,7 +40,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    * 处理字符显示逻辑
    */
   const processCharDisplay = (char: IChar) => {
-    console.log('processCharDisplay', char);
     const currentSegment = currentParagraphRef.current;
     // debugger;
     /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
@@ -50,7 +49,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           const newParagraphs = [...prev];
           // 放入到稳定队列
           if (currentSegment) {
-            debugger;
             newParagraphs.push({ ...currentSegment, isTyped: false });
           }
           return newParagraphs;
@@ -325,9 +323,17 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           if (paragraph.type === 'br') {
             return null;
           }
-          return <HighReactMarkdown key={index}>{paragraph.content || ''}</HighReactMarkdown>;
+          return (
+            <HighReactMarkdown theme={theme} key={index}>
+              {paragraph.content || ''}
+            </HighReactMarkdown>
+          );
         })}
-        {currentSegment?.answerType === answerType && <HighReactMarkdown key={currentSegment.content}>{currentSegment.content || ''}</HighReactMarkdown>}
+        {currentSegment?.answerType === answerType && (
+          <HighReactMarkdown theme={theme} key={currentSegment.content}>
+            {currentSegment.content || ''}
+          </HighReactMarkdown>
+        )}
       </div>
     );
   };
@@ -337,6 +343,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       className={classNames({
         'ds-markdown': true,
         apple: true,
+        'ds-markdown-dark': theme === 'dark',
       })}
     >
       {(thinkingParagraphs.length > 0 || currentSegment?.answerType === 'thinking') && <div className="ds-markdown-thinking">{getParagraphs(thinkingParagraphs, 'thinking')}</div>}

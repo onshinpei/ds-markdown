@@ -15,7 +15,10 @@ function throttle(fn: (...args: any[]) => void, delay: number) {
   };
 }
 
-const BasicDemo = () => {
+const BasicDemo: React.FC<{
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
+}> = ({ theme, setTheme }) => {
   const [thinkingContent, setThinkingContent] = useState('');
   const [answerContent, setAnswerContent] = useState('');
   const messageDivRef = useRef<HTMLDivElement>(null!);
@@ -70,7 +73,19 @@ const BasicDemo = () => {
   return (
     <>
       <div className="ds-message-actions">
-        {thinkingContent ? <button onClick={onReset}>重置</button> : <button onClick={onClick}>点击显示</button>} <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
+        {thinkingContent ? (
+          <button className="start-btn" onClick={onReset}>
+            重置
+          </button>
+        ) : (
+          <button className="start-btn" onClick={onClick}>
+            点击显示
+          </button>
+        )}
+        <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
+        <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          切换为{theme === 'light' ? '暗色' : '亮色'}
+        </button>
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
@@ -92,6 +107,7 @@ const BasicDemo = () => {
             onTypedChar={throttleOnTypedChar}
             // timerType="setTimeout"
             timerType={timerType}
+            theme={theme}
           >
             {thinkingContent}
           </Markdown>
@@ -115,6 +131,7 @@ const BasicDemo = () => {
               onTypedChar={throttleOnTypedChar}
               // timerType="setTimeout"
               timerType={timerType}
+              theme={theme}
             >
               {answerContent}
             </Markdown>

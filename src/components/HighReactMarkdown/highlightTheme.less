@@ -620,7 +620,6 @@
 .md-code-block-banner-wrap {
   background-color: var(--ds-md-code-block-banner-wrap-background-color);
   z-index: 6;
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
 }
@@ -632,6 +631,8 @@
   line-height: var(--ds-md-code-block-font-size);
   justify-content: space-between;
   display: flex;
+  border-top-left-radius: var(--ds-md-code-block-border-radius);
+  border-top-right-radius: var(--ds-md-code-block-border-radius);
 }
 
 .md-code-block-banner-lite {
