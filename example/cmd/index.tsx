@@ -27,7 +27,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
 
     async function pushData() {
       while (true) {
-        const timeout = 20 + Math.random() * 100;
+        const timeout = 20 + Math.random() * 300;
         await new Promise((resolve) => setTimeout(resolve, timeout));
 
         const data = cozeData.shift();
@@ -51,7 +51,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
   }, []);
 
   const interval = 8;
-  const flag = false;
+  const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (

@@ -182,7 +182,6 @@ interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
-  flushBuffer: (answerType?: AnswerType) => void;
 }
 ```
 
@@ -191,7 +190,6 @@ interface MarkdownRef {
 | `push`            | `(content: string, answerType: AnswerType)` | 添加内容并开始打字 |
 | `clear`           | -                                           | 清空所有内容和状态 |
 | `triggerWholeEnd` | -                                           | 手动触发完成回调   |
-| `flushBuffer`     | `answerType?: AnswerType`                   | 强制刷新缓冲区内容 |
 
 ---
 
@@ -330,9 +328,6 @@ const handleStreamingMarkdown = () => {
     markdownRef.current?.push(chunk, 'answer');
     // 无需延迟，组件内部智能缓冲
   });
-
-  // 可选：手动刷新剩余缓冲内容
-  markdownRef.current?.flushBuffer();
 };
 
 // 🧠 智能处理流程：
@@ -341,13 +336,6 @@ const handleStreamingMarkdown = () => {
 // 3. 收到 "." 形成 "1." 后立即处理
 // 4. 零延迟，纯同步处理
 ```
-
-**缓冲机制特性**：
-
-- ⚡ **零延迟**：无 setTimeout，纯同步实时处理
-- 🧠 **智能边界**：基于 Markdown 语法规则的边界检测
-- 🔄 **实时分割**：遇到完整语法立即处理，不完整时智能缓冲
-- 🛡️ **安全保障**：提供 `flushBuffer()` 方法处理剩余内容
 
 **支持的语法检测**：
 

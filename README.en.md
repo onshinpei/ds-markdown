@@ -182,16 +182,14 @@ interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
-  flushBuffer: (answerType?: AnswerType) => void;
 }
 ```
 
-| Method            | Parameters                                  | Description                          |
-| ----------------- | ------------------------------------------- | ------------------------------------ |
-| `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing         |
-| `clear`           | -                                           | Clear all content and state          |
-| `triggerWholeEnd` | -                                           | Manually trigger completion callback |
-| `flushBuffer`     | `answerType?: AnswerType`                   | Force flush buffer content           |
+| Method            | Parameters                                  | Description                   |
+| ----------------- | ------------------------------------------- | ----------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing  |
+| `clear`           | -                                           | Clear all content and state   |
+| `triggerWholeEnd` | -                                           | Manually trigger end callback |
 
 ---
 
@@ -330,9 +328,6 @@ const handleStreamingMarkdown = () => {
     markdownRef.current?.push(chunk, 'answer');
     // No delay needed, component buffers intelligently internally
   });
-
-  // Optional: manually flush remaining buffer content
-  markdownRef.current?.flushBuffer();
 };
 
 // 🧠 Smart Processing Flow:
@@ -341,13 +336,6 @@ const handleStreamingMarkdown = () => {
 // 3. Process immediately after receiving "." to form "1."
 // 4. Zero delay, pure synchronous processing
 ```
-
-**Buffer Mechanism Features**:
-
-- ⚡ **Zero Delay**: No setTimeout, pure synchronous real-time processing
-- 🧠 **Smart Boundaries**: Boundary detection based on Markdown syntax rules
-- 🔄 **Real-time Splitting**: Process immediately when complete syntax is encountered, smart buffering when incomplete
-- 🛡️ **Safety Guarantee**: Provides `flushBuffer()` method to handle remaining content
 
 **Supported Syntax Detection**:
 

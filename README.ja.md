@@ -182,7 +182,6 @@ interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
-  flushBuffer: (answerType?: AnswerType) => void;
 }
 ```
 
@@ -190,8 +189,7 @@ interface MarkdownRef {
 | ----------------- | ------------------------------------------- | ------------------------------------ |
 | `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピングを開始 |
 | `clear`           | -                                           | すべてのコンテンツと状態をクリア     |
-| `triggerWholeEnd` | -                                           | 手動で完了コールバックをトリガー     |
-| `flushBuffer`     | `answerType?: AnswerType`                   | バッファーコンテンツを強制フラッシュ |
+| `triggerWholeEnd` | -                                           | 完了コールバックを手動でトリガー     |
 
 ---
 
@@ -331,8 +329,6 @@ const handleStreamingMarkdown = () => {
     // 遅延不要、コンポーネント内部で知的バッファリング
   });
 
-  // オプション：残りのバッファーコンテンツを手動でフラッシュ
-  markdownRef.current?.flushBuffer();
 };
 
 // 🧠 スマート処理フロー：
@@ -341,13 +337,6 @@ const handleStreamingMarkdown = () => {
 // 3. "." を受信して "1." を形成後、即座に処理
 // 4. ゼロ遅延、純粋同期処理
 ```
-
-**バッファーメカニズム特徴**：
-
-- ⚡ **ゼロ遅延**：setTimeout なし、純粋同期リアルタイム処理
-- 🧠 **スマート境界**：Markdown 構文ルールに基づく境界検出
-- 🔄 **リアルタイム分割**：完全構文に遭遇時即座に処理、不完全時はスマートバッファリング
-- 🛡️ **安全保証**：残りコンテンツを処理する `flushBuffer()` メソッドを提供
 
 **サポートされる構文検出**：
 
