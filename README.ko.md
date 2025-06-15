@@ -20,9 +20,10 @@
 
 ### 🎯 **완벽한 재현**
 
-- [DeepSeek 웹사이트](https://chat.deepseek.com/) 채팅 응답 효과 1:1 재현
-- 사고 과정(`thinking`)과 답변 내용(`answer`) 듀얼 모드 지원
-- 코드 하이라이트, 테이블, 리스트 등을 포함한 네이티브 Markdown 구문 지원
+- [DeepSeek 웹사이트](https://chat.deepseek.com/) 채팅 응답 효과를 1:1로 재현
+- 사고 과정(`thinking`)과 답변 내용(`answer`) 두 가지 모드 지원
+- 코드 하이라이팅, 테이블, 목록 등을 포함한 네이티브 Markdown 구문 지원
+- 라이트/다크 테마 지원, 다양한 시나리오에 완벽하게 대응
 
 ### ⚡ **극한의 성능**
 
@@ -164,14 +165,15 @@ React 19는 많은 흥미로운 새 기능을 제공합니다:
 
 ### 선언적 API (초보자 추천)
 
-| 속성          | 타입                                        | 설명                             | 기본값                                                                   |
-| ------------- | ------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------ |
-| `interval`    | `number`                                    | 타이핑 간격 (밀리초)             | `30`                                                                     |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 타이머 타입                      | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`으로 변경 예정 |
-| `answerType`  | `'thinking'` \| `'answer'`                  | 콘텐츠 타입 (스타일 테마에 영향) | `'answer'`                                                               |
-| `onEnd`       | `(data: EndData) => void`                   | 타이핑 완료 콜백                 | -                                                                        |
-| `onStart`     | `(data: StartData) => void`                 | 타이핑 시작 콜백                 | -                                                                        |
-| `onTypedChar` | `(data: CharData) => void`                  | 문자별 타이핑 콜백               | -                                                                        |
+| 속성          | 타입                                        | 설명                 | 기본값                                                                 |
+| ------------- | ------------------------------------------- | -------------------- | ---------------------------------------------------------------------- |
+| `interval`    | `number`                                    | 타이핑 간격 (밀리초) | `30`                                                                   |
+| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 타이머 타입          | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`로 변경 예정 |
+| `answerType`  | `'thinking'` \| `'answer'`                  | 콘텐츠 타입          | `'answer'`                                                             |
+| `theme`       | `'light'` \| `'dark'`                       | 테마 타입            | `'light'`                                                              |
+| `onEnd`       | `(data: EndData) => void`                   | 타이핑 완료 콜백     | -                                                                      |
+| `onStart`     | `(data: StartData) => void`                 | 타이핑 시작 콜백     | -                                                                      |
+| `onTypedChar` | `(data: CharData) => void`                  | 문자별 타이핑 콜백   | -                                                                      |
 
 ### 명령형 API (스트리밍 시나리오 추천)
 

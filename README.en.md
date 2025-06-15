@@ -23,6 +23,7 @@ A React component designed specifically for modern AI applications, providing sm
 - 1:1 recreation of [DeepSeek website](https://chat.deepseek.com/) chat response effects
 - Support for both thinking process (`thinking`) and answer content (`answer`) modes
 - Native Markdown syntax support, including code highlighting, tables, lists, etc.
+- Light/dark theme support, perfectly adapting to different scenarios
 
 ### ⚡ **Ultimate Performance**
 
@@ -169,6 +170,7 @@ Let's explore these new features together!`);
 | `interval`    | `number`                                    | Typing interval (milliseconds)     | `30`                                                                          |
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
 | `answerType`  | `'thinking'` \| `'answer'`                  | Content type (affects style theme) | `'answer'`                                                                    |
+| `theme`       | `'light'` \| `'dark'`                       | Theme type                         | `'light'`                                                                     |
 | `onEnd`       | `(data: EndData) => void`                   | Typing completion callback         | -                                                                             |
 | `onStart`     | `(data: StartData) => void`                 | Typing start callback              | -                                                                             |
 | `onTypedChar` | `(data: CharData) => void`                  | Per-character typing callback      | -                                                                             |

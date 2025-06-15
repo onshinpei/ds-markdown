@@ -20,9 +20,10 @@
 
 ### 🎯 **完璧な再現**
 
-- [DeepSeek ウェブサイト](https://chat.deepseek.com/) チャット応答効果の 1:1 再現
-- 思考プロセス（`thinking`）と回答コンテンツ（`answer`）の両モードをサポート
-- コードハイライト、テーブル、リストなどを含むネイティブ Markdown 構文サポート
+- [DeepSeek ウェブサイト](https://chat.deepseek.com/) のチャット応答効果を1:1で再現
+- 思考プロセス（`thinking`）と回答内容（`answer`）の両方のモードをサポート
+- コードハイライト、テーブル、リストなどを含むネイティブMarkdown構文サポート
+- ライト/ダークテーマのサポート、様々なシナリオに完璧に対応
 
 ### ⚡ **究極のパフォーマンス**
 
@@ -162,16 +163,17 @@ React 19 は多くのエキサイティングな新機能をもたらします�
 
 ## 📚 完全 API ドキュメント
 
-### 宣言的 API（初心者におすすめ）
+### 宣言的 API（初心者向け推奨）
 
-| プロパティ    | 型                                          | 説明                                     | デフォルト                                                               |
-| ------------- | ------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| `interval`    | `number`                                    | タイピング間隔（ミリ秒）                 | `30`                                                                     |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | タイマー型                               | 現在のデフォルトは `setTimeout`、後で `requestAnimationFrame` に変更予定 |
-| `answerType`  | `'thinking'` \| `'answer'`                  | コンテンツタイプ（スタイルテーマに影響） | `'answer'`                                                               |
-| `onEnd`       | `(data: EndData) => void`                   | タイピング完了コールバック               | -                                                                        |
-| `onStart`     | `(data: StartData) => void`                 | タイピング開始コールバック               | -                                                                        |
-| `onTypedChar` | `(data: CharData) => void`                  | 文字単位タイピングコールバック           | -                                                                        |
+| プロパティ    | 型                                          | 説明                             | デフォルト                                                            |
+| ------------- | ------------------------------------------- | -------------------------------- | --------------------------------------------------------------------- |
+| `interval`    | `number`                                    | タイピング間隔（ミリ秒）         | `30`                                                                  |
+| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | タイマータイプ                   | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
+| `answerType`  | `'thinking'` \| `'answer'`                  | コンテンツタイプ                 | `'answer'`                                                            |
+| `theme`       | `'light'` \| `'dark'`                       | テーマタイプ                     | `'light'`                                                             |
+| `onEnd`       | `(data: EndData) => void`                   | タイピング完了コールバック       | -                                                                     |
+| `onStart`     | `(data: StartData) => void`                 | タイピング開始コールバック       | -                                                                     |
+| `onTypedChar` | `(data: CharData) => void`                  | 文字ごとのタイピングコールバック | -                                                                     |
 
 ### 命令的 API（ストリーミングシナリオにおすすめ）
 
@@ -328,7 +330,6 @@ const handleStreamingMarkdown = () => {
     markdownRef.current?.push(chunk, 'answer');
     // 遅延不要、コンポーネント内部で知的バッファリング
   });
-
 };
 
 // 🧠 スマート処理フロー：

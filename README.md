@@ -23,6 +23,7 @@
 - 1:1 复刻 [DeepSeek 官网](https://chat.deepseek.com/) 聊天响应效果
 - 支持思考过程 (`thinking`) 和回答内容 (`answer`) 双模式
 - 原生 Markdown 语法支持，包括代码高亮、表格、列表等
+- 支持亮色/暗色主题切换，完美适配不同场景
 
 ### ⚡ **极致性能**
 
@@ -169,6 +170,7 @@ React 19 带来了许多激动人心的新特性：
 | `interval`    | `number`                                    | 打字间隔 (毫秒)         | `30`                                                        |
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
 | `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                                                  |
+| `theme`       | `'light'` \| `'dark'`                       | 主题类型                | `'light'`                                                   |
 | `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
 | `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
 | `onTypedChar` | `(data: CharData) => void`                  | 每字符打字回调          | -                                                           |
