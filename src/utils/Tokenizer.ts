@@ -18,21 +18,18 @@ interface Space {
 interface Fence {
   type: 'fence';
   raw: string;
-  noTrimEndRaw?: string;
   id: number;
 }
 
 interface Segment {
   type: 'segment';
   raw: string;
-  noTrimEndRaw?: string;
   id: number;
 }
 
 interface List {
   type: 'list';
   raw: string;
-  noTrimEndRaw: string;
   items: ListItem[];
   loose: boolean;
   id: number;
@@ -41,7 +38,6 @@ interface List {
 interface ListItem {
   type: 'list_item';
   raw: string;
-  noTrimEndRaw: string;
   task: boolean;
   checked: boolean | undefined;
   loose: boolean;
@@ -97,7 +93,6 @@ export class Tokenizer {
       const list: List = {
         type: 'list',
         raw: '',
-        noTrimEndRaw: '',
         items: [],
         loose: false,
         id: getTokenId(),
@@ -111,7 +106,6 @@ export class Tokenizer {
       while (src) {
         let endEarly = false;
         let raw = '';
-        let noTrimEndRaw = '';
         let itemContents = '';
         if (!(cap = itemRegex.exec(src))) {
           break;
@@ -122,7 +116,7 @@ export class Tokenizer {
           break;
         }
 
-        raw = noTrimEndRaw = cap[0];
+        raw = cap[0];
         src = src.substring(raw.length);
 
         /** 获取列表项 */
@@ -145,7 +139,6 @@ export class Tokenizer {
         } else if (blankLine && rules.other.blankLine.test(nextLine)) {
           // Items begin with at most one blank line
           raw += nextLine + '\n';
-          noTrimEndRaw += nextLine + '\n';
           src = src.substring(nextLine.length + 1);
           endEarly = true;
         }
@@ -220,7 +213,6 @@ export class Tokenizer {
             }
 
             raw += rawLine + '\n';
-            noTrimEndRaw += rawLine + '\n';
             src = src.substring(rawLine.length + 1);
             line = nextLineWithoutTabs.slice(indent);
           }
@@ -237,7 +229,6 @@ export class Tokenizer {
         list.items.push({
           type: 'list_item',
           raw,
-          noTrimEndRaw,
           task: !!istask,
           checked: ischecked,
           loose: false,
@@ -247,7 +238,6 @@ export class Tokenizer {
         });
 
         list.raw += raw;
-        list.noTrimEndRaw += noTrimEndRaw;
       }
 
       // Do not consume newlines at end of final item. Alternatively, make itemRegex *start* with any newlines to simplify/speed up endsWithBlankLine logic
@@ -261,11 +251,7 @@ export class Tokenizer {
         return;
       }
 
-      list.raw = list.raw.trimEnd();
-
-      if (src !== '') {
-        list.noTrimEndRaw = list.noTrimEndRaw.trimEnd();
-      }
+      // list.raw = list.raw.trimEnd();
 
       return list;
     }

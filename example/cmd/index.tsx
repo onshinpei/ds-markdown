@@ -27,7 +27,8 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
 
     async function pushData() {
       while (true) {
-        await new Promise((resolve) => setTimeout(resolve, Math.random() * 30));
+        const timeout = 20 + Math.random() * 300;
+        await new Promise((resolve) => setTimeout(resolve, timeout));
 
         const data = cozeData.shift();
 

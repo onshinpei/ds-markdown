@@ -182,7 +182,6 @@ interface MarkdownRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
-  flushBuffer: (answerType?: AnswerType) => void;
 }
 ```
 
@@ -190,8 +189,7 @@ interface MarkdownRef {
 | ----------------- | ------------------------------------------- | -------------------------- |
 | `push`            | `(content: string, answerType: AnswerType)` | 콘텐츠 추가 및 타이핑 시작 |
 | `clear`           | -                                           | 모든 콘텐츠와 상태 초기화  |
-| `triggerWholeEnd` | -                                           | 수동으로 완료 콜백 트리거  |
-| `flushBuffer`     | `answerType?: AnswerType`                   | 버퍼 콘텐츠 강제 플러시    |
+| `triggerWholeEnd` | -                                           | 완료 콜백 수동 트리거      |
 
 ---
 
@@ -330,9 +328,6 @@ const handleStreamingMarkdown = () => {
     markdownRef.current?.push(chunk, 'answer');
     // 지연 불필요, 컴포넌트 내부에서 지능적 버퍼링
   });
-
-  // 선택사항: 남은 버퍼 콘텐츠 수동 플러시
-  markdownRef.current?.flushBuffer();
 };
 
 // 🧠 스마트 처리 플로우:
@@ -341,13 +336,6 @@ const handleStreamingMarkdown = () => {
 // 3. "."을 받아 "1." 형성 후 즉시 처리
 // 4. 지연 없음, 순수 동기 처리
 ```
-
-**버퍼 메커니즘 특징**:
-
-- ⚡ **지연 없음**: setTimeout 없음, 순수 동기 실시간 처리
-- 🧠 **스마트 경계**: Markdown 구문 규칙 기반 경계 감지
-- 🔄 **실시간 분할**: 완전한 구문 만날 때 즉시 처리, 불완전할 때 스마트 버퍼링
-- 🛡️ **안전 보장**: 남은 콘텐츠 처리를 위한 `flushBuffer()` 메서드 제공
 
 **지원되는 구문 감지**:
 

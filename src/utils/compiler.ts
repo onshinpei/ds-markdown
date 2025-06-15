@@ -19,7 +19,7 @@ function compile(src: string) {
     const list = tokenizer.list(src);
     if (list) {
       tokens.push(list);
-      src = src.slice(list.noTrimEndRaw.length);
+      src = src.slice(list.raw.length);
       continue;
     }
     const fence = tokenizer.fence(src);
