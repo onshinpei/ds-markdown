@@ -1,11 +1,12 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { __DEV__ } from '../constant.js';
-import { AnswerType, MarkdownProps } from '../defined.js';
+import { AnswerType, MarkdownProps, Theme } from '../defined.js';
 import MarkdownCMD, { MarkdownRef } from '../MarkdownCMD/index.js';
 
 interface MarkdownImplProps extends MarkdownProps {
   children: string | undefined;
   answerType: AnswerType;
+  theme?: Theme;
 }
 
 const MarkdownInner: React.FC<MarkdownImplProps> = ({ children: _children = '', answerType, ...rest }) => {

@@ -5,13 +5,14 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
 
 import BlockWrap from '../BlockWrap/index.js';
+import { Theme } from '../../defined.js';
 
 interface HighReactMarkdownProps extends Options {
-  id?: number;
+  theme?: Theme;
 }
 
 const modulePrefix = 'HighReactMarkdown';
-const HighReactMarkdown: React.FC<HighReactMarkdownProps> = (props) => {
+const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', ...props }) => {
   return (
     <Markdown
       remarkPlugins={[gfmPlugin]}
@@ -19,8 +20,8 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = (props) => {
         code: ({ className, children, ...props }) => {
           const match = /language-(\w+)/.exec(className || '');
           return match ? (
-            <BlockWrap language={match[1]}>
-              <SyntaxHighlighter useInlineStyles={false} language={match[1]}>
+            <BlockWrap language={match[1]} theme={theme}>
+              <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
                 {String(children).replace(/\n$/, '')}
               </SyntaxHighlighter>
             </BlockWrap>

@@ -57,7 +57,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
   return (
     <div className="ds-message-box">
       <div className="ds-message-list">
-        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="dark" />
       </div>
     </div>
   );

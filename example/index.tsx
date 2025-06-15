@@ -7,9 +7,10 @@ import './index.css';
 import BasicDemo from './basic';
 import CDMDemo from './cmd';
 const App = () => {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
-    <div className="ds-message">
-      <BasicDemo />
+    <div className={`ds-message ds-message-${theme}`}>
+      <BasicDemo theme={theme} setTheme={setTheme} />
     </div>
   );
 };

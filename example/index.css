@@ -24,6 +24,10 @@ body {
   flex-direction: column;
 }
 
+.ds-message.ds-message-dark .ds-message-box {
+  background-color: #292a2d;
+}
+
 .ds-message-box {
   flex: 1;
   overflow: auto;
@@ -46,14 +50,17 @@ body {
   max-width: var(--message-list-max-width);
   padding: var(--message-list-padding-horizontal);
   margin: 0 auto;
-  button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: 1px solid #1890ff;
-    background-color: #1890ff;
-    cursor: pointer;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.start-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid #1890ff;
+  background-color: #1890ff;
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
 }

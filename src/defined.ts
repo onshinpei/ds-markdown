@@ -4,6 +4,8 @@
  */
 export type AnswerType = 'answer' | 'thinking';
 
+export type Theme = 'light' | 'dark';
+
 /**
  * 字符接口
  */
@@ -60,4 +62,6 @@ export interface MarkdownProps {
    * @param index 字符索引
    */
   onTypedChar?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
+  /** 主题 */
+  theme?: Theme;
 }
