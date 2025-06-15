@@ -50,6 +50,9 @@ body {
   max-width: var(--message-list-max-width);
   padding: var(--message-list-padding-horizontal);
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .start-btn {
   padding: 10px 20px;

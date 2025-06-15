@@ -73,16 +73,18 @@ const BasicDemo: React.FC<{
   return (
     <>
       <div className="ds-message-actions">
-        {thinkingContent ? (
-          <button className="start-btn" onClick={onReset}>
-            重置
-          </button>
-        ) : (
-          <button className="start-btn" onClick={onClick}>
-            点击显示
-          </button>
-        )}
-        <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
+        <div>
+          {thinkingContent ? (
+            <button className="start-btn" onClick={onReset}>
+              重置
+            </button>
+          ) : (
+            <button className="start-btn" onClick={onClick}>
+              点击显示
+            </button>
+          )}
+          <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
+        </div>
         <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
           切换为{theme === 'light' ? '暗色' : '亮色'}
         </button>
