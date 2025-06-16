@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { MarkdownCMD } from '../../src';
+import { MarkdownCMD, MarkdownRef } from '../../src';
 
 // 导入 ./cozeData.text
 
 import { cozeData } from './cozeData';
 import data from '../basic/data.json';
-import { MarkdownRef } from '../../src/MarkdownCMD';
 
 interface CMDDemoProps {
   id?: number;

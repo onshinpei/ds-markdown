@@ -1,6 +1,6 @@
-import MarkdownCMD from './MarkdownCMD/index.js';
+import MarkdownCMD, { MarkdownRef } from './MarkdownCMD/index.js';
 import Markdown from './Markdown/index.js';
 
 export default Markdown;
 
-export { Markdown, MarkdownCMD };
+export { Markdown, MarkdownCMD, MarkdownRef };
