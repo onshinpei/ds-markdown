@@ -12,7 +12,9 @@ A React component designed specifically for modern AI applications, providing sm
 [![React](https://img.shields.io/badge/React-16.8+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-[📖 Live Demo](https://onshinpei.github.io/ds-markdown/) | [🔧 StackBlitz Experience](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+[📖 Live Demo](https://onshinpei.github.io/ds-markdown/)
+
+[DEMO：🔧 StackBlitz Experience](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 
 ---
 
@@ -245,6 +247,8 @@ High-frequency recommends `requestAnimationFrame`, low-frequency recommends `set
 ## 💡 Practical Examples
 
 ### 📝 AI Streaming Conversation
+
+[DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
 ````tsx
 import { useRef } from 'react';

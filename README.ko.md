@@ -12,7 +12,9 @@
 [![React](https://img.shields.io/badge/React-16.8+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-[📖 라이브 데모](https://onshinpei.github.io/ds-markdown/) | [🔧 StackBlitz 체험](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+[📖 온라인 데모](https://onshinpei.github.io/ds-markdown/)
+
+[DEMO：🔧 StackBlitz 체험](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 
 ---
 

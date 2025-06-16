@@ -12,7 +12,9 @@
 [![React](https://img.shields.io/badge/React-16.8+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-[📖 在线演示](https://onshinpei.github.io/ds-markdown/) | [🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+[📖 在线演示](https://onshinpei.github.io/ds-markdown/)
+
+[DEMO：🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 
 ---
 
@@ -245,6 +247,8 @@ interface MarkdownRef {
 ## 💡 实战示例
 
 ### 📝 AI 流式对话
+
+[DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
 ````tsx
 import { useRef } from 'react';
