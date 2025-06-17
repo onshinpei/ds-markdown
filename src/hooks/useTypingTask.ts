@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { AnswerType, IChar, MarkdownProps } from '../defined.js';
+import { AnswerType, IChar, IOnTypedEndCharData, MarkdownProps } from '../defined.js';
 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
@@ -7,7 +7,7 @@ interface UseTypingTaskOptions {
   charsRef: React.MutableRefObject<IChar[]>;
   onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
-  onTypedChar?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
+  onTypedChar?: (data?: IOnTypedEndCharData) => void;
   processCharDisplay: (char: IChar) => void;
 }
 

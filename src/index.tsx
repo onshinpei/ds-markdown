@@ -3,4 +3,6 @@ import Markdown from './Markdown/index.js';
 
 export default Markdown;
 
-export { Markdown, MarkdownCMD, MarkdownRef };
+export type { MarkdownRef };
+
+export { Markdown, MarkdownCMD };
