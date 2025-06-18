@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState }
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, IParagraph, MarkdownProps, IChar, ITokensReference } from '../defined.js';
+import { AnswerType, IParagraph, MarkdownProps, IChar, ITokensReference, IWholeContent } from '../defined.js';
 import { compiler } from '../utils/compiler.js';
 import { __DEV__ } from '../constant.js';
 import deepClone from '../utils/methods/deepClone.js';
@@ -36,6 +36,18 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   /** 当前段落引用 */
   const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
   const currentSegment = currentParagraphRef.current;
+
+  /** 整个内容引用 */
+  const wholeContentRef = useRef<IWholeContent>({
+    thinking: {
+      content: '',
+      length: 0,
+    },
+    answer: {
+      content: '',
+      length: 0,
+    },
+  });
 
   /** 触发更新 */
   const [, setUpdate] = useState(false);
@@ -122,6 +134,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     onStart,
     onTypedChar,
     processCharDisplay,
+    wholeContentRef,
   });
 
   const lastSegmentRawRef = useRef<{
@@ -130,26 +143,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
   }>({
     thinkingReference: null,
     answerReference: null,
-  });
-
-  const wholeContentRef = useRef<{
-    thinking: {
-      content: string;
-      length: number;
-    };
-    answer: {
-      content: string;
-      length: number;
-    };
-  }>({
-    thinking: {
-      content: '',
-      length: 0,
-    },
-    answer: {
-      content: '',
-      length: 0,
-    },
   });
 
   /**
@@ -198,7 +191,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
 
     const pushAndSplitSegment = (raw: string, tokenIndex: number, segmentTokenId: number) => {
-      console.log('pushAndSplitSegment', raw);
       const currentToken = tokens[tokenIndex];
       if (tokenIndex > 0) {
         const prevToken = tokens[tokenIndex - 1];
@@ -355,5 +347,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     </div>
   );
 });
+
+if (__DEV__) {
+  MarkdownCMD.displayName = 'MarkdownCMD';
+}
 
 export default MarkdownCMD;

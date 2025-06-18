@@ -3,7 +3,7 @@ import { MarkdownCMD, MarkdownRef } from '../../src';
 
 // 导入 ./cozeData.text
 
-import { cozeData } from './cozeData2';
+import { cozeData } from './cozeData';
 
 interface CMDDemoProps {
   id?: number;

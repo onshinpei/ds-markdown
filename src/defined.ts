@@ -75,3 +75,14 @@ export interface MarkdownProps {
   /** 主题 */
   theme?: Theme;
 }
+
+export interface IWholeContent {
+  thinking: {
+    content: string;
+    length: number;
+  };
+  answer: {
+    content: string;
+    length: number;
+  };
+}
