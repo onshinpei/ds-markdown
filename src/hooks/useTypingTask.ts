@@ -32,6 +32,10 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   // 已经打过的字记录
   const typedCharsRef = useRef<{ typedContent: string; answerType: AnswerType; prevStr: string } | undefined>(undefined);
 
+  const getChars = () => {
+    return charsRef.current;
+  };
+
   useEffect(() => {
     isUnmountRef.current = false;
 
@@ -150,10 +154,10 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** requestAnimationFrame 模式 */
   const startAnimationFrameMode = () => {
-    const chars = charsRef.current;
     let lastFrameTime = 0;
 
     const frameLoop = (currentTime: number) => {
+      const chars = getChars();
       if (isUnmountRef.current) return;
 
       if (chars.length === 0) {
@@ -211,9 +215,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** setTimeout 模式 */
   const startTimeoutMode = () => {
-    const chars = charsRef.current;
-
     const nextTyped = () => {
+      const chars = getChars();
       if (chars.length === 0) {
         stopTimeout();
         return;
@@ -222,6 +225,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     };
 
     const startTyped = (isStartPoint = false) => {
+      const chars = getChars();
       if (isUnmountRef.current) return;
 
       isTypedRef.current = true;

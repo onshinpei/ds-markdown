@@ -251,7 +251,7 @@ export class Tokenizer {
         return;
       }
 
-      // list.raw = list.raw.trimEnd();
+      list.raw = list.raw.trimEnd();
 
       return list;
     }

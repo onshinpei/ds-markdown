@@ -3,8 +3,7 @@ import { MarkdownCMD, MarkdownRef } from '../../src';
 
 // 导入 ./cozeData.text
 
-import { cozeData } from './cozeData';
-import data from '../basic/data.json';
+import { cozeData } from './cozeData2';
 
 interface CMDDemoProps {
   id?: number;
@@ -26,7 +25,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
 
     async function pushData() {
       while (true) {
-        const timeout = 20 + Math.random() * 300;
+        const timeout = 10 + Math.random() * 10;
         await new Promise((resolve) => setTimeout(resolve, timeout));
 
         const data = cozeData.shift();
@@ -50,13 +49,13 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
   }, []);
 
   const interval = 8;
-  const flag = true;
+  const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
     <div className="ds-message-box">
       <div className="ds-message-list">
-        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="dark" />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="light" />
       </div>
     </div>
   );

@@ -10,6 +10,16 @@ function compile(src: string) {
     if (src.length === 0) {
       break;
     }
+
+    // TODO: 临时方案
+    if (src.trim().length === 0 && tokens.length > 0) {
+      const lastToken = tokens[tokens.length - 1];
+      // 如果只剩下空格或换行符，则加到上一个token中
+      if (lastToken.type === 'list') {
+        lastToken.raw = lastToken.raw + src;
+        break;
+      }
+    }
     const space = tokenizer.space(src);
     if (space) {
       tokens.push(space);

@@ -30,11 +30,18 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    * 稳定段落
    * 稳定段落是已经打过字，并且不会再变化的段落
    */
-  const [stableSegments, setStableSegments] = useState<IParagraph[]>([]);
-  /** 当前段落 */
-  const [currentSegment, setCurrentSegment] = useState<IParagraph | undefined>(undefined);
+  const stableSegmentsRef = useRef<IParagraph[]>([]);
+  const stableSegments = stableSegmentsRef.current;
+
   /** 当前段落引用 */
   const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
+  const currentSegment = currentParagraphRef.current;
+
+  /** 触发更新 */
+  const [, setUpdate] = useState(false);
+  const triggerUpdate = () => {
+    setUpdate((prev) => !prev);
+  };
 
   /**
    * 处理字符显示逻辑
@@ -45,16 +52,15 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
     if (char.contentType === 'space' || char.contentType === 'split_segment') {
       if (currentSegment) {
-        setStableSegments((prev) => {
-          const newParagraphs = [...prev];
-          // 放入到稳定队列
-          if (currentSegment) {
-            newParagraphs.push({ ...currentSegment, isTyped: false });
-          }
-          return newParagraphs;
-        });
-        setCurrentSegment(() => undefined);
+        const newStableSegments = [...stableSegmentsRef.current];
+
+        // 放入到稳定队列
+        if (currentSegment) {
+          newStableSegments.push({ ...currentSegment, isTyped: false });
+        }
+        stableSegmentsRef.current = newStableSegments;
         currentParagraphRef.current = undefined;
+        triggerUpdate();
       }
       return;
     }
@@ -74,11 +80,10 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       _currentParagraph = newCurrentParagraph;
     } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
       // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
-      setStableSegments((prev) => {
-        const newParagraphs = [...prev];
-        newParagraphs.push({ ...currentSegment, isTyped: false });
-        return newParagraphs;
-      });
+      const newStableSegments = [...stableSegmentsRef.current];
+      newStableSegments.push({ ...currentSegment, isTyped: false });
+      stableSegmentsRef.current = newStableSegments;
+
       _currentParagraph = newCurrentParagraph;
     }
 
@@ -100,7 +105,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       isTyped: true,
     };
     currentParagraphRef.current = newCurrentSegment;
-    setCurrentSegment(() => newCurrentSegment);
+    triggerUpdate();
   };
 
   /** 思考段落 */
@@ -193,6 +198,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     }
 
     const pushAndSplitSegment = (raw: string, tokenIndex: number, segmentTokenId: number) => {
+      console.log('pushAndSplitSegment', raw);
       const currentToken = tokens[tokenIndex];
       if (tokenIndex > 0) {
         const prevToken = tokens[tokenIndex - 1];
@@ -215,22 +221,13 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     } else {
       // debugger;
       let str = '';
-      let firstSpaceIndex = -1;
       let nextTokenIndex = lastSegmentRaw.length;
       for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i];
 
         if (token.type === 'space') {
-          if (firstSpaceIndex === -1) {
-            firstSpaceIndex = str.length;
-          }
+          charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
           str += token.raw;
-          if (lastSegmentRaw.length > firstSpaceIndex) {
-            // 如果lastSegmentRaw的长度大于firstSpaceIndex，则需要将当前设置为 segment
-            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: token.id, index: currentIndex++ })) as IChar[]));
-          } else {
-            charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
-          }
         } else {
           str += token.raw;
           if (str.length < nextTokenIndex && i == 0) {
@@ -240,11 +237,18 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
             const tokensReference = currentSegment?.tokensReference || {};
             const lastTokenReference = tokensReference[lastSegmentReferenceId];
             if (lastTokenReference) {
-              const newTokensReference: Record<string, ITokensReference> = { ...tokensReference, [lastSegmentReferenceId]: { startIndex: lastTokenReference.startIndex, raw: token.raw } };
+              const newTokensReference: Record<string, ITokensReference> = { [lastSegmentReferenceId]: { startIndex: lastTokenReference.startIndex, raw: token.raw } };
+
+              // 去除charsRef中 tokenId = lastSegmentReferenceId 的字符
+              charsRef.current = charsRef.current.filter((char) => char.tokenId !== lastSegmentReferenceId);
+
               const newCurrentSegment: IParagraph = { ...currentSegment, tokensReference: newTokensReference, isTyped: false, type: 'text', answerType };
               newCurrentSegment.content = Object.values(newTokensReference).reduce((acc, curr) => acc + curr.raw, '');
-              setCurrentSegment(newCurrentSegment);
+
               currentParagraphRef.current = newCurrentSegment;
+              triggerUpdate();
+            } else {
+              // TODO
             }
           }
           const realRaw = str.slice(nextTokenIndex);
@@ -282,8 +286,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     clear: () => {
       typingTask.stop();
       charsRef.current = [];
-      setStableSegments([]);
-      setCurrentSegment(undefined);
       isWholeTypedEndRef.current = false;
       currentParagraphRef.current = undefined;
       typingTask.clear();
@@ -297,6 +299,8 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       wholeContentRef.current.thinking.length = 0;
       wholeContentRef.current.answer.content = '';
       wholeContentRef.current.answer.length = 0;
+
+      triggerUpdate();
     },
     /**
      * 主动触发打字结束
