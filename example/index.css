@@ -64,3 +64,7 @@ body {
   font-size: 20px;
   font-weight: 600;
 }
+
+.theme-btn {
+  margin-right: 20px;
+}
