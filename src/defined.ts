@@ -85,4 +85,5 @@ export interface IWholeContent {
     content: string;
     length: number;
   };
+  allLength: number;
 }

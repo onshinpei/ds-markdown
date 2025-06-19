@@ -9,7 +9,7 @@ interface MarkdownImplProps extends MarkdownProps {
   theme?: Theme;
 }
 
-const MarkdownInner: React.FC<MarkdownImplProps> = ({ children: _children = '', answerType, onTypedChar, ...rest }) => {
+const MarkdownInner: React.FC<MarkdownImplProps> = ({ children: _children = '', answerType, ...rest }) => {
   const cmdRef = useRef<MarkdownRef>(null!);
   const prefixRef = useRef('');
   const content = useMemo(() => {

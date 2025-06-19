@@ -20,7 +20,7 @@ export interface TypingTaskController {
 }
 
 export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskController => {
-  const { timerType = 'setTimeout', interval, charsRef, onEnd, onStart, onTypedChar, processCharDisplay } = options;
+  const { timerType = 'setTimeout', interval, charsRef, onEnd, onStart, onTypedChar, processCharDisplay, wholeContentRef } = options;
   /** 是否卸载 */
   const isUnmountRef = useRef(false);
   /** 是否正在打字 */
@@ -114,12 +114,18 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       return;
     }
 
+    const { answerType, content } = char;
+
+    const allLength = wholeContentRef.current.allLength;
+
+    const percent = ((char.index + 1) / allLength) * 100;
+
     onTypedChar({
       currentIndex: typedCharsRef.current?.prevStr.length || 0,
-      currentChar: char.content,
-      answerType: char.answerType,
+      currentChar: content,
+      answerType: answerType,
       prevStr: typedCharsRef.current?.prevStr || '',
-      percent: 0,
+      percent,
     });
   };
 

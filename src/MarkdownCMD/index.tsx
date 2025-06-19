@@ -1,12 +1,9 @@
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, IParagraph, MarkdownProps, IChar, ITokensReference, IWholeContent } from '../defined.js';
-import { compiler } from '../utils/compiler.js';
+import { AnswerType, MarkdownProps, IChar, IWholeContent } from '../defined.js';
 import { __DEV__ } from '../constant.js';
-import deepClone from '../utils/methods/deepClone.js';
-import { Token } from '../utils/Tokenizer.js';
 import { useTypingTask } from '../hooks/useTypingTask.js';
 
 type MarkdownCMDProps = MarkdownProps;
@@ -25,17 +22,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    * 如果打字已经完全结束，则不会再触发打字效果
    */
   const isWholeTypedEndRef = useRef(false);
-
-  /**
-   * 稳定段落
-   * 稳定段落是已经打过字，并且不会再变化的段落
-   */
-  const stableSegmentsRef = useRef<IParagraph[]>([]);
-  const stableSegments = stableSegmentsRef.current;
-
-  /** 当前段落引用 */
-  const currentParagraphRef = useRef<IParagraph | undefined>(undefined);
-  const currentSegment = currentParagraphRef.current;
+  const charIndexRef = useRef(0);
 
   /** 整个内容引用 */
   const wholeContentRef = useRef<IWholeContent>({
@@ -47,9 +34,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       content: '',
       length: 0,
     },
+    allLength: 0,
   });
 
-  /** 触发更新 */
   const [, setUpdate] = useState(false);
   const triggerUpdate = () => {
     setUpdate((prev) => !prev);
@@ -59,71 +46,15 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
    * 处理字符显示逻辑
    */
   const processCharDisplay = (char: IChar) => {
-    const currentSegment = currentParagraphRef.current;
-    // debugger;
-    /** 如果碰到 space，和split_segment 则需要处理成两个段落 */
-    if (char.contentType === 'space' || char.contentType === 'split_segment') {
-      if (currentSegment) {
-        const newStableSegments = [...stableSegmentsRef.current];
-
-        // 放入到稳定队列
-        if (currentSegment) {
-          newStableSegments.push({ ...currentSegment, isTyped: false });
-        }
-        stableSegmentsRef.current = newStableSegments;
-        currentParagraphRef.current = undefined;
-        triggerUpdate();
-      }
-      return;
-    }
-
-    // 处理当前段落
-    const newCurrentParagraph: IParagraph = {
-      content: '',
-      isTyped: false,
-      type: 'text',
-      answerType: char.answerType,
-      tokensReference: {},
-    };
-
-    let _currentParagraph = currentSegment;
-    if (!_currentParagraph) {
-      // 如果当前没有段落，则直接设置为新当前段落
-      _currentParagraph = newCurrentParagraph;
-    } else if (currentSegment && currentSegment?.answerType !== char.answerType) {
-      // 如果当前段落和当前字符的回答类型不一致，则需要处理成两个段落
-      const newStableSegments = [...stableSegmentsRef.current];
-      newStableSegments.push({ ...currentSegment, isTyped: false });
-      stableSegmentsRef.current = newStableSegments;
-
-      _currentParagraph = newCurrentParagraph;
-    }
-
-    const tokensReference = deepClone(_currentParagraph.tokensReference);
-    if (tokensReference[char.tokenId]) {
-      tokensReference[char.tokenId].raw += char.content;
-      tokensReference[char.tokenId].startIndex = currentSegment?.content?.length || 0;
+    if (char.answerType === 'thinking') {
+      wholeContentRef.current.thinking.content += char.content;
+      wholeContentRef.current.thinking.length += 1;
     } else {
-      tokensReference[char.tokenId] = {
-        startIndex: currentSegment?.content?.length || 0,
-        raw: char.content,
-      };
+      wholeContentRef.current.answer.content += char.content;
+      wholeContentRef.current.answer.length += 1;
     }
-
-    const newCurrentSegment = {
-      ..._currentParagraph,
-      tokensReference,
-      content: (currentSegment?.content || '') + char.content,
-      isTyped: true,
-    };
-    currentParagraphRef.current = newCurrentSegment;
     triggerUpdate();
   };
-
-  /** 思考段落 */
-  const thinkingParagraphs = useMemo(() => stableSegments.filter((paragraph) => paragraph.answerType === 'thinking'), [stableSegments]);
-  /** 回答段落 */
-  const answerParagraphs = useMemo(() => stableSegments.filter((paragraph) => paragraph.answerType === 'answer'), [stableSegments]);
 
   // 使用新的打字任务 hook
   const typingTask = useTypingTask({
@@ -137,14 +68,6 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     wholeContentRef,
   });
 
-  const lastSegmentRawRef = useRef<{
-    thinkingReference: Token | null;
-    answerReference: Token | null;
-  }>({
-    thinkingReference: null,
-    answerReference: null,
-  });
-
   /**
    * 内部推送处理逻辑
    */
@@ -153,110 +76,21 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
       return;
     }
 
-    const lastSegmentReference = lastSegmentRawRef.current[`${answerType}Reference`];
+    charsRef.current.push(
+      ...content.split('').map((chatStr) => {
+        const index = charIndexRef.current++;
+        const charObj: IChar = {
+          content: chatStr,
+          answerType,
+          contentType: 'segment',
+          tokenId: 0,
+          index,
+        };
+        return charObj;
+      }),
+    );
 
-    if (isWholeTypedEndRef.current) {
-      if (__DEV__) {
-        console.warn('打字已经完全结束，不能再添加新的内容');
-      }
-      return;
-    }
-    const wholeContent = wholeContentRef.current[`${answerType}`] || '';
-    let currentIndex = wholeContent.length;
-
-    let currentLastSegmentReference: Token | null = null;
-    let currentLastSegmentRaw = '';
-    let lastSegmentRaw = '';
-    if (lastSegmentReference) {
-      lastSegmentRaw = lastSegmentReference.raw;
-      currentLastSegmentRaw = lastSegmentRaw + content;
-    } else {
-      currentLastSegmentRaw = content;
-    }
-
-    const tokens = compiler(currentLastSegmentRaw);
-
-    // 如果最后一个token是space，则把lastSegmentRaw设置为空
-    if (tokens[tokens.length - 1].type === 'space') {
-      currentLastSegmentReference = null;
-    } else {
-      // 如果上一个segment存在并且当前只有一个token，则说明是同一个segment
-      if (lastSegmentReference !== null && tokens.length === 1) {
-        const newCurrentLastSegmentReference = lastSegmentReference;
-        newCurrentLastSegmentReference.raw = newCurrentLastSegmentReference.raw + content;
-        currentLastSegmentReference = newCurrentLastSegmentReference;
-      } else {
-        currentLastSegmentReference = tokens[tokens.length - 1];
-      }
-    }
-
-    const pushAndSplitSegment = (raw: string, tokenIndex: number, segmentTokenId: number) => {
-      const currentToken = tokens[tokenIndex];
-      if (tokenIndex > 0) {
-        const prevToken = tokens[tokenIndex - 1];
-        if (prevToken.type !== 'space' && currentToken.type !== 'space') {
-          charsRef.current.push({ content: '', answerType, contentType: 'split_segment', tokenId: currentToken.id, index: currentIndex++ });
-        }
-      }
-
-      charsRef.current.push(...(raw.split('').map((char) => ({ content: char, answerType, contentType: 'segment', tokenId: segmentTokenId, index: currentIndex++ })) as IChar[]));
-    };
-
-    if (!lastSegmentReference) {
-      tokens.forEach((token, i) => {
-        if (token.type === 'space') {
-          charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
-        } else {
-          pushAndSplitSegment(token.raw, i, token.id);
-        }
-      });
-    } else {
-      // debugger;
-      let str = '';
-      let nextTokenIndex = lastSegmentRaw.length;
-      for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i];
-
-        if (token.type === 'space') {
-          charsRef.current.push(...(token.raw.split('').map((char) => ({ content: char, answerType, contentType: 'space', tokenId: token.id, index: currentIndex++ })) as IChar[]));
-          str += token.raw;
-        } else {
-          str += token.raw;
-          if (str.length < nextTokenIndex && i == 0) {
-            /** 如果当前字符串长度小于下一个token的索引，则需要将当前段落更新, 以修正不完整的token */
-            const lastSegmentReferenceId = lastSegmentReference.id;
-            const currentSegment = currentParagraphRef.current;
-            const tokensReference = currentSegment?.tokensReference || {};
-            const lastTokenReference = tokensReference[lastSegmentReferenceId];
-            if (lastTokenReference) {
-              const newTokensReference: Record<string, ITokensReference> = { [lastSegmentReferenceId]: { startIndex: lastTokenReference.startIndex, raw: token.raw } };
-
-              // 去除charsRef中 tokenId = lastSegmentReferenceId 的字符
-              charsRef.current = charsRef.current.filter((char) => char.tokenId !== lastSegmentReferenceId);
-
-              const newCurrentSegment: IParagraph = { ...currentSegment, tokensReference: newTokensReference, isTyped: false, type: 'text', answerType };
-              newCurrentSegment.content = Object.values(newTokensReference).reduce((acc, curr) => acc + curr.raw, '');
-
-              currentParagraphRef.current = newCurrentSegment;
-              triggerUpdate();
-            } else {
-              // TODO
-            }
-          }
-          const realRaw = str.slice(nextTokenIndex);
-          if (realRaw.length > 0) {
-            pushAndSplitSegment(realRaw, i, lastSegmentReference.id);
-          }
-        }
-
-        nextTokenIndex = str.length;
-      }
-    }
-
-    lastSegmentRawRef.current[`${answerType}Reference`] = currentLastSegmentReference;
-
-    wholeContent.content = wholeContent.content + content;
-    wholeContent.length = wholeContent.content.length;
+    wholeContentRef.current.allLength += content.length;
 
     if (!typingTask.isTyping()) {
       typingTask.start();
@@ -278,20 +112,18 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
     clear: () => {
       typingTask.stop();
       charsRef.current = [];
+      wholeContentRef.current = {
+        thinking: {
+          content: '',
+          length: 0,
+        },
+        answer: {
+          content: '',
+          length: 0,
+        },
+      };
       isWholeTypedEndRef.current = false;
-      currentParagraphRef.current = undefined;
-      typingTask.clear();
-
-      // 清理缓冲区
-      const lastSegmentRef = lastSegmentRawRef.current;
-      lastSegmentRef.thinkingReference = null;
-      lastSegmentRef.answerReference = null;
-
-      wholeContentRef.current.thinking.content = '';
-      wholeContentRef.current.thinking.length = 0;
-      wholeContentRef.current.answer.content = '';
-      wholeContentRef.current.answer.length = 0;
-
+      charIndexRef.current = 0;
       triggerUpdate();
     },
     /**
@@ -312,24 +144,10 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      */
   }));
 
-  const getParagraphs = (paragraphs: IParagraph[], answerType: AnswerType) => {
+  const getParagraphs = (answerType: AnswerType) => {
     return (
       <div className={`ds-markdown-paragraph ds-typed-${answerType}`}>
-        {paragraphs.map((paragraph, index) => {
-          if (paragraph.type === 'br') {
-            return null;
-          }
-          return (
-            <HighReactMarkdown theme={theme} key={index}>
-              {paragraph.content || ''}
-            </HighReactMarkdown>
-          );
-        })}
-        {currentSegment?.answerType === answerType && (
-          <HighReactMarkdown theme={theme} key={currentSegment.content}>
-            {currentSegment.content || ''}
-          </HighReactMarkdown>
-        )}
+        <HighReactMarkdown theme={theme}>{wholeContentRef.current[answerType].content || ''}</HighReactMarkdown>
       </div>
     );
   };
@@ -342,8 +160,9 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
         'ds-markdown-dark': theme === 'dark',
       })}
     >
-      {(thinkingParagraphs.length > 0 || currentSegment?.answerType === 'thinking') && <div className="ds-markdown-thinking">{getParagraphs(thinkingParagraphs, 'thinking')}</div>}
-      {(answerParagraphs.length > 0 || currentSegment?.answerType === 'answer') && <div className="ds-markdown-answer">{getParagraphs(answerParagraphs, 'answer')}</div>}
+      <div className="ds-markdown-thinking">{getParagraphs('thinking')}</div>
+
+      <div className="ds-markdown-answer">{getParagraphs('answer')}</div>
     </div>
   );
 });
