@@ -87,3 +87,18 @@ export interface IWholeContent {
   };
   allLength: number;
 }
+
+export interface MarkdownBaseRef {
+  stop: () => void;
+  resume: () => void;
+}
+
+/** Markdown 组件的ref 类型 */
+export type MarkdownRef = MarkdownBaseRef;
+
+/** MarkdownCMD 组件的 ref 类型 */
+export interface MarkdownCMDRef extends MarkdownBaseRef {
+  push: (content: string, answerType: AnswerType) => void;
+  clear: () => void;
+  triggerWholeEnd: () => void;
+}

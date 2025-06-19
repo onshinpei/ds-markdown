@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { __DEV__ } from '../constant.js';
 import { AnswerType, MarkdownProps, Theme } from '../defined.js';
-import MarkdownCMD, { MarkdownRef } from '../MarkdownCMD/index.js';
+import MarkdownCMD, { MarkdownCMDRef } from '../MarkdownCMD/index.js';
 
 interface MarkdownImplProps extends MarkdownProps {
   children: string | undefined;
@@ -10,7 +10,7 @@ interface MarkdownImplProps extends MarkdownProps {
 }
 
 const MarkdownInner: React.FC<MarkdownImplProps> = ({ children: _children = '', answerType, ...rest }) => {
-  const cmdRef = useRef<MarkdownRef>(null!);
+  const cmdRef = useRef<MarkdownCMDRef>(null!);
   const prefixRef = useRef('');
   const content = useMemo(() => {
     if (typeof _children === 'string') {

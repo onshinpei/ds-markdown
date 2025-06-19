@@ -2,18 +2,13 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, MarkdownProps, IChar, IWholeContent } from '../defined.js';
+import { AnswerType, MarkdownProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined.js';
 import { __DEV__ } from '../constant.js';
 import { useTypingTask } from '../hooks/useTypingTask.js';
 
 type MarkdownCMDProps = MarkdownProps;
 
-export interface MarkdownRef {
-  push: (content: string, answerType: AnswerType) => void;
-  clear: () => void;
-  triggerWholeEnd: () => void;
-}
-const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light' }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light' }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
@@ -111,6 +106,7 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
      */
     clear: () => {
       typingTask.stop();
+      typingTask.typedIsManualStopRef.current = false;
       charsRef.current = [];
       wholeContentRef.current = {
         thinking: {
@@ -121,10 +117,19 @@ const MarkdownCMD = forwardRef<MarkdownRef, MarkdownCMDProps>(({ interval = 30, 
           content: '',
           length: 0,
         },
+        allLength: 0,
       };
       isWholeTypedEndRef.current = false;
       charIndexRef.current = 0;
       triggerUpdate();
+    },
+    /** 停止打字任务 */
+    stop: () => {
+      typingTask.stop();
+    },
+    /** 重新开始打字任务 */
+    resume: () => {
+      typingTask.resume();
     },
     /**
      * 主动触发打字结束

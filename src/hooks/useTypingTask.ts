@@ -5,7 +5,7 @@ interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
   interval: number;
   charsRef: React.RefObject<IChar[]>;
-  onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
+  onEnd?: (data?: { str?: string; answerType?: AnswerType; manual: boolean }) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
   onTypedChar?: (data?: IOnTypedEndCharData) => void;
   processCharDisplay: (char: IChar) => void;
@@ -17,6 +17,9 @@ export interface TypingTaskController {
   stop: () => void;
   clear: () => void;
   isTyping: () => boolean;
+  /** 是否主动调用 stop 方法 */
+  typedIsManualStopRef: React.RefObject<boolean>;
+  resume: () => void;
 }
 
 export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskController => {
@@ -32,6 +35,9 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   // 已经打过的字记录
   const typedCharsRef = useRef<{ typedContent: string; answerType: AnswerType; prevStr: string } | undefined>(undefined);
+
+  // 是否主动调用 stop 方法
+  const typedIsManualStopRef = useRef(false);
 
   const getChars = () => {
     return charsRef.current;
@@ -90,7 +96,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   /**
    * 触发打字结束回调
    */
-  const triggerOnEnd = () => {
+  const triggerOnEnd = (data?: { manual?: boolean }) => {
     if (!onEnd) {
       return;
     }
@@ -98,6 +104,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     onEnd({
       str: typedCharsRef.current?.typedContent,
       answerType: typedCharsRef.current?.answerType,
+      manual: data?.manual ?? false,
     });
   };
 
@@ -114,14 +121,14 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       return;
     }
 
-    const { answerType, content } = char;
+    const { answerType, content, index } = char;
 
     const allLength = wholeContentRef.current.allLength;
 
     const percent = ((char.index + 1) / allLength) * 100;
 
     onTypedChar({
-      currentIndex: typedCharsRef.current?.prevStr.length || 0,
+      currentIndex: index,
       currentChar: content,
       answerType: answerType,
       prevStr: typedCharsRef.current?.prevStr || '',
@@ -149,6 +156,11 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** 开始打字任务 */
   const startTypedTask = () => {
+    /** 如果手动调用 stop 方法，则不重新开始打字 */
+    if (typedIsManualStopRef.current) {
+      return;
+    }
+
     if (isTypedRef.current) {
       return;
     }
@@ -212,13 +224,15 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   };
 
   /** 停止动画帧模式 */
-  const stopAnimationFrame = () => {
+  const stopAnimationFrame = (manual = false) => {
     isTypedRef.current = false;
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
     }
-    triggerOnEnd();
+    if (!manual) {
+      triggerOnEnd({ manual });
+    }
   };
 
   /** setTimeout 模式 */
@@ -268,13 +282,29 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     triggerOnEnd();
   };
 
+  const stopTask = () => {
+    typedIsManualStopRef.current = true;
+    if (timerType === 'requestAnimationFrame') {
+      stopAnimationFrame();
+    } else {
+      stopTimeout();
+    }
+  };
+
+  function restartTypedTask() {
+    typedIsManualStopRef.current = false;
+    startTypedTask();
+  }
+
   return {
     start: startTypedTask,
-    stop: clearTimer,
+    stop: stopTask,
+    resume: restartTypedTask,
     clear: () => {
       clearTimer();
       typedCharsRef.current = undefined;
     },
     isTyping: () => isTypedRef.current,
+    typedIsManualStopRef,
   };
 };

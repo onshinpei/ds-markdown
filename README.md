@@ -180,9 +180,9 @@ React 19 带来了许多激动人心的新特性：
 ### 命令式 API (推荐流式场景)
 
 ```typescript
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-interface MarkdownRef {
+interface MarkdownCMDRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
@@ -252,10 +252,10 @@ interface MarkdownRef {
 
 ````tsx
 import { useRef } from 'react';
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
-  const markdownRef = useRef<MarkdownRef>(null);
+  const markdownRef = useRef<MarkdownCMDRef>(null);
 
   // 模拟 AI 流式响应
   const simulateAIResponse = async () => {
@@ -382,7 +382,7 @@ const handleStreamingMarkdown = () => {
 
 ```tsx
 // ✅ 推荐：命令式 API
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
@@ -395,9 +395,9 @@ const [content, setContent] = useState('');
 ### 3. 类型安全
 
 ```tsx
-import { MarkdownRef } from 'ds-markdown';
+import { MarkdownCMDRef } from 'ds-markdown';
 
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
 

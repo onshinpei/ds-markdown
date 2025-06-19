@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { MarkdownCMD, MarkdownRef } from '../../src';
+import { MarkdownCMD, MarkdownCMDRef } from '../../src';
 
 // 导入 ./cozeData.text
 
@@ -15,7 +15,7 @@ const input =
 
 const modulePrefix = 'CMDDemo';
 const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
-  const cmdRef = useRef<MarkdownRef>(null!);
+  const cmdRef = useRef<MarkdownCMDRef>(null!);
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -50,15 +50,31 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
   }, []);
 
   const interval = 16.67;
-  const flag = true;
+  const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   const onTypedChar = (data: IOnTypedEndCharData) => {
-    console.log('onTypedChar', data);
+    // console.log('onTypedChar', data);
   };
 
   return (
     <div className="ds-message-box">
+      <div style={{ padding: '20px 50px' }}>
+        <button
+          onClick={() => {
+            cmdRef.current.stop();
+          }}
+        >
+          stop
+        </button>
+        <button
+          onClick={() => {
+            cmdRef.current.resume();
+          }}
+        >
+          resume
+        </button>
+      </div>
       <div className="ds-message-list">
         <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="light" onTypedChar={onTypedChar} />
       </div>

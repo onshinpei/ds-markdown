@@ -42,7 +42,8 @@ const BasicDemo: React.FC<{
   };
 
   const throttleOnTypedChar = useMemo(() => {
-    return throttle(() => {
+    return throttle((char) => {
+      console.log(char.percent);
       if (!scrollCacheRef.current.needAutoScroll) return;
       const messageDiv = messageDivRef.current;
       // 自动滑动到最底部
