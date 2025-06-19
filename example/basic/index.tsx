@@ -1,7 +1,7 @@
 import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import Markdown from '../../src';
+import Markdown, { MarkdownRef } from '../../src';
 import json from './data.json';
 
 function throttle(fn: (...args: any[]) => void, delay: number) {
@@ -23,6 +23,8 @@ const BasicDemo: React.FC<{
   const [answerContent, setAnswerContent] = useState('');
   const messageDivRef = useRef<HTMLDivElement>(null!);
 
+  const markdownRef = useRef<MarkdownRef>(null!);
+
   const scrollCacheRef = useRef<{
     type: 'manual' | 'auto';
     needAutoScroll: boolean;
@@ -42,7 +44,7 @@ const BasicDemo: React.FC<{
   };
 
   const throttleOnTypedChar = useMemo(() => {
-    return throttle(() => {
+    return throttle((char) => {
       if (!scrollCacheRef.current.needAutoScroll) return;
       const messageDiv = messageDivRef.current;
       // 自动滑动到最底部
@@ -85,9 +87,11 @@ const BasicDemo: React.FC<{
           )}
           <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
         </div>
-        <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-          切换为{theme === 'light' ? '暗色' : '亮色'}
-        </button>
+        <div>
+          <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+            切换为{theme === 'light' ? '暗色' : '亮色'}
+          </button>
+        </div>
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
@@ -100,12 +104,6 @@ const BasicDemo: React.FC<{
                 setAnswerContent(json.content);
               }
             }}
-            // onStart={(args) => {
-            //   console.log('思考开始', args);
-            // }}
-            // onTypedChar={(args) => {
-            //   console.log('打字中', args);
-            // }}
             onTypedChar={throttleOnTypedChar}
             // timerType="setTimeout"
             timerType={timerType}
@@ -115,28 +113,19 @@ const BasicDemo: React.FC<{
           </Markdown>
 
           {answerContent && (
-            <Markdown
-              interval={interval}
-              answerType="answer"
-              // onEnd={(args) => {
-              //   console.log('思考完成', args);
-              //   if (thinkingContent) {
-              //     setAnswerContent(json.content);
-              //   }
-              // }}
-              // onStart={(args) => {
-              //   console.log('思考开始', args);
-              // }}
-              // onTypedChar={(args) => {
-              //   console.log('打字中', args);
-              // }}
-              onTypedChar={throttleOnTypedChar}
-              // timerType="setTimeout"
-              timerType={timerType}
-              theme={theme}
-            >
-              {answerContent}
-            </Markdown>
+            <>
+              <div>
+                <button className="theme-btn" onClick={() => markdownRef.current.stop()}>
+                  停止
+                </button>
+                <button className="theme-btn" onClick={() => markdownRef.current.resume()}>
+                  继续
+                </button>
+              </div>
+              <Markdown interval={interval} ref={markdownRef} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme}>
+                {answerContent}
+              </Markdown>
+            </>
           )}
         </div>
       </div>

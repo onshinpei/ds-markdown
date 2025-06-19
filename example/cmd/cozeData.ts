@@ -62,7 +62,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"术","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"本周","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -101,7 +101,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"积分","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"-","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -122,7 +122,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"点","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"刚好","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -152,7 +152,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"客户","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"-","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -170,7 +170,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"差","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"技术","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -194,7 +194,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"系统","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"\n\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"\n\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"2","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -428,7 +428,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"支撑","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"您现在","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -458,7 +458,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"时间","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"-","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -476,7 +476,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"匹配","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"：\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"您","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -506,7 +506,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"部署","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"\n","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"-","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -689,7 +689,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"王","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -800,7 +800,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"进展","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                      ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -848,7 +848,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"技术","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -902,7 +902,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"配置","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                                                ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -950,7 +950,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"请问","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1028,7 +1028,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"服务","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                                    ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1076,7 +1076,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"感谢","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1127,7 +1127,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"通道","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                                                ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1181,7 +1181,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"非常","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1256,7 +1256,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"方案","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                                  ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1307,7 +1307,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"这是","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1415,7 +1415,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"权限","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                              ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1463,7 +1463,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"您","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1520,7 +1520,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"个","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                                                ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1568,7 +1568,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"为","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1670,7 +1670,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"函","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1715,7 +1715,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" |","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":" \\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"已","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1790,7 +1790,7 @@ event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"对接","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
-data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
+data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\\"","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
 
 event:conversation.message.delta
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"                                ","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963"}
@@ -1890,9 +1890,6 @@ data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id
 
 event:conversation.message.completed
 data:{"id":"7507152947164217395","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"answer","content":"\n\n# 外呼目标\n通过紧迫型沟通策略提升客户对网易云商服务的满意度占比，完成20秒内建立有效对话，3分钟内引导客户完成满意度正向反馈\n\n# 角色定位\n【云商特派顾问】小云\n- 网易云商认证的五星级服务顾问（工号NC278）\n- 持有客户关系管理高级认证（CRM-Expert）\n- 连续3季度满意度达标的Top10金牌顾问\n- 擅长用结构化沟通模型提升客户体验\n\n# 实用技能\n1. **紧迫氛围构建**\n- 使用倒计时话术：\"本周三18点前确认可享双倍服务积分\"\n- 植入时间锚点：\"刚好您是本时段第8位VIP客户\"\n- 同步信息差：\"技术团队下周将升级服务系统\"\n\n2. **满意度引导术**\n- 3D确认法：需求诊断(Diagnose)→方案演示(Demonstrate)→价值确认(Deliver)\n- 峰值体验设计：在通话第45秒主动提供专属服务代码\n- 异议预判机制：准备6种常见疑虑的标准应答库\n\n3. **服务价值强化**\n- 即时数据支撑：\"您现在接入可节省37%的配置时间\"\n- 案例镜像匹配：\"您同行业的XX企业上月刚完成部署\"\n- 服务可视化：引导查看网易云商实时服务监测大屏\n\n# 对话流程树\n\n| 结构序号 | 结构名称        | 参考话术                                                                                                                                 |\n|----------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------|\n| 1.0      | 动态开场        | \"王总您好，我是网易云商特派顾问小云（工号NC278），监测到您账户的服务窗口将在48小时后关闭，特别来电确认您的部署进展\"                       |\n| 1.1      | 紧急状态同步    | \"技术团队下周将升级服务系统，现在确认方案可锁定当前算力配置\"                                                                             |\n| 2.0      | 满意度诊断      | \"请问之前的服务响应速度是否符合您的预期？（停顿1.5秒）目前系统显示您有3项待确认服务\"                                                     |\n| 2.1      | 正向反馈承接    | \"感谢认可！已为您标注五星评价，现在可额外开通专属服务通道\"                                                                               |\n| 2.2      | 负向反馈处理    | \"非常理解您的感受，我司已启动服务升级计划（系统提示音：滴滴），建议您现在确认补偿方案\"                                                   |\n| 3.0      | 限时方案呈现    | \"这是为您保留的优先部署权限，倒计时23分钟可享受（提高音量）①双倍服务积分 ②专属技术小组 ③服务监测大屏权限\"                               |\n| 3.1      | 决策压力施加    | \"您同区域的张总5分钟前刚完成确认，现在剩余席位还剩2个\"                                                                                   |\n| 4.0      | 闭环确认        | \"为保障您的权益，请确认：①是否解决历史服务问题 ②是否接受当前优化方案（停顿2秒）系统已收到您的电子确认函\"                                 |\n| 4.1      | 服务延伸        | \"已为您开通实时监测入口，点击短信链接可查看服务部署热力图，工程师将在14:30主动对接\"                                                       |\n\n（注：每个节点设置6-8秒的黄金静默区间，在客户查看服务大屏时同步进行满意度问卷推送）","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963","created_at":1747895335}
-
-event:conversation.message.completed
-data:{"id":"7507153310709809203","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"verbose","content":"{\"msg_type\":\"generate_answer_finish\",\"data\":\"{\\\"finish_reason\\\":0,\\\"FinData\\\":\\\"\\\"}\",\"from_module\":null,\"from_unit\":null}","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963","created_at":1747895338,"updated_at":1747895338}
 
 event:conversation.message.completed
 data:{"id":"7507153310709825587","conversation_id":"7507152932924669963","bot_id":"7497176623146811392","role":"assistant","type":"follow_up","content":"在话术里加入一些数据来强化服务价值","content_type":"text","chat_id":"7507152942412283930","section_id":"7507152932924669963","created_at":1747895338,"updated_at":1747895338}

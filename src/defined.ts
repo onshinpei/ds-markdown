@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /**
  * 回答类型，思考和回答
  */
@@ -45,6 +44,17 @@ export interface ITokensReference {
   raw: string;
 }
 
+export interface IOnTypedCharData {
+  currentIndex: number;
+  currentChar: string;
+  answerType: AnswerType;
+  prevStr: string;
+}
+
+export interface IOnTypedEndCharData extends IOnTypedCharData {
+  percent: number;
+}
+
 export interface MarkdownProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
@@ -55,13 +65,40 @@ export interface MarkdownProps {
   /** 打字完成后回调,  */
   onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
   /** 开始打字回调 */
-  onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
+  onStart?: (data?: IOnTypedCharData) => void;
   /**
    * 打字机打完一个字符回调
    * @param char 字符
    * @param index 字符索引
    */
-  onTypedChar?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
+  onTypedChar?: (data?: IOnTypedEndCharData) => void;
   /** 主题 */
   theme?: Theme;
+}
+
+export interface IWholeContent {
+  thinking: {
+    content: string;
+    length: number;
+  };
+  answer: {
+    content: string;
+    length: number;
+  };
+  allLength: number;
+}
+
+export interface MarkdownBaseRef {
+  stop: () => void;
+  resume: () => void;
+}
+
+/** Markdown 组件的ref 类型 */
+export type MarkdownRef = MarkdownBaseRef;
+
+/** MarkdownCMD 组件的 ref 类型 */
+export interface MarkdownCMDRef extends MarkdownBaseRef {
+  push: (content: string, answerType: AnswerType) => void;
+  clear: () => void;
+  triggerWholeEnd: () => void;
 }

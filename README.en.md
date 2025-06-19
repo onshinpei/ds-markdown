@@ -180,9 +180,9 @@ Let's explore these new features together!`);
 ### Imperative API (Recommended for Streaming Scenarios)
 
 ```typescript
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-interface MarkdownRef {
+interface MarkdownCMDRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
@@ -252,10 +252,10 @@ High-frequency recommends `requestAnimationFrame`, low-frequency recommends `set
 
 ````tsx
 import { useRef } from 'react';
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
-  const markdownRef = useRef<MarkdownRef>(null);
+  const markdownRef = useRef<MarkdownCMDRef>(null);
 
   // Simulate AI streaming response
   const simulateAIResponse = async () => {
@@ -382,7 +382,7 @@ const handleStreamingMarkdown = () => {
 
 ```tsx
 // ✅ Recommended: Imperative API
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
@@ -395,9 +395,9 @@ const [content, setContent] = useState('');
 ### 3. Type Safety
 
 ```tsx
-import { MarkdownRef } from 'ds-markdown';
+import { MarkdownCMDRef } from 'ds-markdown';
 
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 // Complete TypeScript type hints
 ```
 

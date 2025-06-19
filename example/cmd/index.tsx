@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { MarkdownCMD, MarkdownRef } from '../../src';
+import { MarkdownCMD, MarkdownCMDRef } from '../../src';
 
 // 导入 ./cozeData.text
 
 import { cozeData } from './cozeData';
-import data from '../basic/data.json';
+import { IOnTypedEndCharData } from '../../src/defined';
 
 interface CMDDemoProps {
   id?: number;
@@ -15,7 +15,7 @@ const input =
 
 const modulePrefix = 'CMDDemo';
 const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
-  const cmdRef = useRef<MarkdownRef>(null!);
+  const cmdRef = useRef<MarkdownCMDRef>(null!);
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
 
     async function pushData() {
       while (true) {
-        const timeout = 20 + Math.random() * 300;
+        const timeout = 10 + Math.random() * 10;
         await new Promise((resolve) => setTimeout(resolve, timeout));
 
         const data = cozeData.shift();
@@ -49,14 +49,34 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     // cmdRef.current.push(data.content, 'answer');
   }, []);
 
-  const interval = 8;
-  const flag = true;
+  const interval = 16.67;
+  const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
+
+  const onTypedChar = (data: IOnTypedEndCharData) => {
+    // console.log('onTypedChar', data);
+  };
 
   return (
     <div className="ds-message-box">
+      <div style={{ padding: '20px 50px' }}>
+        <button
+          onClick={() => {
+            cmdRef.current.stop();
+          }}
+        >
+          stop
+        </button>
+        <button
+          onClick={() => {
+            cmdRef.current.resume();
+          }}
+        >
+          resume
+        </button>
+      </div>
       <div className="ds-message-list">
-        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="dark" />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="light" onTypedChar={onTypedChar} />
       </div>
     </div>
   );

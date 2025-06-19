@@ -180,9 +180,9 @@ React 19는 많은 흥미로운 새 기능을 제공합니다:
 ### 명령형 API (스트리밍 시나리오 추천)
 
 ```typescript
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-interface MarkdownRef {
+interface MarkdownCMDRef {
   push: (content: string, answerType: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
@@ -250,10 +250,10 @@ interface MarkdownRef {
 
 ````tsx
 import { useRef } from 'react';
-import { MarkdownCMD, MarkdownRef } from 'ds-markdown';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
-  const markdownRef = useRef<MarkdownRef>(null);
+  const markdownRef = useRef<MarkdownCMDRef>(null);
 
   // AI 스트리밍 응답 시뮬레이션
   const simulateAIResponse = async () => {
@@ -380,7 +380,7 @@ const handleStreamingMarkdown = () => {
 
 ```tsx
 // ✅ 추천: 명령형 API
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
@@ -393,9 +393,9 @@ const [content, setContent] = useState('');
 ### 3. 타입 안전성
 
 ```tsx
-import { MarkdownRef } from 'ds-markdown';
+import { MarkdownCMDRef } from 'ds-markdown';
 
-const ref = useRef<MarkdownRef>(null);
+const ref = useRef<MarkdownCMDRef>(null);
 // 완전한 TypeScript 타입 힌트
 ```
 
