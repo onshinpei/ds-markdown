@@ -194,6 +194,15 @@ interface MarkdownCMDRef {
 | `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピングを開始 |
 | `clear`           | -                                           | すべてのコンテンツと状態をクリア     |
 | `triggerWholeEnd` | -                                           | 完了コールバックを手動でトリガー     |
+| `stop`            | -                                           | タイピングを一時停止                 |
+| `resume`          | -                                           | タイピングを再開                     |
+
+**使用例：**
+
+```tsx
+markdownRef.current?.stop(); // アニメーションを一時停止
+markdownRef.current?.resume(); // アニメーションを再開
+```
 
 ---
 

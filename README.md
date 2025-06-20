@@ -180,21 +180,20 @@ React 19 带来了许多激动人心的新特性：
 
 ### 命令式 API (推荐流式场景)
 
-```typescript
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-interface MarkdownCMDRef {
-  push: (content: string, answerType: AnswerType) => void;
-  clear: () => void;
-  triggerWholeEnd: () => void;
-}
-```
-
 | 方法              | 参数                                        | 说明               |
 | ----------------- | ------------------------------------------- | ------------------ |
 | `push`            | `(content: string, answerType: AnswerType)` | 添加内容并开始打字 |
 | `clear`           | -                                           | 清空所有内容和状态 |
 | `triggerWholeEnd` | -                                           | 手动触发完成回调   |
+| `stop`            | -                                           | 暂停打字动画       |
+| `resume`          | -                                           | 恢复打字动画       |
+
+**用法示例：**
+
+```tsx
+markdownRef.current?.stop(); // 暂停动画
+markdownRef.current?.resume(); // 恢复动画
+```
 
 ---
 

@@ -194,6 +194,15 @@ interface MarkdownCMDRef {
 | `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing  |
 | `clear`           | -                                           | Clear all content and state   |
 | `triggerWholeEnd` | -                                           | Manually trigger end callback |
+| `stop`            | -                                           | Pause typing animation        |
+| `resume`          | -                                           | Resume typing animation       |
+
+**Usage Example:**
+
+```tsx
+markdownRef.current?.stop(); // Pause animation
+markdownRef.current?.resume(); // Resume animation
+```
 
 ---
 

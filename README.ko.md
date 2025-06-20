@@ -195,6 +195,16 @@ interface MarkdownCMDRef {
 | `clear`           | -                                           | 모든 콘텐츠와 상태 초기화  |
 | `triggerWholeEnd` | -                                           | 완료 콜백 수동 트리거      |
 
+| `stop` | - | 타이핑 애니메이션 일시정지 |
+| `resume` | - | 타이핑 애니메이션 재개 |
+
+**사용 예시:**
+
+```tsx
+markdownRef.current?.stop(); // 애니메이션 일시정지
+markdownRef.current?.resume(); // 애니메이션 재개
+```
+
 ---
 
 ## 🎛️ 타이머 모드 상세 설명
