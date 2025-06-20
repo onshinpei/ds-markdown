@@ -39,16 +39,7 @@
         import { createRoot } from 'react-dom/client';
         import DsMarkdown from 'ds-markdown';
 
-        const markdown = `
-# Hello ds-markdown
-
-This is a **high-performance** typing animation component!
-
-## Features
-- ⚡ Zero-delay streaming
-- 🎬 Smooth typing animation
-- 🎯 Perfect syntax support
-        `;
+        const markdown = "React 19 是 React 生态的重要更新，引入了多项改进和新特性，旨在简化开发流程、优化性能并增强功能。以下是 React 19 的主要新特性：\n\n---\n\n### 1. **React 编译器（React Compiler）**\n   - **自动优化组件**：通过静态分析和动态跟踪，自动对组件进行记忆化（memoization），减少不必要的重新渲染。\n   - **无需手动优化**：开发者不再需要手动使用 `useMemo` 或 `useCallback`，编译器会智能处理依赖项。\n\n---\n\n### 2. **服务端组件（Server Components）正式支持**\n   - **服务端渲染优化**：直接在服务端渲染组件，减少客户端加载的代码量，提升首屏性能。\n   - **无缝数据获取**：服务端组件可直接访问数据库或 API，简化数据获取流程。\n   - **渐进式集成**：支持与服务端框架（如 Next.js、Remix）深度集成。\n\n---\n\n### 3. **动作处理（Actions）**\n   - **简化表单处理**：通过 `useActionState` 和 `useFormStatus` 等新 Hook，统一管理表单提交状态和结果。\n   - **示例代码**：\n     ```jsx\n     function Form({ action }) {\n       const [state, formAction] = useActionState(action, null);\n       return (\n         <form action={formAction}>\n           <button>Submit</button>\n           {state && <p>{state.message}</p>}\n         </form>\n       );\n     }\n     ```\n\n---\n\n### 4. **文档元数据支持**\n   - **SEO 优化**：直接在组件内使用 `<title>`、`<meta>` 等标签管理文档元数据，无需第三方库。\n   - **示例**：\n     ```jsx\n     function Page() {\n       return (\n         <>\n           <title>React 19 新特性</title>\n           <meta name=\"description\" content=\"React 19 更新内容\" />\n         </>\n       );\n     }\n     ```\n\n---\n\n### 5. **资源加载优化**\n   - **异步资源预加载**：通过 `preload`、`preinit` 等 API 提前加载脚本或样式，减少页面阻塞。\n   - **代码示例**：\n     ```jsx\n     import { prefetchDNS, preconnect, preload } from 'react-dom';\n     prefetchDNS(\"https://example.com\");\n     preload(\"https://example.com/style.css\", { as: \"style\" });\n     ```\n\n---\n\n### 6. **增强的 Hooks**\n   - **`use` Hook**：支持在条件语句或循环中使用异步操作，简化数据获取逻辑。\n     ```jsx\n     const data = use(fetchData());\n     ```\n   - **`useOptimistic`**：乐观更新 UI，适用于实时应用（如聊天、投票）。\n     ```jsx\n     const [optimisticState, addOptimistic] = useOptimistic(\n       state,\n       (currentState, optimisticValue) => [...currentState, optimisticValue]\n     );\n     ```\n\n---\n\n### 7. **错误处理改进**\n   - **服务端错误恢复**：服务端组件渲染出错时，客户端可自动尝试重新渲染，避免页面崩溃。\n   - **更清晰的错误边界**：通过 `errorBoundary` 属性指定错误处理组件。\n\n---\n\n### 8. **兼容性调整**\n   - **弃用 `react-dom/createRoot`**：推荐使用新的根 API `react-dom/client`。\n   - **移除旧版 API**：如 `ReactDOM.render` 和 `react-dom/server` 的遗留方法。\n\n---\n\n### 升级建议\n- **测试环境验证**：在非生产环境充分测试现有代码，尤其是涉及服务端渲染和表单处理的逻辑。\n- **关注官方迁移指南**：React 官网通常会提供详细的版本迁移说明。\n\n---\n\nReact 19 的这些改进显著降低了开发复杂性，同时提升了性能和用户体验。建议开发者参考 [React 官方博客](https://react.dev/blog) 获取最新动态和详细文档。";
 
         const root = createRoot(document.getElementById('root'));
         root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
