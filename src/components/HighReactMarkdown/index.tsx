@@ -3,7 +3,9 @@ import Markdown from 'react-markdown';
 import type { Options } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
-
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+import remarkMathBracket from '../../utils/remarkMathBracket';
 import BlockWrap from '../BlockWrap/index.js';
 import { Theme } from '../../defined.js';
 
@@ -15,7 +17,8 @@ const modulePrefix = 'HighReactMarkdown';
 const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', ...props }) => {
   return (
     <Markdown
-      remarkPlugins={[gfmPlugin]}
+      remarkPlugins={[gfmPlugin, remarkMathBracket, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       components={{
         code: ({ className, children, ...props }) => {
           const match = /language-(\w+)/.exec(className || '');
