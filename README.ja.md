@@ -38,12 +38,20 @@
 - 高頻度タイピングサポート（`requestAnimationFrame` モードでは `0ms` に近いタイピング間隔をサポート）
 - フレーム同期レンダリング、ブラウザの 60fps と完璧にマッチ
 - スマート文字バッチ処理により、より自然な視覚効果
+- タイピングの中断 `stop` と再開 `resume` をサポート
 
 ### 🔧 **柔軟で使いやすい**
 
 - **宣言的 API**：シンプルなシナリオに適し、React スタイル
 - **命令的 API**：ストリーミングデータに適し、より良いパフォーマンス
 - **ネイティブ TypeScript サポート**：完全な型ヒント
+
+### 🧮 **数式サポート**
+
+- **KaTeX 統合**：高性能な数式レンダリング
+- **デュアル構文サポート**：`$...$` と `\[...\]` の2つの区切り文字
+- **ストリーミング対応**：タイピングアニメーションでの数式の完璧なサポート
+- **テーマ適応**：ライト/ダークテーマへの自動適応
 
 ---
 
@@ -64,45 +72,24 @@ pnpm add ds-markdown
 
 インストール不要、ブラウザで直接使用できます：
 
+[DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
+
 ```html
 <!-- スタイルのインポート -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- コンポーネントのインポート -->
-<script type="importmap">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@19.1.0",
-      "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-      "ds-markdown": "https://esm.sh/ds-markdown"
-    }
-  }
-</script>
-<script type="module" src="https://esm.sh/tsx"></script>
-
-<script type="text/babel">
-  import { createRoot } from 'react-dom/client';
-  import DsMarkdown from 'ds-markdown';
-
-  const markdown = `
-# Hello ds-markdown
-
-これは**高性能**なタイピングアニメーションコンポーネントです！
-
-## 特徴
-- ⚡ 遅延ゼロのストリーミング
-- 🎬 スムーズなタイピングアニメーション
-- 🎯 完璧なシンタックスサポート
-  `;
-
-  const root = createRoot(document.getElementById('root'));
-  root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
+<script type="module">
+  import Markdown from 'https://esm.sh/ds-markdown';
 </script>
 ```
 
 ## 🚀 5分クイックスタート
 
 ### 基本的な使用法
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -112,6 +99,23 @@ function App() {
   return (
     <DsMarkdown interval={20} answerType="answer">
       # Hello ds-markdown これは**高性能**なタイピングアニメーションコンポーネントです！ ## 機能 - ⚡ ゼロ遅延ストリーミング処理 - 🎬 滑らかなタイピングアニメーション - 🎯 完璧な構文サポート
+    </DsMarkdown>
+  );
+}
+```
+
+### 数式サポート
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+import 'ds-markdown/katex.css'; // 数式スタイルのインポート
+
+function MathDemo() {
+  return (
+    <DsMarkdown interval={20} answerType="answer" math={{ isOpen: true, splitSymbol: 'dollar' }}>
+      # ピタゴラスの定理 直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい： $a^2 + b^2 = c^2$ ここで： - $a$ と $b$ は直角辺 - $c$ は斜辺 古典的な「3-4-5」三角形の場合： $c = \sqrt
+      {3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
 }
@@ -173,21 +177,24 @@ React 19 は多くのエキサイティングな新機能をもたらします�
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | タイマータイプ                   | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
 | `answerType`  | `'thinking'` \| `'answer'`                  | コンテンツタイプ                 | `'answer'`                                                            |
 | `theme`       | `'light'` \| `'dark'`                       | テーマタイプ                     | `'light'`                                                             |
+| `math`        | `IMarkdownMath`                             | 数式設定                         | `{ isOpen: false, splitSymbol: 'dollar' }`                            |
 | `onEnd`       | `(data: EndData) => void`                   | タイピング完了コールバック       | -                                                                     |
 | `onStart`     | `(data: StartData) => void`                 | タイピング開始コールバック       | -                                                                     |
 | `onTypedChar` | `(data: CharData) => void`                  | 文字ごとのタイピングコールバック | -                                                                     |
 
+### 数式設定
+
+| プロパティ    | 型                        | 説明                         | デフォルト |
+| ------------- | ------------------------- | ---------------------------- | ---------- |
+| `isOpen`      | `boolean`                 | 数式レンダリングを有効にする | `false`    |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 数式区切り文字タイプ         | `'dollar'` |
+
+**区切り文字の説明：**
+
+- `'dollar'`：`$...$` と `$$...$$` 構文を使用
+- `'bracket'`：`\(...\)` と `\[...\]` 構文を使用
+
 ### 命令的 API（ストリーミングシナリオにおすすめ）
-
-```typescript
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-interface MarkdownCMDRef {
-  push: (content: string, answerType: AnswerType) => void;
-  clear: () => void;
-  triggerWholeEnd: () => void;
-}
-```
 
 | メソッド          | パラメータ                                  | 説明                                 |
 | ----------------- | ------------------------------------------- | ------------------------------------ |
@@ -206,56 +213,123 @@ markdownRef.current?.resume(); // アニメーションを再開
 
 ---
 
-## 🎛️ タイマーモード詳細説明
+## 🧮 数式使用ガイド
+
+### 基本構文
+
+```tsx
+// 1. 数式サポートを有効にする
+<DsMarkdown math={{ isOpen: true }}>
+  # 数式の例
+
+  // インライン数式
+  これはインライン数式です：$E = mc^2$
+
+  // ブロック数式
+  $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+</DsMarkdown>
+```
+
+### 区切り文字の選択
+
+```tsx
+// ドル記号区切り文字を使用（デフォルト）
+<DsMarkdown math={{ isOpen: true, splitSymbol: 'dollar' }}>
+  インライン：$a + b = c$
+  ブロック：$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
+</DsMarkdown>
+
+// 括弧区切り文字を使用
+<DsMarkdown math={{ isOpen: true, splitSymbol: 'bracket' }}>
+  インライン：\(a + b = c\)
+  ブロック：\[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
+</DsMarkdown>
+```
+
+### ストリーミング数式
+
+```tsx
+// ストリーミング出力での数式の完璧なサポート
+const mathContent = ['ピタゴラスの定理：', '$a^2 + b^2 = c^2$', '\n\n', 'ここで：', '- $a$ と $b$ は直角辺', '- $c$ は斜辺'];
+
+mathContent.forEach((chunk) => {
+  markdownRef.current?.push(chunk, 'answer');
+});
+```
+
+### スタイルカスタマイズ
+
+```css
+/* 数式スタイルのカスタマイズ */
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display {
+  margin: 1em 0;
+  text-align: center;
+}
+
+/* ダークテーマ適応 */
+[data-theme='dark'] .katex {
+  color: #e1e1e1;
+}
+```
+
+---
+
+## 🎛️ タイマーモード詳細
 
 ### `requestAnimationFrame` モード 🌟（推奨）
 
 ```typescript
 // 🎯 特徴
 - 時間駆動：実際の経過時間に基づいて文字数を計算
-- バッチ処理：単一フレーム内で複数文字を処理可能
-- フレーム同期：ブラウザ 60fps リフレッシュレートと同期
-- 高頻度最適化：interval < 16ms の高速タイピングを完璧サポート
+- バッチ処理：1フレーム内で複数の文字を処理可能
+- フレーム同期：ブラウザの60fpsリフレッシュレートと同期
+- 高頻度最適化：interval < 16msの高速タイピングを完璧にサポート
 
 // 🎯 適用シナリオ
-- 現代 Web アプリケーションのデフォルト選択
+- モダンWebアプリケーションのデフォルト選択
 - 滑らかなアニメーション効果を追求
-- 高頻度タイピング（interval > 0 で十分）
-- AI リアルタイム会話シナリオ
+- 高頻度タイピング（interval > 0で十分）
+- AIリアルタイム会話シナリオ
 ```
 
 ### `setTimeout` モード 📟（互換性）
 
 ```typescript
 // 🎯 特徴
-- 単一文字：一度に正確に一文字を処理
-- 固定間隔：設定時間に従って厳密に実行
-- リズム感：クラシックタイプライターのリズム
-- 精密制御：特定のタイミング要件に適用
+- 単一文字：毎回正確に1文字を処理
+- 固定間隔：設定された時間に厳密に実行
+- ビート感：クラシックタイプライターのリズム感
+- 精密制御：特定のタイミング要件に適している
 
 // 🎯 適用シナリオ
-- 精密時間制御が必要
-- レトロタイプライター効果の作成
+- 精密な時間制御が必要
+- レトロタイプライター効果を演出
 - 互換性要件の高いシナリオ
 ```
 
 ### 📊 パフォーマンス比較
 
-| 機能                             | requestAnimationFrame                 | setTimeout            |
-| -------------------------------- | ------------------------------------- | --------------------- |
-| **文字処理**                     | フレームあたり複数文字を処理可能      | 一度に一文字を処理    |
-| **高頻度間隔**                   | ✅ 優秀（5ms → フレームあたり3文字）  | ❌ ラグの可能性       |
-| **低頻度間隔**                   | ✅ 通常（100ms → 6フレーム後に1文字） | ✅ 精密               |
-| **視覚効果**                     | 🎬 滑らかなアニメーション感           | ⚡ 精密なリズム感     |
-| **パフォーマンスオーバーヘッド** | 🟢 低（フレーム同期）                 | 🟡 中程度（タイマー） |
+| 特徴                             | requestAnimationFrame               | setTimeout        |
+| -------------------------------- | ----------------------------------- | ----------------- |
+| **文字処理**                     | 1フレームで複数文字を処理可能       | 毎回1文字を処理   |
+| **高頻度間隔**                   | ✅ 優秀（5ms → 1フレーム3文字）     | ❌ ラグの可能性   |
+| **低頻度間隔**                   | ✅ 正常（100ms → 6フレーム後1文字） | ✅ 精密           |
+| **視覚効果**                     | 🎬 滑らかなアニメーション感         | ⚡ 精密なビート感 |
+| **パフォーマンスオーバーヘッド** | 🟢 低（フレーム同期）               | 🟡 中（タイマー） |
 
-高頻度では `requestAnimationFrame`、低頻度では `setTimeout` を推奨
+高頻度は`requestAnimationFrame`、低頻度は`setTimeout`を推奨
 
 ---
 
 ## 💡 実践例
 
 ### 📝 AI ストリーミング会話
+
+[DEMO: 🔧 StackBlitz 体験](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
 ````tsx
 import { useRef } from 'react';
@@ -271,18 +345,18 @@ function StreamingChat() {
     // 思考段階
     markdownRef.current?.push('🤔 あなたの質問を分析しています...', 'thinking');
     await delay(1000);
-    markdownRef.current?.push('\n\n✅ 分析完了、回答を開始します', 'thinking');
+    markdownRef.current?.push('\n\n✅ 分析完了、回答を開始', 'thinking');
 
     // ストリーミング回答
     const chunks = [
-      '# React 19 新機能分析\n\n',
+      '# React 19 新機能解析\n\n',
       '## 🚀 React Compiler\n',
-      'React 19 の最大のハイライトは **React Compiler** の導入です：\n\n',
-      '- 🎯 **自動最適化**：手動の memo と useMemo が不要\n',
-      '- ⚡ **パフォーマンス向上**：コンパイル時最適化、ランタイムオーバーヘッドゼロ\n',
-      '- 🔧 **後方互換**：既存コードの修正不要\n\n',
-      '## 📝 Actions がフォームを簡素化\n',
-      '新しい Actions API により、フォーム処理がより簡単になります：\n\n',
+      'React 19 の最大のハイライトは**React Compiler**の導入です：\n\n',
+      '- 🎯 **自動最適化**：手動のmemoとuseMemoが不要\n',
+      '- ⚡ **パフォーマンス向上**：コンパイル時最適化、実行時ゼロオーバーヘッド\n',
+      '- 🔧 **後方互換性**：既存コードの修正不要\n\n',
+      '## 📝 Actions フォーム簡素化\n',
+      '新しいActions APIによりフォーム処理がより簡単になります：\n\n',
       '```tsx\n',
       'function ContactForm({ action }) {\n',
       '  const [state, formAction] = useActionState(action, null);\n',
@@ -294,7 +368,7 @@ function StreamingChat() {
       '  );\n',
       '}\n',
       '```\n\n',
-      'この回答がお役に立てれば幸いです！🎉',
+      'この回答がお役に立てば幸いです！🎉',
     ];
 
     for (const chunk of chunks) {
@@ -305,7 +379,7 @@ function StreamingChat() {
 
   return (
     <div className="chat-container">
-      <button onClick={simulateAIResponse}>🤖 React 19 機能について質問</button>
+      <button onClick={simulateAIResponse}>🤖 React 19 新機能について質問</button>
 
       <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('段落完了:', data)} />
     </div>
@@ -315,9 +389,46 @@ function StreamingChat() {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ````
 
-### 🔄 ストリーミング Markdown 構文処理
+### 🧮 数式ストリーミングレンダリング
 
-**核心問題**：ストリーミング出力時、不完全な Markdown 構文がレンダリングエラーを引き起こす可能性
+```tsx
+function MathStreamingDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const simulateMathResponse = async () => {
+    markdownRef.current?.clear();
+
+    const mathChunks = [
+      '# ピタゴラスの定理の説明\n\n',
+      '直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい：\n\n',
+      '$a^2 + b^2 = c^2$\n\n',
+      'ここで：\n',
+      '- $a$ と $b$ は直角辺\n',
+      '- $c$ は斜辺\n\n',
+      '古典的な「3-4-5」三角形の場合：\n',
+      '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+      'この定理は幾何学で広く応用されています！',
+    ];
+
+    for (const chunk of mathChunks) {
+      await delay(150);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={simulateMathResponse}>📐 ピタゴラスの定理を説明</button>
+
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" math={{ isOpen: true, splitSymbol: 'dollar' }} />
+    </div>
+  );
+}
+```
+
+### 🔄 ストリーミングMarkdown構文処理
+
+**核心問題**：ストリーミング出力時に不完全なMarkdown構文がレンダリングエラーを引き起こす
 
 ```tsx
 // 🚨 問題シナリオ
@@ -325,47 +436,50 @@ push('#'); // "# "
 push(' '); // "# "
 push('タイトル'); // "# タイトル"
 push('\n'); // "# タイトル\n"
-push('1'); // "# タイトル\n1"     ← これは段落として誤解釈される
+push('1'); // "# タイトル\n1"     ← ここで段落として誤解析される
 push('.'); // "# タイトル\n1."    ← 正しいリストを形成
 push(' 項目'); // "# タイトル\n1. 項目"
 ```
 
-**✅ スマートソリューション**：コンポーネント内蔵同期バッファリングメカニズム
+**✅ スマート解決策**：内蔵同期バッファリングメカニズム
 
 ```tsx
-// コンポーネントが構文境界を知的に処理
+// コンポーネントが構文境界をインテリジェントに処理
 const handleStreamingMarkdown = () => {
   const chunks = ['#', ' ', '使用', 'スキル', '\n', '1', '.', ' ', 'スキル1', '\n', '2', '.', ' スキル2'];
 
   chunks.forEach((chunk) => {
     markdownRef.current?.push(chunk, 'answer');
-    // 遅延不要、コンポーネント内部で知的バッファリング
+    // 遅延不要、コンポーネントが内部でインテリジェントにバッファリング
   });
 };
 
-// 🧠 スマート処理フロー：
-// 1. "# 使用スキル\n1" 構文不完全をリアルタイム検出
-// 2. スマートバッファリング、より多くの文字を待機
-// 3. "." を受信して "1." を形成後、即座に処理
-// 4. ゼロ遅延、純粋同期処理
+// 🧠 インテリジェント処理フロー：
+// 1. "# 使用スキル\n1" のような不完全な構文をリアルタイム検出
+// 2. インテリジェントバッファリング、より多くの文字を待機
+// 3. "." を受信して "1." を形成した後すぐに処理
+// 4. ゼロ遅延、純粋な同期処理
 ```
 
 **サポートされる構文検出**：
 
 ````typescript
-// ✅ 完全構文（即座に処理）
-'## タイトル'; // 完全タイトル
-'1. リスト項目'; // 完全リスト項目
-'- 項目'; // 完全無順序リスト
-'> 引用コンテンツ'; // 完全引用
+// ✅ 完全な構文（即座に処理）
+'## タイトル'; // 完全なタイトル
+'1. リスト項目'; // 完全なリスト項目
+'- 項目'; // 完全な順序なしリスト
+'> 引用コンテンツ'; // 完全な引用
 '```javascript'; // コードブロック開始
 '```'; // コードブロック終了
 '改行で終わるコンテンツ\n'; // 改行境界
+'$a + b$'; // 完全な数式
+'$$\\sum x$$'; // 完全なブロック数式
 
-// 🔄 不完全構文（スマートバッファリング）
+// 🔄 不完全な構文（インテリジェントバッファリング）
 '##'; // タイトル記号のみ
 '1'; // 数字のみ
-'```java'; // 可能なコードブロック開始
+'```java'; // 可能性のあるコードブロック開始
+'$a +'; // 不完全な数式
 ````
 
 ---
@@ -378,37 +492,52 @@ const handleStreamingMarkdown = () => {
 // ✅ 推奨設定
 <DsMarkdown
   timerType="requestAnimationFrame"
-  interval={15} // 15-30ms が最適体験
+  interval={15} // 15-30msが最適な体験
 />
 
-// ❌ 過小間隔を避ける
+// ❌ 小さすぎる間隔を避ける
 <DsMarkdown interval={1} /> // パフォーマンス問題を引き起こす可能性
 ```
 
 ### 2. ストリーミングデータ処理
 
 ```tsx
-// ✅ 推奨：命令的 API
+// ✅ 推奨：命令的API
 const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
 
-// ❌ 避ける：頻繁な children 更新
+// ❌ 避ける：頻繁なchildren更新
 const [content, setContent] = useState('');
-// 各更新で全体コンテンツを再解析
+// 毎回の更新でコンテンツ全体を再解析
 ```
 
-### 3. 型安全
+### 3. 数式最適化
+
+```tsx
+// ✅ 推奨：数式スタイルを必要に応じて読み込み
+import 'ds-markdown/style.css';
+import 'ds-markdown/katex.css'; // 必要な時のみインポート
+
+// ✅ 推奨：区切り文字の合理的な使用
+// シンプルな数式には $...$ で簡潔さを
+// 複雑な数式には $$...$$ で明確さを
+
+// ❌ 避ける：不要な時に数式を有効にする
+<DsMarkdown math={{ isOpen: true }}>プレーンテキストコンテンツ</DsMarkdown>;
+```
+
+### 4. 型安全性
 
 ```tsx
 import { MarkdownCMDRef } from 'ds-markdown';
 
 const ref = useRef<MarkdownCMDRef>(null);
-// 完全な TypeScript 型ヒント
+// 完全なTypeScript型ヒント
 ```
 
-### 4. スタイルカスタマイズ
+### 5. スタイルカスタマイズ
 
 ```css
 /* 思考エリアスタイル */
@@ -448,18 +577,33 @@ const ref = useRef<MarkdownCMDRef>(null);
   padding: 8px 12px;
   text-align: left;
 }
+
+/* 数式スタイル */
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display {
+  margin: 1em 0;
+  text-align: center;
+}
+
+/* ダークテーマ数式 */
+[data-theme='dark'] .katex {
+  color: #e1e1e1;
+}
 ```
 
 ---
 
 ## 🌐 互換性
 
-| 環境           | バージョン要件                      | 説明                   |
-| -------------- | ----------------------------------- | ---------------------- |
-| **React**      | 16.8.0+                             | Hooks サポートが必要   |
-| **TypeScript** | 4.0+                                | オプション、ただし推奨 |
-| **ブラウザ**   | Chrome 60+, Firefox 55+, Safari 12+ | モダンブラウザ         |
-| **Node.js**    | 14.0+                               | ビルド環境             |
+| 環境           | バージョン要件                      | 説明                |
+| -------------- | ----------------------------------- | ------------------- |
+| **React**      | 16.8.0+                             | Hooksサポートが必要 |
+| **TypeScript** | 4.0+                                | オプションだが推奨  |
+| **ブラウザ**   | Chrome 60+, Firefox 55+, Safari 12+ | モダンブラウザ      |
+| **Node.js**    | 14.0+                               | ビルド環境          |
 
 ---
 
@@ -467,7 +611,7 @@ const ref = useRef<MarkdownCMDRef>(null);
 
 Issue と Pull Request の提出を歓迎します！
 
-1. このリポジトリをフォーク
+1. このリポジトリをFork
 2. 機能ブランチを作成：`git checkout -b feature/amazing-feature`
 3. 変更をコミット：`git commit -m 'Add amazing feature'`
 4. ブランチをプッシュ：`git push origin feature/amazing-feature`
@@ -482,11 +626,11 @@ MIT © [onshinpei](https://github.com/onshinpei)
 ---
 
 <div align="center">
-  <strong>このプロジェクトがお役に立てば、⭐️ Star でサポートしてください！</strong>
+  <strong>このプロジェクトがお役に立てば、⭐️ Star をお願いします！</strong>
   
   <br><br>
   
   [🐛 問題報告](https://github.com/onshinpei/ds-markdown/issues) | 
   [💡 機能提案](https://github.com/onshinpei/ds-markdown/issues) | 
-  [📖 ドキュメント参照](https://onshinpei.github.io/ds-markdown/)
+  [📖 ドキュメント閲覧](https://onshinpei.github.io/ds-markdown/)
 </div>
