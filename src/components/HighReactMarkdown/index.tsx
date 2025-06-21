@@ -5,7 +5,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
-import { replaceMathBracket } from '../../utils/remarkMathBracket';
+import { replaceMathBracket } from '../../utils/remarkMathBracket.js';
 import BlockWrap from '../BlockWrap/index.js';
 import { IMarkdownMath, Theme } from '../../defined.js';
 
