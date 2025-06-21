@@ -25,7 +25,9 @@ const App: React.FC<{
   const [answerContent, setAnswerContent] = useState('');
   const messageDivRef = useRef<HTMLDivElement>(null!);
 
-  const mardkownRef = useRef<MarkdownRef>(null!);
+  const markdownRef = useRef<MarkdownRef>(null!);
+
+  const [mathOpen, setMathOpen] = useState(true);
 
   const scrollCacheRef = useRef<{
     type: 'manual' | 'auto';
@@ -92,18 +94,21 @@ const App: React.FC<{
           <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
             切换为{theme === 'light' ? '暗色' : '亮色'}
           </button>
-          <button className="theme-btn" onClick={() => mardkownRef.current.stop()}>
+          <button className="theme-btn" onClick={() => setMathOpen(!mathOpen)}>
+            {mathOpen ? '关闭' : '开启'}公式转换
+          </button>
+          <button className="theme-btn" onClick={() => markdownRef.current.stop()}>
             暂停
           </button>
 
-          <button className="theme-btn" onClick={() => mardkownRef.current.resume()}>
+          <button className="theme-btn" onClick={() => markdownRef.current.resume()}>
             继续
           </button>
         </div>
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
-          <Markdown ref={mardkownRef} interval={interval} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme}>
+          <Markdown ref={markdownRef} interval={interval} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme} math={{ isOpen: mathOpen, splitSymbol: 'bracket' }}>
             {answerContent}
           </Markdown>
         </div>

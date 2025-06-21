@@ -74,6 +74,16 @@ export interface MarkdownProps {
   onTypedChar?: (data?: IOnTypedEndCharData) => void;
   /** 主题 */
   theme?: Theme;
+
+  /** 数学公式配置 */
+  math?: IMarkdownMath;
+}
+
+export interface IMarkdownMath {
+  /** 是括号还是$作为分隔符, 默认是$ */
+  splitSymbol: 'bracket' | 'dollar';
+  /** 是否开启数学公式 */
+  isOpen?: boolean;
 }
 
 export interface IWholeContent {
