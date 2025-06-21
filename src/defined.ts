@@ -51,7 +51,7 @@ export interface IOnTypedCharData {
   prevStr: string;
 }
 
-export interface IOnTypedEndCharData extends IOnTypedCharData {
+export interface ITypedChar extends IOnTypedCharData {
   percent: number;
 }
 
@@ -71,7 +71,7 @@ export interface MarkdownProps {
    * @param char 字符
    * @param index 字符索引
    */
-  onTypedChar?: (data?: IOnTypedEndCharData) => void;
+  onTypedChar?: (data?: ITypedChar) => void;
   /** 主题 */
   theme?: Theme;
 

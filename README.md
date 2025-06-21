@@ -179,9 +179,17 @@ React 19 带来了许多激动人心的新特性：
 | `math`        | [IMarkdownMath ](#IMarkdownMath)            | 数学公式配置            | `{ isOpen: false, splitSymbol: 'dollar' }`                  |
 | `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
 | `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
-| `onTypedChar` | `(data: CharData) => void`                  | 每字符打字回调          | -                                                           |
+| `onTypedChar` | `(data: [ITypedChar](#ITypedChar)) => void` | 每字符打字回调          | -                                                           |
 
-### IMarkdownMath
+### ITypedChar
+
+| 属性           | 类型     | 说明                         | 默认值 |
+| -------------- | -------- | ---------------------------- | ------ |
+| `percent`      | `number` | 打字进度百分比               | `0`    |
+| `currentChar`  | `string` | 当前打字的字符               | -      |
+| `currentIndex` | `number` | 当前打字在整个字符串中的索引 | `0`    |
+
+#### IMarkdownMath
 
 | 属性          | 类型                      | 说明                 | 默认值     |
 | ------------- | ------------------------- | -------------------- | ---------- |

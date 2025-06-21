@@ -4,7 +4,7 @@ import { MarkdownCMD, MarkdownCMDRef } from '../../src';
 // 导入 ./cozeData.text
 
 import { cozeData } from './cozeData';
-import { IOnTypedEndCharData } from '../../src/defined';
+import { ITypedChar } from '../../src/defined';
 
 interface CMDDemoProps {
   id?: number;
@@ -53,7 +53,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
   const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
-  const onTypedChar = (data: IOnTypedEndCharData) => {
+  const onTypedChar = (data: ITypedChar) => {
     // console.log('onTypedChar', data);
   };
 
