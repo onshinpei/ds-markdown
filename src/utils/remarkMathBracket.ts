@@ -19,12 +19,12 @@ const remarkMathBracket: Plugin = () => (tree, file) => {
     let newValue = '';
     if (typeof value === 'string') {
       // 替换 \[ ... \] 为 $$ ... $$
-      newValue = value.replace(/\[([\s\S]+?)\]/g, (_match, p1) => `$$${p1.trim()}$$`);
+      newValue = value.replace(/\[([\s\S]+?)\]/g, (_match, p1) => `$$${p1}$$`);
       // 替换 \( ... \) 为 $ ... $
-      newValue = newValue.replace(/\(([\s\S]+?)\)/g, (_match, p1) => `$${p1.trim()}$`);
+      newValue = newValue.replace(/\(([\s\S]+?)\)/g, (_match, p1) => `$${p1}$`);
 
       node.value = newValue;
-      console.log(newValue);
+      console.log(node);
     }
   });
 };
