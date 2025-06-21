@@ -1,7 +1,7 @@
 {
   "name": "ds-markdown",
   "private": false,
-  "version": "0.0.14",
+  "version": "0.0.15-beta.1",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "module": "./dist/esm/index.js",
@@ -31,6 +31,11 @@
       "import": "./dist/style.css",
       "require": "./dist/style.css",
       "default": "./dist/style.css"
+    },
+    "./katex.css": {
+      "import": "./dist/katex.css",
+      "require": "./dist/katex.css",
+      "default": "./dist/katex.css"
     }
   },
   "files": [
@@ -42,7 +47,7 @@
     "build": "rimraf dist && npm run build:cjs && npm run build:esm && npm run build:less",
     "build:cjs": "tsc --project tsconfig-cjs.json && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
     "build:esm": "tsc --project tsconfig-esm.json",
-    "build:less": "lessc src/style.less dist/style.css",
+    "build:less": "lessc src/style.less dist/style.css && lessc src/katex.less dist/katex.css",
     "lint": "eslint .",
     "preview": "vite preview",
     "release": "npm run build && node scripts/set-tag.cjs && cross-env RELEASE_MODE=true npm publish",
@@ -52,9 +57,12 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "katex": "^0.16.22",
     "react-markdown": "^10.1.0",
     "react-syntax-highlighter": "^15.6.1",
-    "remark-gfm": "^4.0.1"
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.12.0",
@@ -70,7 +78,7 @@
     "@types/react-dom": "^19.1.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^4.4.1",
-    "babel-jest": "^30.0.0-beta.3",
+    "babel-jest": "^29.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.2",
@@ -112,6 +120,6 @@
     "react-markdown"
   ],
   "publishConfig": {
-    "tag": "latest"
+    "tag": "beta"
   }
 }

@@ -46,6 +46,13 @@
 - **命令式 API**：适合流式数据，性能更优
 - **TypeScript 原生支持**：完整类型提示
 
+### 🧮 **数学公式支持**
+
+- **KaTeX 集成**：高性能数学公式渲染
+- **双语法支持**：`$...$` 和 `\[...\]` 两种分隔符
+- **流式兼容**：完美支持打字动画中的数学公式
+- **主题适配**：自动适配亮色/暗色主题
+
 ---
 
 ## 📦 快速安装
@@ -68,8 +75,11 @@ pnpm add ds-markdown
 [DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
 
 ```html
-<!-- 导入样式 -->
+<!-- 导入样式， 必须 -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- 导入katex数学公式样式， 非不要不引入 -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- 导入组件 -->
 <script type="module">
@@ -91,6 +101,22 @@ function App() {
   return (
     <DsMarkdown interval={20} answerType="answer">
       # Hello ds-markdown 这是一个**高性能**的打字动画组件！ ## 特性 - ⚡ 零延迟流式处理 - 🎬 流畅打字动画 - 🎯 完美语法支持
+    </DsMarkdown>
+  );
+}
+```
+
+### 数学公式支持
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+import 'ds-markdown/katex.css'; // 引入数学公式样式
+
+function MathDemo() {
+  return (
+    <DsMarkdown interval={20} answerType="answer" math={{ isOpen: true, splitSymbol: 'dollar' }}>
+      # 勾股定理 在直角三角形中，斜边的平方等于两条直角边的平方和： $a^2 + b^2 = c^2$ 其中： - $a$ 和 $b$ 是直角边 - $c$ 是斜边 对于经典的"勾三股四弦五"： $c = \sqrt{3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
 }
@@ -152,9 +178,30 @@ React 19 带来了许多激动人心的新特性：
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
 | `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                                                  |
 | `theme`       | `'light'` \| `'dark'`                       | 主题类型                | `'light'`                                                   |
+| `math`        | [IMarkdownMath ](#IMarkdownMath)            | 数学公式配置            | `{ isOpen: false, splitSymbol: 'dollar' }`                  |
 | `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
 | `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
-| `onTypedChar` | `(data: CharData) => void`                  | 每字符打字回调          | -                                                           |
+| `onTypedChar` | `(data: [ITypedChar](#ITypedChar)) => void` | 每字符打字回调          | -                                                           |
+
+### ITypedChar
+
+| 属性           | 类型     | 说明                         | 默认值 |
+| -------------- | -------- | ---------------------------- | ------ |
+| `percent`      | `number` | 打字进度百分比               | `0`    |
+| `currentChar`  | `string` | 当前打字的字符               | -      |
+| `currentIndex` | `number` | 当前打字在整个字符串中的索引 | `0`    |
+
+#### IMarkdownMath
+
+| 属性          | 类型                      | 说明                 | 默认值     |
+| ------------- | ------------------------- | -------------------- | ---------- |
+| `isOpen`      | `boolean`                 | 是否开启数学公式渲染 | `false`    |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 数学公式分隔符类型   | `'dollar'` |
+
+**分隔符说明：**
+
+- `'dollar'`：使用 `$...$` 和 `$$...$$` 语法
+- `'bracket'`：使用 `\(...\)` 和 `\[...\]` 语法
 
 ### 命令式 API (推荐流式场景)
 
@@ -171,6 +218,83 @@ React 19 带来了许多激动人心的新特性：
 ```tsx
 markdownRef.current?.stop(); // 暂停动画
 markdownRef.current?.resume(); // 恢复动画
+```
+
+---
+
+## 🧮 数学公式使用指南
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-4whdsqcr?file=src%2FApp.tsx)
+
+### 基本语法
+
+```tsx
+// 1. 启用数学公式支持
+<DsMarkdown math={{ isOpen: true }}>
+  # 数学公式示例
+
+  // 行内公式
+  这是一个行内公式：$E = mc^2$
+
+  // 块级公式
+  $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+</DsMarkdown>
+```
+
+### 分隔符选择
+
+```tsx
+// 使用美元符号分隔符（默认）
+<DsMarkdown math={{ isOpen: true, splitSymbol: 'dollar' }}>
+  行内：$a + b = c$
+  块级：$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
+</DsMarkdown>
+
+// 使用括号分隔符
+<DsMarkdown math={{ isOpen: true, splitSymbol: 'bracket' }}>
+  行内：\(a + b = c\)
+  块级：\[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
+</DsMarkdown>
+```
+
+### 流式数学公式
+
+```tsx
+// 完美支持流式输出中的数学公式
+const mathContent = [
+  '勾股定理：',
+  '$a^2 + b^2 = c^2$',
+  '\n\n',
+  '其中：',
+  '- $a$ 和 $b$ 是直角边\n',
+  '- $c$ 是斜边\n\n',
+  '对于经典的"勾三股四弦五"：\n',
+  '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+  '这个定理在几何学中有着广泛的应用！',
+];
+
+mathContent.forEach((chunk) => {
+  markdownRef.current?.push(chunk, 'answer');
+});
+```
+
+### 样式定制
+
+```css
+/* 数学公式样式定制 */
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display {
+  margin: 1em 0;
+  text-align: center;
+}
+
+/* 暗色主题适配 */
+[data-theme='dark'] .katex {
+  color: #e1e1e1;
+}
 ```
 
 ---
@@ -286,6 +410,43 @@ function StreamingChat() {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ````
 
+### 🧮 数学公式流式渲染
+
+```tsx
+function MathStreamingDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const simulateMathResponse = async () => {
+    markdownRef.current?.clear();
+
+    const mathChunks = [
+      '# 勾股定理详解\n\n',
+      '在直角三角形中，斜边的平方等于两条直角边的平方和：\n\n',
+      '$a^2 + b^2 = c^2$\n\n',
+      '其中：\n',
+      '- $a$ 和 $b$ 是直角边\n',
+      '- $c$ 是斜边\n\n',
+      '对于经典的"勾三股四弦五"：\n',
+      '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+      '这个定理在几何学中有着广泛的应用！',
+    ];
+
+    for (const chunk of mathChunks) {
+      await delay(150);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={simulateMathResponse}>📐 讲解勾股定理</button>
+
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" math={{ isOpen: true, splitSymbol: 'dollar' }} />
+    </div>
+  );
+}
+```
+
 ### 🔄 流式 Markdown 语法处理
 
 **核心问题**：流式输出时，不完整的 Markdown 语法会导致渲染错误
@@ -332,11 +493,14 @@ const handleStreamingMarkdown = () => {
 '```javascript'; // 代码块开始
 '```'; // 代码块结束
 '内容以换行结尾\n'; // 换行边界
+'$a + b$'; // 完整数学公式
+'$$\\sum x$$'; // 完整块级数学公式
 
 // 🔄 不完整语法 (智能缓冲)
 '##'; // 只有标题符号
 '1'; // 只有数字
 '```java'; // 可能的代码块开始
+'$a +'; // 不完整的数学公式
 ````
 
 ---
@@ -370,7 +534,22 @@ const [content, setContent] = useState('');
 // 每次更新都会重新解析整个内容
 ```
 
-### 3. 类型安全
+### 3. 数学公式优化
+
+```tsx
+// ✅ 推荐：按需加载数学公式样式
+import 'ds-markdown/style.css';
+import 'ds-markdown/katex.css'; // 仅在需要时引入
+
+// ✅ 推荐：合理使用分隔符
+// 对于简单公式，使用 $...$ 更简洁
+// 对于复杂公式，使用 $$...$$ 更清晰
+
+// ❌ 避免：在不需要时开启数学公式
+<DsMarkdown math={{ isOpen: true }}>纯文本内容</DsMarkdown>;
+```
+
+### 4. 类型安全
 
 ```tsx
 import { MarkdownCMDRef } from 'ds-markdown';
@@ -379,7 +558,7 @@ const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
 
-### 4. 样式定制
+### 5. 样式定制
 
 ```css
 /* 思考区域样式 */
@@ -418,6 +597,21 @@ const ref = useRef<MarkdownCMDRef>(null);
   border: 1px solid #ddd;
   padding: 8px 12px;
   text-align: left;
+}
+
+/* 数学公式样式 */
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display {
+  margin: 1em 0;
+  text-align: center;
+}
+
+/* 暗色主题数学公式 */
+[data-theme='dark'] .katex {
+  color: #e1e1e1;
 }
 ```
 
