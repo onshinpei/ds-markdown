@@ -75,8 +75,10 @@ pnpm add ds-markdown
 [DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
 
 ```html
-<!-- 导入样式 -->
+<!-- 导入样式， 必须 -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- 导入katex数学公式样式， 非不要不引入 -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- 导入组件 -->
