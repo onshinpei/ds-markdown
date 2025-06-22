@@ -49,6 +49,7 @@
 ### 🧮 **数式サポート**
 
 - **KaTeX 統合**：高性能な数式レンダリング
+- **プラグインアーキテクチャ**：プラグインシステムによる柔軟な設定
 - **デュアル構文サポート**：`$...$` と `\[...\]` の2つの区切り文字
 - **ストリーミング対応**：タイピングアニメーションでの数式の完璧なサポート
 - **テーマ適応**：ライト/ダークテーマへの自動適応
@@ -108,12 +109,13 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css'; // 数式スタイルのインポート
 
 function MathDemo() {
   return (
-    <DsMarkdown interval={20} answerType="answer" math={{ isOpen: true, splitSymbol: 'dollar' }}>
+    <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
       # ピタゴラスの定理 直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい： $a^2 + b^2 = c^2$ ここで： - $a$ と $b$ は直角辺 - $c$ は斜辺 古典的な「3-4-5」三角形の場合： $c = \sqrt
       {3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>

@@ -27,6 +27,11 @@
         "default": "./dist/cjs/index.js"
       }
     },
+    "./plugins": {
+      "import": "./dist/esm/plugins/index.js",
+      "require": "./dist/cjs/plugins/index.js",
+      "default": "./dist/esm/plugins/index.js"
+    },
     "./style.css": {
       "import": "./dist/style.css",
       "require": "./dist/style.css",

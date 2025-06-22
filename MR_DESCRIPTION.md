@@ -1,3 +1,127 @@
+# 🧮 重构数学公式支持为插件化架构
+
+## 📋 概述
+
+本次 MR 重构了 `ds-markdown` 的数学公式支持功能，将其从简单的配置属性升级为灵活的插件化架构。通过引入插件系统，为未来的功能扩展提供了更好的架构基础。
+
+## 🎯 重构特性
+
+### ✨ 核心改进
+
+- **插件化架构**：将数学公式支持重构为插件系统
+- **向后兼容**：保持现有功能的同时提供更好的扩展性
+- **类型安全**：完整的 TypeScript 类型支持
+- **灵活配置**：支持自定义插件和内置插件
+
+### 🔧 技术实现
+
+- 新增 `plugins` 属性，支持插件配置
+- 新增 `katexPlugin` 内置插件
+- 新增 `createBuildInPlugin` 工具函数
+- 移除 `math.isOpen` 属性，改为通过插件控制
+- 新增 `IMarkdownPlugin` 接口定义
+
+## 📦 依赖更新
+
+### 新增依赖
+
+```json
+{
+  "katex": "^0.16.22",
+  "rehype-katex": "^7.0.1",
+  "remark-math": "^6.0.0"
+}
+```
+
+### 构建更新
+
+- 新增 `src/katex.less` 样式文件
+- 更新构建脚本生成 `dist/katex.css`
+- 更新 `package.json` 构建流程
+
+## 🎯 API 变更
+
+### 新增接口
+
+```typescript
+interface IMarkdownPlugin {
+  remarkPlugin?: unknown;
+  rehypePlugin?: unknown;
+  type: 'buildIn' | 'custom';
+  id?: any;
+}
+```
+
+### 修改接口
+
+```typescript
+// 移除 isOpen 属性
+interface IMarkdownMath {
+  splitSymbol: 'dollar' | 'bracket'; // 分隔符类型
+}
+```
+
+### 使用示例
+
+```tsx
+// 旧方式（已废弃）
+<DsMarkdown math={{ isOpen: true }}>$E = mc^2$</DsMarkdown>;
+
+// 新方式（推荐）
+import { katexPlugin } from 'ds-markdown/plugins';
+
+<DsMarkdown plugins={[katexPlugin]}>$E = mc^2$</DsMarkdown>;
+```
+
+## 📚 文档更新
+
+### 多语言支持
+
+- ✅ README.md (中文) - 插件化数学公式支持
+- ✅ README.en.md (English) - Plugin-based Mathematical Formula Support
+- ✅ README.ja.md (日本語) - プラグイン化数式サポート
+- ✅ README.ko.md (한국어) - 플러그인화 수식 지원
+
+### 新增内容
+
+- 插件系统使用指南
+- 自定义插件开发指南
+- 数学公式插件化配置示例
+- 迁移指南（从旧API到新API）
+
+## 🧪 示例和测试
+
+### 新增示例
+
+- `example/katex/` - 更新为使用插件系统
+- 包含插件化配置示例
+- 展示自定义插件开发方法
+
+### 测试覆盖
+
+- 插件系统功能测试
+- 向后兼容性测试
+- 类型安全测试
+
+## 🔄 兼容性
+
+### ⚠️ 破坏性变更
+
+- **移除 `math.isOpen` 属性**：现在需要通过 `plugins` 属性来启用数学公式支持
+- **API 变更**：使用 `plugins={[katexPlugin]}` 替代 `math={{ isOpen: true }}`
+
+### ✅ 向后兼容
+
+- 数学公式功能完全保留
+- 分隔符配置保持不变
+- 样式和主题支持不变
+
+### 🌐 环境支持
+
+- React 16.8+
+- TypeScript 4.0+
+- 现代浏览器 (Chrome 60+, Firefox 55+, Safari 12+)
+
 # 🧮 添加数学公式支持功能
 
 ## 📋 概述
