@@ -111,9 +111,11 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+// 如果需要展示公式，则需要引入公式转换插件
 import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
-import 'ds-markdown/katex.css'; // 引入数学公式样式
+// 如果需要展示公式，则需要引入数学公式样式
+import 'ds-markdown/katex.css';
 
 function MathDemo() {
   return (
@@ -498,64 +500,6 @@ function MathStreamingDemo() {
   );
 }
 ```
-
-### 🔄 流式 Markdown 语法处理
-
-**核心问题**：流式输出时，不完整的 Markdown 语法会导致渲染错误
-
-```tsx
-// 🚨 问题场景
-push('#'); // "# "
-push(' '); // "# "
-push('标题'); // "# 标题"
-push('\n'); // "# 标题\n"
-push('1'); // "# 标题\n1"     ← 这里会被误解析为段落
-push('.'); // "# 标题\n1."    ← 形成正确的列表
-push(' 项目'); // "# 标题\n1. 项目"
-```
-
-**✅ 智能解决方案**：组件内置同步缓冲机制
-
-```tsx
-// 组件会智能处理语法边界
-const handleStreamingMarkdown = () => {
-  const chunks = ['#', ' ', '使用', '技能', '\n', '1', '.', ' ', '技能1', '\n', '2', '.', ' 技能2'];
-
-  chunks.forEach((chunk) => {
-    markdownRef.current?.push(chunk, 'answer');
-    // 无需延迟，组件内部智能缓冲
-  });
-};
-
-// 🧠 智能处理流程：
-// 1. 实时检测 "# 使用技能\n1" 语法不完整
-// 2. 智能缓冲，等待更多字符
-// 3. 收到 "." 形成 "1." 后立即处理
-// 4. 零延迟，纯同步处理
-```
-
-**支持的语法检测**：
-
-````typescript
-// ✅ 完整语法 (立即处理)
-'## 标题'; // 完整标题
-'1. 列表项'; // 完整列表项
-'- 项目'; // 完整无序列表
-'> 引用内容'; // 完整引用
-'```javascript'; // 代码块开始
-'```'; // 代码块结束
-'内容以换行结尾\n'; // 换行边界
-'$a + b$'; // 完整数学公式
-'$$\\sum x$$'; // 完整块级数学公式
-
-// 🔄 不完整语法 (智能缓冲)
-'##'; // 只有标题符号
-'1'; // 只有数字
-'```java'; // 可能的代码块开始
-'$a +'; // 不完整的数学公式
-````
-
----
 
 ## 🔧 最佳实践
 
