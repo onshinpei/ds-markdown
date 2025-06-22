@@ -235,7 +235,7 @@ markdownRef.current?.resume(); // 恢复动画
 
 ## 🧮 数学公式使用指南
 
-[DEMO](https://stackblitz.com/edit/vitejs-vite-4whdsqcr?file=src%2FApp.tsx)
+[DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ### 基本语法
 
