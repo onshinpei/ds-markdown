@@ -49,6 +49,7 @@ A React component designed specifically for modern AI applications, providing sm
 ### 🧮 **Mathematical Formula Support**
 
 - **KaTeX Integration**: High-performance mathematical formula rendering
+- **Plugin Architecture**: Flexible configuration through plugin system
 - **Dual Syntax Support**: `$...$` and `\[...\]` delimiters
 - **Streaming Compatible**: Perfect support for mathematical formulas in typing animations
 - **Theme Adaptation**: Automatic adaptation to light/dark themes
@@ -108,12 +109,13 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css'; // Import mathematical formula styles
 
 function MathDemo() {
   return (
-    <DsMarkdown interval={20} answerType="answer" math={{ isOpen: true, splitSymbol: 'dollar' }}>
+    <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
       # Pythagorean Theorem In a right triangle, the square of the hypotenuse equals the sum of squares of the two legs: $a^2 + b^2 = c^2$ Where: - $a$ and $b$ are the legs - $c$ is the hypotenuse For
       the classic "3-4-5" triangle: $c = \sqrt{3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
@@ -177,22 +179,31 @@ Let's explore these new features together!`);
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
 | `answerType`  | `'thinking'` \| `'answer'`                  | Content type (affects style theme) | `'answer'`                                                                    |
 | `theme`       | `'light'` \| `'dark'`                       | Theme type                         | `'light'`                                                                     |
-| `math`        | `IMarkdownMath`                             | Mathematical formula configuration | `{ isOpen: false, splitSymbol: 'dollar' }`                                    |
+| `plugins`     | `IMarkdownPlugin[]`                         | Plugin configuration               | `[]`                                                                          |
+| `math`        | `IMarkdownMath`                             | Mathematical formula configuration | `{ splitSymbol: 'dollar' }`                                                   |
 | `onEnd`       | `(data: EndData) => void`                   | Typing completion callback         | -                                                                             |
 | `onStart`     | `(data: StartData) => void`                 | Typing start callback              | -                                                                             |
 | `onTypedChar` | `(data: CharData) => void`                  | Per-character typing callback      | -                                                                             |
 
 ### Mathematical Formula Configuration
 
-| Property      | Type                      | Description                           | Default    |
-| ------------- | ------------------------- | ------------------------------------- | ---------- |
-| `isOpen`      | `boolean`                 | Enable mathematical formula rendering | `false`    |
-| `splitSymbol` | `'dollar'` \| `'bracket'` | Mathematical formula delimiter type   | `'dollar'` |
+| Property      | Type                      | Description                         | Default   |
+| ------------- | ------------------------- | ----------------------------------- | --------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | Mathematical formula delimiter type | `'dollar' |
 
 **Delimiter Description:**
 
 - `'dollar'`: Use `$...$` and `$$...$$` syntax
 - `'bracket'`: Use `\(...\)` and `\[...\]` syntax
+
+### Plugin Configuration
+
+| Property       | Type                      | Description      | Default |
+| -------------- | ------------------------- | ---------------- | ------- |
+| `remarkPlugin` | `unknown`                 | remark plugin    | -       |
+| `rehypePlugin` | `unknown`                 | rehype plugin    | -       |
+| `type`         | `'buildIn'` \| `'custom'` | Plugin type      | -       |
+| `id`           | `any`                     | Plugin unique ID | -       |
 
 ### Imperative API (Recommended for Streaming Scenarios)
 
@@ -218,8 +229,10 @@ markdownRef.current?.resume(); // Resume animation
 ### Basic Syntax
 
 ```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
 // 1. Enable mathematical formula support
-<DsMarkdown math={{ isOpen: true }}>
+<DsMarkdown plugins={[katexPlugin]}>
   # Mathematical Formula Example
 
   // Inline formula
@@ -234,13 +247,19 @@ markdownRef.current?.resume(); // Resume animation
 
 ```tsx
 // Use dollar symbol delimiters (default)
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'dollar' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'dollar' }}
+>
   Inline: $a + b = c$
   Block: $$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
 </DsMarkdown>
 
 // Use bracket delimiters
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'bracket' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'bracket' }}
+>
   Inline: \(a + b = c\)
   Block: \[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
 </DsMarkdown>
@@ -284,6 +303,37 @@ mathContent.forEach((chunk) => {
 [data-theme='dark'] .katex {
   color: #e1e1e1;
 }
+```
+
+---
+
+## 🔌 Plugin System
+
+### Built-in Plugins
+
+#### KaTeX Mathematical Formula Plugin
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// Enable mathematical formula support
+<DsMarkdown plugins={[katexPlugin]}>Mathematical formula: $E = mc^2$</DsMarkdown>;
+```
+
+### Custom Plugins
+
+```tsx
+import { createBuildInPlugin } from 'ds-markdown/plugins';
+
+// Create custom plugin
+const customPlugin = createBuildInPlugin({
+  remarkPlugin: yourRemarkPlugin,
+  rehypePlugin: yourRehypePlugin,
+  id: Symbol('custom-plugin'),
+});
+
+// Use custom plugin
+<DsMarkdown plugins={[katexPlugin, customPlugin]}>Content</DsMarkdown>;
 ```
 
 ---
@@ -402,6 +452,8 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ### 🧮 Mathematical Formula Streaming Rendering
 
 ```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
 function MathStreamingDemo() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
 
@@ -430,7 +482,7 @@ function MathStreamingDemo() {
     <div>
       <button onClick={simulateMathResponse}>📐 Explain Pythagorean Theorem</button>
 
-      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" math={{ isOpen: true, splitSymbol: 'dollar' }} />
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
     </div>
   );
 }
@@ -534,8 +586,9 @@ import 'ds-markdown/katex.css'; // Only import when needed
 // For simple formulas, use $...$ for conciseness
 // For complex formulas, use $$...$$ for clarity
 
-// ❌ Avoid: Enable mathematical formulas when not needed
-<DsMarkdown math={{ isOpen: true }}>Plain text content</DsMarkdown>;
+// ✅ Recommended: Plugin-based configuration
+import { katexPlugin } from 'ds-markdown/plugins';
+<DsMarkdown plugins={[katexPlugin]}>Mathematical formula content</DsMarkdown>;
 ```
 
 ### 4. Type Safety

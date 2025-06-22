@@ -1,7 +1,7 @@
 {
   "name": "ds-markdown",
   "private": false,
-  "version": "0.0.15-beta.1",
+  "version": "0.0.15-beta.2",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "module": "./dist/esm/index.js",
@@ -26,6 +26,11 @@
         "types": "./dist/cjs/index.d.ts",
         "default": "./dist/cjs/index.js"
       }
+    },
+    "./plugins": {
+      "import": "./dist/esm/plugins/index.js",
+      "require": "./dist/cjs/plugins/index.js",
+      "default": "./dist/esm/plugins/index.js"
     },
     "./style.css": {
       "import": "./dist/style.css",

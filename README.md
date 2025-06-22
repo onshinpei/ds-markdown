@@ -49,6 +49,7 @@
 ### 🧮 **数学公式支持**
 
 - **KaTeX 集成**：高性能数学公式渲染
+- **插件化架构**：通过插件系统灵活配置
 - **双语法支持**：`$...$` 和 `\[...\]` 两种分隔符
 - **流式兼容**：完美支持打字动画中的数学公式
 - **主题适配**：自动适配亮色/暗色主题
@@ -110,12 +111,13 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css'; // 引入数学公式样式
 
 function MathDemo() {
   return (
-    <DsMarkdown interval={20} answerType="answer" math={{ isOpen: true, splitSymbol: 'dollar' }}>
+    <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
       # 勾股定理 在直角三角形中，斜边的平方等于两条直角边的平方和： $a^2 + b^2 = c^2$ 其中： - $a$ 和 $b$ 是直角边 - $c$ 是斜边 对于经典的"勾三股四弦五"： $c = \sqrt{3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
@@ -178,7 +180,8 @@ React 19 带来了许多激动人心的新特性：
 | `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
 | `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                                                  |
 | `theme`       | `'light'` \| `'dark'`                       | 主题类型                | `'light'`                                                   |
-| `math`        | [IMarkdownMath ](#IMarkdownMath)            | 数学公式配置            | `{ isOpen: false, splitSymbol: 'dollar' }`                  |
+| `plugins`     | `IMarkdownPlugin[]`                         | 插件配置                | `[]`                                                        |
+| `math`        | [IMarkdownMath](#IMarkdownMath)             | 数学公式配置            | `{ splitSymbol: 'dollar' }`                                 |
 | `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
 | `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
 | `onTypedChar` | `(data: [ITypedChar](#ITypedChar)) => void` | 每字符打字回调          | -                                                           |
@@ -193,15 +196,23 @@ React 19 带来了许多激动人心的新特性：
 
 #### IMarkdownMath
 
-| 属性          | 类型                      | 说明                 | 默认值     |
-| ------------- | ------------------------- | -------------------- | ---------- |
-| `isOpen`      | `boolean`                 | 是否开启数学公式渲染 | `false`    |
-| `splitSymbol` | `'dollar'` \| `'bracket'` | 数学公式分隔符类型   | `'dollar'` |
+| 属性          | 类型                      | 说明               | 默认值     |
+| ------------- | ------------------------- | ------------------ | ---------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 数学公式分隔符类型 | `'dollar'` |
 
 **分隔符说明：**
 
 - `'dollar'`：使用 `$...$` 和 `$$...$$` 语法
 - `'bracket'`：使用 `\(...\)` 和 `\[...\]` 语法
+
+#### IMarkdownPlugin
+
+| 属性           | 类型                      | 说明         | 默认值 |
+| -------------- | ------------------------- | ------------ | ------ |
+| `remarkPlugin` | `unknown`                 | remark 插件  | -      |
+| `rehypePlugin` | `unknown`                 | rehype 插件  | -      |
+| `type`         | `'buildIn'` \| `'custom'` | 插件类型     | -      |
+| `id`           | `any`                     | 插件唯一标识 | -      |
 
 ### 命令式 API (推荐流式场景)
 
@@ -224,13 +235,15 @@ markdownRef.current?.resume(); // 恢复动画
 
 ## 🧮 数学公式使用指南
 
-[DEMO](https://stackblitz.com/edit/vitejs-vite-4whdsqcr?file=src%2FApp.tsx)
+[DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ### 基本语法
 
 ```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
 // 1. 启用数学公式支持
-<DsMarkdown math={{ isOpen: true }}>
+<DsMarkdown plugins={[katexPlugin]}>
   # 数学公式示例
 
   // 行内公式
@@ -245,13 +258,19 @@ markdownRef.current?.resume(); // 恢复动画
 
 ```tsx
 // 使用美元符号分隔符（默认）
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'dollar' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'dollar' }}
+>
   行内：$a + b = c$
   块级：$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
 </DsMarkdown>
 
 // 使用括号分隔符
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'bracket' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'bracket' }}
+>
   行内：\(a + b = c\)
   块级：\[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
 </DsMarkdown>
@@ -295,6 +314,37 @@ mathContent.forEach((chunk) => {
 [data-theme='dark'] .katex {
   color: #e1e1e1;
 }
+```
+
+---
+
+## 🔌 插件系统
+
+### 内置插件
+
+#### KaTeX 数学公式插件
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 启用数学公式支持
+<DsMarkdown plugins={[katexPlugin]}>数学公式：$E = mc^2$</DsMarkdown>;
+```
+
+### 自定义插件
+
+```tsx
+import { createBuildInPlugin } from 'ds-markdown/plugins';
+
+// 创建自定义插件
+const customPlugin = createBuildInPlugin({
+  remarkPlugin: yourRemarkPlugin,
+  rehypePlugin: yourRehypePlugin,
+  id: Symbol('custom-plugin'),
+});
+
+// 使用自定义插件
+<DsMarkdown plugins={[katexPlugin, customPlugin]}>内容</DsMarkdown>;
 ```
 
 ---
@@ -413,6 +463,8 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ### 🧮 数学公式流式渲染
 
 ```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
 function MathStreamingDemo() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
 
@@ -441,7 +493,7 @@ function MathStreamingDemo() {
     <div>
       <button onClick={simulateMathResponse}>📐 讲解勾股定理</button>
 
-      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" math={{ isOpen: true, splitSymbol: 'dollar' }} />
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
     </div>
   );
 }
@@ -545,8 +597,9 @@ import 'ds-markdown/katex.css'; // 仅在需要时引入
 // 对于简单公式，使用 $...$ 更简洁
 // 对于复杂公式，使用 $$...$$ 更清晰
 
-// ❌ 避免：在不需要时开启数学公式
-<DsMarkdown math={{ isOpen: true }}>纯文本内容</DsMarkdown>;
+// ✅ 推荐：插件化配置
+import { katexPlugin } from 'ds-markdown/plugins';
+<DsMarkdown plugins={[katexPlugin]}>数学公式内容</DsMarkdown>;
 ```
 
 ### 4. 类型安全
@@ -557,101 +610,3 @@ import { MarkdownCMDRef } from 'ds-markdown';
 const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
-
-### 5. 样式定制
-
-```css
-/* 思考区域样式 */
-.ds-markdown-thinking {
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 3px solid #ffc107;
-  padding: 12px;
-  border-radius: 6px;
-  margin: 8px 0;
-}
-
-/* 回答区域样式 */
-.ds-markdown-answer {
-  color: #333;
-  line-height: 1.6;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* 代码块样式 */
-.ds-markdown pre {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 16px;
-  overflow-x: auto;
-}
-
-/* 表格样式 */
-.ds-markdown-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 16px 0;
-}
-
-.ds-markdown-table th,
-.ds-markdown-table td {
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  text-align: left;
-}
-
-/* 数学公式样式 */
-.katex {
-  font-size: 1.1em;
-}
-
-.katex-display {
-  margin: 1em 0;
-  text-align: center;
-}
-
-/* 暗色主题数学公式 */
-[data-theme='dark'] .katex {
-  color: #e1e1e1;
-}
-```
-
----
-
-## 🌐 兼容性
-
-| 环境           | 版本要求                            | 说明            |
-| -------------- | ----------------------------------- | --------------- |
-| **React**      | 16.8.0+                             | 需要 Hooks 支持 |
-| **TypeScript** | 4.0+                                | 可选，但推荐    |
-| **浏览器**     | Chrome 60+, Firefox 55+, Safari 12+ | 现代浏览器      |
-| **Node.js**    | 14.0+                               | 构建环境        |
-
----
-
-## 🤝 贡献指南
-
-欢迎提交 Issue 和 Pull Request！
-
-1. Fork 本仓库
-2. 创建特性分支：`git checkout -b feature/amazing-feature`
-3. 提交更改：`git commit -m 'Add amazing feature'`
-4. 推送分支：`git push origin feature/amazing-feature`
-5. 提交 Pull Request
-
----
-
-## 📄 开源协议
-
-MIT © [onshinpei](https://github.com/onshinpei)
-
----
-
-<div align="center">
-  <strong>如果这个项目对你有帮助，请给个 ⭐️ Star 支持一下！</strong>
-  
-  <br><br>
-  
-  [🐛 报告问题](https://github.com/onshinpei/ds-markdown/issues) | 
-  [💡 功能建议](https://github.com/onshinpei/ds-markdown/issues) | 
-  [📖 查看文档](https://onshinpei.github.io/ds-markdown/)
-</div>

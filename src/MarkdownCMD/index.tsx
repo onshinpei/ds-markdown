@@ -8,7 +8,7 @@ import { useTypingTask } from '../hooks/useTypingTask.js';
 
 type MarkdownCMDProps = MarkdownProps;
 
-const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math }, ref) => {
+const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins }, ref) => {
   /** 当前需要打字的内容 */
   const charsRef = useRef<IChar[]>([]);
 
@@ -152,7 +152,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(({ interval = 3
   const getParagraphs = (answerType: AnswerType) => {
     return (
       <div className={`ds-markdown-paragraph ds-typed-${answerType}`}>
-        <HighReactMarkdown theme={theme} math={math}>
+        <HighReactMarkdown theme={theme} math={math} plugins={plugins}>
           {wholeContentRef.current[answerType].content || ''}
         </HighReactMarkdown>
       </div>

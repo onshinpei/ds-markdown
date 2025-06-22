@@ -6,6 +6,7 @@ import json from './data.json';
 import dataJson from './data.json';
 
 import 'katex/dist/katex.min.css';
+import { katexPlugin } from '../../src/plugins';
 
 function throttle(fn: (...args: any[]) => void, delay: number) {
   let lastTime = 0;
@@ -108,7 +109,16 @@ const App: React.FC<{
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
-          <Markdown ref={markdownRef} interval={interval} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme} math={{ isOpen: mathOpen, splitSymbol: 'bracket' }}>
+          <Markdown
+            ref={markdownRef}
+            plugins={mathOpen ? [katexPlugin] : []}
+            interval={interval}
+            answerType="answer"
+            onTypedChar={throttleOnTypedChar}
+            timerType={timerType}
+            theme={theme}
+            math={{ splitSymbol: 'bracket' }}
+          >
             {answerContent}
           </Markdown>
         </div>

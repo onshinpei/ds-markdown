@@ -1,43 +1,56 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { memo, useMemo } from 'react';
 import Markdown from 'react-markdown';
 import type { Options } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
 import { replaceMathBracket } from '../../utils/remarkMathBracket.js';
 import BlockWrap from '../BlockWrap/index.js';
-import { IMarkdownMath, Theme } from '../../defined.js';
+import { IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined.js';
+import { katexId } from '../../constant.js';
 
 interface HighReactMarkdownProps extends Options {
   theme?: Theme;
   children: string;
   math?: IMarkdownMath;
+  plugins?: IMarkdownPlugin[];
 }
 
-const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', children: _children, math, ...props }) => {
-  let children = _children;
-
-  const mathOpen = math?.isOpen ?? false;
+const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', children: _children, math, plugins, ...props }) => {
   const mathSplitSymbol = math?.splitSymbol ?? 'dollar';
 
-  if (mathOpen && mathSplitSymbol === 'bracket') {
-    children = replaceMathBracket(children);
-  }
-
-  const remarkPlugins = useMemo(() => {
-    if (math?.isOpen) {
-      return [gfmPlugin, remarkMath];
+  const { remarkPlugins, rehypePlugins, hasKatexPlugin } = useMemo(() => {
+    let hasKatexPlugin = false;
+    const remarkPlugins: any[] = [gfmPlugin];
+    const rehypePlugins: any[] = [];
+    if (!plugins) {
+      return {
+        remarkPlugins,
+        rehypePlugins,
+      };
     }
-    return [gfmPlugin];
-  }, [math]);
+    plugins.forEach((plugin) => {
+      if (plugin.id === katexId) {
+        hasKatexPlugin = true;
+        remarkPlugins.push(plugin.remarkPlugin);
+        rehypePlugins.push(plugin.rehypePlugin);
+      }
+    });
 
-  const rehypePlugins = useMemo(() => {
-    if (mathOpen) {
-      return [rehypeKatex];
+    return {
+      remarkPlugins,
+      rehypePlugins,
+      hasKatexPlugin,
+    };
+  }, [plugins]);
+
+  const children = useMemo(() => {
+    /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
+    if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
+      return replaceMathBracket(_children);
     }
-    return [];
-  }, [mathOpen]);
+    return _children;
+  }, [hasKatexPlugin, mathSplitSymbol, _children]);
 
   return (
     <Markdown
