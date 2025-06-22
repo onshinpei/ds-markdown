@@ -1,4 +1,4 @@
-import { getTokenId, Token, Tokenizer } from './Tokenizer.js';
+import { getTokenId, Token, Tokenizer } from './Tokenizer.ts';
 
 function compile(src: string) {
   const tokenizer = new Tokenizer();

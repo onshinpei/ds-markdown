@@ -12,6 +12,9 @@
     "strict": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "emitDeclarationOnly": false
   }
 }

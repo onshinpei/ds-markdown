@@ -1,10 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
+import HighReactMarkdown from '../components/HighReactMarkdown/index';
 import classNames from 'classnames';
-import { AnswerType, MarkdownProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined.js';
-import { __DEV__ } from '../constant.js';
-import { useTypingTask } from '../hooks/useTypingTask.js';
+import { AnswerType, MarkdownProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
+import { __DEV__ } from '../constant';
+import { useTypingTask } from '../hooks/useTypingTask';
 
 type MarkdownCMDProps = MarkdownProps;
 
