@@ -77,13 +77,21 @@ export interface MarkdownProps {
 
   /** 数学公式配置 */
   math?: IMarkdownMath;
+
+  plugins?: IMarkdownPlugin[];
+}
+
+export interface IMarkdownPlugin {
+  remarkPlugin?: unknown;
+  rehypePlugin?: unknown;
+  type: 'buildIn' | 'custom';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  id?: any;
 }
 
 export interface IMarkdownMath {
   /** 是括号还是$作为分隔符, 默认是$ */
   splitSymbol: 'bracket' | 'dollar';
-  /** 是否开启数学公式 */
-  isOpen?: boolean;
 }
 
 export interface IWholeContent {
