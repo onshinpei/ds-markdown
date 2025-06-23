@@ -1,16 +1,14 @@
-import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import { useMemo, useRef, useState } from 'react';
 
 import Markdown, { MarkdownRef } from '../../src';
-import json from './data.json';
 import dataJson from './data.json';
 
 import 'katex/dist/katex.min.css';
 import { katexPlugin } from '../../src/plugins';
 
-function throttle(fn: (...args: any[]) => void, delay: number) {
+function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
   let lastTime = 0;
-  return (...args: unknown[]) => {
+  return (...args: T) => {
     const now = Date.now();
     if (now - lastTime > delay) {
       fn(...args);
@@ -72,8 +70,8 @@ const App: React.FC<{
     }, 50);
   }, []);
 
-  const interval = 16.67;
-  const flag = true;
+  const interval = 8;
+  const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
