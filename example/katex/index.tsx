@@ -5,6 +5,7 @@ import dataJson from './data.json';
 
 import 'katex/dist/katex.min.css';
 import { katexPlugin } from '../../src/plugins';
+import { replaceMathBracket } from '../../src/utils/remarkMathBracket';
 
 function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
   let lastTime = 0;
@@ -22,6 +23,7 @@ const App: React.FC<{
   setTheme: (theme: 'light' | 'dark') => void;
 }> = ({ theme, setTheme }) => {
   const [answerContent, setAnswerContent] = useState('');
+  const [disableTyping, setDisableTyping] = useState(false);
   const messageDivRef = useRef<HTMLDivElement>(null!);
 
   const markdownRef = useRef<MarkdownRef>(null!);
@@ -70,8 +72,8 @@ const App: React.FC<{
     }, 50);
   }, []);
 
-  const interval = 8;
-  const flag = false;
+  const interval = 5;
+  const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
@@ -96,6 +98,9 @@ const App: React.FC<{
           <button className="theme-btn" onClick={() => setMathOpen(!mathOpen)}>
             {mathOpen ? '关闭' : '开启'}公式转换
           </button>
+          <button className="theme-btn" onClick={() => setDisableTyping(!disableTyping)}>
+            {disableTyping ? '开启' : '关闭'}打字机效果
+          </button>
           <button className="theme-btn" onClick={() => markdownRef.current.stop()}>
             暂停
           </button>
@@ -116,6 +121,7 @@ const App: React.FC<{
             timerType={timerType}
             theme={theme}
             math={{ splitSymbol: 'bracket' }}
+            disableTyping={disableTyping}
           >
             {answerContent}
           </Markdown>
