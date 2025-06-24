@@ -60,8 +60,8 @@ export interface MarkdownProps {
   timerType?: 'setTimeout' | 'requestAnimationFrame';
   /** 打字机效果间隔时间 */
   interval: number;
-  /** 是否关闭匀速打字机效果 */
-  isClosePrettyTyped?: boolean;
+  /** 是否关闭打字机效果 */
+  disableTyping?: boolean;
   /** 打字完成后回调,  */
   onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
   /** 开始打字回调 */
@@ -78,6 +78,7 @@ export interface MarkdownProps {
   /** 数学公式配置 */
   math?: IMarkdownMath;
 
+  /** 插件配置 */
   plugins?: IMarkdownPlugin[];
 }
 
