@@ -20,39 +20,32 @@
 
 ## ✨ 核心特性
 
-### 🎯 **完美还原**
+### 🤖 **AI 对话场景**
 
 - 1:1 复刻 [DeepSeek 官网](https://chat.deepseek.com/) 聊天响应效果
 - 支持思考过程 (`thinking`) 和回答内容 (`answer`) 双模式
-- 原生 Markdown 语法支持，包括代码高亮、表格、列表等
-- 支持亮色/暗色主题切换，完美适配不同场景
+- 流式数据完美适配，零延迟响应用户输入
 
-### ⚡ **极致性能**
+### 📊 **内容展示场景**
 
-- 智能分批处理，大文档渲染零卡顿
-- 双模式定时器：`requestAnimationFrame` + `setTimeout`
-- 内置流式语法缓冲，避免不完整 Markdown 渲染错误
+- 完整 Markdown 语法支持，包括代码高亮、表格、列表等
+- 数学公式渲染 (KaTeX)，支持 `$...$` 和 `\[...\]` 语法
+- 支持亮色/暗色主题，适配不同产品风格
+- 插件化架构，支持 remark/rehype 插件扩展
 
-### 🎬 **流畅动画**
-
-- 高频打字支持（`requestAnimationFrame`模式下打字间隔最低可接近于`0ms`）
-- 帧同步渲染，与浏览器 60fps 完美配合
-- 智能字符批量处理，视觉效果更自然
-- 支持打字的中断 `stop` 和 继续`resume`
-
-### 🔧 **灵活易用**
+### 🔧 **开发体验**
 
 - **声明式 API**：适合简单场景，React 风格
 - **命令式 API**：适合流式数据，性能更优
 - **TypeScript 原生支持**：完整类型提示
+- 支持打字中断 `stop` 和继续 `resume`
 
-### 🧮 **数学公式支持**
+### 🎬 **流畅动画**
 
-- **KaTeX 集成**：高性能数学公式渲染
-- **插件化架构**：通过插件系统灵活配置
-- **双语法支持**：`$...$` 和 `\[...\]` 两种分隔符
-- **流式兼容**：完美支持打字动画中的数学公式
-- **主题适配**：自动适配亮色/暗色主题
+- 双模式定时器优化，支持`requestAnimationFrame`和`setTimeout`模式
+- 高频打字支持（`requestAnimationFrame`模式下打字间隔最低可接近于`0ms`）
+- 帧同步渲染，与浏览器刷新完美配合
+- 智能字符批量处理，视觉效果更自然
 
 ---
 
@@ -103,6 +96,27 @@ function App() {
     <DsMarkdown interval={20} answerType="answer">
       # Hello ds-markdown 这是一个**高性能**的打字动画组件！ ## 特性 - ⚡ 零延迟流式处理 - 🎬 流畅打字动画 - 🎯 完美语法支持
     </DsMarkdown>
+  );
+}
+```
+
+### 禁用打字动画
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+
+function StaticDemo() {
+  const [disableTyping, setDisableTyping] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? '开启' : '关闭'}打字机效果</button>
+
+      <DsMarkdown interval={20} answerType="answer" disableTyping={disableTyping}>
+        # 静态展示模式 当 `disableTyping` 为 `true` 时，内容会立即全部显示，无打字动画效果。 这在某些场景下非常有用： - 📄 静态文档展示 - 🔄 切换显示模式 - ⚡ 快速预览内容
+      </DsMarkdown>
+    </div>
   );
 }
 ```
@@ -176,17 +190,20 @@ React 19 带来了许多激动人心的新特性：
 
 ### 声明式 API (推荐新手)
 
-| 属性          | 类型                                        | 说明                    | 默认值                                                      |
-| ------------- | ------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
-| `interval`    | `number`                                    | 打字间隔 (毫秒)         | `30`                                                        |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
-| `answerType`  | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题) | `'answer'`                                                  |
-| `theme`       | `'light'` \| `'dark'`                       | 主题类型                | `'light'`                                                   |
-| `plugins`     | `IMarkdownPlugin[]`                         | 插件配置                | `[]`                                                        |
-| `math`        | [IMarkdownMath](#IMarkdownMath)             | 数学公式配置            | `{ splitSymbol: 'dollar' }`                                 |
-| `onEnd`       | `(data: EndData) => void`                   | 打字结束回调            | -                                                           |
-| `onStart`     | `(data: StartData) => void`                 | 打字开始回调            | -                                                           |
-| `onTypedChar` | `(data: [ITypedChar](#ITypedChar)) => void` | 每字符打字回调          | -                                                           |
+| 属性            | 类型                                          | 说明                    | 默认值                                                      |
+| --------------- | --------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
+| `interval`      | `number`                                      | 打字间隔 (毫秒)         | `30`                                                        |
+| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'`   | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
+| `answerType`    | `'thinking'` \| `'answer'`                    | 内容类型 (影响样式主题) | `'answer'`                                                  |
+| `theme`         | `'light'` \| `'dark'`                         | 主题类型                | `'light'`                                                   |
+| `plugins`       | `IMarkdownPlugin[]`                           | 插件配置                | `[]`                                                        |
+| `math`          | [IMarkdownMath](#IMarkdownMath)               | 数学公式配置            | `{ splitSymbol: 'dollar' }`                                 |
+| `onEnd`         | `(data: EndData) => void`                     | 打字结束回调            | -                                                           |
+| `onStart`       | `(data: StartData) => void`                   | 打字开始回调            | -                                                           |
+| `onTypedChar`   | `(data: `[ITypedChar](#ITypedChar)`) => void` | 每字符打字回调          | -                                                           |
+| `disableTyping` | `boolean`                                     | 禁用打字动画效果        | `false`                                                     |
+
+> 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`，则在下一个打字触发时，会把剩下的所有字一次性显示
 
 ### ITypedChar
 
@@ -237,7 +254,9 @@ markdownRef.current?.resume(); // 恢复动画
 
 ## 🧮 数学公式使用指南
 
-[DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
+[DEMO1：勾股定理](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
+
+[DEMO2：题目解答](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=README.md)
 
 ### 基本语法
 

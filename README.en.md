@@ -20,39 +20,32 @@ A React component designed specifically for modern AI applications, providing sm
 
 ## ✨ Core Features
 
-### 🎯 **Perfect Replication**
+### 🤖 **AI Conversation Scenarios**
 
 - 1:1 recreation of [DeepSeek website](https://chat.deepseek.com/) chat response effects
 - Support for both thinking process (`thinking`) and answer content (`answer`) modes
-- Native Markdown syntax support, including code highlighting, tables, lists, etc.
-- Light/dark theme support, perfectly adapting to different scenarios
+- Perfect adaptation to streaming data with zero-delay response to user input
 
-### ⚡ **Ultimate Performance**
+### 📊 **Content Display Scenarios**
 
-- Smart batch processing, zero lag rendering for large documents
-- Dual timer modes: `requestAnimationFrame` + `setTimeout`
-- Built-in streaming syntax buffering, avoiding incomplete Markdown rendering errors
+- Complete Markdown syntax support, including code highlighting, tables, lists, etc.
+- Mathematical formula rendering (KaTeX), supporting `$...$` and `\[...\]` syntax
+- Light/dark theme support, adapting to different product styles
+- Plugin architecture supporting remark/rehype plugin extensions
 
-### 🎬 **Smooth Animation**
-
-- High-frequency typing support (`requestAnimationFrame` mode supports typing intervals as low as `0ms`)
-- Frame-synchronized rendering, perfectly matching browser 60fps
-- Smart character batch processing for more natural visual effects
-- Support for typing interruption `stop` and resume `resume`
-
-### 🔧 **Flexible and Easy to Use**
+### 🔧 **Developer Experience**
 
 - **Declarative API**: Suitable for simple scenarios, React-style
 - **Imperative API**: Suitable for streaming data, better performance
 - **Native TypeScript support**: Complete type hints
+- Support for typing interruption `stop` and resume `resume`
 
-### 🧮 **Mathematical Formula Support**
+### 🎬 **Smooth Animation**
 
-- **KaTeX Integration**: High-performance mathematical formula rendering
-- **Plugin Architecture**: Flexible configuration through plugin system
-- **Dual Syntax Support**: `$...$` and `\[...\]` delimiters
-- **Streaming Compatible**: Perfect support for mathematical formulas in typing animations
-- **Theme Adaptation**: Automatic adaptation to light/dark themes
+- Dual timer mode optimization, supporting `requestAnimationFrame` and `setTimeout` modes
+- High-frequency typing support (`requestAnimationFrame` mode supports typing intervals as low as `0ms`)
+- Frame-synchronized rendering, perfectly matching browser 60fps
+- Smart character batch processing for more natural visual effects
 
 ---
 
@@ -101,6 +94,28 @@ function App() {
     <DsMarkdown interval={20} answerType="answer">
       # Hello ds-markdown This is a **high-performance** typing animation component! ## Features - ⚡ Zero-delay streaming processing - 🎬 Smooth typing animation - 🎯 Perfect syntax support
     </DsMarkdown>
+  );
+}
+```
+
+### Disable Typing Animation
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+
+function StaticDemo() {
+  const [disableTyping, setDisableTyping] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? 'Enable' : 'Disable'} Typing Effect</button>
+
+      <DsMarkdown interval={20} answerType="answer" disableTyping={disableTyping}>
+        # Static Display Mode When `disableTyping` is `true`, content will be displayed immediately without typing animation. This is very useful in certain scenarios: - 📄 Static document display -
+        🔄 Toggle display modes - ⚡ Quick content preview
+      </DsMarkdown>
+    </div>
   );
 }
 ```
@@ -173,17 +188,18 @@ Let's explore these new features together!`);
 
 ### Declarative API (Recommended for Beginners)
 
-| Property      | Type                                        | Description                        | Default                                                                       |
-| ------------- | ------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `interval`    | `number`                                    | Typing interval (milliseconds)     | `30`                                                                          |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
-| `answerType`  | `'thinking'` \| `'answer'`                  | Content type (affects style theme) | `'answer'`                                                                    |
-| `theme`       | `'light'` \| `'dark'`                       | Theme type                         | `'light'`                                                                     |
-| `plugins`     | `IMarkdownPlugin[]`                         | Plugin configuration               | `[]`                                                                          |
-| `math`        | `IMarkdownMath`                             | Mathematical formula configuration | `{ splitSymbol: 'dollar' }`                                                   |
-| `onEnd`       | `(data: EndData) => void`                   | Typing completion callback         | -                                                                             |
-| `onStart`     | `(data: StartData) => void`                 | Typing start callback              | -                                                                             |
-| `onTypedChar` | `(data: CharData) => void`                  | Per-character typing callback      | -                                                                             |
+| Property        | Type                                        | Description                        | Default                                                                       |
+| --------------- | ------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `interval`      | `number`                                    | Typing interval (milliseconds)     | `30`                                                                          |
+| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
+| `answerType`    | `'thinking'` \| `'answer'`                  | Content type (affects style theme) | `'answer'`                                                                    |
+| `theme`         | `'light'` \| `'dark'`                       | Theme type                         | `'light'`                                                                     |
+| `plugins`       | `IMarkdownPlugin[]`                         | Plugin configuration               | `[]`                                                                          |
+| `math`          | `IMarkdownMath`                             | Mathematical formula configuration | `{ splitSymbol: 'dollar' }`                                                   |
+| `onEnd`         | `(data: EndData) => void`                   | Typing completion callback         | -                                                                             |
+| `onStart`       | `(data: StartData) => void`                 | Typing start callback              | -                                                                             |
+| `onTypedChar`   | `(data: CharData) => void`                  | Per-character typing callback      | -                                                                             |
+| `disableTyping` | `boolean`                                   | Disable typing animation effect    | `false`                                                                       |
 
 ### Mathematical Formula Configuration
 
