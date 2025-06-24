@@ -78,6 +78,7 @@ export interface MarkdownProps {
   /** 数学公式配置 */
   math?: IMarkdownMath;
 
+  /** 插件配置 */
   plugins?: IMarkdownPlugin[];
 }
 
