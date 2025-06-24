@@ -10,7 +10,7 @@ interface UseTypingTaskOptions {
   onTypedChar?: (data?: ITypedChar) => void;
   processCharDisplay: (char: IChar) => void;
   wholeContentRef: React.RefObject<IWholeContent>;
-  isClosePrettyTyped: boolean;
+  disableTyping: boolean;
   triggerUpdate: () => void;
 }
 
@@ -25,7 +25,7 @@ export interface TypingTaskController {
 }
 
 export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskController => {
-  const { timerType = 'setTimeout', interval, charsRef, onEnd, onStart, onTypedChar, processCharDisplay, wholeContentRef, isClosePrettyTyped, triggerUpdate } = options;
+  const { timerType = 'setTimeout', interval, charsRef, onEnd, onStart, onTypedChar, processCharDisplay, wholeContentRef, disableTyping, triggerUpdate } = options;
   /** 是否卸载 */
   const isUnmountRef = useRef(false);
   /** 是否正在打字 */
@@ -39,8 +39,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   // 是否主动调用 stop 方法
   const typedIsManualStopRef = useRef(false);
 
-  const isClosePrettyTypedRef = useRef(isClosePrettyTyped);
-  isClosePrettyTypedRef.current = isClosePrettyTyped;
+  const disableTypingRef = useRef(disableTyping);
+  disableTypingRef.current = disableTyping;
 
   const getChars = () => {
     return charsRef.current;
@@ -106,7 +106,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
     onEnd({
       str: typedCharsRef.current?.typedContent,
-      answerType: typedCharsRef.current?.answerType,
+      answerType: typedCharsRef.current?.answerType || 'answer',
       manual: data?.manual ?? false,
     });
   };
@@ -225,7 +225,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
     const frameLoop = (currentTime: number) => {
       // 如果关闭打字机效果，则打完所有字符
-      if (isClosePrettyTypedRef.current) {
+      if (disableTypingRef.current) {
         typingRemainAll();
         return;
       }
@@ -301,7 +301,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
     const startTyped = (isStartPoint = false) => {
       // 如果关闭打字机效果，则打完所有字符
-      if (isClosePrettyTypedRef.current) {
+      if (disableTypingRef.current) {
         typingRemainAll();
         return;
       }

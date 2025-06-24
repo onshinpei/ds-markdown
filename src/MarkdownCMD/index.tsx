@@ -9,7 +9,7 @@ import { useTypingTask } from '../hooks/useTypingTask.js';
 type MarkdownCMDProps = MarkdownProps;
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
-  ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, isClosePrettyTyped = false }, ref) => {
+  ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false }, ref) => {
     /** 当前需要打字的内容 */
     const charsRef = useRef<IChar[]>([]);
 
@@ -62,7 +62,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       onTypedChar,
       processCharDisplay,
       wholeContentRef,
-      isClosePrettyTyped,
+      disableTyping,
       triggerUpdate,
     });
 
@@ -108,7 +108,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
        * @param answerType 回答类型 {AnswerType}
        */
       push: (content: string, answerType: AnswerType) => {
-        if (isClosePrettyTyped) {
+        if (disableTyping) {
           processNoTypingPush(content, answerType);
           return;
         }
