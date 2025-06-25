@@ -23,7 +23,9 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
             </div>
           )}
           <pre className="code-block">
-            <code className={activeTab === 'code' ? 'language-tsx' : 'language-markdown'}>{showHeader ? (activeTab === 'code' ? sourceCode.code : sourceCode.markdownString) : sourceCode.code}</code>
+            <code className={activeTab === 'code' ? `language-${sourceCode.lang || 'tsx'}` : 'language-markdown'}>
+              {showHeader ? (activeTab === 'code' ? sourceCode.code : sourceCode.markdownString) : sourceCode.code}
+            </code>
           </pre>
         </div>
         {showHeader && renderComponent && (

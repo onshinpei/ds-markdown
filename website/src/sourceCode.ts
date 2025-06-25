@@ -1,14 +1,6 @@
 // 示例代码数据
 export const sourceCodeExamples = {
   installation: {
-    code: `# npm
-npm install ds-markdown
-
-# yarn
-yarn add ds-markdown
-
-# pnpm
-pnpm add ds-markdown`,
     markdownString: `# 📦 安装 ds-markdown
 
 \`\`\`bash
@@ -30,34 +22,6 @@ pnpm add ds-markdown
   },
 
   basicUsage: {
-    code: `import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
-
-function App() {
-  return (
-    <DsMarkdown interval={20} answerType="answer">
-      # Hello ds-markdown
-      
-      这是一个**高性能**的打字动画组件！
-      
-      ## 特性
-      
-      - ⚡ 零延迟流式处理
-      - 🎬 流畅打字动画
-      - 🎯 完美语法支持
-      - 📊 丰富的内容类型
-      
-      ### 代码示例
-      
-      \`\`\`javascript
-      const message = "Hello World!";
-      console.log(message);
-      \`\`\`
-      
-      > 这是一个引用块，展示了 Markdown 的强大功能。
-    </DsMarkdown>
-  );
-}`,
     markdownString: `# Hello ds-markdown
 
 这是一个**高性能**的打字动画组件！
@@ -94,33 +58,6 @@ function greet(name) {
   },
 
   mathSupport: {
-    code: `import DsMarkdown from 'ds-markdown';
-import { katexPlugin } from 'ds-markdown/plugins';
-import 'ds-markdown/style.css';
-import 'ds-markdown/katex.css';
-
-function MathDemo() {
-  return (
-    <DsMarkdown 
-      interval={20} 
-      answerType="answer" 
-      plugins={[katexPlugin]}
-      math={{ splitSymbol: 'dollar' }}
-    >
-      # 勾股定理
-      
-      在直角三角形中，斜边的平方等于两条直角边的平方和：
-      
-      $a^2 + b^2 = c^2$
-      
-      ## 更复杂的公式
-      
-      二次公式：$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
-      
-      积分：$\\int_{0}^{\\infty} e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$
-    </DsMarkdown>
-  );
-}`,
     markdownString: `# 🧮 勾股定理
 
 在直角三角形中，斜边的平方等于两条直角边的平方和：
@@ -149,63 +86,6 @@ $\\int_{0}^{\\infty} e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$
   },
 
   typingAnimation: {
-    code: `import React, { useState, useRef } from 'react';
-import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
-
-function TypingDemo() {
-  const [disableTyping, setDisableTyping] = useState<boolean>(false);
-  const markdownRef = useRef<DsMarkdownRef>(null);
-
-  const toggleTyping = () => {
-    setDisableTyping(!disableTyping);
-  };
-
-  const pauseTyping = () => {
-    if (markdownRef.current?.stop) {
-      markdownRef.current.stop();
-    }
-  };
-
-  const resumeTyping = () => {
-    if (markdownRef.current?.resume) {
-      markdownRef.current.resume();
-    }
-  };
-
-  return (
-    <div>
-      <div className="controls">
-        <button onClick={toggleTyping}>
-          {disableTyping ? '开启' : '关闭'}打字机效果
-        </button>
-        <button onClick={pauseTyping}>
-          暂停
-        </button>
-        <button onClick={resumeTyping}>
-          继续
-        </button>
-      </div>
-
-      <DsMarkdown 
-        ref={markdownRef}
-        interval={30}
-        answerType="answer"
-        disableTyping={disableTyping}
-      >
-        # 打字动画演示
-        
-        这段文字会以打字机的效果逐字显示...
-        
-        ## 控制功能
-        
-        1. **开启/关闭打字效果** - 可以切换静态显示模式
-        2. **暂停/继续** - 可以在打字过程中暂停和继续
-        3. **速度控制** - 通过 interval 属性调整打字速度
-      </DsMarkdown>
-    </div>
-  );
-}`,
     markdownString: `# ⌨️ 打字动画演示
 
 这段文字会以打字机的效果逐字显示...
@@ -227,53 +107,6 @@ function TypingDemo() {
   },
 
   themeSwitch: {
-    code: `import React, { useState } from 'react';
-import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
-
-function ThemeDemo() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  return (
-    <div>
-      <button onClick={toggleTheme}>
-        切换为{theme === 'light' ? '暗色' : '亮色'}主题
-      </button>
-
-      <DsMarkdown 
-        interval={20}
-        answerType="answer"
-        theme={theme}
-      >
-        # 主题演示
-        
-        当前主题：**{theme === 'light' ? '亮色' : '暗色'}模式**
-        
-        ## 支持的主题
-        
-        1. **light** - 亮色主题，适合日间使用 ☀️
-        2. **dark** - 暗色主题，适合夜间使用 🌙
-        
-        ### 代码高亮
-        
-        \`\`\`javascript
-        const theme = 'dark';
-        if (theme === 'dark') {
-          document.body.classList.add('dark-theme');
-        } else {
-          document.body.classList.remove('dark-theme');
-        }
-        \`\`\`
-        
-        > 两种主题都有完美的代码高亮支持
-      </DsMarkdown>
-    </div>
-  );
-}`,
     markdownString: `# 🎨 主题演示
 
 当前主题：**{{THEME}}模式**
@@ -298,52 +131,6 @@ if (theme === 'dark') {
   },
 
   advancedUsage: {
-    code: `import React from 'react';
-import DsMarkdown from 'ds-markdown';
-import { katexPlugin } from 'ds-markdown/plugins';
-import 'ds-markdown/style.css';
-import 'ds-markdown/katex.css';
-
-function AdvancedDemo() {
-  const handleCharTyped = (char: string) => {
-    console.log('Typed character:', char);
-  };
-
-  return (
-    <DsMarkdown
-      interval={25}
-      timerType="requestAnimationFrame"
-      answerType="answer"
-      theme="light"
-      disableTyping={false}
-      plugins={[katexPlugin]}
-      math={{ splitSymbol: 'dollar' }}
-      onTypedChar={handleCharTyped}
-    >
-      # 高级用法示例
-      
-      这个示例展示了所有可用的 props：
-      
-      - **interval**: 25ms 打字间隔
-      - **timerType**: 使用 requestAnimationFrame
-      - **plugins**: 启用 KaTeX 数学公式
-      - **onTypedChar**: 字符打字回调
-      
-      ## 数学公式
-      
-      $E = mc^2$
-      
-      ## 代码高亮
-      
-      \`\`\`typescript
-      interface Props {
-        interval?: number;
-        theme?: 'light' | 'dark';
-      }
-      \`\`\`
-    </DsMarkdown>
-  );
-}`,
     markdownString: `# 🚀 高级用法示例
 
 这个示例展示了所有可用的 props：

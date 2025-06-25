@@ -12,6 +12,7 @@ export interface DemoData {
 export interface SourceCodeExample {
   code: string;
   markdownString: string;
+  lang?: string; // 代码高亮语言，默认 tsx
 }
 
 // 组件属性类型
