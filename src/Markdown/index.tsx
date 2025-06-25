@@ -45,6 +45,9 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
     resume: () => {
       cmdRef.current.resume();
     },
+    start: () => {
+      cmdRef.current.start();
+    },
   }));
 
   return <MarkdownCMD ref={cmdRef} {...rest} />;

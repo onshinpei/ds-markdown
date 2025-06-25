@@ -7,7 +7,13 @@ import { __DEV__ } from '../constant.js';
 import { useTypingTask } from '../hooks/useTypingTask.js';
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
-  ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false }, ref) => {
+  ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true }, ref) => {
+    /** 是否自动开启打字动画, 后面发生变化将不会生效 */
+    const autoStartTypingRef = useRef(autoStartTyping);
+
+    /** 是否打过字 */
+    const isStartedTypingRef = useRef(false);
+
     /** 当前需要打字的内容 */
     const charsRef = useRef<IChar[]>([]);
 
@@ -40,6 +46,9 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
      * 处理字符显示逻辑
      */
     const processCharDisplay = (char: IChar) => {
+      if (!isStartedTypingRef.current) {
+        isStartedTypingRef.current = true;
+      }
       if (char.answerType === 'thinking') {
         wholeContentRef.current.thinking.content += char.content;
         wholeContentRef.current.thinking.length += 1;
@@ -88,6 +97,11 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
 
       wholeContentRef.current.allLength += content.length;
 
+      // 如果关闭了自动打字， 并且没有打过字， 则不开启打字动画
+      if (!autoStartTypingRef.current && !isStartedTypingRef.current) {
+        return;
+      }
+
       if (!typingTask.isTyping()) {
         typingTask.start();
       }
@@ -97,6 +111,11 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       wholeContentRef.current[answerType].content += content;
       wholeContentRef.current[answerType].length += content.length;
       triggerUpdate();
+      onEnd?.({
+        str: content,
+        answerType,
+        manual: false,
+      });
     };
 
     useImperativeHandle(ref, () => ({
@@ -127,8 +146,15 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
         wholeContentRef.current.allLength = 0;
         isWholeTypedEndRef.current = false;
         charIndexRef.current = 0;
+        isStartedTypingRef.current = false;
 
         triggerUpdate();
+      },
+      /** 开启打字，只有在关闭了自动打字才生效 */
+      start: () => {
+        if (!autoStartTypingRef.current) {
+          typingTask.start();
+        }
       },
       /** 停止打字任务 */
       stop: () => {
@@ -148,6 +174,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
           onEnd?.({
             str: undefined,
             answerType: undefined,
+            manual: true,
           });
         }
       },

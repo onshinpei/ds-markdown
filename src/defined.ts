@@ -65,7 +65,7 @@ export interface MarkdownBaseProps {
   /** 是否关闭打字机效果 */
   disableTyping?: boolean;
   /** 打字完成后回调,  */
-  onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
+  onEnd?: (data?: IEndData) => void;
   /** 开始打字回调 */
   onStart?: (data?: IOnTypedCharData) => void;
   /**
@@ -82,6 +82,9 @@ export interface MarkdownBaseProps {
 
   /** 插件配置 */
   plugins?: IMarkdownPlugin[];
+
+  /** 是否自动开启打字动画 */
+  autoStartTyping?: boolean;
 }
 
 export interface MarkdownProps extends MarkdownBaseProps {
@@ -121,6 +124,7 @@ export interface IWholeContent {
 export interface MarkdownBaseRef {
   stop: () => void;
   resume: () => void;
+  start: () => void;
 }
 
 /** Markdown 组件的ref 类型 */
@@ -131,4 +135,10 @@ export interface MarkdownCMDRef extends MarkdownBaseRef {
   push: (content: string, answerType?: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
+}
+
+export interface IEndData {
+  str?: string;
+  answerType?: AnswerType;
+  manual: boolean;
 }

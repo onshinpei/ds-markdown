@@ -7,6 +7,7 @@ import './index.css';
 import BasicDemo from './basic';
 import CDMDemo from './cmd';
 import KatexDemo from './katex';
+import ManualStartDemo from './ManualStart';
 const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (

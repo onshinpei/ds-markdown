@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps } from '../defined.js';
+import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData } from '../defined.js';
 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
   interval: number;
   charsRef: React.RefObject<IChar[]>;
-  onEnd?: (data?: { str?: string; answerType?: AnswerType; manual: boolean }) => void;
+  onEnd?: (data?: IEndData) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
   onTypedChar?: (data?: ITypedChar) => void;
   processCharDisplay: (char: IChar) => void;
@@ -29,7 +29,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   /** 是否卸载 */
   const isUnmountRef = useRef(false);
   /** 是否正在打字 */
-  const isTypedRef = useRef(false);
+  const isTypingRef = useRef(false);
   /** 动画帧ID */
   const animationFrameRef = useRef<number | null>(null);
   /** 传统定时器（兼容模式） */
@@ -153,7 +153,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       timerRef.current = null;
     }
 
-    isTypedRef.current = false;
+    isTypingRef.current = false;
     typedCharsRef.current = undefined;
   };
 
@@ -164,7 +164,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       return;
     }
 
-    if (isTypedRef.current) {
+    if (isTypingRef.current) {
       return;
     }
 
@@ -213,7 +213,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     wholeContentRef.current.answer.length += answerCharsStr.length;
     wholeContentRef.current.allLength += thinkingCharsStr.length + answerCharsStr.length;
     charsRef.current = [];
-    isTypedRef.current = false;
+    isTypingRef.current = false;
 
     triggerOnEnd();
     triggerUpdate();
@@ -252,8 +252,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
         const char = chars.shift();
         if (char === undefined) break;
 
-        if (!isTypedRef.current) {
-          isTypedRef.current = true;
+        if (!isTypingRef.current) {
+          isTypingRef.current = true;
           triggerOnStart(char);
           triggerOnTypedChar(char, true);
         } else {
@@ -268,7 +268,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       if (chars.length > 0) {
         animationFrameRef.current = requestAnimationFrame(frameLoop);
       } else {
-        isTypedRef.current = false;
+        isTypingRef.current = false;
         triggerOnEnd();
       }
     };
@@ -278,7 +278,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** 停止动画帧模式 */
   const stopAnimationFrame = (manual = false) => {
-    isTypedRef.current = false;
+    isTypingRef.current = false;
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
@@ -309,7 +309,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       const chars = getChars();
       if (isUnmountRef.current) return;
 
-      isTypedRef.current = true;
+      isTypingRef.current = true;
       const char = chars.shift();
 
       if (char === undefined) {
@@ -333,7 +333,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** 停止超时模式 */
   const stopTimeout = () => {
-    isTypedRef.current = false;
+    isTypingRef.current = false;
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -363,7 +363,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       clearTimer();
       typedCharsRef.current = undefined;
     },
-    isTyping: () => isTypedRef.current,
+    isTyping: () => isTypingRef.current,
     typedIsManualStopRef,
   };
 };
