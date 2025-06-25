@@ -2,11 +2,9 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
 import classNames from 'classnames';
-import { AnswerType, MarkdownProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined.js';
+import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined.js';
 import { __DEV__ } from '../constant.js';
 import { useTypingTask } from '../hooks/useTypingTask.js';
-
-type MarkdownCMDProps = MarkdownProps;
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
   ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false }, ref) => {
@@ -107,7 +105,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
        * @param content 内容 {string}
        * @param answerType 回答类型 {AnswerType}
        */
-      push: (content: string, answerType: AnswerType) => {
+      push: (content: string, answerType: AnswerType = 'answer') => {
         if (disableTyping) {
           processNoTypingPush(content, answerType);
           return;

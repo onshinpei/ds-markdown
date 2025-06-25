@@ -1,15 +1,9 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { __DEV__ } from '../constant.js';
-import { AnswerType, MarkdownCMDRef, MarkdownProps, MarkdownRef, Theme } from '../defined.js';
+import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined.js';
 import MarkdownCMD from '../MarkdownCMD/index.js';
 
-interface MarkdownImplProps extends MarkdownProps {
-  children: string | undefined;
-  answerType: AnswerType;
-  theme?: Theme;
-}
-
-interface MarkdownInnerProps extends MarkdownImplProps {
+interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
 }
 
@@ -56,7 +50,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
   return <MarkdownCMD ref={cmdRef} {...rest} />;
 };
 
-const Markdown = forwardRef<MarkdownRef, MarkdownImplProps>((props, ref) => {
+const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
   const { children = '', answerType = 'answer' } = props;
 
   if (__DEV__) {

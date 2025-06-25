@@ -55,9 +55,11 @@ export interface ITypedChar extends IOnTypedCharData {
   percent: number;
 }
 
-export interface MarkdownProps {
+export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
+  /** 回答类型 */
+  answerType?: 'thinking' | 'answer';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭打字机效果 */
@@ -80,6 +82,15 @@ export interface MarkdownProps {
 
   /** 插件配置 */
   plugins?: IMarkdownPlugin[];
+}
+
+export interface MarkdownProps extends MarkdownBaseProps {
+  children: string | undefined;
+}
+
+/**  MarkdownCMD 组件不需要 children */
+export interface MarkdownCMDProps extends MarkdownBaseProps {
+  children?: undefined;
 }
 
 export interface IMarkdownPlugin {
@@ -117,7 +128,7 @@ export type MarkdownRef = MarkdownBaseRef;
 
 /** MarkdownCMD 组件的 ref 类型 */
 export interface MarkdownCMDRef extends MarkdownBaseRef {
-  push: (content: string, answerType: AnswerType) => void;
+  push: (content: string, answerType?: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
 }
