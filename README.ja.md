@@ -33,27 +33,17 @@
 - ライト/ダークテーマサポート、様々なプロダクトスタイルに対応
 - remark/rehype プラグイン拡張をサポートするプラグインアーキテクチャ
 
-### 🔧 **開発者エクスペリエンス**
+### �� **開発者エクスペリエンス**
 
-- **宣言的 API**：シンプルなシナリオに適し、React スタイル
-- **命令的 API**：ストリーミングデータに適し、より良いパフォーマンス
-- **ネイティブ TypeScript サポート**：完全な型ヒント
 - タイピングの中断 `stop` と再開 `resume` をサポート
+- タイピングの無効化と有効化をサポート
 
 ### 🎬 **滑らかなアニメーション**
 
 - デュアルタイマーモード最適化、`requestAnimationFrame` と `setTimeout` モードをサポート
 - 高頻度タイピングサポート（`requestAnimationFrame` モードでは `0ms` に近いタイピング間隔をサポート）
-- フレーム同期レンダリング、ブラウザの 60fps と完璧にマッチ
+- フレーム同期レンダリング、ブラウザのリフレッシュレートと完璧にマッチ
 - スマート文字バッチ処理により、より自然な視覚効果
-
-### 🧮 **数式サポート**
-
-- **KaTeX 統合**：高性能な数式レンダリング
-- **プラグインアーキテクチャ**：プラグインシステムによる柔軟な設定
-- **デュアル構文サポート**：`$...$` と `\[...\]` の2つの区切り文字
-- **ストリーミング対応**：タイピングアニメーションでの数式の完璧なサポート
-- **テーマ適応**：ライト/ダークテーマへの自動適応
 
 ---
 
@@ -77,8 +67,10 @@ pnpm add ds-markdown
 [DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
 
 ```html
-<!-- スタイルのインポート -->
+<!-- スタイルのインポート、必須 -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- katex数学公式スタイルのインポート、必要な場合のみ -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- コンポーネントのインポート -->
@@ -106,18 +98,42 @@ function App() {
 }
 ```
 
+### タイピングアニメーションの無効化
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+
+function StaticDemo() {
+  const [disableTyping, setDisableTyping] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? '有効' : '無効'}にするタイピング効果</button>
+
+      <DsMarkdown interval={20} answerType="answer" disableTyping={disableTyping}>
+        # 静的表示モード `disableTyping` が `true` の場合、コンテンツはタイピングアニメーション効果なしで即座に全て表示されます。これは特定のシナリオで非常に有用です： - 📄 静的ドキュメント表示 - 🔄
+        表示モードの切り替え - ⚡ コンテンツの素早いプレビュー
+      </DsMarkdown>
+    </div>
+  );
+}
+```
+
 ### 数式サポート
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+// 数式を表示する必要がある場合は、数式変換プラグインを取り込む
 import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
-import 'ds-markdown/katex.css'; // 数式スタイルのインポート
+// 数式を表示する必要がある場合は、数学公式スタイルを取り込む
+import 'ds-markdown/katex.css';
 
 function MathDemo() {
   return (
     <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
-      # ピタゴラスの定理 直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい： $a^2 + b^2 = c^2$ ここで： - $a$ と $b$ は直角辺 - $c$ は斜辺 古典的な「3-4-5」三角形の場合： $c = \sqrt
+      # ピタゴラスの定理 直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい： $a^2 + b^2 = c^2$ ここで： - $a$ と $b$ は直角辺 - $c$ は斜辺 古典的な「勾三股四弦五」の場合： $c = \sqrt
       {3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
@@ -172,40 +188,73 @@ React 19 は多くのエキサイティングな新機能をもたらします�
 
 ## 📚 完全 API ドキュメント
 
-### 宣言的 API（初心者向け推奨）
+### デフォルトエクスポート DsMarkdown と MarkdownCMD の props
 
-| プロパティ    | 型                                          | 説明                             | デフォルト                                                            |
-| ------------- | ------------------------------------------- | -------------------------------- | --------------------------------------------------------------------- |
-| `interval`    | `number`                                    | タイピング間隔（ミリ秒）         | `30`                                                                  |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | タイマータイプ                   | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
-| `answerType`  | `'thinking'` \| `'answer'`                  | コンテンツタイプ                 | `'answer'`                                                            |
-| `theme`       | `'light'` \| `'dark'`                       | テーマタイプ                     | `'light'`                                                             |
-| `math`        | `IMarkdownMath`                             | 数式設定                         | `{ isOpen: false, splitSymbol: 'dollar' }`                            |
-| `onEnd`       | `(data: EndData) => void`                   | タイピング完了コールバック       | -                                                                     |
-| `onStart`     | `(data: StartData) => void`                 | タイピング開始コールバック       | -                                                                     |
-| `onTypedChar` | `(data: CharData) => void`                  | 文字ごとのタイピングコールバック | -                                                                     |
+```js
+import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
+```
 
-### 数式設定
+| プロパティ      | 型                                            | 説明                               | デフォルト                                                            |
+| --------------- | --------------------------------------------- | ---------------------------------- | --------------------------------------------------------------------- |
+| `interval`      | `number`                                      | タイピング間隔（ミリ秒）           | `30`                                                                  |
+| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'`   | タイマータイプ                     | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
+| `answerType`    | `'thinking'` \| `'answer'`                    | コンテンツタイプ（スタイルに影響） | `'answer'`                                                            |
+| `theme`         | `'light'` \| `'dark'`                         | テーマタイプ                       | `'light'`                                                             |
+| `plugins`       | `IMarkdownPlugin[]`                           | プラグイン設定                     | `[]`                                                                  |
+| `math`          | [IMarkdownMath](#IMarkdownMath)               | 数式設定                           | `{ splitSymbol: 'dollar' }`                                           |
+| `onEnd`         | `(data: EndData) => void`                     | タイピング完了コールバック         | -                                                                     |
+| `onStart`       | `(data: StartData) => void`                   | タイピング開始コールバック         | -                                                                     |
+| `onTypedChar`   | `(data: `[ITypedChar](#ITypedChar)`) => void` | 文字ごとのタイピングコールバック   | -                                                                     |
+| `disableTyping` | `boolean`                                     | タイピングアニメーション効果を無効 | `false`                                                               |
 
-| プロパティ    | 型                        | 説明                         | デフォルト |
-| ------------- | ------------------------- | ---------------------------- | ---------- |
-| `isOpen`      | `boolean`                 | 数式レンダリングを有効にする | `false`    |
-| `splitSymbol` | `'dollar'` \| `'bracket'` | 数式区切り文字タイプ         | `'dollar'` |
+> 注意： タイピング中に `disableTyping` が `true` から `false` に変わると、次のタイピングトリガー時に残りの全文字が一度に表示されます。
+
+### ITypedChar
+
+| プロパティ     | 型       | 説明                             | デフォルト |
+| -------------- | -------- | -------------------------------- | ---------- |
+| `percent`      | `number` | タイピング進行パーセンテージ     | `0`        |
+| `currentChar`  | `string` | 現在タイピング中の文字           | -          |
+| `currentIndex` | `number` | 文字列全体での現在のインデックス | `0`        |
+
+#### IMarkdownMath
+
+| プロパティ    | 型                        | 説明                 | デフォルト |
+| ------------- | ------------------------- | -------------------- | ---------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 数式区切り文字タイプ | `'dollar'` |
 
 **区切り文字の説明：**
 
 - `'dollar'`：`$...$` と `$$...$$` 構文を使用
 - `'bracket'`：`\(...\)` と `\[...\]` 構文を使用
 
-### 命令的 API（ストリーミングシナリオにおすすめ）
+#### IMarkdownPlugin
 
-| メソッド          | パラメータ                                  | 説明                                 |
-| ----------------- | ------------------------------------------- | ------------------------------------ |
-| `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピングを開始 |
-| `clear`           | -                                           | すべてのコンテンツと状態をクリア     |
-| `triggerWholeEnd` | -                                           | 完了コールバックを手動でトリガー     |
-| `stop`            | -                                           | タイピングを一時停止                 |
-| `resume`          | -                                           | タイピングを再開                     |
+| プロパティ     | 型                        | 説明              | デフォルト |
+| -------------- | ------------------------- | ----------------- | ---------- |
+| `remarkPlugin` | `unknown`                 | remark プラグイン | -          |
+| `rehypePlugin` | `unknown`                 | rehype プラグイン | -          |
+| `type`         | `'buildIn'` \| `'custom'` | プラグインタイプ  | -          |
+| `id`           | `any`                     | プラグイン固有ID  | -          |
+
+### コンポーネント公開メソッド
+
+#### デフォルトエクスポート DsMarkdown
+
+| メソッド | パラメータ | 説明                 |
+| -------- | ---------- | -------------------- |
+| `stop`   | -          | タイピングを一時停止 |
+| `resume` | -          | タイピングを再開     |
+
+#### MarkdownCMD 公開メソッド
+
+| メソッド          | パラメータ                                  | 説明                               |
+| ----------------- | ------------------------------------------- | ---------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピング開始 |
+| `clear`           | -                                           | 全コンテンツと状態をクリア         |
+| `triggerWholeEnd` | -                                           | 手動で完了コールバックを発火       |
+| `stop`            | -                                           | タイピングを一時停止               |
+| `resume`          | -                                           | タイピングを再開                   |
 
 **使用例：**
 
@@ -218,11 +267,17 @@ markdownRef.current?.resume(); // アニメーションを再開
 
 ## 🧮 数式使用ガイド
 
+[DEMO1：ピタゴラスの定理](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
+
+[DEMO2：問題解答](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=README.md)
+
 ### 基本構文
 
 ```tsx
-// 1. 数式サポートを有効にする
-<DsMarkdown math={{ isOpen: true }}>
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 1. 数式サポートを有効化
+<DsMarkdown plugins={[katexPlugin]}>
   # 数式の例
 
   // インライン数式
@@ -237,13 +292,19 @@ markdownRef.current?.resume(); // アニメーションを再開
 
 ```tsx
 // ドル記号区切り文字を使用（デフォルト）
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'dollar' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'dollar' }}
+>
   インライン：$a + b = c$
   ブロック：$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
 </DsMarkdown>
 
 // 括弧区切り文字を使用
-<DsMarkdown math={{ isOpen: true, splitSymbol: 'bracket' }}>
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'bracket' }}
+>
   インライン：\(a + b = c\)
   ブロック：\[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
 </DsMarkdown>
@@ -252,8 +313,18 @@ markdownRef.current?.resume(); // アニメーションを再開
 ### ストリーミング数式
 
 ```tsx
-// ストリーミング出力での数式の完璧なサポート
-const mathContent = ['ピタゴラスの定理：', '$a^2 + b^2 = c^2$', '\n\n', 'ここで：', '- $a$ と $b$ は直角辺', '- $c$ は斜辺'];
+// ストリーミング出力での数式を完璧にサポート
+const mathContent = [
+  'ピタゴラスの定理：',
+  '$a^2 + b^2 = c^2$',
+  '\n\n',
+  'ここで：',
+  '- $a$ と $b$ は直角辺\n',
+  '- $c$ は斜辺\n\n',
+  '古典的な「勾三股四弦五」の場合：\n',
+  '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+  'この定理は幾何学で広く応用されています！',
+];
 
 mathContent.forEach((chunk) => {
   markdownRef.current?.push(chunk, 'answer');
@@ -263,7 +334,7 @@ mathContent.forEach((chunk) => {
 ### スタイルカスタマイズ
 
 ```css
-/* 数式スタイルのカスタマイズ */
+/* 数式スタイルカスタマイズ */
 .katex {
   font-size: 1.1em;
 }
@@ -273,7 +344,7 @@ mathContent.forEach((chunk) => {
   text-align: center;
 }
 
-/* ダークテーマ適応 */
+/* ダークテーマ対応 */
 [data-theme='dark'] .katex {
   color: #e1e1e1;
 }
@@ -281,54 +352,85 @@ mathContent.forEach((chunk) => {
 
 ---
 
+## 🔌 プラグインシステム
+
+### 内蔵プラグイン
+
+#### KaTeX 数式プラグイン
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 数式サポートを有効化
+<DsMarkdown plugins={[katexPlugin]}>数式：$E = mc^2$</DsMarkdown>;
+```
+
+### カスタムプラグイン
+
+```tsx
+import { createBuildInPlugin } from 'ds-markdown/plugins';
+
+// カスタムプラグインを作成
+const customPlugin = createBuildInPlugin({
+  remarkPlugin: yourRemarkPlugin,
+  rehypePlugin: yourRehypePlugin,
+  id: Symbol('custom-plugin'),
+});
+
+// カスタムプラグインを使用
+<DsMarkdown plugins={[katexPlugin, customPlugin]}>コンテンツ</DsMarkdown>;
+```
+
+---
+
 ## 🎛️ タイマーモード詳細
 
-### `requestAnimationFrame` モード 🌟（推奨）
+### `requestAnimationFrame` モード 🌟 (推奨)
 
 ```typescript
 // 🎯 特徴
 - 時間駆動：実際の経過時間に基づいて文字数を計算
-- バッチ処理：1フレーム内で複数の文字を処理可能
+- バッチ処理：単一フレーム内で複数文字を処理可能
 - フレーム同期：ブラウザの60fpsリフレッシュレートと同期
 - 高頻度最適化：interval < 16msの高速タイピングを完璧にサポート
 
 // 🎯 適用シナリオ
 - モダンWebアプリケーションのデフォルト選択
-- 滑らかなアニメーション効果を追求
-- 高頻度タイピング（interval > 0で十分）
-- AIリアルタイム会話シナリオ
+- 滑らかなアニメーション効果の追求
+- 高頻度タイピング (interval > 0 で十分)
+- AI リアルタイム会話シナリオ
 ```
 
-### `setTimeout` モード 📟（互換性）
+### `setTimeout` モード 📟 (互換)
 
 ```typescript
 // 🎯 特徴
-- 単一文字：毎回正確に1文字を処理
-- 固定間隔：設定された時間に厳密に実行
-- ビート感：クラシックタイプライターのリズム感
+- 単一文字：毎回正確に一文字を処理
+- 固定間隔：設定時間通りに厳密実行
+- リズム感：クラシックタイプライターのリズム感
 - 精密制御：特定のタイミング要件に適している
 
 // 🎯 適用シナリオ
 - 精密な時間制御が必要
-- レトロタイプライター効果を演出
-- 互換性要件の高いシナリオ
+- レトロタイプライター効果の創出
+- 互換性要件が高いシナリオ
 ```
 
 ### 📊 パフォーマンス比較
 
-| 特徴                             | requestAnimationFrame               | setTimeout        |
-| -------------------------------- | ----------------------------------- | ----------------- |
-| **文字処理**                     | 1フレームで複数文字を処理可能       | 毎回1文字を処理   |
-| **高頻度間隔**                   | ✅ 優秀（5ms → 1フレーム3文字）     | ❌ ラグの可能性   |
-| **低頻度間隔**                   | ✅ 正常（100ms → 6フレーム後1文字） | ✅ 精密           |
-| **視覚効果**                     | 🎬 滑らかなアニメーション感         | ⚡ 精密なビート感 |
-| **パフォーマンスオーバーヘッド** | 🟢 低（フレーム同期）               | 🟡 中（タイマー） |
+| 特徴                             | requestAnimationFrame               | setTimeout           |
+| -------------------------------- | ----------------------------------- | -------------------- |
+| **文字処理**                     | フレームあたり複数文字              | 一度に一文字         |
+| **高頻度間隔**                   | ✅ 優秀 (5ms → フレームあたり3文字) | ❌ ラグ可能性あり    |
+| **低頻度間隔**                   | ✅ 正常 (100ms → 6フレーム後1文字)  | ✅ 精密              |
+| **視覚効果**                     | 🎬 滑らかなアニメーション感         | ⚡ 精密なリズム感    |
+| **パフォーマンスオーバーヘッド** | 🟢 低 (フレーム同期)                | 🟡 中程度 (タイマー) |
 
-高頻度は`requestAnimationFrame`、低頻度は`setTimeout`を推奨
+高頻度は `requestAnimationFrame` 推奨、低頻度は `setTimeout` 推奨
 
 ---
 
-## 💡 実践例
+## 💡 実戦例
 
 ### 📝 AI ストリーミング会話
 
@@ -341,25 +443,25 @@ import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 function StreamingChat() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
 
-  // AI ストリーミング応答をシミュレート
+  // AI ストリーミング応答のシミュレート
   const simulateAIResponse = async () => {
     markdownRef.current?.clear();
 
     // 思考段階
-    markdownRef.current?.push('🤔 あなたの質問を分析しています...', 'thinking');
+    markdownRef.current?.push('🤔 あなたの質問を分析中...', 'thinking');
     await delay(1000);
-    markdownRef.current?.push('\n\n✅ 分析完了、回答を開始', 'thinking');
+    markdownRef.current?.push('\n\n✅ 分析完了、回答開始', 'thinking');
 
     // ストリーミング回答
     const chunks = [
       '# React 19 新機能解析\n\n',
       '## 🚀 React Compiler\n',
-      'React 19 の最大のハイライトは**React Compiler**の導入です：\n\n',
-      '- 🎯 **自動最適化**：手動のmemoとuseMemoが不要\n',
-      '- ⚡ **パフォーマンス向上**：コンパイル時最適化、実行時ゼロオーバーヘッド\n',
+      'React 19 の最大のハイライトは **React Compiler** の導入です：\n\n',
+      '- 🎯 **自動最適化**：手動でのmemoやuseMemoが不要\n',
+      '- ⚡ **パフォーマンス向上**：コンパイル時最適化、ランタイムゼロオーバーヘッド\n',
       '- 🔧 **後方互換性**：既存コードの修正不要\n\n',
-      '## 📝 Actions フォーム簡素化\n',
-      '新しいActions APIによりフォーム処理がより簡単になります：\n\n',
+      '## 📝 Actions でフォーム簡素化\n',
+      '新しい Actions API でフォーム処理がより簡単に：\n\n',
       '```tsx\n',
       'function ContactForm({ action }) {\n',
       '  const [state, formAction] = useActionState(action, null);\n',
@@ -371,7 +473,7 @@ function StreamingChat() {
       '  );\n',
       '}\n',
       '```\n\n',
-      'この回答がお役に立てば幸いです！🎉',
+      'この回答がお役に立てれば幸いです！🎉',
     ];
 
     for (const chunk of chunks) {
@@ -384,7 +486,7 @@ function StreamingChat() {
     <div className="chat-container">
       <button onClick={simulateAIResponse}>🤖 React 19 新機能について質問</button>
 
-      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('段落完了:', data)} />
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('セクション完了:', data)} />
     </div>
   );
 }
@@ -395,6 +497,8 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ### 🧮 数式ストリーミングレンダリング
 
 ```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
 function MathStreamingDemo() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
 
@@ -402,13 +506,13 @@ function MathStreamingDemo() {
     markdownRef.current?.clear();
 
     const mathChunks = [
-      '# ピタゴラスの定理の説明\n\n',
+      '# ピタゴラスの定理詳解\n\n',
       '直角三角形では、斜辺の二乗は二つの直角辺の二乗の和に等しい：\n\n',
       '$a^2 + b^2 = c^2$\n\n',
       'ここで：\n',
       '- $a$ と $b$ は直角辺\n',
       '- $c$ は斜辺\n\n',
-      '古典的な「3-4-5」三角形の場合：\n',
+      '古典的な「勾三股四弦五」の場合：\n',
       '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
       'この定理は幾何学で広く応用されています！',
     ];
@@ -423,69 +527,11 @@ function MathStreamingDemo() {
     <div>
       <button onClick={simulateMathResponse}>📐 ピタゴラスの定理を説明</button>
 
-      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" math={{ isOpen: true, splitSymbol: 'dollar' }} />
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
     </div>
   );
 }
 ```
-
-### 🔄 ストリーミングMarkdown構文処理
-
-**核心問題**：ストリーミング出力時に不完全なMarkdown構文がレンダリングエラーを引き起こす
-
-```tsx
-// 🚨 問題シナリオ
-push('#'); // "# "
-push(' '); // "# "
-push('タイトル'); // "# タイトル"
-push('\n'); // "# タイトル\n"
-push('1'); // "# タイトル\n1"     ← ここで段落として誤解析される
-push('.'); // "# タイトル\n1."    ← 正しいリストを形成
-push(' 項目'); // "# タイトル\n1. 項目"
-```
-
-**✅ スマート解決策**：内蔵同期バッファリングメカニズム
-
-```tsx
-// コンポーネントが構文境界をインテリジェントに処理
-const handleStreamingMarkdown = () => {
-  const chunks = ['#', ' ', '使用', 'スキル', '\n', '1', '.', ' ', 'スキル1', '\n', '2', '.', ' スキル2'];
-
-  chunks.forEach((chunk) => {
-    markdownRef.current?.push(chunk, 'answer');
-    // 遅延不要、コンポーネントが内部でインテリジェントにバッファリング
-  });
-};
-
-// 🧠 インテリジェント処理フロー：
-// 1. "# 使用スキル\n1" のような不完全な構文をリアルタイム検出
-// 2. インテリジェントバッファリング、より多くの文字を待機
-// 3. "." を受信して "1." を形成した後すぐに処理
-// 4. ゼロ遅延、純粋な同期処理
-```
-
-**サポートされる構文検出**：
-
-````typescript
-// ✅ 完全な構文（即座に処理）
-'## タイトル'; // 完全なタイトル
-'1. リスト項目'; // 完全なリスト項目
-'- 項目'; // 完全な順序なしリスト
-'> 引用コンテンツ'; // 完全な引用
-'```javascript'; // コードブロック開始
-'```'; // コードブロック終了
-'改行で終わるコンテンツ\n'; // 改行境界
-'$a + b$'; // 完全な数式
-'$$\\sum x$$'; // 完全なブロック数式
-
-// 🔄 不完全な構文（インテリジェントバッファリング）
-'##'; // タイトル記号のみ
-'1'; // 数字のみ
-'```java'; // 可能性のあるコードブロック開始
-'$a +'; // 不完全な数式
-````
-
----
 
 ## 🔧 ベストプラクティス
 
@@ -495,40 +541,41 @@ const handleStreamingMarkdown = () => {
 // ✅ 推奨設定
 <DsMarkdown
   timerType="requestAnimationFrame"
-  interval={15} // 15-30msが最適な体験
+  interval={15} // 15-30ms が最適な体験
 />
 
-// ❌ 小さすぎる間隔を避ける
+// ❌ 過小な間隔は避ける
 <DsMarkdown interval={1} /> // パフォーマンス問題を引き起こす可能性
 ```
 
 ### 2. ストリーミングデータ処理
 
 ```tsx
-// ✅ 推奨：命令的API
+// ✅ 推奨：命令的 API
 const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
 
-// ❌ 避ける：頻繁なchildren更新
+// ❌ 避ける：頻繁な children 更新
 const [content, setContent] = useState('');
-// 毎回の更新でコンテンツ全体を再解析
+// 各更新で全コンテンツを再解析
 ```
 
 ### 3. 数式最適化
 
 ```tsx
-// ✅ 推奨：数式スタイルを必要に応じて読み込み
+// ✅ 推奨：オンデマンドで数式スタイルを読み込み
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css'; // 必要な時のみインポート
 
-// ✅ 推奨：区切り文字の合理的な使用
-// シンプルな数式には $...$ で簡潔さを
-// 複雑な数式には $$...$$ で明確さを
+// ✅ 推奨：適切な区切り文字の使用
+// シンプルな数式には $...$ がより簡潔
+// 複雑な数式には $$...$$ がより明確
 
-// ❌ 避ける：不要な時に数式を有効にする
-<DsMarkdown math={{ isOpen: true }}>プレーンテキストコンテンツ</DsMarkdown>;
+// ✅ 推奨：プラグイン設定
+import { katexPlugin } from 'ds-markdown/plugins';
+<DsMarkdown plugins={[katexPlugin]}>数式コンテンツ</DsMarkdown>;
 ```
 
 ### 4. 型安全性
@@ -537,7 +584,7 @@ import 'ds-markdown/katex.css'; // 必要な時のみインポート
 import { MarkdownCMDRef } from 'ds-markdown';
 
 const ref = useRef<MarkdownCMDRef>(null);
-// 完全なTypeScript型ヒント
+// 完全な TypeScript 型ヒント
 ```
 
 ### 5. スタイルカスタマイズ
