@@ -1,0 +1,35 @@
+{
+  "name": "ds-markdown-website",
+  "version": "1.0.0",
+  "description": "ds-markdown 库的在线文档网站",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "ds-markdown",
+    "documentation",
+    "markdown",
+    "react",
+    "typescript"
+  ],
+  "author": "ds-markdown team",
+  "license": "MIT",
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ds-markdown": "^0.1.2-beta.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  }
+}
