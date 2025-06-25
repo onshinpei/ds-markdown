@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ReactElement } from 'react';
 
 // 演示数据类型
 export interface DemoData {
@@ -19,8 +19,8 @@ export interface DemoSectionProps {
   id: string;
   title: string;
   sourceCode: SourceCodeExample;
-  demoType: 'installation' | 'basic' | 'math' | 'typing' | 'theme' | 'advanced';
   showHeader?: boolean;
+  renderComponent?: ReactElement;
   children?: ReactNode;
 }
 
