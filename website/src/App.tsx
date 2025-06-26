@@ -39,8 +39,7 @@ console.log({
   customThemeDemoMarkdown,
 });
 
-const installationSource = `
-// npm
+const installationSource = `// npm
 npm install ds-markdown
 // yarn
 yarn add ds-markdown
@@ -61,6 +60,7 @@ const App: React.FC = () => {
             title="📦 安装"
             sourceCode={{
               code: installationSource,
+              markdownString: installationSource,
             }}
             showHeader={false}
           />

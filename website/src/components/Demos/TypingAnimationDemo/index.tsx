@@ -18,7 +18,7 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   return (
-    <div>
+    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
         <button className="btn" onClick={toggleTyping}>
           {disableTyping ? '开启打字效果' : '关闭打字效果'}

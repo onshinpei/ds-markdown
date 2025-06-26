@@ -20,7 +20,7 @@ npm run dev
 ./start.sh
 ```
 
-访问 http://localhost:8080
+访问 http://localhost:3000
 
 ### 方式二：使用 Vite 预览模式
 
@@ -32,30 +32,19 @@ npm run build
 npm run preview
 ```
 
-### 方式三：使用其他静态服务器
-
-```bash
-# 安装 http-server
-npm install -g http-server
-
-# 启动服务器
-http-server -p 8080
-
-# 或者使用其他静态服务器
-npx serve -p 8080
-```
-
 ## 📁 文件结构
 
 ```
 website/
-├── index.html          # 主页面
-├── styles.css          # 样式文件
-├── app.js             # JavaScript 应用逻辑
-├── vite.config.js     # Vite 配置文件
-├── package.json       # 项目配置和依赖
-├── start.sh           # 快速启动脚本
-└── README.md          # 说明文档
+├── src/                    # 源代码目录
+├── public/                 # 静态资源目录
+├── dist/                   # 构建输出目录
+├── index.html             # 主页面模板
+├── vite.config.js         # Vite 配置文件
+├── tsconfig.json          # TypeScript 配置
+├── package.json           # 项目配置和依赖
+├── start.sh               # 快速启动脚本
+└── README.md              # 说明文档
 ```
 
 ## ✨ 功能特性
@@ -90,48 +79,83 @@ website/
 
 ## 🔧 技术栈
 
-- **HTML5** - 页面结构
-- **CSS3** - 样式和布局
-- **ES6+ JavaScript** - 交互逻辑
-- **React 18** - 组件渲染 (通过 CDN)
+- **React 18** - 前端框架
+- **TypeScript** - 类型安全
 - **ds-markdown** - 核心库
-- **Prism.js** - 代码高亮
 - **Vite** - 开发服务器和构建工具
+- **CSS3** - 样式和布局
 
-## �� 演示功能
+## 📦 脚本命令
 
-### 1. 安装指南
+```bash
+# 开发相关
+npm run dev         # 启动开发服务器
+npm run start       # 同 dev 命令
 
-展示如何通过不同包管理器安装 ds-markdown。
+# 构建相关
+npm run build       # 构建项目
+npm run build:prod  # 生产环境构建 (设置正确的基础路径)
 
-### 2. 基础用法
+# 预览相关
+npm run preview     # 预览构建结果
+npm run serve       # 同 preview 命令
 
-演示基本的 Markdown 渲染和打字动画效果，包括：
+# 类型检查
+npm run type-check  # 运行 TypeScript 类型检查
+```
 
-- 标题和段落
-- 代码块高亮
-- 表格渲染
-- 引用块
+## 🚀 部署
 
-### 3. 数学公式
+### 自动部署到 GitHub Pages
 
-展示 KaTeX 数学公式渲染功能：
+项目已配置自动部署，当推送代码到 `main` 或 `master` 分支时，会自动构建并部署到 GitHub Pages。
 
-- 行内公式
-- 块级公式
-- 复杂数学表达式
+**访问地址**: `https://onshinpei.github.io/ds-markdown/`
 
-### 4. 打字动画
+#### 设置步骤：
 
-演示打字效果的控制功能：
+1. 在 GitHub 仓库中启用 Pages 功能
+2. 在 Settings > Pages 中选择 "GitHub Actions" 作为部署源
+3. 推送代码后会自动触发部署
 
-- 开启/关闭打字效果
-- 暂停/继续功能
-- 速度控制
+#### 配置文件：
 
-### 5. 主题切换
+- `.github/workflows/deploy-website.yml` - GitHub Actions 工作流
+- `website/vite.config.js` - 配置了 `base: '/ds-markdown/'`
 
-展示亮色/暗色主题切换效果。
+### 手动部署
+
+#### 构建生产版本
+
+```bash
+# 进入 website 目录
+cd website
+
+# 安装依赖
+npm install
+
+# 构建生产版本
+npm run build:prod
+
+# dist 目录包含所有构建文件
+```
+
+#### 其他平台部署
+
+**Netlify:**
+
+1. 连接 GitHub 仓库
+2. 设置构建命令: `cd website && npm install && npm run build:prod`
+3. 设置发布目录: `website/dist`
+
+**Vercel:**
+
+```json
+{
+  "buildCommand": "cd website && npm install && npm run build:prod",
+  "outputDirectory": "website/dist"
+}
+```
 
 ## 📱 响应式设计
 
@@ -140,46 +164,6 @@ website/
 - 🖥️ 桌面端 (1200px+)
 - 📱 平板端 (768px-1199px)
 - 📱 手机端 (<768px)
-
-## 🚀 部署
-
-### 构建生产版本
-
-```bash
-# 构建优化后的静态文件
-npm run build
-
-# 预览构建结果
-npm run preview
-```
-
-### GitHub Pages
-
-```bash
-# 复制构建后的文件到 gh-pages 分支
-npm run build
-git checkout gh-pages
-cp -r dist/* .
-git add .
-git commit -m "Update documentation"
-git push origin gh-pages
-```
-
-### Netlify
-
-1. 连接 GitHub 仓库
-2. 设置构建命令: `npm run build`
-3. 设置发布目录: `dist`
-
-### Vercel
-
-```bash
-# 在项目根目录创建 vercel.json
-{
-  "buildCommand": "cd website && npm install && npm run build",
-  "outputDirectory": "website/dist"
-}
-```
 
 ## 🛠️ 开发指南
 
@@ -197,26 +181,48 @@ npm install
 npm run dev
 ```
 
-### 开发脚本
+### 配置说明
 
-- `npm run dev` - 启动开发服务器 (热重载)
-- `npm run build` - 构建生产版本
-- `npm run preview` - 预览构建结果
-- `./start.sh` - 一键启动脚本 (包含依赖检查)
+#### Vite 配置 (`vite.config.js`)
 
-### Vite 配置
+```javascript
+export default defineConfig({
+  // GitHub Pages 部署需要的基础路径
+  base: '/ds-markdown/',
 
-网站使用 Vite 作为开发服务器，配置文件为 `vite.config.js`：
+  // 其他配置...
+});
+```
 
-- 开发服务器端口: 8080
-- 自动打开浏览器
-- 热重载支持
-- 源码映射生成
-- 优化的依赖预构建
+#### TypeScript 配置 (`tsconfig.json`)
 
-## 📝 许可证
+项目使用 TypeScript 进行类型检查，确保代码质量。
 
-MIT License - 查看 [LICENSE](../license) 文件了解详情。
+## 🔧 故障排除
+
+### 构建问题
+
+```bash
+# 清理缓存
+rm -rf node_modules package-lock.json
+npm install
+
+# 类型检查
+npm run type-check
+
+# 重新构建
+npm run build:prod
+```
+
+### 部署问题
+
+1. 确认 GitHub Pages 已启用
+2. 检查工作流运行状态
+3. 验证构建输出是否正确
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](../license) 文件。
 
 ## 🤝 贡献
 

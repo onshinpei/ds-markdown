@@ -22,7 +22,7 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownContent = markdown.replace('{{THEME}}', theme === 'light' ? '亮色' : '暗色');
 
   return (
-    <div>
+    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
         <button
           className="btn"

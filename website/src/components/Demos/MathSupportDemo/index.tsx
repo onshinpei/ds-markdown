@@ -16,7 +16,7 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [mathOpen, setMathOpen] = useState(true);
 
   return (
-    <div>
+    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
         <button
           className="btn"

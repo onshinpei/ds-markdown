@@ -164,7 +164,7 @@ body {
   margin-bottom: 80px;
 }
 
-.section h2 {
+.section-title {
   font-size: 2rem;
   margin-bottom: 30px;
   color: #2c3e50;
@@ -173,7 +173,7 @@ body {
   display: inline-block;
 }
 
-.section h3 {
+.demo-title {
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: #34495e;
@@ -214,10 +214,6 @@ body {
   flex-direction: column;
 }
 
-.source-code {
-  background: #2d3748;
-}
-
 .demo-effect {
   background: white;
   border-radius: 8px;
@@ -228,8 +224,8 @@ body {
   height: 100%;
 }
 
-.source-code h3,
-.demo-effect h3 {
+.source-code-header,
+.demo-effect-header {
   background: #667eea;
   color: white;
   padding: 12px 20px;
@@ -309,17 +305,11 @@ body {
 
 .code-block {
   margin: 0;
-  background: #2d3748 !important;
   padding: 20px;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.5;
   overflow-x: auto;
   flex: 1;
-}
-
-.code-block code {
-  color: #e2e8f0;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
 
 /* 安装部分特殊样式 - 没有source-header时的圆角 */
@@ -329,10 +319,17 @@ body {
 }
 
 .demo-box {
-  padding: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.demo-impl {
+  height: 100%;
+  padding: 20px;
+}
+.demo-impl.demo-impl-dark {
+  background: rgb(42, 42, 45);
 }
 
 .controls {
@@ -494,8 +491,8 @@ body {
     height: 41px;
   }
 
-  .source-code h3,
-  .demo-effect h3 {
+  .source-code-header,
+  .demo-effect-header {
     height: 41px;
     padding: 10px 8px;
     font-size: 12px;
@@ -549,4 +546,23 @@ html {
   transform: translateY(-2px);
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+}
+
+.syntax-highlighter-block {
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+.syntax-highlighter-block pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+.syntax-highlighter-block code {
+  background: none !important;
+  color: #e2e8f0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
