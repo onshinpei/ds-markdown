@@ -26,7 +26,7 @@ export default defineConfig(({ command, mode }) => {
 
     // 构建配置
     build: {
-      outDir: 'dist',
+      outDir: '../docs',
       assetsDir: 'assets',
       // 构建前清空输出目录
       emptyOutDir: true,
