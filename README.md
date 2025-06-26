@@ -192,18 +192,19 @@ React 19 带来了许多激动人心的新特性：
 import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 ```
 
-| 属性            | 类型                                          | 说明                    | 默认值                                                      |
-| --------------- | --------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
-| `interval`      | `number`                                      | 打字间隔 (毫秒)         | `30`                                                        |
-| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'`   | 定时器类型              | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
-| `answerType`    | `'thinking'` \| `'answer'`                    | 内容类型 (影响样式主题) | `'answer'`                                                  |
-| `theme`         | `'light'` \| `'dark'`                         | 主题类型                | `'light'`                                                   |
-| `plugins`       | `IMarkdownPlugin[]`                           | 插件配置                | `[]`                                                        |
-| `math`          | [IMarkdownMath](#IMarkdownMath)               | 数学公式配置            | `{ splitSymbol: 'dollar' }`                                 |
-| `onEnd`         | `(data: EndData) => void`                     | 打字结束回调            | -                                                           |
-| `onStart`       | `(data: StartData) => void`                   | 打字开始回调            | -                                                           |
-| `onTypedChar`   | `(data: `[ITypedChar](#ITypedChar)`) => void` | 每字符打字回调          | -                                                           |
-| `disableTyping` | `boolean`                                     | 禁用打字动画效果        | `false`                                                     |
+| 属性              | 类型                                          | 说明                                          | 默认值                                                      |
+| ----------------- | --------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------- |
+| `interval`        | `number`                                      | 打字间隔 (毫秒)                               | `30`                                                        |
+| `timerType`       | `'setTimeout'` \| `'requestAnimationFrame'`   | 定时器类型                                    | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
+| `answerType`      | `'thinking'` \| `'answer'`                    | 内容类型 (影响样式主题)                       | `'answer'`                                                  |
+| `theme`           | `'light'` \| `'dark'`                         | 主题类型                                      | `'light'`                                                   |
+| `plugins`         | `IMarkdownPlugin[]`                           | 插件配置                                      | `[]`                                                        |
+| `math`            | [IMarkdownMath](#IMarkdownMath)               | 数学公式配置                                  | `{ splitSymbol: 'dollar' }`                                 |
+| `onEnd`           | `(data: EndData) => void`                     | 打字结束回调                                  | -                                                           |
+| `onStart`         | `(data: StartData) => void`                   | 打字开始回调                                  | -                                                           |
+| `onTypedChar`     | `(data: `[ITypedChar](#ITypedChar)`) => void` | 每字符打字回调                                | -                                                           |
+| `disableTyping`   | `boolean`                                     | 禁用打字动画效果                              | `false`                                                     |
+| `autoStartTyping` | `boolean`                                     | 是否自动开始打字动画，设为 false 时需手动触发 | `true`                                                      |
 
 > 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`，则在下一个打字触发时，会把剩下的所有字一次性显示
 

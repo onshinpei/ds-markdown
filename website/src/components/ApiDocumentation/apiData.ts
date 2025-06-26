@@ -86,6 +86,12 @@ export const propsData: ApiProperty[] = [
     description: '每个字符打字时的回调函数',
     defaultValue: 'undefined',
   },
+  {
+    prop: 'autoStartTyping',
+    type: 'boolean',
+    description: '是否自动开始打字动画，设为 false 时需手动触发',
+    defaultValue: 'true',
+  },
 ];
 
 // DsMarkdown Ref 方法
