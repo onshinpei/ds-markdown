@@ -11,13 +11,21 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownRef = useRef<MarkdownRef>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const [mathOpen, setMathOpen] = useState(true);
 
   // 事件处理函数
   const handleStart = () => {
-    markdownRef.current?.start();
+    if (isStarted) {
+      // 如果已经开始过，则重新开始
+      markdownRef.current?.start();
+    } else {
+      // 第一次开始
+      markdownRef.current?.start();
+      setIsStarted(true);
+    }
     setIsTyping(true);
     setIsStopped(false);
   };
@@ -38,11 +46,11 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   const handleToggleMath = () => {
-    setMathOpen((v) => !v);
+    setMathOpen(!mathOpen);
   };
 
   const handleToggleTyping = () => {
-    setDisableTyping((v) => !v);
+    setDisableTyping(!disableTyping);
   };
 
   const handleTypingStart = () => {
@@ -59,8 +67,8 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   return (
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <button className="btn btn-success" onClick={handleStart} disabled={isTyping || isStopped}>
-          ▶️ 开始
+        <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
+          {isStarted ? '🔄 重新开始' : '▶️ 开始'}
         </button>
         <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
           ⏹️ 停止

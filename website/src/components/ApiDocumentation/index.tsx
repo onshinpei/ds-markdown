@@ -5,6 +5,7 @@ import {
   dsMarkdownMethods,
   markdownCMDMethods,
   iTypedCharData,
+  iBeforeTypedCharData,
   iMarkdownMathData,
   iMarkdownPluginData,
   timerComparisonData,
@@ -28,6 +29,7 @@ const ApiDocumentation: React.FC = () => (
     {/* 类型定义 */}
     <h3>类型定义</h3>
     <ApiTable data={iTypedCharData} title="ITypedChar" />
+    <ApiTable data={iBeforeTypedCharData} title="IBeforeTypedChar" />
     <ApiTable data={iMarkdownMathData} title="IMarkdownMath" />
     <ApiTable data={iMarkdownPluginData} title="IMarkdownPlugin" />
 
@@ -46,6 +48,9 @@ const ApiDocumentation: React.FC = () => (
     {/* 使用示例 */}
     <h3>使用示例</h3>
     <CodeExample code={codeExamples.streamingChat} title="流式对话示例" />
+    <CodeExample code={codeExamples.callbackExample} title="回调函数示例" />
+    <CodeExample code={codeExamples.startExample} title="手动开始动画示例" />
+    <CodeExample code={codeExamples.restartExample} title="重新开始动画示例" />
   </section>
 );
 

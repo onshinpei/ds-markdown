@@ -18,6 +18,57 @@
 
 ---
 
+## 📋 목차
+
+- [✨ 핵심 기능](#-핵심-기능)
+- [📦 빠른 설치](#-빠른-설치)
+- [🚀 5분 빠른 시작](#-5분-빠른-시작)
+  - [기본 사용법](#기본-사용법)
+  - [타이핑 애니메이션 비활성화](#타이핑-애니메이션-비활성화)
+  - [수학 공식 지원](#수학-공식-지원)
+  - [AI 대화 시나리오](#ai-대화-시나리오)
+  - [🎯 고급 콜백 제어](#-고급-콜백-제어)
+  - [🔄 애니메이션 재시작 데모](#-애니메이션-재시작-데모)
+  - [▶️ 수동 시작 애니메이션 데모](#️-수동-시작-애니메이션-데모)
+- [📚 완전 API 문서](#-완전-api-문서)
+- [🧮 수학 공식 사용 가이드](#-수학-공식-사용-가이드)
+- [🔌 플러그인 시스템](#-플러그인-시스템)
+- [🎛️ 타이머 모드 상세](#️-타이머-모드-상세)
+- [💡 실전 예제](#-실전-예제)
+- [🔧 모범 사례](#-모범-사례)
+
+---
+
+## ❓ 왜 ds-markdown을 써야 하나요?
+
+- **AI 채팅 경험 완벽 재현**  
+  DeepSeek 등 주요 AI 채팅 UI의 타이핑 애니메이션과 스트리밍 응답을 1:1로 재현, "AI가 생각/답변 중"인 진짜 같은 경험을 제공합니다.
+
+- **백엔드 스트리밍 데이터 완벽 대응**  
+  많은 AI/LLM 백엔드(OpenAI, DeepSeek 등)는 한 번에 여러 글자가 포함된 chunk를 보냅니다.  
+  **ds-markdown은 각 chunk를 자동으로 한 글자씩 분리해, 백엔드가 여러 글자를 한 번에 보내도 항상 부드럽게 한 글자씩 타이핑 애니메이션을 보여줍니다.**
+
+- **완벽한 Markdown & 수식 지원**  
+  KaTeX 내장, 모든 주요 Markdown 구문과 수식 지원—기술 Q&A, 교육, 지식베이스에 최적.
+
+- **최고의 개발 경험**  
+  풍부한 명령형 API, 스트리밍 데이터, 비동기 콜백, 플러그인 확장 등으로 유연한 제어 가능.
+
+- **가볍고 고성능**  
+  작은 용량, 빠른 속도, 모바일/데스크탑 모두 지원. 핵심 의존성은 [react-markdown](https://github.com/remarkjs/react-markdown) (업계 표준의 성숙한 Markdown 렌더러) 하나뿐이며, 그 외 무거운 의존성은 없습니다. 바로 사용 가능합니다.
+
+- **다중 테마 및 플러그인 아키텍처**  
+  라이트/다크 테마 전환, remark/rehype 플러그인 호환, 고급 확장성.
+
+- **다양한 활용 사례**
+  - AI 챗봇/어시스턴트
+  - 실시간 Q&A/지식베이스
+  - 교육/수학/프로그래밍 콘텐츠
+  - 제품 데모, 인터랙티브 문서
+  - "타자기" 애니메이션과 스트리밍 Markdown이 필요한 모든 상황
+
+---
+
 ## ✨ 핵심 기능
 
 ### 🤖 **AI 대화 시나리오**
@@ -194,28 +245,43 @@ React 19는 많은 흥미로운 새 기능을 제공합니다:
 import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 ```
 
-| 속성            | 타입                                          | 설명                       | 기본값                                                                 |
-| --------------- | --------------------------------------------- | -------------------------- | ---------------------------------------------------------------------- |
-| `interval`      | `number`                                      | 타이핑 간격 (밀리초)       | `30`                                                                   |
-| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'`   | 타이머 타입                | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`로 변경 예정 |
-| `answerType`    | `'thinking'` \| `'answer'`                    | 콘텐츠 타입 (스타일 영향)  | `'answer'`                                                             |
-| `theme`         | `'light'` \| `'dark'`                         | 테마 타입                  | `'light'`                                                              |
-| `plugins`       | `IMarkdownPlugin[]`                           | 플러그인 설정              | `[]`                                                                   |
-| `math`          | [IMarkdownMath](#IMarkdownMath)               | 수학 공식 설정             | `{ splitSymbol: 'dollar' }`                                            |
-| `onEnd`         | `(data: EndData) => void`                     | 타이핑 완료 콜백           | -                                                                      |
-| `onStart`       | `(data: StartData) => void`                   | 타이핑 시작 콜백           | -                                                                      |
-| `onTypedChar`   | `(data: `[ITypedChar](#ITypedChar)`) => void` | 문자별 타이핑 콜백         | -                                                                      |
-| `disableTyping` | `boolean`                                     | 타이핑 애니메이션 비활성화 | `false`                                                                |
+| 속성                | 타입                                        | 설명                                                       | 기본값                                                                 |
+| ------------------- | ------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `interval`          | `number`                                    | 타이핑 간격 (밀리초)                                       | `30`                                                                   |
+| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | 타이머 타입                                                | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`로 변경 예정 |
+| `answerType`        | `'thinking'` \| `'answer'`                  | 콘텐츠 타입 (스타일 영향)                                  | `'answer'`                                                             |
+| `theme`             | `'light'` \| `'dark'`                       | 테마 타입                                                  | `'light'`                                                              |
+| `plugins`           | `IMarkdownPlugin[]`                         | 플러그인 설정                                              | `[]`                                                                   |
+| `math`              | [IMarkdownMath](#IMarkdownMath)             | 수학 공식 설정                                             | `{ splitSymbol: 'dollar' }`                                            |
+| `onEnd`             | `(data: EndData) => void`                   | 타이핑 완료 콜백                                           | -                                                                      |
+| `onStart`           | `(data: StartData) => void`                 | 타이핑 시작 콜백                                           | -                                                                      |
+| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | 문자 타이핑 전 콜백, 비동기 작업 지원, 후속 타이핑 차단    | -                                                                      |
+| `onTypedChar`       | `(data: ITypedChar) => void`                | 문자 타이핑 후 콜백                                        | -                                                                      |
+| `disableTyping`     | `boolean`                                   | 타이핑 애니메이션 비활성화                                 | `false`                                                                |
+| `autoStartTyping`   | `boolean`                                   | 타이핑 애니메이션 자동 시작 여부, false인 경우 수동 트리거 | `true`                                                                 |
 
 > 참고: 타이핑 중에 `disableTyping`이 `true`에서 `false`로 변경되면 다음 타이핑 트리거 시 남은 모든 문자가 한 번에 표시됩니다.
 
+### IBeforeTypedChar
+
+| 속성           | 타입         | 설명                           | 기본값 |
+| -------------- | ------------ | ------------------------------ | ------ |
+| `currentIndex` | `number`     | 전체 문자열에서 현재 인덱스    | `0`    |
+| `currentChar`  | `string`     | 타이핑 예정 문자               | -      |
+| `answerType`   | `AnswerType` | 콘텐츠 타입 (thinking/answer)  | -      |
+| `prevStr`      | `string`     | 현재 타입 콘텐츠의 이전 문자열 | -      |
+| `percent`      | `number`     | 타이핑 진행률 백분율 (0-100)   | `0`    |
+
 ### ITypedChar
 
-| 속성           | 타입     | 설명                        | 기본값 |
-| -------------- | -------- | --------------------------- | ------ |
-| `percent`      | `number` | 타이핑 진행률 백분율        | `0`    |
-| `currentChar`  | `string` | 현재 타이핑 중인 문자       | -      |
-| `currentIndex` | `number` | 전체 문자열에서 현재 인덱스 | `0`    |
+| 속성           | 타입         | 설명                             | 기본값 |
+| -------------- | ------------ | -------------------------------- | ------ |
+| `currentIndex` | `number`     | 전체 문자열에서 현재 인덱스      | `0`    |
+| `currentChar`  | `string`     | 타이핑된 문자                    | -      |
+| `answerType`   | `AnswerType` | 콘텐츠 타입 (thinking/answer)    | -      |
+| `prevStr`      | `string`     | 현재 타입 콘텐츠의 이전 문자열   | -      |
+| `currentStr`   | `string`     | 현재 타입 콘텐츠의 완전한 문자열 | -      |
+| `percent`      | `number`     | 타이핑 진행률 백분율 (0-100)     | `0`    |
 
 #### IMarkdownMath
 
@@ -241,26 +307,32 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 
 #### 기본 내보내기 DsMarkdown
 
-| 메서드   | 매개변수 | 설명            |
-| -------- | -------- | --------------- |
-| `stop`   | -        | 타이핑 일시정지 |
-| `resume` | -        | 타이핑 재개     |
+| 메서드    | 매개변수 | 설명                                                  |
+| --------- | -------- | ----------------------------------------------------- |
+| `start`   | -        | 타이핑 애니메이션 시작                                |
+| `stop`    | -        | 타이핑 일시정지                                       |
+| `resume`  | -        | 타이핑 재개                                           |
+| `restart` | -        | 타이핑 애니메이션 재시작, 현재 콘텐츠를 처음부터 재생 |
 
 #### MarkdownCMD 노출 메서드
 
-| 메서드            | 매개변수                                    | 설명                       |
-| ----------------- | ------------------------------------------- | -------------------------- |
-| `push`            | `(content: string, answerType: AnswerType)` | 콘텐츠 추가 및 타이핑 시작 |
-| `clear`           | -                                           | 모든 콘텐츠 및 상태 지우기 |
-| `triggerWholeEnd` | -                                           | 수동으로 완료 콜백 트리거  |
-| `stop`            | -                                           | 타이핑 일시정지            |
-| `resume`          | -                                           | 타이핑 재개                |
+| 메서드            | 매개변수                                    | 설명                                                  |
+| ----------------- | ------------------------------------------- | ----------------------------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | 콘텐츠 추가 및 타이핑 시작                            |
+| `clear`           | -                                           | 모든 콘텐츠 및 상태 지우기                            |
+| `triggerWholeEnd` | -                                           | 수동으로 완료 콜백 트리거                             |
+| `start`           | -                                           | 타이핑 애니메이션 시작                                |
+| `stop`            | -                                           | 타이핑 일시정지                                       |
+| `resume`          | -                                           | 타이핑 재개                                           |
+| `restart`         | -                                           | 타이핑 애니메이션 재시작, 현재 콘텐츠를 처음부터 재생 |
 
 **사용 예:**
 
 ```tsx
+markdownRef.current?.start(); // 애니메이션 시작
 markdownRef.current?.stop(); // 애니메이션 일시정지
 markdownRef.current?.resume(); // 애니메이션 재개
+markdownRef.current?.restart(); // 애니메이션 재시작
 ```
 
 ---
@@ -585,4 +657,149 @@ import { MarkdownCMDRef } from 'ds-markdown';
 
 const ref = useRef<MarkdownCMDRef>(null);
 // 완전한 TypeScript 타입 힌트
+```
+
+### 🔄 애니메이션 재시작 데모
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 애니메이션 재시작 데모\n\n' +
+        '이 예제는 `restart()` 메서드의 사용법을 보여줍니다:\n\n' +
+        '- 🔄 **재시작**: 현재 콘텐츠를 처음부터 재생\n' +
+        '- ⏸️ **일시정지/재개**: 언제든지 일시정지와 재개 가능\n' +
+        '- 🎯 **정밀 제어**: 애니메이션 재생 상태의 완전한 제어\n\n' +
+        '현재 상태: ' +
+        (isPlaying ? '재생 중' : '일시정지') +
+        '\n\n' +
+        '이는 매우 실용적인 기능입니다!',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 이미 시작된 경우 재시작
+      markdownRef.current?.restart();
+    } else {
+      // 첫 번째 시작
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 콘텐츠 시작</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 재시작' : '▶️ 시작'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ 일시정지
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ 재개
+        </button>
+        <button onClick={handleRestart}>🔄 재시작</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>애니메이션 상태:</strong> {isPlaying ? '🟢 재생 중' : '🔴 일시정지'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### ▶️ 수동 시작 애니메이션 데모
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 수동 시작 애니메이션 데모\n\n' +
+        '이 예제는 `start()` 메서드의 사용법을 보여줍니다:\n\n' +
+        '- 🎯 **수동 제어**: `autoStartTyping=false`일 때 수동으로 `start()`를 호출해야 합니다\n' +
+        '- ⏱️ **지연 시작**: 사용자 상호작용 후 애니메이션을 시작할 수 있습니다\n' +
+        '- 🎮 **게임화**: 사용자의 적극성이 필요한 시나리오에 적합합니다\n\n' +
+        '"애니메이션 시작" 버튼을 클릭하여 타이핑 효과를 수동으로 트리거하세요!',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 이미 시작된 경우 재시작
+      markdownRef.current?.restart();
+    } else {
+      // 첫 번째 시작
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 콘텐츠 로드</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 재시작' : '▶️ 애니메이션 시작'}
+        </button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>상태:</strong> {isPlaying ? '🟢 애니메이션 재생 중' : '🔴 시작 대기 중'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
 ```

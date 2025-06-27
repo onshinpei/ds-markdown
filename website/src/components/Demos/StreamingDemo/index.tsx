@@ -7,11 +7,11 @@ interface DemoProps {
 
 // 类型定义
 type StreamingType = 'ai-chat' | 'code-generation' | 'documentation';
-type ContentType = 'thinking' | 'answer';
+type AnswerType = 'thinking' | 'answer';
 
 interface StreamingItem {
   content: string;
-  type: ContentType;
+  type: AnswerType;
 }
 
 // 流式演示组件

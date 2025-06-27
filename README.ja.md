@@ -18,6 +18,57 @@
 
 ---
 
+## 📋 目次
+
+- [✨ コア機能](#-コア機能)
+- [📦 クイックインストール](#-クイックインストール)
+- [🚀 5分クイックスタート](#-5分クイックスタート)
+  - [基本的な使用法](#基本的な使用法)
+  - [タイピングアニメーションの無効化](#タイピングアニメーションの無効化)
+  - [数式サポート](#数式サポート)
+  - [AI 会話シナリオ](#ai-会話シナリオ)
+  - [🎯 高度なコールバック制御](#-高度なコールバック制御)
+  - [🔄 アニメーション再開デモ](#-アニメーション再開デモ)
+  - [▶️ 手動開始アニメーションデモ](#️-手動開始アニメーションデモ)
+- [📚 完全 API ドキュメント](#-完全-api-ドキュメント)
+- [🧮 数式使用ガイド](#-数式使用ガイド)
+- [🔌 プラグインシステム](#-プラグインシステム)
+- [🎛️ タイマーモード詳細](#️-タイマーモード詳細)
+- [💡 実戦例](#-実戦例)
+- [🔧 ベストプラクティス](#-ベストプラクティス)
+
+---
+
+## ❓ なぜ ds-markdown を使うのか？
+
+- **AI チャット体験を完全再現**  
+  DeepSeek などの主要な AI チャット UI のタイピングアニメーションとストリーミング応答を1:1で再現し、「AI が考え中/回答中」のリアルな体験を提供します。
+
+- **バックエンドのストリーミングデータに完全対応**  
+  多くの AI/LLM バックエンド（OpenAI、DeepSeek など）は、一度に複数文字を含む chunk を送信します。  
+  **ds-markdown は各 chunk を自動的に1文字ずつ分割し、どんなにまとめて送られても滑らかに1文字ずつアニメーション表示します。**
+
+- **Markdown & 数式完全対応**  
+  KaTeX 内蔵、主要な Markdown 構文と数式をすべてサポート。技術 Q&A、教育、ナレッジベースに最適。
+
+- **優れた開発体験**  
+  豊富な命令型 API、ストリーミングデータ・非同期コールバック・プラグイン拡張に対応し、柔軟な制御が可能。
+
+- **軽量・高性能**  
+  小さなバンドルサイズ、高速、モバイル・デスクトップ両対応。コア依存は [react-markdown](https://github.com/remarkjs/react-markdown)（業界標準の成熟した Markdown レンダラー）のみで、他に重い依存はありません。すぐに使えます。
+
+- **多テーマ・プラグインアーキテクチャ**  
+  ライト/ダークテーマ切替、remark/rehype プラグイン互換、拡張性抜群。
+
+- **幅広い用途**
+  - AI チャットボット/アシスタント
+  - リアルタイム Q&A/ナレッジベース
+  - 教育/数学/プログラミングコンテンツ
+  - プロダクトデモ、インタラクティブドキュメント
+  - 「タイプライター」アニメーションやストリーミング Markdown が必要なあらゆる場面
+
+---
+
 ## ✨ コア機能
 
 ### 🤖 **AI 会話シナリオ**
@@ -32,11 +83,6 @@
 - 数式レンダリング (KaTeX)、`$...$` と `\[...\]` 構文をサポート
 - ライト/ダークテーマサポート、様々なプロダクトスタイルに対応
 - remark/rehype プラグイン拡張をサポートするプラグインアーキテクチャ
-
-### �� **開発者エクスペリエンス**
-
-- タイピングの中断 `stop` と再開 `resume` をサポート
-- タイピングの無効化と有効化をサポート
 
 ### 🎬 **滑らかなアニメーション**
 
@@ -184,6 +230,195 @@ React 19 は多くのエキサイティングな新機能をもたらします�
 }
 ```
 
+### 🎯 高度なコールバック制御
+
+```tsx
+import { useRef } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function AdvancedCallbackDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const handleStart = () => {
+    markdownRef.current?.start();
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+  };
+
+  const handleEnd = (data: EndData) => {
+    console.log('セクション完了:', data);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={handleStart}>🚀 コンテンツ開始</button>
+        <button onClick={handleStop}>⏸️ 一時停止</button>
+        <button onClick={handleResume}>▶️ 再開</button>
+        <button onClick={handleRestart}>🔄 再開</button>
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={20} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### 🔄 アニメーション再開デモ
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# アニメーション再開デモ\n\n' +
+        'この例は `restart()` メソッドの使用方法を示しています：\n\n' +
+        '- 🔄 **再開**：現在のコンテンツを最初から再生\n' +
+        '- ⏸️ **一時停止/再開**：いつでも一時停止と再開が可能\n' +
+        '- 🎯 **精密制御**：アニメーション再生状態の完全制御\n\n' +
+        '現在の状態：' +
+        (isPlaying ? '再生中' : '一時停止') +
+        '\n\n' +
+        'これは非常に実用的な機能です！',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 既に開始されている場合は再開
+      markdownRef.current?.restart();
+    } else {
+      // 初回開始
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 コンテンツ開始</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 再開' : '▶️ 開始'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ 一時停止
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ 再開
+        </button>
+        <button onClick={handleRestart}>🔄 再開</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>アニメーション状態：</strong> {isPlaying ? '🟢 再生中' : '🔴 一時停止'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### ▶️ 手動開始アニメーションデモ
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 手動開始アニメーションデモ\n\n' +
+        'この例は `start()` メソッドの使用方法を示しています：\n\n' +
+        '- 🎯 **手動制御**：`autoStartTyping=false` の場合、手動で `start()` を呼び出す必要があります\n' +
+        '- ⏱️ **遅延開始**：ユーザーインタラクション後にアニメーションを開始できます\n' +
+        '- 🎮 **ゲーミフィケーション**：ユーザーの積極性を必要とするシナリオに適しています\n\n' +
+        '"アニメーション開始"ボタンをクリックしてタイピング効果を手動でトリガーしてください！',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 既に開始されている場合は再開
+      markdownRef.current?.restart();
+    } else {
+      // 初回開始
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 コンテンツ読み込み</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 再開' : '▶️ アニメーション開始'}
+        </button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>状態：</strong> {isPlaying ? '🟢 アニメーション再生中' : '🔴 開始待機中'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
 ---
 
 ## 📚 完全 API ドキュメント
@@ -194,28 +429,43 @@ React 19 は多くのエキサイティングな新機能をもたらします�
 import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 ```
 
-| プロパティ      | 型                                            | 説明                               | デフォルト                                                            |
-| --------------- | --------------------------------------------- | ---------------------------------- | --------------------------------------------------------------------- |
-| `interval`      | `number`                                      | タイピング間隔（ミリ秒）           | `30`                                                                  |
-| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'`   | タイマータイプ                     | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
-| `answerType`    | `'thinking'` \| `'answer'`                    | コンテンツタイプ（スタイルに影響） | `'answer'`                                                            |
-| `theme`         | `'light'` \| `'dark'`                         | テーマタイプ                       | `'light'`                                                             |
-| `plugins`       | `IMarkdownPlugin[]`                           | プラグイン設定                     | `[]`                                                                  |
-| `math`          | [IMarkdownMath](#IMarkdownMath)               | 数式設定                           | `{ splitSymbol: 'dollar' }`                                           |
-| `onEnd`         | `(data: EndData) => void`                     | タイピング完了コールバック         | -                                                                     |
-| `onStart`       | `(data: StartData) => void`                   | タイピング開始コールバック         | -                                                                     |
-| `onTypedChar`   | `(data: `[ITypedChar](#ITypedChar)`) => void` | 文字ごとのタイピングコールバック   | -                                                                     |
-| `disableTyping` | `boolean`                                     | タイピングアニメーション効果を無効 | `false`                                                               |
+| プロパティ          | 型                                          | 説明                                                                           | デフォルト                                                            |
+| ------------------- | ------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `interval`          | `number`                                    | タイピング間隔（ミリ秒）                                                       | `30`                                                                  |
+| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | タイマータイプ                                                                 | 現在のデフォルトは`setTimeout`、後で`requestAnimationFrame`に変更予定 |
+| `answerType`        | `'thinking'` \| `'answer'`                  | コンテンツタイプ（スタイルに影響）                                             | `'answer'`                                                            |
+| `theme`             | `'light'` \| `'dark'`                       | テーマタイプ                                                                   | `'light'`                                                             |
+| `plugins`           | `IMarkdownPlugin[]`                         | プラグイン設定                                                                 | `[]`                                                                  |
+| `math`              | [IMarkdownMath](#IMarkdownMath)             | 数式設定                                                                       | `{ splitSymbol: 'dollar' }`                                           |
+| `onEnd`             | `(data: EndData) => void`                   | タイピング完了コールバック                                                     | -                                                                     |
+| `onStart`           | `(data: StartData) => void`                 | タイピング開始コールバック                                                     | -                                                                     |
+| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | 文字タイピング前コールバック、非同期操作をサポート、後続のタイピングをブロック | -                                                                     |
+| `onTypedChar`       | `(data: ITypedChar) => void`                | 文字タイピング後コールバック                                                   | -                                                                     |
+| `disableTyping`     | `boolean`                                   | タイピングアニメーション効果を無効                                             | `false`                                                               |
+| `autoStartTyping`   | `boolean`                                   | タイピングアニメーションを自動開始するかどうか、falseの場合は手動トリガー      | `true`                                                                |
 
 > 注意： タイピング中に `disableTyping` が `true` から `false` に変わると、次のタイピングトリガー時に残りの全文字が一度に表示されます。
 
+### IBeforeTypedChar
+
+| プロパティ     | 型           | 説明                                  | デフォルト |
+| -------------- | ------------ | ------------------------------------- | ---------- |
+| `currentIndex` | `number`     | 文字列全体での現在のインデックス      | `0`        |
+| `currentChar`  | `string`     | タイピング予定の文字                  | -          |
+| `answerType`   | `AnswerType` | コンテンツタイプ（thinking/answer）   | -          |
+| `prevStr`      | `string`     | 現在のタイプコンテンツの前の文字列    | -          |
+| `percent`      | `number`     | タイピング進行パーセンテージ（0-100） | `0`        |
+
 ### ITypedChar
 
-| プロパティ     | 型       | 説明                             | デフォルト |
-| -------------- | -------- | -------------------------------- | ---------- |
-| `percent`      | `number` | タイピング進行パーセンテージ     | `0`        |
-| `currentChar`  | `string` | 現在タイピング中の文字           | -          |
-| `currentIndex` | `number` | 文字列全体での現在のインデックス | `0`        |
+| プロパティ     | 型           | 説明                                  | デフォルト |
+| -------------- | ------------ | ------------------------------------- | ---------- |
+| `currentIndex` | `number`     | 文字列全体での現在のインデックス      | `0`        |
+| `currentChar`  | `string`     | タイピング済みの文字                  | -          |
+| `answerType`   | `AnswerType` | コンテンツタイプ（thinking/answer）   | -          |
+| `prevStr`      | `string`     | 現在のタイプコンテンツの前の文字列    | -          |
+| `currentStr`   | `string`     | 現在のタイプコンテンツの完全な文字列  | -          |
+| `percent`      | `number`     | タイピング進行パーセンテージ（0-100） | `0`        |
 
 #### IMarkdownMath
 
@@ -241,26 +491,32 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 
 #### デフォルトエクスポート DsMarkdown
 
-| メソッド | パラメータ | 説明                 |
-| -------- | ---------- | -------------------- |
-| `stop`   | -          | タイピングを一時停止 |
-| `resume` | -          | タイピングを再開     |
+| メソッド  | パラメータ | 説明                                                           |
+| --------- | ---------- | -------------------------------------------------------------- |
+| `start`   | -          | タイピングアニメーションを開始                                 |
+| `stop`    | -          | タイピングを一時停止                                           |
+| `resume`  | -          | タイピングを再開                                               |
+| `restart` | -          | タイピングアニメーションを再開、現在のコンテンツを最初から再生 |
 
 #### MarkdownCMD 公開メソッド
 
-| メソッド          | パラメータ                                  | 説明                               |
-| ----------------- | ------------------------------------------- | ---------------------------------- |
-| `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピング開始 |
-| `clear`           | -                                           | 全コンテンツと状態をクリア         |
-| `triggerWholeEnd` | -                                           | 手動で完了コールバックを発火       |
-| `stop`            | -                                           | タイピングを一時停止               |
-| `resume`          | -                                           | タイピングを再開                   |
+| メソッド          | パラメータ                                  | 説明                                                           |
+| ----------------- | ------------------------------------------- | -------------------------------------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | コンテンツを追加してタイピング開始                             |
+| `clear`           | -                                           | 全コンテンツと状態をクリア                                     |
+| `triggerWholeEnd` | -                                           | 手動で完了コールバックを発火                                   |
+| `start`           | -                                           | タイピングアニメーションを開始                                 |
+| `stop`            | -                                           | タイピングを一時停止                                           |
+| `resume`          | -                                           | タイピングを再開                                               |
+| `restart`         | -                                           | タイピングアニメーションを再開、現在のコンテンツを最初から再生 |
 
 **使用例：**
 
 ```tsx
+markdownRef.current?.start(); // アニメーションを開始
 markdownRef.current?.stop(); // アニメーションを一時停止
 markdownRef.current?.resume(); // アニメーションを再開
+markdownRef.current?.restart(); // アニメーションを再開
 ```
 
 ---

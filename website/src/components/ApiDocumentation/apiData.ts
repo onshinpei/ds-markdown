@@ -81,9 +81,15 @@ export const propsData: ApiProperty[] = [
     defaultValue: 'undefined',
   },
   {
+    prop: 'onBeforeTypedChar',
+    type: '(data: IBeforeTypedChar) => Promise<void>',
+    description: '字符打字前的回调函数，支持异步操作，会阻塞之后的打字',
+    defaultValue: 'undefined',
+  },
+  {
     prop: 'onTypedChar',
     type: '(data: ITypedChar) => void',
-    description: '每个字符打字时的回调函数',
+    description: '每个字符打字后的回调函数',
     defaultValue: 'undefined',
   },
   {
@@ -97,12 +103,20 @@ export const propsData: ApiProperty[] = [
 // DsMarkdown Ref 方法
 export const dsMarkdownMethods: RefMethod[] = [
   {
+    method: 'start()',
+    description: '开始打字动画，手动触发动画开始',
+  },
+  {
     method: 'stop()',
     description: '暂停打字动画，可在打字过程中调用',
   },
   {
     method: 'resume()',
     description: '恢复打字动画，与stop()配合使用',
+  },
+  {
+    method: 'restart()',
+    description: '重新开始打字动画，从头开始播放当前内容',
   },
 ];
 
@@ -121,6 +135,10 @@ export const markdownCMDMethods: RefMethod[] = [
     description: '手动触发完成回调',
   },
   {
+    method: 'start()',
+    description: '开始打字动画，手动触发动画开始',
+  },
+  {
     method: 'stop()',
     description: '暂停打字动画',
   },
@@ -128,26 +146,82 @@ export const markdownCMDMethods: RefMethod[] = [
     method: 'resume()',
     description: '恢复打字动画',
   },
+  {
+    method: 'restart()',
+    description: '重新开始打字动画，从头开始播放当前内容',
+  },
 ];
 
 // ITypedChar 类型定义
 export const iTypedCharData: ApiProperty[] = [
+  {
+    prop: 'currentIndex',
+    type: 'number',
+    description: '当前字符在整个字符串中的索引',
+    defaultValue: '0',
+  },
+  {
+    prop: 'currentChar',
+    type: 'string',
+    description: '当前已打字的字符',
+    defaultValue: '-',
+  },
+  {
+    prop: 'answerType',
+    type: 'AnswerType',
+    description: '内容类型 (thinking/answer)',
+    defaultValue: '-',
+  },
+  {
+    prop: 'prevStr',
+    type: 'string',
+    description: '当前类型内容的前缀字符串',
+    defaultValue: '-',
+  },
+  {
+    prop: 'currentStr',
+    type: 'string',
+    description: '当前类型内容的完整字符串',
+    defaultValue: '-',
+  },
   {
     prop: 'percent',
     type: 'number',
     description: '打字进度百分比 (0-100)',
     defaultValue: '0',
   },
-  {
-    prop: 'currentChar',
-    type: 'string',
-    description: '当前打字的字符',
-    defaultValue: '-',
-  },
+];
+
+// IBeforeTypedChar 类型定义
+export const iBeforeTypedCharData: ApiProperty[] = [
   {
     prop: 'currentIndex',
     type: 'number',
     description: '当前字符在整个字符串中的索引',
+    defaultValue: '0',
+  },
+  {
+    prop: 'currentChar',
+    type: 'string',
+    description: '当前即将打字的字符',
+    defaultValue: '-',
+  },
+  {
+    prop: 'answerType',
+    type: 'AnswerType',
+    description: '内容类型 (thinking/answer)',
+    defaultValue: '-',
+  },
+  {
+    prop: 'prevStr',
+    type: 'string',
+    description: '当前类型内容的前缀字符串',
+    defaultValue: '-',
+  },
+  {
+    prop: 'percent',
+    type: 'number',
+    description: '打字进度百分比 (0-100)',
     defaultValue: '0',
   },
 ];
@@ -313,6 +387,156 @@ function StreamingChat() {
         ref={markdownRef}
         interval={15}
         timerType="requestAnimationFrame"
+      />
+    </div>
+  );
+}`,
+
+  callbackExample: `import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function CallbackDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [progress, setProgress] = useState(0);
+
+  const handleBeforeTypedChar = async (data) => {
+    // 在字符打字前进行异步操作
+    console.log('即将打字:', data.currentChar);
+    
+    // 可以在这里进行网络请求、数据验证等
+    if (data.currentChar === '!') {
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+  };
+
+  const handleTypedChar = (data) => {
+    // 更新进度
+    setProgress(Math.round(data.percent));
+    
+    // 添加特效
+    if (data.currentChar === '.') {
+      console.log('播放句号音效');
+    }
+  };
+
+  return (
+    <div>
+      <div>进度: {progress}%</div>
+      <MarkdownCMD 
+        ref={markdownRef}
+        interval={30}
+        onBeforeTypedChar={handleBeforeTypedChar}
+        onTypedChar={handleTypedChar}
+      />
+    </div>
+  );
+}`,
+
+  restartExample: `import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 重新开始动画演示\\n\\n' +
+      '这个示例展示了如何使用 restart() 方法：\\n\\n' +
+      '- 🔄 重新开始：从头开始播放当前内容\\n' +
+      '- ⏸️ 暂停恢复：可以随时暂停和恢复\\n' +
+      '- 🎯 精确控制：完全控制动画播放状态\\n\\n' +
+      '当前状态：' + (isPlaying ? '播放中' : '已暂停') + '\\n\\n' +
+      '这是一个非常实用的功能！',
+      'answer'
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    markdownRef.current?.start();
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px' }}>
+        <button onClick={startContent}>🚀 开始内容</button>
+        <button onClick={handleStart} disabled={isPlaying}>▶️ 开始</button>
+        <button onClick={handleStop} disabled={!isPlaying}>⏸️ 暂停</button>
+        <button onClick={handleResume} disabled={isPlaying}>▶️ 恢复</button>
+        <button onClick={handleRestart}>🔄 重新开始</button>
+      </div>
+      
+      <div>状态: {isPlaying ? '🟢 播放中' : '🔴 已暂停'}</div>
+      
+      <MarkdownCMD 
+        ref={markdownRef} 
+        interval={25} 
+        onEnd={() => setIsPlaying(false)}
+      />
+    </div>
+  );
+}`,
+
+  startExample: `import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 手动开始动画演示\\n\\n' +
+      '这个示例展示了如何使用 start() 方法：\\n\\n' +
+      '- 🎯 手动控制：当 autoStartTyping=false 时，需要手动调用 start()\\n' +
+      '- ⏱️ 延迟开始：可以在用户交互后开始动画\\n' +
+      '- 🎮 游戏化：适合需要用户主动触发的场景\\n\\n' +
+      '点击"开始动画"按钮来手动启动打字效果！',
+      'answer'
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    markdownRef.current?.start();
+    setIsPlaying(true);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px' }}>
+        <button onClick={loadContent}>📝 加载内容</button>
+        <button onClick={handleStart} disabled={isPlaying}>▶️ 开始动画</button>
+      </div>
+      
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>状态：</strong> {isPlaying ? '🟢 动画播放中' : '🔴 等待开始'}
+      </div>
+      
+      <MarkdownCMD 
+        ref={markdownRef} 
+        interval={30} 
+        autoStartTyping={false}
+        onEnd={() => setIsPlaying(false)}
       />
     </div>
   );

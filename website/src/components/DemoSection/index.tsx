@@ -6,8 +6,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import type { DemoSectionProps } from '../../defined';
 
 // Demo组件
-const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children }) => {
-  const [activeTab, setActiveTab] = useState<'code' | 'markdown'>('markdown');
+const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children, onlyShowCode = false }) => {
+  const [activeTab, setActiveTab] = useState<'code' | 'markdown'>(onlyShowCode ? 'code' : 'markdown');
 
   return (
     <section id={id} className="section">

@@ -23,7 +23,7 @@
   "author": "ds-markdown team",
   "license": "MIT",
   "dependencies": {
-    "ds-markdown": "^0.1.2-beta.2",
+    "ds-markdown": "^0.1.2-beta.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-syntax-highlighter": "^15.6.1"

@@ -49,8 +49,10 @@ const App: React.FC = () => {
             sourceCode={{
               code: installationSource,
               markdownString: installationSource,
+              lang: 'bash',
             }}
             showHeader={false}
+            onlyShowCode={true}
           />
 
           <DemoSection

@@ -11,6 +11,7 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownRef = useRef<MarkdownRef>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   const [mathOpen, setMathOpen] = useState(true);
   const [disableTyping, setDisableTyping] = useState(false);
 
@@ -20,15 +21,22 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   const handleToggleMath = () => {
-    setMathOpen((v) => !v);
+    setMathOpen(!mathOpen);
   };
 
   const handleToggleTyping = () => {
-    setDisableTyping((v) => !v);
+    setDisableTyping(!disableTyping);
   };
 
   const handleStart = () => {
-    markdownRef.current?.start();
+    if (isStarted) {
+      // 如果已经开始过，则重新开始
+      markdownRef.current?.start();
+    } else {
+      // 第一次开始
+      markdownRef.current?.start();
+      setIsStarted(true);
+    }
     setIsTyping(true);
     setIsStopped(false);
   };
@@ -90,8 +98,8 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
         <button className="btn btn-outline" onClick={handleToggleTyping}>
           {disableTyping ? '开启打字效果' : '关闭打字效果'}
         </button>
-        <button className="btn btn-success" onClick={handleStart} disabled={isTyping || isStopped}>
-          ▶️ 开始
+        <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
+          {isStarted ? '🔄 重新开始' : '▶️ 开始'}
         </button>
         <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
           ⏹️ 停止
