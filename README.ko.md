@@ -18,6 +18,57 @@
 
 ---
 
+## 📋 목차
+
+- [✨ 핵심 기능](#-핵심-기능)
+- [📦 빠른 설치](#-빠른-설치)
+- [🚀 5분 빠른 시작](#-5분-빠른-시작)
+  - [기본 사용법](#기본-사용법)
+  - [타이핑 애니메이션 비활성화](#타이핑-애니메이션-비활성화)
+  - [수학 공식 지원](#수학-공식-지원)
+  - [AI 대화 시나리오](#ai-대화-시나리오)
+  - [🎯 고급 콜백 제어](#-고급-콜백-제어)
+  - [🔄 애니메이션 재시작 데모](#-애니메이션-재시작-데모)
+  - [▶️ 수동 시작 애니메이션 데모](#️-수동-시작-애니메이션-데모)
+- [📚 완전 API 문서](#-완전-api-문서)
+- [🧮 수학 공식 사용 가이드](#-수학-공식-사용-가이드)
+- [🔌 플러그인 시스템](#-플러그인-시스템)
+- [🎛️ 타이머 모드 상세](#️-타이머-모드-상세)
+- [💡 실전 예제](#-실전-예제)
+- [🔧 모범 사례](#-모범-사례)
+
+---
+
+## ❓ 왜 ds-markdown을 써야 하나요?
+
+- **AI 채팅 경험 완벽 재현**  
+  DeepSeek 등 주요 AI 채팅 UI의 타이핑 애니메이션과 스트리밍 응답을 1:1로 재현, "AI가 생각/답변 중"인 진짜 같은 경험을 제공합니다.
+
+- **백엔드 스트리밍 데이터 완벽 대응**  
+  많은 AI/LLM 백엔드(OpenAI, DeepSeek 등)는 한 번에 여러 글자가 포함된 chunk를 보냅니다.  
+  **ds-markdown은 각 chunk를 자동으로 한 글자씩 분리해, 백엔드가 여러 글자를 한 번에 보내도 항상 부드럽게 한 글자씩 타이핑 애니메이션을 보여줍니다.**
+
+- **완벽한 Markdown & 수식 지원**  
+  KaTeX 내장, 모든 주요 Markdown 구문과 수식 지원—기술 Q&A, 교육, 지식베이스에 최적.
+
+- **최고의 개발 경험**  
+  풍부한 명령형 API, 스트리밍 데이터, 비동기 콜백, 플러그인 확장 등으로 유연한 제어 가능.
+
+- **가볍고 고성능**  
+  작은 용량, 빠른 속도, 모바일/데스크탑 모두 지원. 핵심 의존성은 [react-markdown](https://github.com/remarkjs/react-markdown) (업계 표준의 성숙한 Markdown 렌더러) 하나뿐이며, 그 외 무거운 의존성은 없습니다. 바로 사용 가능합니다.
+
+- **다중 테마 및 플러그인 아키텍처**  
+  라이트/다크 테마 전환, remark/rehype 플러그인 호환, 고급 확장성.
+
+- **다양한 활용 사례**
+  - AI 챗봇/어시스턴트
+  - 실시간 Q&A/지식베이스
+  - 교육/수학/프로그래밍 콘텐츠
+  - 제품 데모, 인터랙티브 문서
+  - "타자기" 애니메이션과 스트리밍 Markdown이 필요한 모든 상황
+
+---
+
 ## ✨ 핵심 기능
 
 ### 🤖 **AI 대화 시나리오**
@@ -35,25 +86,15 @@
 
 ### 🔧 **개발자 경험**
 
-- **선언적 API**: 간단한 시나리오에 적합, React 스타일
-- **명령형 API**: 스트리밍 데이터에 적합, 더 나은 성능
-- **네이티브 TypeScript 지원**: 완전한 타입 힌트
 - 타이핑 중단 `stop` 및 재개 `resume` 지원
+- 타이핑 비활성화 및 활성화 지원
 
 ### 🎬 **부드러운 애니메이션**
 
 - 듀얼 타이머 모드 최적화, `requestAnimationFrame` 및 `setTimeout` 모드 지원
 - 고주파 타이핑 지원(`requestAnimationFrame` 모드에서 `0ms`에 가까운 타이핑 간격 지원)
-- 프레임 동기화 렌더링으로 브라우저 60fps와 완벽 매칭
+- 프레임 동기화 렌더링으로 브라우저 새로고침 속도와 완벽 매칭
 - 스마트 문자 배치 처리로 더 자연스러운 시각적 효과
-
-### 🧮 **수식 지원**
-
-- **KaTeX 통합**: 고성능 수식 렌더링
-- **플러그인 아키텍처**: 플러그인 시스템을 통한 유연한 설정
-- **이중 구문 지원**: `$...$` 및 `\[...\]` 구분자
-- **스트리밍 호환**: 타이핑 애니메이션에서 수식의 완벽한 지원
-- **테마 적응**: 라이트/다크 테마에 자동 적응
 
 ---
 
@@ -74,45 +115,26 @@ pnpm add ds-markdown
 
 설치 없이 브라우저에서 직접 사용할 수 있습니다:
 
+[DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
+
 ```html
-<!-- 스타일 가져오기 -->
+<!-- 스타일 가져오기, 필수 -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
 
+<!-- katex 수학 공식 스타일 가져오기, 필요한 경우만 -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
+
 <!-- 컴포넌트 가져오기 -->
-<script type="importmap">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@19.1.0",
-      "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-      "ds-markdown": "https://esm.sh/ds-markdown"
-    }
-  }
-</script>
-<script type="module" src="https://esm.sh/tsx"></script>
-
-<script type="text/babel">
-  import { createRoot } from 'react-dom/client';
-  import DsMarkdown from 'ds-markdown';
-
-  const markdown = `
-# Hello ds-markdown
-
-이것은 **고성능** 타이핑 애니메이션 컴포넌트입니다!
-
-## 특징
-- ⚡ 지연 없는 스트리밍
-- 🎬 부드러운 타이핑 애니메이션
-- 🎯 완벽한 구문 지원
-  `;
-
-  const root = createRoot(document.getElementById('root'));
-  root.render(<DsMarkdown interval={20}>{markdown}</DsMarkdown>);
+<script type="module">
+  import Markdown from 'https://esm.sh/ds-markdown';
 </script>
 ```
 
 ## 🚀 5분 빠른 시작
 
 ### 기본 사용법
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -122,6 +144,48 @@ function App() {
   return (
     <DsMarkdown interval={20} answerType="answer">
       # Hello ds-markdown 이것은 **고성능** 타이핑 애니메이션 컴포넌트입니다! ## 기능 - ⚡ 지연 없는 스트리밍 처리 - 🎬 부드러운 타이핑 애니메이션 - 🎯 완벽한 구문 지원
+    </DsMarkdown>
+  );
+}
+```
+
+### 타이핑 애니메이션 비활성화
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+
+function StaticDemo() {
+  const [disableTyping, setDisableTyping] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? '활성화' : '비활성화'}타이핑 효과</button>
+
+      <DsMarkdown interval={20} answerType="answer" disableTyping={disableTyping}>
+        # 정적 표시 모드 `disableTyping`이 `true`일 때, 콘텐츠는 타이핑 애니메이션 효과 없이 즉시 모두 표시됩니다. 이는 특정 시나리오에서 매우 유용합니다: - 📄 정적 문서 표시 - 🔄 표시 모드 전환 - ⚡
+        콘텐츠 빠른 미리보기
+      </DsMarkdown>
+    </div>
+  );
+}
+```
+
+### 수학 공식 지원
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+// 공식을 표시해야 하는 경우 공식 변환 플러그인을 가져옵니다
+import { katexPlugin } from 'ds-markdown/plugins';
+import 'ds-markdown/style.css';
+// 공식을 표시해야 하는 경우 수학 공식 스타일을 가져옵니다
+import 'ds-markdown/katex.css';
+
+function MathDemo() {
+  return (
+    <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
+      # 피타고라스 정리 직각삼각형에서 빗변의 제곱은 두 직각변의 제곱의 합과 같습니다: $a^2 + b^2 = c^2$ 여기서: - $a$와 $b$는 직각변 - $c$는 빗변 고전적인 "구삼고사현오"의 경우: $c = \sqrt
+      {3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
 }
@@ -175,98 +239,274 @@ React 19는 많은 흥미로운 새 기능을 제공합니다:
 
 ## 📚 완전 API 문서
 
-### 선언적 API (초보자 추천)
+### 기본 내보내기 DsMarkdown 및 MarkdownCMD props
 
-| 속성          | 타입                                        | 설명                 | 기본값                                                                 |
-| ------------- | ------------------------------------------- | -------------------- | ---------------------------------------------------------------------- |
-| `interval`    | `number`                                    | 타이핑 간격 (밀리초) | `30`                                                                   |
-| `timerType`   | `'setTimeout'` \| `'requestAnimationFrame'` | 타이머 타입          | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`로 변경 예정 |
-| `answerType`  | `'thinking'` \| `'answer'`                  | 콘텐츠 타입          | `'answer'`                                                             |
-| `theme`       | `'light'` \| `'dark'`                       | 테마 타입            | `'light'`                                                              |
-| `onEnd`       | `(data: EndData) => void`                   | 타이핑 완료 콜백     | -                                                                      |
-| `onStart`     | `(data: StartData) => void`                 | 타이핑 시작 콜백     | -                                                                      |
-| `onTypedChar` | `(data: CharData) => void`                  | 문자별 타이핑 콜백   | -                                                                      |
-
-### 명령형 API (스트리밍 시나리오 추천)
-
-```typescript
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-interface MarkdownCMDRef {
-  push: (content: string, answerType: AnswerType) => void;
-  clear: () => void;
-  triggerWholeEnd: () => void;
-}
+```js
+import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 ```
 
-| 메서드            | 매개변수                                    | 설명                       |
-| ----------------- | ------------------------------------------- | -------------------------- |
-| `push`            | `(content: string, answerType: AnswerType)` | 콘텐츠 추가 및 타이핑 시작 |
-| `clear`           | -                                           | 모든 콘텐츠와 상태 초기화  |
-| `triggerWholeEnd` | -                                           | 완료 콜백 수동 트리거      |
+| 속성                | 타입                                        | 설명                                                       | 기본값                                                                 |
+| ------------------- | ------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `interval`          | `number`                                    | 타이핑 간격 (밀리초)                                       | `30`                                                                   |
+| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | 타이머 타입                                                | 현재 기본값은 `setTimeout`, 나중에 `requestAnimationFrame`로 변경 예정 |
+| `answerType`        | `'thinking'` \| `'answer'`                  | 콘텐츠 타입 (스타일 영향)                                  | `'answer'`                                                             |
+| `theme`             | `'light'` \| `'dark'`                       | 테마 타입                                                  | `'light'`                                                              |
+| `plugins`           | `IMarkdownPlugin[]`                         | 플러그인 설정                                              | `[]`                                                                   |
+| `math`              | [IMarkdownMath](#IMarkdownMath)             | 수학 공식 설정                                             | `{ splitSymbol: 'dollar' }`                                            |
+| `onEnd`             | `(data: EndData) => void`                   | 타이핑 완료 콜백                                           | -                                                                      |
+| `onStart`           | `(data: StartData) => void`                 | 타이핑 시작 콜백                                           | -                                                                      |
+| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | 문자 타이핑 전 콜백, 비동기 작업 지원, 후속 타이핑 차단    | -                                                                      |
+| `onTypedChar`       | `(data: ITypedChar) => void`                | 문자 타이핑 후 콜백                                        | -                                                                      |
+| `disableTyping`     | `boolean`                                   | 타이핑 애니메이션 비활성화                                 | `false`                                                                |
+| `autoStartTyping`   | `boolean`                                   | 타이핑 애니메이션 자동 시작 여부, false인 경우 수동 트리거 | `true`                                                                 |
 
-| `stop` | - | 타이핑 애니메이션 일시정지 |
-| `resume` | - | 타이핑 애니메이션 재개 |
+> 참고: 타이핑 중에 `disableTyping`이 `true`에서 `false`로 변경되면 다음 타이핑 트리거 시 남은 모든 문자가 한 번에 표시됩니다.
 
-**사용 예시:**
+### IBeforeTypedChar
+
+| 속성           | 타입         | 설명                           | 기본값 |
+| -------------- | ------------ | ------------------------------ | ------ |
+| `currentIndex` | `number`     | 전체 문자열에서 현재 인덱스    | `0`    |
+| `currentChar`  | `string`     | 타이핑 예정 문자               | -      |
+| `answerType`   | `AnswerType` | 콘텐츠 타입 (thinking/answer)  | -      |
+| `prevStr`      | `string`     | 현재 타입 콘텐츠의 이전 문자열 | -      |
+| `percent`      | `number`     | 타이핑 진행률 백분율 (0-100)   | `0`    |
+
+### ITypedChar
+
+| 속성           | 타입         | 설명                             | 기본값 |
+| -------------- | ------------ | -------------------------------- | ------ |
+| `currentIndex` | `number`     | 전체 문자열에서 현재 인덱스      | `0`    |
+| `currentChar`  | `string`     | 타이핑된 문자                    | -      |
+| `answerType`   | `AnswerType` | 콘텐츠 타입 (thinking/answer)    | -      |
+| `prevStr`      | `string`     | 현재 타입 콘텐츠의 이전 문자열   | -      |
+| `currentStr`   | `string`     | 현재 타입 콘텐츠의 완전한 문자열 | -      |
+| `percent`      | `number`     | 타이핑 진행률 백분율 (0-100)     | `0`    |
+
+#### IMarkdownMath
+
+| 속성          | 타입                      | 설명             | 기본값     |
+| ------------- | ------------------------- | ---------------- | ---------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 수학 공식 구분자 | `'dollar'` |
+
+**구분자 설명:**
+
+- `'dollar'`: `$...$` 및 `$$...$$` 구문 사용
+- `'bracket'`: `\(...\)` 및 `\[...\]` 구문 사용
+
+#### IMarkdownPlugin
+
+| 속성           | 타입                      | 설명             | 기본값 |
+| -------------- | ------------------------- | ---------------- | ------ |
+| `remarkPlugin` | `unknown`                 | remark 플러그인  | -      |
+| `rehypePlugin` | `unknown`                 | rehype 플러그인  | -      |
+| `type`         | `'buildIn'` \| `'custom'` | 플러그인 타입    | -      |
+| `id`           | `any`                     | 플러그인 고유 ID | -      |
+
+### 컴포넌트 노출 메서드
+
+#### 기본 내보내기 DsMarkdown
+
+| 메서드    | 매개변수 | 설명                                                  |
+| --------- | -------- | ----------------------------------------------------- |
+| `start`   | -        | 타이핑 애니메이션 시작                                |
+| `stop`    | -        | 타이핑 일시정지                                       |
+| `resume`  | -        | 타이핑 재개                                           |
+| `restart` | -        | 타이핑 애니메이션 재시작, 현재 콘텐츠를 처음부터 재생 |
+
+#### MarkdownCMD 노출 메서드
+
+| 메서드            | 매개변수                                    | 설명                                                  |
+| ----------------- | ------------------------------------------- | ----------------------------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | 콘텐츠 추가 및 타이핑 시작                            |
+| `clear`           | -                                           | 모든 콘텐츠 및 상태 지우기                            |
+| `triggerWholeEnd` | -                                           | 수동으로 완료 콜백 트리거                             |
+| `start`           | -                                           | 타이핑 애니메이션 시작                                |
+| `stop`            | -                                           | 타이핑 일시정지                                       |
+| `resume`          | -                                           | 타이핑 재개                                           |
+| `restart`         | -                                           | 타이핑 애니메이션 재시작, 현재 콘텐츠를 처음부터 재생 |
+
+**사용 예:**
 
 ```tsx
+markdownRef.current?.start(); // 애니메이션 시작
 markdownRef.current?.stop(); // 애니메이션 일시정지
 markdownRef.current?.resume(); // 애니메이션 재개
+markdownRef.current?.restart(); // 애니메이션 재시작
 ```
 
 ---
 
-## 🎛️ 타이머 모드 상세 설명
+## 🧮 수학 공식 사용 가이드
 
-### `requestAnimationFrame` 모드 🌟 (추천)
+[DEMO1: 피타고라스 정리](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
+
+[DEMO2: 문제 해답](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=README.md)
+
+### 기본 구문
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 1. 수학 공식 지원 활성화
+<DsMarkdown plugins={[katexPlugin]}>
+  # 수학 공식 예제
+
+  // 인라인 공식
+  이것은 인라인 공식입니다: $E = mc^2$
+
+  // 블록 공식
+  $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+</DsMarkdown>
+```
+
+### 구분자 선택
+
+```tsx
+// 달러 기호 구분자 사용 (기본값)
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'dollar' }}
+>
+  인라인: $a + b = c$
+  블록: $$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
+</DsMarkdown>
+
+// 괄호 구분자 사용
+<DsMarkdown
+  plugins={[katexPlugin]}
+  math={{ splitSymbol: 'bracket' }}
+>
+  인라인: \(a + b = c\)
+  블록: \[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
+</DsMarkdown>
+```
+
+### 스트리밍 수학 공식
+
+```tsx
+// 스트리밍 출력에서 수학 공식을 완벽하게 지원
+const mathContent = [
+  '피타고라스 정리:',
+  '$a^2 + b^2 = c^2$',
+  '\n\n',
+  '여기서:',
+  '- $a$와 $b$는 직각변\n',
+  '- $c$는 빗변\n\n',
+  '고전적인 "구삼고사현오"의 경우:\n',
+  '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+  '이 정리는 기하학에서 광범위하게 응용됩니다!',
+];
+
+mathContent.forEach((chunk) => {
+  markdownRef.current?.push(chunk, 'answer');
+});
+```
+
+### 스타일 커스터마이징
+
+```css
+/* 수학 공식 스타일 커스터마이징 */
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display {
+  margin: 1em 0;
+  text-align: center;
+}
+
+/* 다크 테마 적응 */
+[data-theme='dark'] .katex {
+  color: #e1e1e1;
+}
+```
+
+---
+
+## 🔌 플러그인 시스템
+
+### 내장 플러그인
+
+#### KaTeX 수학 공식 플러그인
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 수학 공식 지원 활성화
+<DsMarkdown plugins={[katexPlugin]}>수학 공식: $E = mc^2$</DsMarkdown>;
+```
+
+### 커스텀 플러그인
+
+```tsx
+import { createBuildInPlugin } from 'ds-markdown/plugins';
+
+// 커스텀 플러그인 생성
+const customPlugin = createBuildInPlugin({
+  remarkPlugin: yourRemarkPlugin,
+  rehypePlugin: yourRehypePlugin,
+  id: Symbol('custom-plugin'),
+});
+
+// 커스텀 플러그인 사용
+<DsMarkdown plugins={[katexPlugin, customPlugin]}>콘텐츠</DsMarkdown>;
+```
+
+---
+
+## 🎛️ 타이머 모드 상세
+
+### `requestAnimationFrame` 모드 🌟 (권장)
 
 ```typescript
 // 🎯 특징
-- 시간 기반: 실제 경과 시간을 기반으로 문자 수 계산
+- 시간 기반: 실제 경과 시간을 바탕으로 문자 수 계산
 - 배치 처리: 단일 프레임 내에서 여러 문자 처리 가능
 - 프레임 동기화: 브라우저 60fps 새로고침 속도와 동기화
-- 고주파 최적화: interval < 16ms 고속 타이핑 완벽 지원
+- 고주파 최적화: interval < 16ms의 고속 타이핑을 완벽하게 지원
 
 // 🎯 적용 시나리오
 - 현대 웹 애플리케이션의 기본 선택
 - 부드러운 애니메이션 효과 추구
-- 고주파 타이핑 (interval > 0이면 충분)
+- 고주파 타이핑 (interval > 0으로 충분)
 - AI 실시간 대화 시나리오
 ```
 
-### `setTimeout` 모드 📟 (호환성)
+### `setTimeout` 모드 📟 (호환)
 
 ```typescript
 // 🎯 특징
-- 단일 문자: 한 번에 정확히 하나의 문자 처리
+- 단일 문자: 매번 정확히 한 문자씩 처리
 - 고정 간격: 설정된 시간에 따라 엄격하게 실행
-- 리듬감: 클래식 타자기의 리듬
+- 리듬감: 클래식 타자기의 리듬감
 - 정밀 제어: 특정 타이밍 요구사항에 적합
 
 // 🎯 적용 시나리오
-- 정밀한 시간 제어가 필요
-- 레트로 타자기 효과 생성
+- 정밀한 시간 제어가 필요한 경우
+- 레트로 타자기 효과 연출
 - 호환성 요구사항이 높은 시나리오
 ```
 
 ### 📊 성능 비교
 
-| 기능              | requestAnimationFrame              | setTimeout           |
-| ----------------- | ---------------------------------- | -------------------- |
-| **문자 처리**     | 프레임당 여러 문자 처리 가능       | 한 번에 한 문자 처리 |
-| **고주파 간격**   | ✅ 우수 (5ms → 프레임당 3문자)     | ❌ 지연 가능성       |
-| **저주파 간격**   | ✅ 정상 (100ms → 6프레임 후 1문자) | ✅ 정밀              |
-| **시각적 효과**   | 🎬 부드러운 애니메이션 느낌        | ⚡ 정밀한 리듬감     |
-| **성능 오버헤드** | 🟢 낮음 (프레임 동기화)            | 🟡 중간 (타이머)     |
+| 특징              | requestAnimationFrame              | setTimeout       |
+| ----------------- | ---------------------------------- | ---------------- |
+| **문자 처리**     | 프레임당 여러 문자                 | 한 번에 한 문자  |
+| **고주파**        | ✅ 우수 (5ms → 프레임당 3문자)     | ❌ 지연 가능성   |
+| **저주파**        | ✅ 정상 (100ms → 6프레임 후 1문자) | ✅ 정밀          |
+| **시각적 효과**   | 🎬 부드러운 애니메이션 감각        | ⚡ 정밀한 리듬감 |
+| **성능 오버헤드** | 🟢 낮음 (프레임 동기화)            | 🟡 보통 (타이머) |
 
-고주파는 `requestAnimationFrame`, 저주파는 `setTimeout` 추천
+고주파는 `requestAnimationFrame` 권장, 저주파는 `setTimeout` 권장
 
 ---
 
 ## 💡 실전 예제
 
 ### 📝 AI 스트리밍 대화
+
+[DEMO: 🔧 StackBlitz 체험](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
 ````tsx
 import { useRef } from 'react';
@@ -280,18 +520,18 @@ function StreamingChat() {
     markdownRef.current?.clear();
 
     // 사고 단계
-    markdownRef.current?.push('🤔 질문을 분석하고 있습니다...', 'thinking');
+    markdownRef.current?.push('🤔 질문을 분석 중입니다...', 'thinking');
     await delay(1000);
-    markdownRef.current?.push('\n\n✅ 분석 완료, 답변을 시작합니다', 'thinking');
+    markdownRef.current?.push('\n\n✅ 분석 완료, 답변 시작', 'thinking');
 
     // 스트리밍 답변
     const chunks = [
-      '# React 19 새 기능 분석\n\n',
+      '# React 19 신기능 분석\n\n',
       '## 🚀 React Compiler\n',
       'React 19의 가장 큰 하이라이트는 **React Compiler** 도입입니다:\n\n',
       '- 🎯 **자동 최적화**: 수동 memo와 useMemo 불필요\n',
-      '- ⚡ **성능 향상**: 컴파일 타임 최적화, 런타임 오버헤드 제로\n',
-      '- 🔧 **하위 호환성**: 기존 코드 수정 불필요\n\n',
+      '- ⚡ **성능 향상**: 컴파일 타임 최적화, 런타임 제로 오버헤드\n',
+      '- 🔧 **후방 호환성**: 기존 코드 수정 불필요\n\n',
       '## 📝 Actions로 폼 간소화\n',
       '새로운 Actions API로 폼 처리가 더 간단해집니다:\n\n',
       '```tsx\n',
@@ -316,9 +556,9 @@ function StreamingChat() {
 
   return (
     <div className="chat-container">
-      <button onClick={simulateAIResponse}>🤖 React 19 기능에 대해 질문하기</button>
+      <button onClick={simulateAIResponse}>🤖 React 19 신기능에 대해 질문</button>
 
-      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('단락 완료:', data)} />
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('섹션 완료:', data)} />
     </div>
   );
 }
@@ -326,80 +566,64 @@ function StreamingChat() {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 ````
 
-### 🔄 스트리밍 Markdown 구문 처리
-
-**핵심 문제**: 스트리밍 출력 시 불완전한 Markdown 구문이 렌더링 오류를 일으킬 수 있음
+### 🧮 수학 공식 스트리밍 렌더링
 
 ```tsx
-// 🚨 문제 시나리오
-push('#'); // "# "
-push(' '); // "# "
-push('제목'); // "# 제목"
-push('\n'); // "# 제목\n"
-push('1'); // "# 제목\n1"     ← 이것은 단락으로 잘못 해석됨
-push('.'); // "# 제목\n1."    ← 올바른 리스트 형성
-push(' 항목'); // "# 제목\n1. 항목"
+import { katexPlugin } from 'ds-markdown/plugins';
+
+function MathStreamingDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const simulateMathResponse = async () => {
+    markdownRef.current?.clear();
+
+    const mathChunks = [
+      '# 피타고라스 정리 상세 설명\n\n',
+      '직각삼각형에서 빗변의 제곱은 두 직각변의 제곱의 합과 같습니다:\n\n',
+      '$a^2 + b^2 = c^2$\n\n',
+      '여기서:\n',
+      '- $a$와 $b$는 직각변\n',
+      '- $c$는 빗변\n\n',
+      '고전적인 "구삼고사현오"의 경우:\n',
+      '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
+      '이 정리는 기하학에서 광범위하게 응용됩니다!',
+    ];
+
+    for (const chunk of mathChunks) {
+      await delay(150);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={simulateMathResponse}>📐 피타고라스 정리 설명</button>
+
+      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
+    </div>
+  );
+}
 ```
-
-**✅ 스마트 솔루션**: 컴포넌트 내장 동기 버퍼링 메커니즘
-
-```tsx
-// 컴포넌트가 구문 경계를 지능적으로 처리
-const handleStreamingMarkdown = () => {
-  const chunks = ['#', ' ', '사용', '기술', '\n', '1', '.', ' ', '기술1', '\n', '2', '.', ' 기술2'];
-
-  chunks.forEach((chunk) => {
-    markdownRef.current?.push(chunk, 'answer');
-    // 지연 불필요, 컴포넌트 내부에서 지능적 버퍼링
-  });
-};
-
-// 🧠 스마트 처리 플로우:
-// 1. "# 사용기술\n1" 구문 불완전 실시간 감지
-// 2. 스마트 버퍼링, 더 많은 문자 대기
-// 3. "."을 받아 "1." 형성 후 즉시 처리
-// 4. 지연 없음, 순수 동기 처리
-```
-
-**지원되는 구문 감지**:
-
-````typescript
-// ✅ 완전한 구문 (즉시 처리)
-'## 제목'; // 완전한 제목
-'1. 리스트 항목'; // 완전한 리스트 항목
-'- 항목'; // 완전한 무순서 리스트
-'> 인용 콘텐츠'; // 완전한 인용
-'```javascript'; // 코드 블록 시작
-'```'; // 코드 블록 끝
-'개행으로 끝나는 콘텐츠\n'; // 개행 경계
-
-// 🔄 불완전한 구문 (스마트 버퍼링)
-'##'; // 제목 기호만
-'1'; // 숫자만
-'```java'; // 가능한 코드 블록 시작
-````
-
----
 
 ## 🔧 모범 사례
 
 ### 1. 성능 최적화
 
 ```tsx
-// ✅ 추천 구성
+// ✅ 권장 구성
 <DsMarkdown
   timerType="requestAnimationFrame"
   interval={15} // 15-30ms가 최적 경험
 />
 
 // ❌ 너무 작은 간격 피하기
-<DsMarkdown interval={1} /> // 성능 문제를 일으킬 수 있음
+<DsMarkdown interval={1} /> // 성능 문제 야기 가능
 ```
 
 ### 2. 스트리밍 데이터 처리
 
 ```tsx
-// ✅ 추천: 명령형 API
+// ✅ 권장: 명령형 API
 const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
@@ -407,10 +631,26 @@ useEffect(() => {
 
 // ❌ 피하기: 빈번한 children 업데이트
 const [content, setContent] = useState('');
-// 각 업데이트마다 전체 콘텐츠를 다시 파싱
+// 각 업데이트마다 전체 내용을 재분석
 ```
 
-### 3. 타입 안전성
+### 3. 수학 공식 최적화
+
+```tsx
+// ✅ 권장: 필요시 수학 공식 스타일 로드
+import 'ds-markdown/style.css';
+import 'ds-markdown/katex.css'; // 필요할 때만 가져오기
+
+// ✅ 권장: 적절한 구분자 사용
+// 간단한 공식에는 $...$가 더 간결
+// 복잡한 공식에는 $$...$$가 더 명확
+
+// ✅ 권장: 플러그인 구성
+import { katexPlugin } from 'ds-markdown/plugins';
+<DsMarkdown plugins={[katexPlugin]}>수학 공식 내용</DsMarkdown>;
+```
+
+### 4. 타입 안전성
 
 ```tsx
 import { MarkdownCMDRef } from 'ds-markdown';
@@ -419,85 +659,147 @@ const ref = useRef<MarkdownCMDRef>(null);
 // 완전한 TypeScript 타입 힌트
 ```
 
-### 4. 스타일 커스터마이징
+### 🔄 애니메이션 재시작 데모
 
-```css
-/* 사고 영역 스타일 */
-.ds-markdown-thinking {
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 3px solid #ffc107;
-  padding: 12px;
-  border-radius: 6px;
-  margin: 8px 0;
-}
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-/* 답변 영역 스타일 */
-.ds-markdown-answer {
-  color: #333;
-  line-height: 1.6;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
-/* 코드 블록 스타일 */
-.ds-markdown pre {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 16px;
-  overflow-x: auto;
-}
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 애니메이션 재시작 데모\n\n' +
+        '이 예제는 `restart()` 메서드의 사용법을 보여줍니다:\n\n' +
+        '- 🔄 **재시작**: 현재 콘텐츠를 처음부터 재생\n' +
+        '- ⏸️ **일시정지/재개**: 언제든지 일시정지와 재개 가능\n' +
+        '- 🎯 **정밀 제어**: 애니메이션 재생 상태의 완전한 제어\n\n' +
+        '현재 상태: ' +
+        (isPlaying ? '재생 중' : '일시정지') +
+        '\n\n' +
+        '이는 매우 실용적인 기능입니다!',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
 
-/* 테이블 스타일 */
-.ds-markdown-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 16px 0;
-}
+  const handleStart = () => {
+    if (hasStarted) {
+      // 이미 시작된 경우 재시작
+      markdownRef.current?.restart();
+    } else {
+      // 첫 번째 시작
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
 
-.ds-markdown-table th,
-.ds-markdown-table td {
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  text-align: left;
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 콘텐츠 시작</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 재시작' : '▶️ 시작'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ 일시정지
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ 재개
+        </button>
+        <button onClick={handleRestart}>🔄 재시작</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>애니메이션 상태:</strong> {isPlaying ? '🟢 재생 중' : '🔴 일시정지'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
 }
 ```
 
----
+### ▶️ 수동 시작 애니메이션 데모
 
-## 🌐 호환성
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-| 환경           | 버전 요구사항                       | 설명                  |
-| -------------- | ----------------------------------- | --------------------- |
-| **React**      | 16.8.0+                             | Hooks 지원 필요       |
-| **TypeScript** | 4.0+                                | 선택사항, 하지만 추천 |
-| **브라우저**   | Chrome 60+, Firefox 55+, Safari 12+ | 모던 브라우저         |
-| **Node.js**    | 14.0+                               | 빌드 환경             |
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
----
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 수동 시작 애니메이션 데모\n\n' +
+        '이 예제는 `start()` 메서드의 사용법을 보여줍니다:\n\n' +
+        '- 🎯 **수동 제어**: `autoStartTyping=false`일 때 수동으로 `start()`를 호출해야 합니다\n' +
+        '- ⏱️ **지연 시작**: 사용자 상호작용 후 애니메이션을 시작할 수 있습니다\n' +
+        '- 🎮 **게임화**: 사용자의 적극성이 필요한 시나리오에 적합합니다\n\n' +
+        '"애니메이션 시작" 버튼을 클릭하여 타이핑 효과를 수동으로 트리거하세요!',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
 
-## 🤝 기여 가이드
+  const handleStart = () => {
+    if (hasStarted) {
+      // 이미 시작된 경우 재시작
+      markdownRef.current?.restart();
+    } else {
+      // 첫 번째 시작
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
 
-Issue와 Pull Request 제출을 환영합니다!
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
 
-1. 이 리포지토리 포크
-2. 기능 브랜치 생성: `git checkout -b feature/amazing-feature`
-3. 변경사항 커밋: `git commit -m 'Add amazing feature'`
-4. 브랜치 푸시: `git push origin feature/amazing-feature`
-5. Pull Request 제출
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 콘텐츠 로드</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 재시작' : '▶️ 애니메이션 시작'}
+        </button>
+      </div>
 
----
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>상태:</strong> {isPlaying ? '🟢 애니메이션 재생 중' : '🔴 시작 대기 중'}
+      </div>
 
-## 📄 라이선스
-
-MIT © [onshinpei](https://github.com/onshinpei)
-
----
-
-<div align="center">
-  <strong>이 프로젝트가 도움이 되었다면, ⭐️ Star로 지원해주세요!</strong>
-  
-  <br><br>
-  
-  [🐛 문제 보고](https://github.com/onshinpei/ds-markdown/issues) | 
-  [💡 기능 제안](https://github.com/onshinpei/ds-markdown/issues) | 
-  [📖 문서 보기](https://onshinpei.github.io/ds-markdown/)
-</div>
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
+```

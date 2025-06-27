@@ -11,10 +11,6 @@ export type Theme = 'light' | 'dark';
 export interface IChar {
   content: string;
   answerType: AnswerType;
-  /**
-   * split_segment 两个连续的段落，需要做分割
-   */
-  contentType: 'space' | 'segment' | 'split_segment';
   tokenId: number;
   /** 字符索引 */
   index: number;
@@ -53,19 +49,28 @@ export interface IOnTypedCharData {
 
 export interface ITypedChar extends IOnTypedCharData {
   percent: number;
+  currentStr: string;
 }
 
-export interface MarkdownProps {
+export interface IBeforeTypedChar extends IOnTypedCharData {
+  percent: number;
+}
+
+export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
+  /** 回答类型 */
+  answerType?: 'thinking' | 'answer';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭打字机效果 */
   disableTyping?: boolean;
   /** 打字完成后回调,  */
-  onEnd?: (data?: { str?: string; answerType?: AnswerType }) => void;
+  onEnd?: (data?: IEndData) => void;
   /** 开始打字回调 */
   onStart?: (data?: IOnTypedCharData) => void;
+  /** 打字前回调 */
+  onBeforeTypedChar?: (data?: IBeforeTypedChar) => Promise<void>;
   /**
    * 打字机打完一个字符回调
    * @param char 字符
@@ -80,6 +85,18 @@ export interface MarkdownProps {
 
   /** 插件配置 */
   plugins?: IMarkdownPlugin[];
+
+  /** 是否自动开启打字动画 */
+  autoStartTyping?: boolean;
+}
+
+export interface MarkdownProps extends MarkdownBaseProps {
+  children: string | undefined;
+}
+
+/**  MarkdownCMD 组件不需要 children */
+export interface MarkdownCMDProps extends MarkdownBaseProps {
+  children?: undefined;
 }
 
 export interface IMarkdownPlugin {
@@ -99,10 +116,12 @@ export interface IWholeContent {
   thinking: {
     content: string;
     length: number;
+    prevLength: number;
   };
   answer: {
     content: string;
     length: number;
+    prevLength: number;
   };
   allLength: number;
 }
@@ -110,6 +129,8 @@ export interface IWholeContent {
 export interface MarkdownBaseRef {
   stop: () => void;
   resume: () => void;
+  start: () => void;
+  restart: () => void;
 }
 
 /** Markdown 组件的ref 类型 */
@@ -117,7 +138,17 @@ export type MarkdownRef = MarkdownBaseRef;
 
 /** MarkdownCMD 组件的 ref 类型 */
 export interface MarkdownCMDRef extends MarkdownBaseRef {
-  push: (content: string, answerType: AnswerType) => void;
+  push: (content: string, answerType?: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
+}
+
+export interface IEndData {
+  manual: boolean;
+  /** 回答字符串 */
+  answerStr: string;
+  /** 思考字符串 */
+  thinkingStr: string;
+  /** 打字机打过的字符串, 和answerStr 相同 */
+  str: string;
 }

@@ -22,9 +22,10 @@ const App: React.FC<{
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
 }> = ({ theme, setTheme }) => {
-  const [answerContent, setAnswerContent] = useState('');
   const [disableTyping, setDisableTyping] = useState(false);
   const messageDivRef = useRef<HTMLDivElement>(null!);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isStop, setIsStop] = useState(false);
 
   const markdownRef = useRef<MarkdownRef>(null!);
 
@@ -39,13 +40,6 @@ const App: React.FC<{
     needAutoScroll: true,
     prevScrollTop: 0,
   });
-
-  const onClick = () => {
-    setAnswerContent(dataJson.content);
-  };
-  const onReset = () => {
-    setAnswerContent('');
-  };
 
   const throttleOnTypedChar = useMemo(() => {
     return throttle(() => {
@@ -72,6 +66,16 @@ const App: React.FC<{
     }, 50);
   }, []);
 
+  const onRestart = () => {
+    markdownRef.current.restart();
+    setIsTyping(true);
+  };
+
+  const onStart = () => {
+    markdownRef.current.start();
+    setIsTyping(true);
+  };
+
   const interval = 5;
   const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
@@ -80,13 +84,13 @@ const App: React.FC<{
     <>
       <div className="ds-message-actions">
         <div>
-          {answerContent ? (
-            <button className="start-btn" onClick={onReset}>
-              重置
+          {isTyping ? (
+            <button className="start-btn" disabled={isStop} onClick={onRestart}>
+              重新开始
             </button>
           ) : (
-            <button className="start-btn" onClick={onClick}>
-              点击显示
+            <button className="start-btn" disabled={isStop} onClick={onStart}>
+              开始任务
             </button>
           )}
           <span style={{ marginLeft: 30 }}>什么是勾股定理</span>
@@ -101,11 +105,23 @@ const App: React.FC<{
           <button className="theme-btn" onClick={() => setDisableTyping(!disableTyping)}>
             {disableTyping ? '开启' : '关闭'}打字机效果
           </button>
-          <button className="theme-btn" onClick={() => markdownRef.current.stop()}>
+          <button
+            className="theme-btn"
+            onClick={() => {
+              markdownRef.current.stop();
+              setIsStop(true);
+            }}
+          >
             暂停
           </button>
 
-          <button className="theme-btn" onClick={() => markdownRef.current.resume()}>
+          <button
+            className="theme-btn"
+            onClick={() => {
+              markdownRef.current.resume();
+              setIsStop(false);
+            }}
+          >
             继续
           </button>
         </div>
@@ -122,8 +138,9 @@ const App: React.FC<{
             theme={theme}
             math={{ splitSymbol: 'bracket' }}
             disableTyping={disableTyping}
+            autoStartTyping={false}
           >
-            {answerContent}
+            {dataJson.content}
           </Markdown>
         </div>
       </div>

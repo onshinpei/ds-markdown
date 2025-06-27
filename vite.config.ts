@@ -7,6 +7,6 @@ export default defineConfig({
   base: '/ds-markdown/',
   build: {
     sourcemap: false, // 或 'inline',
-    outDir: 'docs',
+    outDir: 'dev',
   },
 });

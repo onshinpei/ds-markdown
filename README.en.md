@@ -18,6 +18,57 @@ A React component designed specifically for modern AI applications, providing sm
 
 ---
 
+## 📋 Table of Contents
+
+- [✨ Core Features](#-core-features)
+- [📦 Quick Installation](#-quick-installation)
+- [🚀 5-Minute Quick Start](#-5-minute-quick-start)
+  - [Basic Usage](#basic-usage)
+  - [Disable Typing Animation](#disable-typing-animation)
+  - [Mathematical Formula Support](#mathematical-formula-support)
+  - [AI Conversation Scenario](#ai-conversation-scenario)
+  - [🎯 Advanced Callback Control](#-advanced-callback-control)
+  - [🔄 Restart Animation Demo](#-restart-animation-demo)
+  - [▶️ Manual Start Animation Demo](#️-manual-start-animation-demo)
+- [📚 Complete API Documentation](#-complete-api-documentation)
+- [🧮 Mathematical Formula Usage Guide](#-mathematical-formula-usage-guide)
+- [🔌 Plugin System](#-plugin-system)
+- [🎛️ Timer Mode Details](#️-timer-mode-details)
+- [💡 Practical Examples](#-practical-examples)
+- [🔧 Best Practices](#-best-practices)
+
+---
+
+## ❓ Why use ds-markdown?
+
+- **Ultimate AI Chat Experience**  
+  Faithfully recreates the typing animation and streaming response of leading AI chat interfaces (like DeepSeek), delivering a truly immersive "AI is thinking/answering" experience.
+
+- **Perfect for Streaming Backend Data**  
+  Many AI/LLM backends (OpenAI, DeepSeek, etc.) send data chunks containing multiple characters at once.  
+  **ds-markdown automatically splits each chunk into single characters and animates them one by one, ensuring smooth typing even if the backend sends several characters at a time.**
+
+- **Full Markdown & Math Formula Support**  
+  Built-in KaTeX, supports all major Markdown syntax and math formulas—ideal for technical Q&A, education, and knowledge bases.
+
+- **Excellent Developer Experience**  
+  Rich imperative API, supports streaming data, async callbacks, and plugin extensions for flexible animation and content control.
+
+- **Lightweight & High Performance**  
+  Small bundle size, fast, mobile and desktop ready. The only core dependency is [react-markdown](https://github.com/remarkjs/react-markdown) (a widely used, mature Markdown renderer). No other heavy dependencies—works out of the box.
+
+- **Multi-theme & Plugin Architecture**  
+  Light/dark theme switching, remark/rehype plugin compatibility, and advanced extensibility.
+
+- **Wide Range of Use Cases**
+  - AI chatbots/assistants
+  - Real-time Q&A/knowledge bases
+  - Education/math/programming content
+  - Product demos, interactive docs
+  - Any scenario needing "typewriter" animation and streaming Markdown rendering
+
+---
+
 ## ✨ Core Features
 
 ### 🤖 **AI Conversation Scenarios**
@@ -35,16 +86,14 @@ A React component designed specifically for modern AI applications, providing sm
 
 ### 🔧 **Developer Experience**
 
-- **Declarative API**: Suitable for simple scenarios, React-style
-- **Imperative API**: Suitable for streaming data, better performance
-- **Native TypeScript support**: Complete type hints
 - Support for typing interruption `stop` and resume `resume`
+- Support for disabling and enabling typing
 
 ### 🎬 **Smooth Animation**
 
 - Dual timer mode optimization, supporting `requestAnimationFrame` and `setTimeout` modes
 - High-frequency typing support (`requestAnimationFrame` mode supports typing intervals as low as `0ms`)
-- Frame-synchronized rendering, perfectly matching browser 60fps
+- Frame-synchronized rendering, perfectly matching browser refresh rate
 - Smart character batch processing for more natural visual effects
 
 ---
@@ -69,8 +118,10 @@ No installation required, use directly in browser:
 [DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
 
 ```html
-<!-- Import styles -->
+<!-- Import styles, required -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- Import katex math formula styles, only if needed -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- Import component -->
@@ -124,9 +175,11 @@ function StaticDemo() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+// If you need to display formulas, import the formula conversion plugin
 import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
-import 'ds-markdown/katex.css'; // Import mathematical formula styles
+// If you need to display formulas, import mathematical formula styles
+import 'ds-markdown/katex.css';
 
 function MathDemo() {
   return (
@@ -182,37 +235,287 @@ Let's explore these new features together!`);
 }
 ```
 
+### 🎯 Advanced Callback Control
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function AdvancedCallbackDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
+
+  const handleBeforeTypedChar = async (data) => {
+    // Perform async operations before character typing
+    console.log('About to type:', data.currentChar);
+
+    // Can perform network requests, data validation, etc.
+    if (data.currentChar === '!') {
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate delay
+    }
+  };
+
+  const handleTypedChar = (data) => {
+    // Update typing statistics
+    setTypingStats({
+      progress: Math.round(data.percent),
+      currentChar: data.currentChar,
+      totalChars: data.currentIndex + 1,
+    });
+
+    // Can add sound effects, animations, etc.
+    if (data.currentChar === '.') {
+      // Play period sound effect
+      console.log('Play period sound effect');
+    }
+  };
+
+  const handleStart = (data) => {
+    console.log('Start typing:', data.currentChar);
+  };
+
+  const handleEnd = (data) => {
+    console.log('Typing complete:', data.str);
+  };
+
+  const startDemo = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Advanced Callback Demo\n\n' +
+        'This example shows how to use `onBeforeTypedChar` and `onTypedChar` callbacks:\n\n' +
+        '- 🎯 **Pre-typing callback**: Can perform async operations before character display\n' +
+        '- 📊 **Post-typing callback**: Can update progress in real-time and add effects\n' +
+        '- ⚡ **Performance optimization**: Supports async operations without affecting typing smoothness\n\n' +
+        'Current progress: ' +
+        typingStats.progress +
+        '%\n' +
+        'Characters typed: ' +
+        typingStats.totalChars +
+        '\n\n' +
+        'This is a very powerful feature!',
+      'answer',
+    );
+  };
+
+  return (
+    <div>
+      <button onClick={startDemo}>🚀 Start Advanced Demo</button>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>Typing Stats:</strong> Progress {typingStats.progress}% | Current char: "{typingStats.currentChar}" | Total chars: {typingStats.totalChars}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### 🔄 Restart Animation Demo
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Restart Animation Demo\n\n' +
+        'This example shows how to use the `restart()` method:\n\n' +
+        '- 🔄 **Restart**: Play current content from the beginning\n' +
+        '- ⏸️ **Pause/Resume**: Can pause and resume at any time\n' +
+        '- 🎯 **Precise Control**: Complete control over animation playback state\n\n' +
+        'Current state: ' +
+        (isPlaying ? 'Playing' : 'Paused') +
+        '\n\n' +
+        'This is a very practical feature!',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // If already started, restart
+      markdownRef.current?.restart();
+    } else {
+      // First time start
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 Start Content</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 Restart' : '▶️ Start'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ Pause
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ Resume
+        </button>
+        <button onClick={handleRestart}>🔄 Restart</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>Animation State:</strong> {isPlaying ? '🟢 Playing' : '🔴 Paused'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### ▶️ Manual Start Animation Demo
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Manual Start Animation Demo\n\n' +
+        'This example shows how to use the `start()` method:\n\n' +
+        '- 🎯 **Manual Control**: When `autoStartTyping=false`, need to manually call `start()`\n' +
+        '- ⏱️ **Delayed Start**: Can start animation after user interaction\n' +
+        '- 🎮 **Gamification**: Suitable for scenarios requiring user initiative\n\n' +
+        'Click the "Start Animation" button to manually trigger the typing effect!',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // If already started, restart
+      markdownRef.current?.restart();
+    } else {
+      // First time start
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 Load Content</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 Restart' : '▶️ Start Animation'}
+        </button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>State:</strong> {isPlaying ? '🟢 Animation Playing' : '🔴 Waiting to Start'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
 ---
 
 ## 📚 Complete API Documentation
 
-### Declarative API (Recommended for Beginners)
+### Default export DsMarkdown and MarkdownCMD props
 
-| Property        | Type                                        | Description                        | Default                                                                       |
-| --------------- | ------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `interval`      | `number`                                    | Typing interval (milliseconds)     | `30`                                                                          |
-| `timerType`     | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
-| `answerType`    | `'thinking'` \| `'answer'`                  | Content type (affects style theme) | `'answer'`                                                                    |
-| `theme`         | `'light'` \| `'dark'`                       | Theme type                         | `'light'`                                                                     |
-| `plugins`       | `IMarkdownPlugin[]`                         | Plugin configuration               | `[]`                                                                          |
-| `math`          | `IMarkdownMath`                             | Mathematical formula configuration | `{ splitSymbol: 'dollar' }`                                                   |
-| `onEnd`         | `(data: EndData) => void`                   | Typing completion callback         | -                                                                             |
-| `onStart`       | `(data: StartData) => void`                 | Typing start callback              | -                                                                             |
-| `onTypedChar`   | `(data: CharData) => void`                  | Per-character typing callback      | -                                                                             |
-| `disableTyping` | `boolean`                                   | Disable typing animation effect    | `false`                                                                       |
+```js
+import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
+```
 
-### Mathematical Formula Configuration
+| Property            | Type                                        | Description                                                                        | Default                                                                       |
+| ------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `interval`          | `number`                                    | Typing interval (milliseconds)                                                     | `30`                                                                          |
+| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type                                                                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
+| `answerType`        | `'thinking'` \| `'answer'`                  | Content type (affects styling)                                                     | `'answer'`                                                                    |
+| `theme`             | `'light'` \| `'dark'`                       | Theme type                                                                         | `'light'`                                                                     |
+| `plugins`           | `IMarkdownPlugin[]`                         | Plugin configuration                                                               | `[]`                                                                          |
+| `math`              | [IMarkdownMath](#IMarkdownMath)             | Mathematical formula config                                                        | `{ splitSymbol: 'dollar' }`                                                   |
+| `onEnd`             | `(data: EndData) => void`                   | Typing completion callback                                                         | -                                                                             |
+| `onStart`           | `(data: StartData) => void`                 | Typing start callback                                                              | -                                                                             |
+| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | Character typing pre-callback, supports async operations, blocks subsequent typing | -                                                                             |
+| `onTypedChar`       | `(data: ITypedChar) => void`                | Character typing post-callback                                                     | -                                                                             |
+| `disableTyping`     | `boolean`                                   | Disable typing animation                                                           | `false`                                                                       |
+| `autoStartTyping`   | `boolean`                                   | Whether to auto-start typing animation, set to false for manual trigger            | `true`                                                                        |
 
-| Property      | Type                      | Description                         | Default   |
-| ------------- | ------------------------- | ----------------------------------- | --------- |
-| `splitSymbol` | `'dollar'` \| `'bracket'` | Mathematical formula delimiter type | `'dollar' |
+> Note: If `disableTyping` changes from `true` to `false` during typing, all remaining characters will be displayed at once on the next typing trigger.
 
-**Delimiter Description:**
+### IBeforeTypedChar
 
-- `'dollar'`: Use `$...$` and `$$...$$` syntax
-- `'bracket'`: Use `\(...\)` and `\[...\]` syntax
+| Property       | Type         | Description                                  | Default |
+| -------------- | ------------ | -------------------------------------------- | ------- |
+| `currentIndex` | `number`     | Current character index in the entire string | `0`     |
+| `currentChar`  | `string`     | Character about to be typed                  | -       |
+| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -       |
+| `prevStr`      | `string`     | Previous string of current type content      | -       |
+| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`     |
 
-### Plugin Configuration
+### ITypedChar
+
+| Property       | Type         | Description                                  | Default |
+| -------------- | ------------ | -------------------------------------------- | ------- |
+| `currentIndex` | `number`     | Current character index in the entire string | `0`     |
+| `currentChar`  | `string`     | Character that was just typed                | -       |
+| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -       |
+| `prevStr`      | `string`     | Previous string of current type content      | -       |
+| `currentStr`   | `string`     | Complete string of current type content      | -       |
+| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`     |
+
+#### IMarkdownMath
+
+| Property      | Type                      | Description                    | Default    |
+| ------------- | ------------------------- | ------------------------------ | ---------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | Mathematical formula delimiter | `'dollar'` |
+
+**Delimiter explanation:**
+
+- `'dollar'`: Uses `$...$` and `$$...$$` syntax
+- `'bracket'`: Uses `\(...\)` and `\[...\]` syntax
+
+#### IMarkdownPlugin
 
 | Property       | Type                      | Description      | Default |
 | -------------- | ------------------------- | ---------------- | ------- |
@@ -221,26 +524,45 @@ Let's explore these new features together!`);
 | `type`         | `'buildIn'` \| `'custom'` | Plugin type      | -       |
 | `id`           | `any`                     | Plugin unique ID | -       |
 
-### Imperative API (Recommended for Streaming Scenarios)
+### Component Exposed Methods
 
-| Method            | Parameters                                  | Description                   |
-| ----------------- | ------------------------------------------- | ----------------------------- |
-| `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing  |
-| `clear`           | -                                           | Clear all content and state   |
-| `triggerWholeEnd` | -                                           | Manually trigger end callback |
-| `stop`            | -                                           | Pause typing animation        |
-| `resume`          | -                                           | Resume typing animation       |
+#### Default export DsMarkdown
 
-**Usage Example:**
+| Method    | Parameters | Description                                                   |
+| --------- | ---------- | ------------------------------------------------------------- |
+| `start`   | -          | Start typing animation                                        |
+| `stop`    | -          | Pause typing                                                  |
+| `resume`  | -          | Resume typing                                                 |
+| `restart` | -          | Restart typing animation, play current content from beginning |
+
+#### MarkdownCMD Exposed Methods
+
+| Method            | Parameters                                  | Description                                                   |
+| ----------------- | ------------------------------------------- | ------------------------------------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing                                  |
+| `clear`           | -                                           | Clear all content and state                                   |
+| `triggerWholeEnd` | -                                           | Manually trigger end callback                                 |
+| `start`           | -                                           | Start typing animation                                        |
+| `stop`            | -                                           | Pause typing                                                  |
+| `resume`          | -                                           | Resume typing                                                 |
+| `restart`         | -                                           | Restart typing animation, play current content from beginning |
+
+**Usage example:**
 
 ```tsx
+markdownRef.current?.start(); // Start animation
 markdownRef.current?.stop(); // Pause animation
 markdownRef.current?.resume(); // Resume animation
+markdownRef.current?.restart(); // Restart animation
 ```
 
 ---
 
 ## 🧮 Mathematical Formula Usage Guide
+
+[DEMO1: Pythagorean Theorem](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
+
+[DEMO2: Problem Solving](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=README.md)
 
 ### Basic Syntax
 
@@ -262,7 +584,7 @@ import { katexPlugin } from 'ds-markdown/plugins';
 ### Delimiter Selection
 
 ```tsx
-// Use dollar symbol delimiters (default)
+// Using dollar sign delimiters (default)
 <DsMarkdown
   plugins={[katexPlugin]}
   math={{ splitSymbol: 'dollar' }}
@@ -271,7 +593,7 @@ import { katexPlugin } from 'ds-markdown/plugins';
   Block: $$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
 </DsMarkdown>
 
-// Use bracket delimiters
+// Using bracket delimiters
 <DsMarkdown
   plugins={[katexPlugin]}
   math={{ splitSymbol: 'bracket' }}
@@ -286,10 +608,10 @@ import { katexPlugin } from 'ds-markdown/plugins';
 ```tsx
 // Perfect support for mathematical formulas in streaming output
 const mathContent = [
-  'Pythagorean Theorem: ',
+  'Pythagorean Theorem:',
   '$a^2 + b^2 = c^2$',
   '\n\n',
-  'Where:\n',
+  'Where:',
   '- $a$ and $b$ are the legs\n',
   '- $c$ is the hypotenuse\n\n',
   'For the classic "3-4-5" triangle:\n',
@@ -360,15 +682,15 @@ const customPlugin = createBuildInPlugin({
 
 ```typescript
 // 🎯 Features
-- Time-driven: Calculate character count based on actual elapsed time
-- Batch processing: Can process multiple characters per frame
-- Frame synchronization: Synchronized with browser 60fps refresh rate
-- High-frequency optimization: Perfect support for high-speed typing with interval < 16ms
+- Time-driven: Calculates character count based on actual elapsed time
+- Batch processing: Can process multiple characters in a single frame
+- Frame-synchronized: Syncs with browser 60fps refresh rate
+- High-frequency optimized: Perfect support for interval < 16ms high-speed typing
 
 // 🎯 Use Cases
 - Default choice for modern web applications
-- Pursuing smooth animation effects
-- High-frequency typing (interval > 0 is sufficient)
+- Pursuit of smooth animation effects
+- High-frequency typing (interval > 0 works)
 - AI real-time conversation scenarios
 ```
 
@@ -376,28 +698,28 @@ const customPlugin = createBuildInPlugin({
 
 ```typescript
 // 🎯 Features
-- Single character: Process exactly one character each time
-- Fixed interval: Execute strictly according to set time
-- Beat feeling: Classic typewriter rhythm
+- Single character: Precisely processes one character at a time
+- Fixed interval: Strictly executes at set time intervals
+- Rhythmic: Classic typewriter rhythm feel
 - Precise control: Suitable for specific timing requirements
 
 // 🎯 Use Cases
-- Need precise time control
+- Need precise timing control
 - Creating retro typewriter effects
 - Scenarios with high compatibility requirements
 ```
 
 ### 📊 Performance Comparison
 
-| Feature                     | requestAnimationFrame                          | setTimeout                      |
-| --------------------------- | ---------------------------------------------- | ------------------------------- |
-| **Character Processing**    | Can process multiple characters per frame      | Process one character each time |
-| **High-frequency Interval** | ✅ Excellent (5ms → 3 characters per frame)    | ❌ May lag                      |
-| **Low-frequency Interval**  | ✅ Normal (100ms → 1 character after 6 frames) | ✅ Precise                      |
-| **Visual Effect**           | 🎬 Smooth animation feeling                    | ⚡ Precise beat feeling         |
-| **Performance Overhead**    | 🟢 Low (frame synchronization)                 | 🟡 Medium (timer)               |
+| Feature                  | requestAnimationFrame               | setTimeout              |
+| ------------------------ | ----------------------------------- | ----------------------- |
+| **Character Processing** | Multiple characters per frame       | One character at a time |
+| **High Frequency**       | ✅ Excellent (5ms → 3 chars/frame)  | ❌ May lag              |
+| **Low Frequency**        | ✅ Normal (100ms → 1 char/6 frames) | ✅ Precise              |
+| **Visual Effect**        | 🎬 Smooth animation feel            | ⚡ Precise rhythm feel  |
+| **Performance Overhead** | 🟢 Low (frame-synced)               | 🟡 Medium (timer)       |
 
-High-frequency recommended `requestAnimationFrame`, low-frequency recommended `setTimeout`
+High frequency recommended `requestAnimationFrame`, low frequency recommended `setTimeout`
 
 ---
 
@@ -421,16 +743,16 @@ function StreamingChat() {
     // Thinking phase
     markdownRef.current?.push('🤔 Analyzing your question...', 'thinking');
     await delay(1000);
-    markdownRef.current?.push('\n\n✅ Analysis complete, starting to answer', 'thinking');
+    markdownRef.current?.push('\n\n✅ Analysis complete, starting answer', 'thinking');
 
     // Streaming answer
     const chunks = [
-      '# React 19 New Features Analysis\n\n',
+      '# React 19 Feature Analysis\n\n',
       '## 🚀 React Compiler\n',
       'The biggest highlight of React 19 is the introduction of **React Compiler**:\n\n',
-      '- 🎯 **Automatic Optimization**: No need for manual memo and useMemo\n',
-      '- ⚡ **Performance Boost**: Compile-time optimization, zero runtime overhead\n',
-      '- 🔧 **Backward Compatible**: No need to modify existing code\n\n',
+      '- 🎯 **Automatic optimization**: No need for manual memo and useMemo\n',
+      '- ⚡ **Performance boost**: Compile-time optimization, zero runtime overhead\n',
+      '- 🔧 **Backward compatible**: Existing code needs no modification\n\n',
       '## 📝 Actions Simplify Forms\n',
       'The new Actions API makes form handling simpler:\n\n',
       '```tsx\n',
@@ -455,9 +777,9 @@ function StreamingChat() {
 
   return (
     <div className="chat-container">
-      <button onClick={simulateAIResponse}>🤖 Ask about React 19 New Features</button>
+      <button onClick={simulateAIResponse}>🤖 Ask about React 19 features</button>
 
-      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('Paragraph complete:', data)} />
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('Section complete:', data)} />
     </div>
   );
 }
@@ -477,7 +799,7 @@ function MathStreamingDemo() {
     markdownRef.current?.clear();
 
     const mathChunks = [
-      '# Pythagorean Theorem Explanation\n\n',
+      '# Pythagorean Theorem Explained\n\n',
       'In a right triangle, the square of the hypotenuse equals the sum of squares of the two legs:\n\n',
       '$a^2 + b^2 = c^2$\n\n',
       'Where:\n',
@@ -504,63 +826,226 @@ function MathStreamingDemo() {
 }
 ```
 
-### 🔄 Streaming Markdown Syntax Processing
-
-**Core Problem**: Incomplete Markdown syntax during streaming output can cause rendering errors
+### 🎯 Advanced Callback Control
 
 ```tsx
-// 🚨 Problem scenario
-push('#'); // "# "
-push(' '); // "# "
-push('Title'); // "# Title"
-push('\n'); // "# Title\n"
-push('1'); // "# Title\n1"     ← This will be incorrectly parsed as paragraph
-push('.'); // "# Title\n1."    ← Forms correct list
-push(' Item'); // "# Title\n1. Item"
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function AdvancedCallbackDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
+
+  const handleBeforeTypedChar = async (data) => {
+    // Perform async operations before character typing
+    console.log('About to type:', data.currentChar);
+
+    // Can perform network requests, data validation, etc.
+    if (data.currentChar === '!') {
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate delay
+    }
+  };
+
+  const handleTypedChar = (data) => {
+    // Update typing statistics
+    setTypingStats({
+      progress: Math.round(data.percent),
+      currentChar: data.currentChar,
+      totalChars: data.currentIndex + 1,
+    });
+
+    // Can add sound effects, animations, etc.
+    if (data.currentChar === '.') {
+      // Play period sound effect
+      console.log('Play period sound effect');
+    }
+  };
+
+  const handleStart = (data) => {
+    console.log('Start typing:', data.currentChar);
+  };
+
+  const handleEnd = (data) => {
+    console.log('Typing complete:', data.str);
+  };
+
+  const startDemo = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Advanced Callback Demo\n\n' +
+        'This example shows how to use `onBeforeTypedChar` and `onTypedChar` callbacks:\n\n' +
+        '- 🎯 **Pre-typing callback**: Can perform async operations before character display\n' +
+        '- 📊 **Post-typing callback**: Can update progress in real-time and add effects\n' +
+        '- ⚡ **Performance optimization**: Supports async operations without affecting typing smoothness\n\n' +
+        'Current progress: ' +
+        typingStats.progress +
+        '%\n' +
+        'Characters typed: ' +
+        typingStats.totalChars +
+        '\n\n' +
+        'This is a very powerful feature!',
+      'answer',
+    );
+  };
+
+  return (
+    <div>
+      <button onClick={startDemo}>🚀 Start Advanced Demo</button>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>Typing Stats:</strong> Progress {typingStats.progress}% | Current char: "{typingStats.currentChar}" | Total chars: {typingStats.totalChars}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
+    </div>
+  );
+}
 ```
 
-**✅ Smart Solution**: Built-in synchronous buffering mechanism
+### 🔄 Restart Animation Demo
 
 ```tsx
-// Component intelligently handles syntax boundaries
-const handleStreamingMarkdown = () => {
-  const chunks = ['#', ' ', 'Use', 'Skills', '\n', '1', '.', ' ', 'Skill1', '\n', '2', '.', ' Skill2'];
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-  chunks.forEach((chunk) => {
-    markdownRef.current?.push(chunk, 'answer');
-    // No delay needed, component internally buffers intelligently
-  });
-};
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
-// 🧠 Intelligent processing flow:
-// 1. Real-time detection of incomplete syntax like "# Use Skills\n1"
-// 2. Intelligent buffering, waiting for more characters
-// 3. Process immediately after receiving "." to form "1."
-// 4. Zero delay, pure synchronous processing
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Restart Animation Demo\n\n' +
+        'This example shows how to use the `restart()` method:\n\n' +
+        '- 🔄 **Restart**: Play current content from the beginning\n' +
+        '- ⏸️ **Pause/Resume**: Can pause and resume at any time\n' +
+        '- 🎯 **Precise Control**: Complete control over animation playback state\n\n' +
+        'Current state: ' +
+        (isPlaying ? 'Playing' : 'Paused') +
+        '\n\n' +
+        'This is a very practical feature!',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // If already started, restart
+      markdownRef.current?.restart();
+    } else {
+      // First time start
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 Start Content</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 Restart' : '▶️ Start'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ Pause
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ Resume
+        </button>
+        <button onClick={handleRestart}>🔄 Restart</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>Animation State:</strong> {isPlaying ? '🟢 Playing' : '🔴 Paused'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
+}
 ```
 
-**Supported Syntax Detection**:
+### ▶️ Manual Start Animation Demo
 
-````typescript
-// ✅ Complete syntax (immediate processing)
-'## Title'; // Complete title
-'1. List item'; // Complete list item
-'- Item'; // Complete unordered list
-'> Quote content'; // Complete quote
-'```javascript'; // Code block start
-'```'; // Code block end
-'Content ending with newline\n'; // Newline boundary
-'$a + b$'; // Complete mathematical formula
-'$$\\sum x$$'; // Complete block mathematical formula
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
-// 🔄 Incomplete syntax (intelligent buffering)
-'##'; // Only title symbol
-'1'; // Only number
-'```java'; // Possible code block start
-'$a +'; // Incomplete mathematical formula
-````
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
----
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# Manual Start Animation Demo\n\n' +
+        'This example shows how to use the `start()` method:\n\n' +
+        '- 🎯 **Manual Control**: When `autoStartTyping=false`, need to manually call `start()`\n' +
+        '- ⏱️ **Delayed Start**: Can start animation after user interaction\n' +
+        '- 🎮 **Gamification**: Suitable for scenarios requiring user initiative\n\n' +
+        'Click the "Start Animation" button to manually trigger the typing effect!',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // If already started, restart
+      markdownRef.current?.restart();
+    } else {
+      // First time start
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 Load Content</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 Restart' : '▶️ Start Animation'}
+        </button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>State:</strong> {isPlaying ? '🟢 Animation Playing' : '🔴 Waiting to Start'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
 
 ## 🔧 Best Practices
 
@@ -588,21 +1073,21 @@ useEffect(() => {
 
 // ❌ Avoid: Frequent children updates
 const [content, setContent] = useState('');
-// Each update will re-parse the entire content
+// Each update re-parses the entire content
 ```
 
 ### 3. Mathematical Formula Optimization
 
 ```tsx
-// ✅ Recommended: Load mathematical formula styles on demand
+// ✅ Recommended: Load math formula styles on demand
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css'; // Only import when needed
 
-// ✅ Recommended: Reasonable use of delimiters
-// For simple formulas, use $...$ for conciseness
+// ✅ Recommended: Use delimiters appropriately
+// For simple formulas, use $...$ for simplicity
 // For complex formulas, use $$...$$ for clarity
 
-// ✅ Recommended: Plugin-based configuration
+// ✅ Recommended: Plugin configuration
 import { katexPlugin } from 'ds-markdown/plugins';
 <DsMarkdown plugins={[katexPlugin]}>Mathematical formula content</DsMarkdown>;
 ```
@@ -615,101 +1100,3 @@ import { MarkdownCMDRef } from 'ds-markdown';
 const ref = useRef<MarkdownCMDRef>(null);
 // Complete TypeScript type hints
 ```
-
-### 5. Style Customization
-
-```css
-/* Thinking area styles */
-.ds-markdown-thinking {
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 3px solid #ffc107;
-  padding: 12px;
-  border-radius: 6px;
-  margin: 8px 0;
-}
-
-/* Answer area styles */
-.ds-markdown-answer {
-  color: #333;
-  line-height: 1.6;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Code block styles */
-.ds-markdown pre {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 16px;
-  overflow-x: auto;
-}
-
-/* Table styles */
-.ds-markdown-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 16px 0;
-}
-
-.ds-markdown-table th,
-.ds-markdown-table td {
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  text-align: left;
-}
-
-/* Mathematical formula styles */
-.katex {
-  font-size: 1.1em;
-}
-
-.katex-display {
-  margin: 1em 0;
-  text-align: center;
-}
-
-/* Dark theme mathematical formulas */
-[data-theme='dark'] .katex {
-  color: #e1e1e1;
-}
-```
-
----
-
-## 🌐 Compatibility
-
-| Environment    | Version Requirement                 | Description              |
-| -------------- | ----------------------------------- | ------------------------ |
-| **React**      | 16.8.0+                             | Requires Hooks support   |
-| **TypeScript** | 4.0+                                | Optional but recommended |
-| **Browser**    | Chrome 60+, Firefox 55+, Safari 12+ | Modern browsers          |
-| **Node.js**    | 14.0+                               | Build environment        |
-
----
-
-## 🤝 Contributing
-
-Welcome to submit Issues and Pull Requests!
-
-1. Fork this repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push branch: `git push origin feature/amazing-feature`
-5. Submit Pull Request
-
----
-
-## 📄 License
-
-MIT © [onshinpei](https://github.com/onshinpei)
-
----
-
-<div align="center">
-  <strong>If this project helps you, please give it a ⭐️ Star!</strong>
-  
-  <br><br>
-  
-  [🐛 Report Issues](https://github.com/onshinpei/ds-markdown/issues) | 
-  [💡 Feature Suggestions](https://github.com/onshinpei/ds-markdown/issues) | 
-  [📖 View Documentation](https://onshinpei.github.io/ds-markdown/)
-</div>
