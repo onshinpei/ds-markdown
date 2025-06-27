@@ -5,9 +5,6 @@ import './App.css';
 import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css';
 
-// 导入源代码示例
-import { sourceCodeExamples } from './sourceCode';
-
 // 导入组件
 import Header from './components/Header';
 import Navigation from './components/Navigation';
@@ -16,28 +13,19 @@ import Footer from './components/Footer';
 import ApiDocumentation from './components/ApiDocumentation';
 
 // 导入演示组件
-import { BasicUsageDemo, MathSupportDemo, TypingAnimationDemo, CustomThemeDemo } from './components/Demos';
-// @ts-expect-error: Vite raw import for source code string
+import { BasicUsageDemo, MathSupportDemo, TypingAnimationDemo, CustomThemeDemo, StreamingDemo } from './components/Demos';
+
 import basicUsageDemoSource from './components/Demos/BasicUsageDemo/index.tsx?raw';
-// @ts-expect-error: Vite raw import for source code string
 import mathSupportDemoSource from './components/Demos/MathSupportDemo/index.tsx?raw';
-// @ts-expect-error: Vite raw import for source code string
 import typingAnimationDemoSource from './components/Demos/TypingAnimationDemo/index.tsx?raw';
-// @ts-expect-error: Vite raw import for source code string
 import customThemeDemoSource from './components/Demos/CustomThemeDemo/index.tsx?raw';
+import streamingDemoSource from './components/Demos/StreamingDemo/index.tsx?raw';
 
-// @ts-expect-error: Vite raw import for markdown string
 import basicUsageDemoMarkdown from './components/Demos/BasicUsageDemo/markdown.md?raw';
-// @ts-expect-error: Vite raw import for markdown string
 import mathSupportDemoMarkdown from './components/Demos/MathSupportDemo/markdown.md?raw';
-// @ts-expect-error: Vite raw import for markdown string
 import typingAnimationDemoMarkdown from './components/Demos/TypingAnimationDemo/markdown.md?raw';
-// @ts-expect-error: Vite raw import for markdown string
 import customThemeDemoMarkdown from './components/Demos/CustomThemeDemo/markdown.md?raw';
-
-console.log({
-  customThemeDemoMarkdown,
-});
+import streamingDemoMarkdown from './components/Demos/StreamingDemo/markdown.md?raw';
 
 const installationSource = `// npm
 npm install ds-markdown
@@ -91,6 +79,13 @@ const App: React.FC = () => {
             title="🎨 主题切换"
             sourceCode={{ code: customThemeDemoSource, markdownString: customThemeDemoMarkdown }}
             renderComponent={React.createElement(CustomThemeDemo, { markdown: customThemeDemoMarkdown })}
+          />
+
+          <DemoSection
+            id="streaming"
+            title="📺 流式演示"
+            sourceCode={{ code: streamingDemoSource, markdownString: streamingDemoMarkdown }}
+            renderComponent={React.createElement(StreamingDemo, { markdown: streamingDemoMarkdown })}
           />
 
           <ApiDocumentation />

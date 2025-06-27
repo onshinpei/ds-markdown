@@ -11,10 +11,6 @@ export type Theme = 'light' | 'dark';
 export interface IChar {
   content: string;
   answerType: AnswerType;
-  /**
-   * split_segment 两个连续的段落，需要做分割
-   */
-  contentType: 'space' | 'segment' | 'split_segment';
   tokenId: number;
   /** 字符索引 */
   index: number;
@@ -53,6 +49,11 @@ export interface IOnTypedCharData {
 
 export interface ITypedChar extends IOnTypedCharData {
   percent: number;
+  currentStr: string;
+}
+
+export interface IBeforeTypedChar extends IOnTypedCharData {
+  percent: number;
 }
 
 export interface MarkdownBaseProps {
@@ -68,6 +69,8 @@ export interface MarkdownBaseProps {
   onEnd?: (data?: IEndData) => void;
   /** 开始打字回调 */
   onStart?: (data?: IOnTypedCharData) => void;
+  /** 打字前回调 */
+  onBeforeTypedChar?: (data?: IBeforeTypedChar) => Promise<void>;
   /**
    * 打字机打完一个字符回调
    * @param char 字符
@@ -113,10 +116,12 @@ export interface IWholeContent {
   thinking: {
     content: string;
     length: number;
+    prevLength: number;
   };
   answer: {
     content: string;
     length: number;
+    prevLength: number;
   };
   allLength: number;
 }
@@ -125,6 +130,7 @@ export interface MarkdownBaseRef {
   stop: () => void;
   resume: () => void;
   start: () => void;
+  restart: () => void;
 }
 
 /** Markdown 组件的ref 类型 */
@@ -138,7 +144,11 @@ export interface MarkdownCMDRef extends MarkdownBaseRef {
 }
 
 export interface IEndData {
-  str?: string;
-  answerType?: AnswerType;
   manual: boolean;
+  /** 回答字符串 */
+  answerStr: string;
+  /** 思考字符串 */
+  thinkingStr: string;
+  /** 打字机打过的字符串, 和answerStr 相同 */
+  str: string;
 }

@@ -44,6 +44,11 @@ const Navigation: React.FC = () => {
             </a>
           </li>
           <li>
+            <a href="#streaming" onClick={(e) => handleNavClick(e, 'streaming')}>
+              流式演示
+            </a>
+          </li>
+          <li>
             <a href="#api" onClick={(e) => handleNavClick(e, 'api')}>
               API 文档
             </a>

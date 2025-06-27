@@ -7,6 +7,7 @@ export interface DemoData {
   math: string;
   typing: string;
   theme: string;
+  streaming: string;
 }
 
 export interface SourceCodeExample {

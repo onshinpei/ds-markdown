@@ -7,7 +7,7 @@ import { __DEV__ } from '../constant.js';
 import { useTypingTask } from '../hooks/useTypingTask.js';
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
-  ({ interval = 30, onEnd, onStart, onTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true }, ref) => {
+  ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true }, ref) => {
     /** 是否自动开启打字动画, 后面发生变化将不会生效 */
     const autoStartTypingRef = useRef(autoStartTyping);
 
@@ -29,10 +29,12 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       thinking: {
         content: '',
         length: 0,
+        prevLength: 0,
       },
       answer: {
         content: '',
         length: 0,
+        prevLength: 0,
       },
       allLength: 0,
     });
@@ -59,6 +61,16 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       triggerUpdate();
     };
 
+    const resetWholeContent = () => {
+      wholeContentRef.current.thinking.content = '';
+      wholeContentRef.current.thinking.length = 0;
+      wholeContentRef.current.thinking.prevLength = 0;
+      wholeContentRef.current.answer.content = '';
+      wholeContentRef.current.answer.length = 0;
+      wholeContentRef.current.answer.prevLength = 0;
+      wholeContentRef.current.allLength = 0;
+    };
+
     // 使用新的打字任务 hook
     const typingTask = useTypingTask({
       timerType,
@@ -67,10 +79,12 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       onEnd,
       onStart,
       onTypedChar,
+      onBeforeTypedChar,
       processCharDisplay,
       wholeContentRef,
       disableTyping,
       triggerUpdate,
+      resetWholeContent,
     });
 
     /**
@@ -87,7 +101,6 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
           const charObj: IChar = {
             content: chatStr,
             answerType,
-            contentType: 'segment',
             tokenId: 0,
             index,
           };
@@ -109,11 +122,14 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
 
     const processNoTypingPush = (content: string, answerType: AnswerType) => {
       wholeContentRef.current[answerType].content += content;
+      // 记录打字前的长度
+      wholeContentRef.current[answerType].prevLength = wholeContentRef.current[answerType].length;
       wholeContentRef.current[answerType].length += content.length;
       triggerUpdate();
       onEnd?.({
         str: content,
-        answerType,
+        answerStr: wholeContentRef.current.answer.content,
+        thinkingStr: wholeContentRef.current.thinking.content,
         manual: false,
       });
     };
@@ -139,11 +155,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
 
         typingTask.typedIsManualStopRef.current = false;
         charsRef.current = [];
-        wholeContentRef.current.thinking.content = '';
-        wholeContentRef.current.thinking.length = 0;
-        wholeContentRef.current.answer.content = '';
-        wholeContentRef.current.answer.length = 0;
-        wholeContentRef.current.allLength = 0;
+        resetWholeContent();
         isWholeTypedEndRef.current = false;
         charIndexRef.current = 0;
         isStartedTypingRef.current = false;
@@ -172,15 +184,17 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
         if (!typingTask.isTyping()) {
           // 这里需要手动触发结束回调，因为 hook 中的 triggerOnEnd 不能直接调用
           onEnd?.({
-            str: undefined,
-            answerType: undefined,
+            str: wholeContentRef.current.answer.content,
+            answerStr: wholeContentRef.current.answer.content,
+            thinkingStr: wholeContentRef.current.thinking.content,
             manual: true,
           });
         }
       },
-      /**
-       * 刷新缓冲区 (新增方法)
-       */
+      /** 重新开始打字任务 */
+      restart: () => {
+        typingTask.restart();
+      },
     }));
 
     const getParagraphs = (answerType: AnswerType) => {

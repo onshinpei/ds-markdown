@@ -121,4 +121,65 @@ if (theme === 'dark') {
 \`\`\`
 
 > 两种主题都有完美的代码高亮支持，确保在任何环境下都有良好的阅读体验。`,
+
+  streaming: `# 🌊 流式数据演示
+
+## 使用 MarkdownCMD 组件
+
+\`\`\`tsx
+import React, { useRef } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StreamingDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const handleStreaming = async () => {
+    // 清空之前的内容
+    markdownRef.current?.clear();
+    
+    // 模拟思考过程
+    markdownRef.current?.push('🤔 正在分析...', 'thinking');
+    await delay(1000);
+    
+    // 流式推送内容
+    const chunks = [
+      '# AI 助手回答\\n\\n',
+      '根据您的问题，我来为您详细解答：\\n\\n',
+      '## 主要特点\\n\\n',
+      '- ⚡ **高性能**：基于优化的渲染引擎\\n',
+      '- 🎬 **流畅动画**：支持多种打字效果\\n',
+      '- 🎯 **完美兼容**：支持完整 Markdown 语法\\n'
+    ];
+    
+    for (const chunk of chunks) {
+      await delay(100);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleStreaming}>
+        开始流式演示
+      </button>
+      <MarkdownCMD 
+        ref={markdownRef}
+        interval={15}
+        timerType="requestAnimationFrame"
+      />
+    </div>
+  );
+}
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+\`\`\`
+
+## 核心特性
+
+- **实时流式处理** - 支持网络流式数据
+- **思考模式** - 模拟 AI 思考过程
+- **中断恢复** - 支持暂停和继续
+- **多种场景** - AI 对话、代码生成、文档生成
+
+> 💡 流式演示完美模拟了真实的 AI 对话体验，支持思考过程和回答内容的区分。`,
 };

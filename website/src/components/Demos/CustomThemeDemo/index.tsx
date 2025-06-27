@@ -14,8 +14,45 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [mathOpen, setMathOpen] = useState(true);
   const [disableTyping, setDisableTyping] = useState(false);
 
-  const toggleTheme = () => {
+  // 事件处理函数
+  const handleToggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const handleToggleMath = () => {
+    setMathOpen((v) => !v);
+  };
+
+  const handleToggleTyping = () => {
+    setDisableTyping((v) => !v);
+  };
+
+  const handleStart = () => {
+    markdownRef.current?.start();
+    setIsTyping(true);
+    setIsStopped(false);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsStopped(true);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsTyping(true);
+    setIsStopped(false);
+  };
+
+  const handleTypingStart = () => {
+    setIsTyping(true);
+  };
+
+  const handleTypingEnd = (data?: { manual?: boolean }) => {
+    if (!data?.manual) {
+      setIsTyping(false);
+      setIsStopped(false);
+    }
   };
 
   // 根据当前主题替换占位符
@@ -25,10 +62,10 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
         <button
-          className="btn"
-          onClick={toggleTheme}
+          className="btn btn-primary btn-round"
+          onClick={handleToggleTheme}
           style={{
-            background: theme === 'dark' ? '#4a5568' : '#667eea',
+            background: theme === 'dark' ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             marginRight: '10px',
           }}
         >
@@ -39,48 +76,27 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
             padding: '8px 12px',
             background: theme === 'dark' ? '#2d3748' : '#f7fafc',
             color: theme === 'dark' ? '#e2e8f0' : '#2d3748',
-            borderRadius: '4px',
+            borderRadius: '8px',
             fontSize: '14px',
+            border: `1px solid ${theme === 'dark' ? '#4a5568' : '#e2e8f0'}`,
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
           }}
         >
           当前: {theme === 'light' ? '☀️ 亮色模式' : '🌙 暗色模式'}
         </span>
-        <button className="btn" onClick={() => setMathOpen((v) => !v)}>
+        <button className="btn btn-primary" onClick={handleToggleMath}>
           {mathOpen ? '关闭公式转换' : '开启公式转换'}
         </button>
-        <button className="btn" onClick={() => setDisableTyping((v) => !v)}>
+        <button className="btn btn-outline" onClick={handleToggleTyping}>
           {disableTyping ? '开启打字效果' : '关闭打字效果'}
         </button>
-        <button
-          className="btn"
-          onClick={() => {
-            markdownRef.current?.start();
-            setIsTyping(true);
-            setIsStopped(false);
-          }}
-          disabled={isTyping || isStopped}
-        >
+        <button className="btn btn-success" onClick={handleStart} disabled={isTyping || isStopped}>
           ▶️ 开始
         </button>
-        <button
-          className="btn"
-          onClick={() => {
-            markdownRef.current?.stop();
-            setIsStopped(true);
-          }}
-          disabled={!isTyping || isStopped}
-        >
+        <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
           ⏹️ 停止
         </button>
-        <button
-          className="btn"
-          onClick={() => {
-            markdownRef.current?.resume();
-            setIsTyping(true);
-            setIsStopped(false);
-          }}
-          disabled={!isStopped}
-        >
+        <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
           ⏭️ 继续
         </button>
       </div>
@@ -93,13 +109,8 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
           plugins={mathOpen ? [katexPlugin] : []}
           disableTyping={disableTyping}
           autoStartTyping={false}
-          onStart={() => setIsTyping(true)}
-          onEnd={(data) => {
-            if (!data?.manual) {
-              setIsTyping(false);
-              setIsStopped(false);
-            }
-          }}
+          onStart={handleTypingStart}
+          onEnd={handleTypingEnd}
         >
           {markdownContent}
         </DsMarkdown>
