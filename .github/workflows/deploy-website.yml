@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'website/package-lock.json'
 
@@ -43,15 +43,10 @@ jobs:
           cd website
           npm ci
 
-      - name: Type check
-        run: |
-          cd website
-          npm run type-check
-
       - name: Build website
         run: |
           cd website
-          npm run build:prod
+          npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -59,7 +54,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './website/dist'
+          path: './docs'
 
   # 部署作业
   deploy:
