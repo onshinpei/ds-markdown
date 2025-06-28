@@ -58,6 +58,9 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
   const disableTypingRef = useRef(disableTyping);
   disableTypingRef.current = disableTyping;
 
+  const intervalRef = useRef(interval);
+  intervalRef.current = interval;
+
   const getChars = () => {
     return charsRef.current;
   };
@@ -252,7 +255,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       }
 
       const deltaTime = currentTime - lastFrameTime;
-      const charsToType = Math.max(1, Math.floor(deltaTime / interval));
+      const charsToType = Math.max(1, Math.floor(deltaTime / intervalRef.current));
       const actualCharsToType = Math.min(charsToType, chars.length);
 
       // 处理字符
@@ -305,7 +308,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
         stopTimeout();
         return;
       }
-      timerRef.current = setTimeout(startTyped, interval);
+      timerRef.current = setTimeout(startTyped, intervalRef.current);
     };
 
     const startTyped = async (isStartPoint = false) => {
