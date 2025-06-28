@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import DsMarkdown, { MarkdownRef } from 'ds-markdown';
+import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 
 interface DemoProps {
   markdown: string;

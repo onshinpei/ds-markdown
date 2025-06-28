@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import DsMarkdown, { MarkdownRef } from 'ds-markdown';
+import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 
 interface DemoProps {
