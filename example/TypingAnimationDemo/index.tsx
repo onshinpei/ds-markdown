@@ -1,6 +1,10 @@
 import React, { useState, useRef, useCallback } from 'react';
-import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
-import { katexPlugin } from 'ds-markdown/plugins';
+import DsMarkdown, { type MarkdownRef } from '../../src';
+import { katexPlugin } from '../../src/plugins';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import markdown from './markdown.md?raw';
 
 interface DemoProps {
   markdown: string;
@@ -51,13 +55,13 @@ interface EndData {
 }
 
 // 全面的打字动画演示组件
-const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
+const TypingAnimationDemo: React.FC<DemoProps> = () => {
   const markdownRef = useRef<MarkdownRef>(null);
 
   // 组件配置状态
   const [config, setConfig] = useState<ComponentConfig>({
     interval: 30,
-    timerType: 'setTimeout',
+    timerType: 'requestAnimationFrame',
     answerType: 'answer',
     theme: 'light',
     disableTyping: false,
