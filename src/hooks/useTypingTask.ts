@@ -232,7 +232,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   /** requestAnimationFrame 模式 */
   const startAnimationFrameMode = () => {
-    let lastFrameTime = 0;
+    let lastFrameTime = performance.now();
 
     const frameLoop = async (currentTime: number) => {
       // 如果关闭打字机效果，则打完所有字符
@@ -249,39 +249,39 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
         return;
       }
 
-      // 计算这一帧应该打多少个字符
-      if (lastFrameTime === 0) {
-        lastFrameTime = currentTime;
-      }
-
       const deltaTime = currentTime - lastFrameTime;
-      const charsToType = Math.max(1, Math.floor(deltaTime / intervalRef.current));
-      const actualCharsToType = Math.min(charsToType, chars.length);
+      let needToTypingCharsLength = Math.max(0, Math.floor(deltaTime / intervalRef.current));
+      needToTypingCharsLength = Math.min(needToTypingCharsLength, chars.length);
 
-      // 处理字符
-      for (let i = 0; i < actualCharsToType; i++) {
-        const char = chars.shift();
-        if (char === undefined) break;
+      if (needToTypingCharsLength > 0) {
+        // 处理字符
+        for (let i = 0; i < needToTypingCharsLength; i++) {
+          const char = chars.shift();
+          if (char === undefined) break;
 
-        if (!isTypingRef.current) {
-          isTypingRef.current = true;
-          triggerOnStart(char);
+          if (!isTypingRef.current) {
+            isTypingRef.current = true;
+            triggerOnStart(char);
+          }
+          /** 打字前回调 */
+          await triggerOnBeforeTypedChar(char);
+          processCharDisplay(char);
+          /** 打字完成回调 */
+          triggerOnTypedChar(char);
         }
-        /** 打字前回调 */
-        await triggerOnBeforeTypedChar(char);
-        processCharDisplay(char);
-        /** 打字完成回调 */
-        triggerOnTypedChar(char);
-      }
 
-      lastFrameTime = performance.now();
+        lastFrameTime = performance.now();
 
-      // 继续下一帧
-      if (chars.length > 0) {
-        animationFrameRef.current = requestAnimationFrame(frameLoop);
+        // 继续下一帧
+        if (chars.length > 0) {
+          animationFrameRef.current = requestAnimationFrame(frameLoop);
+        } else {
+          isTypingRef.current = false;
+          triggerOnEnd();
+        }
       } else {
-        isTypingRef.current = false;
-        triggerOnEnd();
+        // 本次你不需要打字，继续下一帧
+        animationFrameRef.current = requestAnimationFrame(frameLoop);
       }
     };
 
