@@ -70,6 +70,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
     return () => {
       isUnmountRef.current = true;
+
+      clearTimer();
     };
   }, []);
 
