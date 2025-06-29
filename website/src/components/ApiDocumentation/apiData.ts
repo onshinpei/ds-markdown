@@ -35,13 +35,13 @@ export const propsData: ApiProperty[] = [
   {
     prop: 'timerType',
     type: "'setTimeout' | 'requestAnimationFrame'",
-    description: '定时器类型，推荐使用 requestAnimationFrame',
+    description: '定时器类型，推荐使用 requestAnimationFrame。不支持动态修改',
     defaultValue: "'setTimeout'",
   },
   {
     prop: 'answerType',
     type: "'thinking' | 'answer'",
-    description: '内容类型，影响样式主题。thinking为思考模式，answer为回答模式',
+    description: '内容类型，影响样式主题。thinking为思考模式，answer为回答模式。不支持动态修改',
     defaultValue: "'answer'",
   },
   {
@@ -95,7 +95,7 @@ export const propsData: ApiProperty[] = [
   {
     prop: 'autoStartTyping',
     type: 'boolean',
-    description: '是否自动开始打字动画，设为 false 时需手动触发',
+    description: '是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改',
     defaultValue: 'true',
   },
 ];
