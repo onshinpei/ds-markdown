@@ -29,6 +29,11 @@ body {
   animation: gradientShift 8s ease-in-out infinite;
 }
 
+.header .container {
+  position: relative;
+  z-index: 2;
+}
+
 .header::before {
   content: '';
   position: absolute;
@@ -40,6 +45,7 @@ body {
     radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
   pointer-events: none;
+  z-index: 1;
 }
 
 .header::after {
@@ -52,6 +58,7 @@ body {
   background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
   animation: shimmer 3s ease-in-out infinite;
   pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes gradientShift {
