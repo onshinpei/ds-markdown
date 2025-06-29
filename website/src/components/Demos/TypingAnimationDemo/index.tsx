@@ -50,6 +50,14 @@ interface EndData {
   manual?: boolean;
 }
 
+const DEFAULT_CONFIG: TypingStats = {
+  currentIndex: 0,
+  currentChar: '',
+  percent: 0,
+  totalChars: 0,
+  avgSpeed: 0,
+};
+
 // 全面的打字动画演示组件
 const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownRef = useRef<MarkdownRef>(null);
@@ -70,14 +78,21 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
 
+  const resetStatus = () => {
+    setIsTyping(false);
+    setIsStopped(false);
+    setIsStarted(false);
+    setTypingStats(DEFAULT_CONFIG);
+    setCallbackData({});
+    setPerformanceMetrics({
+      frameCount: 0,
+      avgFrameTime: 0,
+      lastFrameTime: 0,
+    });
+  };
+
   // 打字统计数据
-  const [typingStats, setTypingStats] = useState<TypingStats>({
-    currentIndex: 0,
-    currentChar: '',
-    percent: 0,
-    totalChars: 0,
-    avgSpeed: 0,
-  });
+  const [typingStats, setTypingStats] = useState<TypingStats>(DEFAULT_CONFIG);
 
   // 回调数据展示
   const [callbackData, setCallbackData] = useState<{
@@ -98,6 +113,9 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const updateConfig = useCallback((key: keyof ComponentConfig, value: string | number | boolean) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
   }, []);
+
+  // 需要重新渲染的配置项key
+  const rerenderKey = `${config.timerType}-${config.autoStartTyping}-${config.answerType}`;
 
   // 演示用的丰富Markdown内容
   const getDemoContent = () => {
@@ -290,58 +308,100 @@ import { katexPlugin } from 'ds-markdown/plugins';
       <div style={{ marginBottom: 20, padding: 16, background: config.theme === 'dark' ? '#2d3748' : '#f7fafc', borderRadius: 8 }}>
         <h4 style={{ margin: '0 0 12px 0', color: config.theme === 'dark' ? '#e2e8f0' : '#2d3748' }}>🎛️ 实时配置面板</h4>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-          {/* 间隔控制 */}
-          <div className="select-wrapper">
-            <label className="select-label">间隔 (ms):</label>
-            <input type="range" min="5" max="2000" value={config.interval} onChange={(e) => updateConfig('interval', parseInt(e.target.value))} style={{ width: '100%' }} />
-            <span style={{ fontSize: 12, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>{config.interval}ms</span>
+        {/* 第一组：实时生效的配置 */}
+        <div style={{ marginBottom: 16 }}>
+          <h5 style={{ margin: '0 0 8px 0', fontSize: 14, color: config.theme === 'dark' ? '#cbd5e0' : '#4a5568' }}>⚡ 实时生效配置</h5>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+            {/* 间隔控制 */}
+            <div className="select-wrapper">
+              <label className="select-label">间隔 (ms):</label>
+              <input type="range" min="5" max="2000" value={config.interval} onChange={(e) => updateConfig('interval', parseInt(e.target.value))} style={{ width: '100%' }} />
+              <span style={{ fontSize: 12, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>{config.interval}ms</span>
+            </div>
+
+            {/* 主题 */}
+            <div className="select-wrapper">
+              <label className="select-label">主题:</label>
+              <select className="select-control" value={config.theme} onChange={(e) => updateConfig('theme', e.target.value)}>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
           </div>
 
-          {/* 定时器类型 */}
-          <div className="select-wrapper">
-            <label className="select-label">定时器类型:</label>
-            <select className="select-control" value={config.timerType} onChange={(e) => updateConfig('timerType', e.target.value)}>
-              <option value="setTimeout">setTimeout</option>
-              <option value="requestAnimationFrame">requestAnimationFrame</option>
-            </select>
+          {/* 实时开关 */}
+          <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="checkbox" checked={config.disableTyping} onChange={(e) => updateConfig('disableTyping', e.target.checked)} />
+              <span className="select-label">禁用打字效果</span>
+            </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="checkbox" checked={config.mathEnabled} onChange={(e) => updateConfig('mathEnabled', e.target.checked)} />
+              <span className="select-label">数学公式</span>
+            </label>
+          </div>
+        </div>
+
+        {/* 第二组：需要重新渲染的配置 */}
+        <div
+          style={{
+            padding: 12,
+            border: `1px dashed ${config.theme === 'dark' ? '#4a5568' : '#e2e8f0'}`,
+            borderRadius: 6,
+            background: config.theme === 'dark' ? '#2d3748' : '#f8f9fa',
+          }}
+        >
+          <h5 style={{ margin: '0 0 8px 0', fontSize: 14, color: config.theme === 'dark' ? '#fbb6ce' : '#d53f8c' }}>🔄 重新渲染配置</h5>
+          <p style={{ fontSize: 12, margin: '0 0 12px 0', color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>这些配置变更需要强制组件重新渲染</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+            {/* 定时器类型 */}
+            <div className="select-wrapper">
+              <label className="select-label">定时器类型:</label>
+              <select
+                className="select-control"
+                value={config.timerType}
+                onChange={(e) => {
+                  updateConfig('timerType', e.target.value);
+                  resetStatus();
+                }}
+              >
+                <option value="setTimeout">setTimeout</option>
+                <option value="requestAnimationFrame">requestAnimationFrame</option>
+              </select>
+            </div>
           </div>
 
-          {/* 主题 */}
-          <div className="select-wrapper">
-            <label className="select-label">主题:</label>
-            <select className="select-control" value={config.theme} onChange={(e) => updateConfig('theme', e.target.value)}>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
+          {/* 重新渲染开关 */}
+          <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input
+                type="checkbox"
+                checked={config.autoStartTyping}
+                onChange={(e) => {
+                  updateConfig('autoStartTyping', e.target.checked);
+                  resetStatus();
+                }}
+              />
+              <span className="select-label">自动开始</span>
+            </label>
           </div>
-
           {/* 内容类型 */}
           <div className="select-wrapper">
             <label className="select-label">内容类型:</label>
-            <select className="select-control" value={config.answerType} onChange={(e) => updateConfig('answerType', e.target.value)}>
+            <select
+              className="select-control"
+              value={config.answerType}
+              onChange={(e) => {
+                updateConfig('answerType', e.target.value);
+                resetStatus();
+              }}
+            >
               <option value="answer">Answer</option>
               <option value="thinking">Thinking</option>
             </select>
           </div>
-        </div>
-
-        {/* 布尔开关 */}
-        <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="checkbox" checked={config.disableTyping} onChange={(e) => updateConfig('disableTyping', e.target.checked)} />
-            <span className="select-label">禁用打字效果</span>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="checkbox" checked={config.autoStartTyping} onChange={(e) => updateConfig('autoStartTyping', e.target.checked)} />
-            <span className="select-label">自动开始</span>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="checkbox" checked={config.mathEnabled} onChange={(e) => updateConfig('mathEnabled', e.target.checked)} />
-            <span className="select-label">数学公式</span>
-          </label>
         </div>
       </div>
 
@@ -432,6 +492,7 @@ import { katexPlugin } from 'ds-markdown/plugins';
       {/* 渲染区域 */}
       <div>
         <DsMarkdown
+          key={rerenderKey}
           ref={markdownRef}
           interval={config.interval}
           timerType={config.timerType}

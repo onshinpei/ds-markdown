@@ -2,6 +2,8 @@ import React, { useState, useRef, useCallback } from 'react';
 import DsMarkdown, { type MarkdownRef } from '../../src';
 import { katexPlugin } from '../../src/plugins';
 
+import 'katex/dist/katex.min.css';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import markdown from './markdown.md?raw';
