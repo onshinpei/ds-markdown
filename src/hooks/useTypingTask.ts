@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, IBeforeTypedChar } from '../defined.js';
+import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, IBeforeTypedChar } from '../defined';
 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];

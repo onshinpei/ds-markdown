@@ -5,7 +5,9 @@ export default {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig-test.json',
+      tsconfig: 'tsconfig.json',
     },
   },
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 };

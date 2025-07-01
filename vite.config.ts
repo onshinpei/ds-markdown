@@ -9,4 +9,7 @@ export default defineConfig({
     sourcemap: false, // 或 'inline',
     outDir: 'dev',
   },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('development'),
+  },
 });
