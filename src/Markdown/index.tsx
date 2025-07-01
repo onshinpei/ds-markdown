@@ -1,7 +1,7 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
-import { __DEV__ } from '../constant.js';
-import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined.js';
-import MarkdownCMD from '../MarkdownCMD/index.js';
+import { __DEV__ } from '../constant';
+import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
+import MarkdownCMD from '../MarkdownCMD';
 
 interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;

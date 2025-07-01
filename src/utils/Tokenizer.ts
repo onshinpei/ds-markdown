@@ -1,6 +1,6 @@
 /** 此文件借鉴 marked 的部分代码 */
 
-import { rules } from './rule.js';
+import { rules } from './rule';
 
 let id = 0;
 
