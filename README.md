@@ -2,7 +2,7 @@
 
 > 🚀 高性能 React Markdown 打字动画组件，完美复刻 DeepSeek 聊天界面效果
 
-**🇨🇳 中文 | [🇺🇸 English](./README.en.md) | [🇯🇵 日本語](./README.ja.md) | [🇰🇷 한국어](./README.ko.md)**
+**🇨🇳 中文 | [🇺🇸 English](./README.en.md)**
 
 一个专为现代 AI 应用设计的 React 组件，提供流畅的实时打字动画和完整的 Markdown 渲染能力。
 
@@ -15,6 +15,8 @@
 [📖 在线演示](https://onshinpei.github.io/ds-markdown/)
 
 [DEMO：🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+
+如果你想要一个纯净的`react markdown` 打字组件，可以使用[react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)
 
 ---
 
