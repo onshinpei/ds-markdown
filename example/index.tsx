@@ -13,7 +13,7 @@ const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
     <div className={`ds-message ds-message-${theme}`}>
-      <TypingAnimationDemo theme={theme} setTheme={setTheme} />
+      <KatexDemo theme={theme} setTheme={setTheme} />
     </div>
   );
 };

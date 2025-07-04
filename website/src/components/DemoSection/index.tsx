@@ -35,7 +35,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
             <div className="ds-markdown code-block">
               <div className="md-code-block md-code-block-light">
                 <SyntaxHighlighter useInlineStyles={false} language={activeTab === 'code' ? sourceCode.lang || 'tsx' : 'markdown'} style={{}}>
-                  {sourceCode.code}
+                  {sourceCode.code.trim()}
                 </SyntaxHighlighter>
               </div>
             </div>

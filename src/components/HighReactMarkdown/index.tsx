@@ -4,10 +4,10 @@ import Markdown from 'react-markdown';
 import type { Options } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
-import { replaceMathBracket } from '../../utils/remarkMathBracket.js';
-import BlockWrap from '../BlockWrap/index.js';
-import { IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined.js';
-import { katexId } from '../../constant.js';
+import { replaceMathBracket } from '../../utils/remarkMathBracket';
+import BlockWrap from '../BlockWrap';
+import { IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined';
+import { katexId } from '../../constant';
 
 interface HighReactMarkdownProps extends Options {
   theme?: Theme;

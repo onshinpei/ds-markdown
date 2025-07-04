@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme } from '../../defined.js';
+import { Theme } from '../../defined';
 
 interface BlockWrapProps {
   children: React.ReactNode;

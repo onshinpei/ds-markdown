@@ -2,7 +2,7 @@
 
 > 🚀 High-performance React Markdown typing animation component, perfectly replicating DeepSeek chat interface effects
 
-**[🇨🇳 中文](./README.md) | 🇺🇸 English | [🇯🇵 日本語](./README.ja.md) | [🇰🇷 한국어](./README.ko.md)**
+**[🇨🇳 中文](./README.md) | 🇺🇸 English**
 
 A React component designed specifically for modern AI applications, providing smooth real-time typing animations and complete Markdown rendering capabilities.
 
@@ -15,6 +15,8 @@ A React component designed specifically for modern AI applications, providing sm
 [📖 Live Demo](https://onshinpei.github.io/ds-markdown/)
 
 [DEMO：🔧 StackBlitz Experience](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+
+**If you want a pure react markdown typing component, you can use [react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)**
 
 ---
 

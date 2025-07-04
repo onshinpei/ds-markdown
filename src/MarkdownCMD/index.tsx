@@ -1,10 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-import HighReactMarkdown from '../components/HighReactMarkdown/index.js';
+import HighReactMarkdown from '../components/HighReactMarkdown';
 import classNames from 'classnames';
-import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined.js';
-import { __DEV__ } from '../constant.js';
-import { useTypingTask } from '../hooks/useTypingTask.js';
+import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
+import { __DEV__ } from '../constant';
+import { useTypingTask } from '../hooks/useTypingTask';
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
   ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true }, ref) => {
