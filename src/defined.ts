@@ -83,7 +83,7 @@ export interface MarkdownBaseProps {
   /** 数学公式配置 */
   math?: IMarkdownMath;
 
-  code?: IMarkdownCode;
+  codeBlock?: IMarkdownCode;
 
   /** 插件配置 */
   plugins?: IMarkdownPlugin[];

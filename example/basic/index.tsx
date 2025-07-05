@@ -4,9 +4,9 @@ import { createRoot } from 'react-dom/client';
 import Markdown, { MarkdownRef } from '../../src';
 import json from './data.json';
 
-function throttle(fn: (...args: any[]) => void, delay: number) {
+function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
   let lastTime = 0;
-  return (...args: unknown[]) => {
+  return (...args: T) => {
     const now = Date.now();
     if (now - lastTime > delay) {
       fn(...args);
@@ -108,6 +108,7 @@ const BasicDemo: React.FC<{
             // timerType="setTimeout"
             timerType={timerType}
             theme={theme}
+            codeBlock={{ headerActions: true }}
           >
             {thinkingContent}
           </Markdown>
@@ -122,7 +123,7 @@ const BasicDemo: React.FC<{
                   继续
                 </button>
               </div>
-              <Markdown interval={interval} ref={markdownRef} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme}>
+              <Markdown interval={interval} ref={markdownRef} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme} codeBlock={{ headerActions: true }}>
                 {answerContent}
               </Markdown>
             </>

@@ -6,7 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
 import { replaceMathBracket } from '../../utils/remarkMathBracket';
 import BlockWrap from '../BlockWrap';
-import { IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined';
+import { IMarkdownCode, IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined';
 import { katexId } from '../../constant';
 
 interface HighReactMarkdownProps extends Options {
@@ -14,9 +14,10 @@ interface HighReactMarkdownProps extends Options {
   children: string;
   math?: IMarkdownMath;
   plugins?: IMarkdownPlugin[];
+  codeBlock?: IMarkdownCode;
 }
 
-const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', children: _children, math, plugins, ...props }) => {
+const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', children: _children, math, plugins, codeBlock, ...props }) => {
   const mathSplitSymbol = math?.splitSymbol ?? 'dollar';
 
   const { remarkPlugins, rehypePlugins, hasKatexPlugin } = useMemo(() => {
@@ -59,10 +60,11 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', 
       components={{
         code: ({ className, children, ...props }) => {
           const match = /language-(\w+)/.exec(className || '');
+          const codeContent = String(children).replace(/\n$/, '');
           return match ? (
-            <BlockWrap language={match[1]} theme={theme}>
+            <BlockWrap language={match[1]} theme={theme} codeBlock={codeBlock} codeContent={codeContent}>
               <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
-                {String(children).replace(/\n$/, '')}
+                {codeContent}
               </SyntaxHighlighter>
             </BlockWrap>
           ) : (

@@ -7,7 +7,7 @@ import { __DEV__ } from '../constant';
 import { useTypingTask } from '../hooks/useTypingTask';
 
 const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
-  ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true }, ref) => {
+  ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true, codeBlock }, ref) => {
     /** 是否自动开启打字动画, 后面发生变化将不会生效 */
     const autoStartTypingRef = useRef(autoStartTyping);
 
@@ -201,7 +201,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       const content = wholeContentRef.current[answerType].content || '';
       return (
         <div className={`ds-markdown-paragraph ds-typed-${answerType}`}>
-          <HighReactMarkdown theme={theme} math={math} plugins={plugins}>
+          <HighReactMarkdown theme={theme} math={math} plugins={plugins} codeBlock={codeBlock}>
             {content}
           </HighReactMarkdown>
         </div>
