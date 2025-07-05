@@ -83,11 +83,21 @@ export interface MarkdownBaseProps {
   /** 数学公式配置 */
   math?: IMarkdownMath;
 
+  code?: IMarkdownCode;
+
   /** 插件配置 */
   plugins?: IMarkdownPlugin[];
 
   /** 是否自动开启打字动画 */
   autoStartTyping?: boolean;
+}
+
+export interface IMarkdownCode {
+  /** 是否显示头部操作按钮
+   * 如果为true，则显示头部操作按钮
+   * 如果为React.ReactNode，则显示自定义头部操作按钮
+   */
+  headerActions?: boolean | React.ReactNode;
 }
 
 export interface MarkdownProps extends MarkdownBaseProps {
