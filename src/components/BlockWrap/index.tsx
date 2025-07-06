@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IMarkdownCode, Theme } from '../../defined';
 import { CopyIcon, DownloadIcon, CheckMarkIcon } from './icon';
 import DsButton from '../DsButton';
@@ -16,6 +16,10 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
   const [copyText, setCopyText] = useState('复制');
   const [showCheckmark, setShowCheckmark] = useState(false);
 
+  useEffect(() => {
+    console.log('render');
+  }, []);
+
   // 复制到剪贴板
   const handleCopy = async () => {
     if (!codeContent) return;
@@ -27,7 +31,7 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
       setTimeout(() => {
         setCopyText('复制');
         setShowCheckmark(false);
-      }, 2000);
+      }, 10000);
     } catch (err) {
       console.error('复制失败:', err);
       // 降级方案：使用传统方法
