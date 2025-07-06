@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IMarkdownCode, Theme } from '../../defined';
 import { CopyIcon, DownloadIcon, CheckMarkIcon } from './icon';
+import DsButton from '../DsButton';
 
 interface BlockWrapProps {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ interface BlockWrapProps {
 }
 
 const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'light', codeBlock, codeContent }) => {
-  const { headerActions } = codeBlock || {};
+  const { headerActions = true } = codeBlock || {};
   const [copyText, setCopyText] = useState('复制');
   const [showCheckmark, setShowCheckmark] = useState(false);
 
@@ -106,14 +107,17 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
     if (headerActions === true) {
       return (
         <div className="md-code-block-header-actions">
-          <button className="md-code-block-action-btn md-code-block-copy-btn" onClick={handleCopy} title="复制代码">
-            {showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />}
+          <DsButton icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
             <span>{copyText}</span>
-          </button>
-          <button className="md-code-block-action-btn md-code-block-download-btn" onClick={handleDownload} title="下载代码">
-            <DownloadIcon size={24} />
+          </DsButton>
+          {/* <button className="md-code-block-action-btn md-code-block-download-btn" onClick={handleDownload} title="下载代码">
+              <DownloadIcon size={24} />
+              <span>下载</span>
+            </button> */}
+
+          <DsButton icon={<DownloadIcon size={24} />} onClick={handleDownload}>
             <span>下载</span>
-          </button>
+          </DsButton>
         </div>
       );
     }
@@ -124,10 +128,8 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
     <div className={`md-code-block md-code-block-${theme}`}>
       <div className="md-code-block-banner-wrap">
         <div className="md-code-block-banner md-code-block-banner-lite">
-          <div className="md-code-block-banner-content">
-            <div className="md-code-block-language">{language}</div>
-            {renderHeaderActions()}
-          </div>
+          <div className="md-code-block-language">{language}</div>
+          {renderHeaderActions()}
         </div>
       </div>
       <div className="md-code-block-content">{children}</div>

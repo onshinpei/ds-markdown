@@ -73,6 +73,11 @@
   --ds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ds-rgba-transparent: 255 255 255 / 0;
   --ds-rgb-link: var(--ds-rgb-primary);
+
+  --ds-input-height-l: 44px;
+  --ds-input-height-m: 34px;
+  --ds-input-height-s: 30px;
+  --ds-input-height-xs: 26px;
 }
 
 .ds-markdown.apple {
@@ -324,4 +329,51 @@ ds-markdown-math {
   margin: calc(var(--ds-md-zoom) * 12px) 0;
   font-size: var(--ds-md-font-size);
   line-height: var(--ds-md-line-height);
+}
+
+.ds-button {
+  --button-height: 28px;
+  --button-font-size: var(--ds-font-size-m);
+  --button-line-height: var(--ds-line-height-m);
+  --button-border-radius: 10px;
+  --button-padding: 0 14px;
+  --button-icon-size: 18px;
+  --button-icon-margin: 0 8px 0 0;
+}
+
+.ds-button {
+  height: var(--button-height);
+  line-height: var(--button-line-height);
+  font-size: var(--button-font-size);
+  border-radius: var(--button-border-radius);
+  padding: var(--button-padding);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition:
+    opacity var(--ds-transition-duration) var(--ds-ease-in-out),
+    background-color var(--ds-transition-duration) var(--ds-ease-in-out);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  align-items: center;
+  text-decoration: none;
+  display: inline-flex;
+  position: relative;
+}
+
+.ds-button > .ds-button__icon {
+  line-height: 0;
+  font-size: var(--button-icon-size);
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  margin: var(--button-icon-margin);
+  flex-grow: 0;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }

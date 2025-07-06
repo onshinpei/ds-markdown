@@ -9,11 +9,12 @@ import CDMDemo from './cmd';
 import KatexDemo from './katex';
 import ManualStartDemo from './ManualStart';
 import TypingAnimationDemo from './TypingAnimationDemo';
+import CodeDemo from './code';
 const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
     <div className={`ds-message ds-message-${theme}`}>
-      <BasicDemo theme={theme} setTheme={setTheme} />
+      <CodeDemo theme={theme} setTheme={setTheme} />
     </div>
   );
 };
