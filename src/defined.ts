@@ -107,6 +107,7 @@ export interface MarkdownProps extends MarkdownBaseProps {
 /**  MarkdownCMD 组件不需要 children */
 export interface MarkdownCMDProps extends MarkdownBaseProps {
   children?: undefined;
+  isInnerRender?: boolean;
 }
 
 export interface IMarkdownPlugin {

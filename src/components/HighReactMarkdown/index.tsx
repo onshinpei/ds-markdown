@@ -8,6 +8,7 @@ import { replaceMathBracket } from '../../utils/remarkMathBracket';
 import BlockWrap from '../BlockWrap';
 import { IMarkdownCode, IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined';
 import { katexId } from '../../constant';
+import { useMarkdownContext } from '../../context/MarkdownProvider';
 
 interface HighReactMarkdownProps extends Options {
   theme?: Theme;
@@ -20,6 +21,10 @@ interface HighReactMarkdownProps extends Options {
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children }) => {
   const match = /language-(\w+)/.exec(className || '');
   const codeContent = String(children).replace(/\n$/, '');
+  const { state } = useMarkdownContext();
+
+  const { theme, codeBlock } = state;
+
   return match ? (
     <BlockWrap language={match[1]} theme={theme} codeBlock={codeBlock} codeContent={codeContent}>
       <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
@@ -27,9 +32,7 @@ const CodeComponent: React.FC<{ className: string; children: string }> = ({ clas
       </SyntaxHighlighter>
     </BlockWrap>
   ) : (
-    <code className={className} {...props}>
-      {children}
-    </code>
+    <code className={className}>{children}</code>
   );
 };
 
@@ -68,22 +71,6 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', 
     }
     return _children;
   }, [hasKatexPlugin, mathSplitSymbol, _children]);
-
-  const CodeComponent: React.FC<{ className?: string; children?: string } & ExtraProps> = useMemo(() => {
-    return ({ className, children }) => {
-      const match = /language-(\w+)/.exec(className || '');
-      const codeContent = String(children).replace(/\n$/, '');
-      return match ? (
-        <BlockWrap language={match[1]} theme={theme} codeBlock={codeBlock} codeContent={codeContent}>
-          <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
-            {codeContent}
-          </SyntaxHighlighter>
-        </BlockWrap>
-      ) : (
-        <code className={className}>{children}</code>
-      );
-    };
-  }, [theme, codeBlock]);
 
   return (
     <Markdown
