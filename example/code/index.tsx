@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
 
-import Markdown, { MarkdownRef } from '../../src';
+import Markdown, { MarkdownRef, ConfigProvider } from '../../src';
 import dataJson from './data.json';
+
+import enUS from '../../src/i18n/en';
 
 import 'katex/dist/katex.min.css';
 import { katexPlugin } from '../../src/plugins';
