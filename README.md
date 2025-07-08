@@ -67,6 +67,7 @@
 - [🔌 插件系统](#-插件系统)
 - [🎛️ 定时器模式详解](#️-定时器模式详解)
 - [💡 实战示例](#-实战示例)
+- [多语言配置](#-多语言配置)
 - [🔧 最佳实践](#-最佳实践)
 
 ---
@@ -956,7 +957,7 @@ const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
 
-## ConfigProvider 多语言配置
+## 多语言配置
 
 ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
 
