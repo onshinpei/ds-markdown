@@ -3,6 +3,7 @@ import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
 import MarkdownCMD from '../MarkdownCMD';
 import { MarkdownProvider } from '../context/MarkdownProvider';
+import { MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
 
 interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
@@ -54,7 +55,9 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
     },
   }));
 
-  return <MarkdownCMD ref={cmdRef} {...rest} />;
+  // 只传递 MarkdownBaseProps 相关的属性
+  const { theme, math, plugins, codeBlock, ...baseProps } = rest;
+  return <MarkdownCMD ref={cmdRef} {...baseProps} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
@@ -71,9 +74,23 @@ const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
 
   const contextValue = useMemo(() => ({ ...reset, answerType }), [reset, answerType]);
 
+  // 分离主题相关的 props
+  const themeProps = useMemo(
+    () => ({
+      theme: props.theme,
+      math: props.math,
+      codeBlock: props.codeBlock,
+      plugins: props.plugins,
+      answerType: props.answerType,
+    }),
+    [props.theme, props.math, props.codeBlock, props.plugins, props.answerType],
+  );
+
   return (
     <MarkdownProvider value={contextValue}>
-      <MarkdownInner {...props} answerType={answerType} markdownRef={ref} />
+      <MarkdownThemeProvider value={themeProps}>
+        <MarkdownInner {...props} answerType={answerType} markdownRef={ref} />
+      </MarkdownThemeProvider>
     </MarkdownProvider>
   );
 });

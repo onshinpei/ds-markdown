@@ -1,39 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { IMarkdownCode, Theme } from '../../defined';
 import { CopyIcon, DownloadIcon, CheckMarkIcon } from './icon';
 import DsButton from '../DsButton';
+import { useMarkdownThemeContext } from '../../context/MarkdownThemeProvider';
+import { useConfig } from '../../context/ConfigProvider';
 
 interface BlockWrapProps {
   children: React.ReactNode;
   language: string;
-  theme?: Theme;
-  codeBlock?: IMarkdownCode;
   codeContent?: string;
 }
 
-const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'light', codeBlock, codeContent }) => {
-  const { headerActions = true } = codeBlock || {};
-  const [copyText, setCopyText] = useState('复制');
-  const [showCheckmark, setShowCheckmark] = useState(false);
+const TIMEOUT = 3000;
 
-  useEffect(() => {
-    console.log('render');
-  }, []);
+const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, codeContent }) => {
+  const { state: themeState } = useMarkdownThemeContext();
+  const { locale } = useConfig();
+
+  // 从 context 中获取主题配置
+  const currentTheme = themeState.theme;
+  const currentCodeBlock = themeState.codeBlock;
+
+  const { headerActions = true } = currentCodeBlock || {};
+  const [copyText, setCopyText] = useState(locale.codeBlock.copy);
+  const [showCheckmark, setShowCheckmark] = useState(false);
+  const [isCopying, setIsCopying] = useState(false);
 
   // 复制到剪贴板
   const handleCopy = async () => {
-    if (!codeContent) return;
-
+    if (isCopying || !codeContent) return;
+    setIsCopying(true);
     try {
       await navigator.clipboard.writeText(codeContent);
-      setCopyText('已复制');
+      setCopyText(locale.codeBlock.copied);
       setShowCheckmark(true);
       setTimeout(() => {
-        setCopyText('复制');
+        setCopyText(locale.codeBlock.copy);
         setShowCheckmark(false);
-      }, 10000);
+        setIsCopying(false);
+      }, TIMEOUT);
     } catch (err) {
-      console.error('复制失败:', err);
       // 降级方案：使用传统方法
       const textArea = document.createElement('textarea');
       textArea.value = codeContent;
@@ -41,14 +46,16 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
       textArea.select();
       try {
         document.execCommand('copy');
-        setCopyText('已复制');
+        setCopyText(locale.codeBlock.copied);
         setShowCheckmark(true);
         setTimeout(() => {
-          setCopyText('复制');
+          setCopyText(locale.codeBlock.copy);
           setShowCheckmark(false);
-        }, 2000);
+          setIsCopying(false);
+        }, TIMEOUT);
       } catch (fallbackErr) {
-        console.error('降级复制也失败:', fallbackErr);
+        console.error('Fallback copy failed:', fallbackErr);
+        setIsCopying(false);
       }
       document.body.removeChild(textArea);
     }
@@ -111,16 +118,11 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
     if (headerActions === true) {
       return (
         <div className="md-code-block-header-actions">
-          <DsButton icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
+          <DsButton style={{ fontSize: 13 }} icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
             <span>{copyText}</span>
           </DsButton>
-          {/* <button className="md-code-block-action-btn md-code-block-download-btn" onClick={handleDownload} title="下载代码">
-              <DownloadIcon size={24} />
-              <span>下载</span>
-            </button> */}
-
-          <DsButton icon={<DownloadIcon size={24} />} onClick={handleDownload}>
-            <span>下载</span>
+          <DsButton style={{ fontSize: 13 }} icon={<DownloadIcon size={24} />} onClick={handleDownload}>
+            <span>{locale.codeBlock.download}</span>
           </DsButton>
         </div>
       );
@@ -129,7 +131,7 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, theme = 'ligh
   };
 
   return (
-    <div className={`md-code-block md-code-block-${theme}`}>
+    <div className={`md-code-block md-code-block-${currentTheme}`}>
       <div className="md-code-block-banner-wrap">
         <div className="md-code-block-banner md-code-block-banner-lite">
           <div className="md-code-block-language">{language}</div>

@@ -6,27 +6,20 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import gfmPlugin from 'remark-gfm';
 import { replaceMathBracket } from '../../utils/remarkMathBracket';
 import BlockWrap from '../BlockWrap';
-import { IMarkdownCode, IMarkdownMath, IMarkdownPlugin, Theme } from '../../defined';
 import { katexId } from '../../constant';
-import { useMarkdownContext } from '../../context/MarkdownProvider';
+import { useMarkdownThemeContext } from '../../context/MarkdownThemeProvider';
 
 interface HighReactMarkdownProps extends Options {
-  theme?: Theme;
   children: string;
-  math?: IMarkdownMath;
-  plugins?: IMarkdownPlugin[];
-  codeBlock?: IMarkdownCode;
 }
 
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children }) => {
   const match = /language-(\w+)/.exec(className || '');
   const codeContent = String(children).replace(/\n$/, '');
-  const { state } = useMarkdownContext();
-
-  const { theme, codeBlock } = state;
+  const { state: themeState } = useMarkdownThemeContext();
 
   return match ? (
-    <BlockWrap language={match[1]} theme={theme} codeBlock={codeBlock} codeContent={codeContent}>
+    <BlockWrap language={match[1]} codeContent={codeContent}>
       <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
         {codeContent}
       </SyntaxHighlighter>
@@ -36,20 +29,25 @@ const CodeComponent: React.FC<{ className: string; children: string }> = ({ clas
   );
 };
 
-const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', children: _children, math, plugins, codeBlock, ...props }) => {
-  const mathSplitSymbol = math?.splitSymbol ?? 'dollar';
+const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _children, ...props }) => {
+  const { state: themeState } = useMarkdownThemeContext();
+
+  // 从 context 中获取主题配置
+  const currentMath = themeState.math;
+  const currentPlugins = themeState.plugins;
+  const mathSplitSymbol = currentMath?.splitSymbol ?? 'dollar';
 
   const { remarkPlugins, rehypePlugins, hasKatexPlugin } = useMemo(() => {
     let hasKatexPlugin = false;
     const remarkPlugins: any[] = [gfmPlugin];
     const rehypePlugins: any[] = [];
-    if (!plugins) {
+    if (!currentPlugins) {
       return {
         remarkPlugins,
         rehypePlugins,
       };
     }
-    plugins.forEach((plugin) => {
+    currentPlugins.forEach((plugin) => {
       if (plugin.id === katexId) {
         hasKatexPlugin = true;
         remarkPlugins.push(plugin.remarkPlugin);
@@ -62,7 +60,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ theme = 'light', 
       rehypePlugins,
       hasKatexPlugin,
     };
-  }, [plugins]);
+  }, [currentPlugins]);
 
   const children = useMemo(() => {
     /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */

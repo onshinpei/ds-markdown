@@ -1,13 +1,20 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import HighReactMarkdown from '../components/HighReactMarkdown';
 import classNames from 'classnames';
 import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
 import { __DEV__ } from '../constant';
 import { useTypingTask } from '../hooks/useTypingTask';
+import { MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
+import { MarkdownProvider } from '../context/MarkdownProvider';
 
-const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
-  ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', theme = 'light', math, plugins, disableTyping = false, autoStartTyping = true, codeBlock }, ref) => {
+const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
+  ({ interval = 30, onEnd, onStart, onTypedChar, onBeforeTypedChar, timerType = 'setTimeout', disableTyping = false, autoStartTyping = true }, ref) => {
+    const { state: themeState } = useMarkdownThemeContext();
+
+    // 从 context 中获取主题配置
+    const currentTheme = themeState.theme;
+
     /** 是否自动开启打字动画, 后面发生变化将不会生效 */
     const autoStartTypingRef = useRef(autoStartTyping);
 
@@ -201,9 +208,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
       const content = wholeContentRef.current[answerType].content || '';
       return (
         <div className={`ds-markdown-paragraph ds-typed-${answerType}`}>
-          <HighReactMarkdown theme={theme} math={math} plugins={plugins} codeBlock={codeBlock}>
-            {content}
-          </HighReactMarkdown>
+          <HighReactMarkdown>{content}</HighReactMarkdown>
         </div>
       );
     };
@@ -213,7 +218,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
         className={classNames({
           'ds-markdown': true,
           apple: true,
-          'ds-markdown-dark': theme === 'dark',
+          'ds-markdown-dark': currentTheme === 'dark',
         })}
       >
         <div className="ds-markdown-thinking">{getParagraphs('thinking')}</div>
@@ -225,7 +230,47 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
 );
 
 if (__DEV__) {
-  MarkdownCMD.displayName = 'MarkdownCMD';
+  MarkdownCMDInner.displayName = 'MarkdownCMD';
 }
+
+const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>((props, ref) => {
+  const { children = '', answerType = 'answer', isInnerRender, ...reset } = props;
+
+  if (__DEV__) {
+    if (!['thinking', 'answer'].includes(answerType)) {
+      throw new Error('Markdown组件的answerType必须是thinking或answer');
+    }
+    if (typeof children !== 'string') {
+      throw new Error('Markdown组件的子元素必须是一个字符串');
+    }
+  }
+
+  const contextValue = useMemo(() => ({ ...reset, answerType }), [reset, answerType]);
+
+  // 分离主题相关的 props
+  const themeProps = useMemo(
+    () => ({
+      theme: props.theme,
+      math: props.math,
+      codeBlock: props.codeBlock,
+      plugins: props.plugins,
+      answerType: props.answerType,
+    }),
+    [props.theme, props.math, props.codeBlock, props.plugins, props.answerType],
+  );
+
+  if (isInnerRender) {
+    // 内部渲染，外层已经 context 传递了 props，这里不再重复传递
+    return <MarkdownCMDInner {...props} ref={ref} />;
+  }
+
+  return (
+    <MarkdownProvider value={contextValue}>
+      <MarkdownThemeProvider value={themeProps}>
+        <MarkdownCMDInner {...props} ref={ref} />
+      </MarkdownThemeProvider>
+    </MarkdownProvider>
+  );
+});
 
 export default MarkdownCMD;

@@ -56,11 +56,22 @@ export interface IBeforeTypedChar extends IOnTypedCharData {
   percent: number;
 }
 
+export interface IMarkdownThemeProps {
+  /** 主题 */
+  theme?: Theme;
+  /** 数学公式配置 */
+  math?: IMarkdownMath;
+  /** 代码块配置 */
+  codeBlock?: IMarkdownCode;
+  /** 插件配置 */
+  plugins?: IMarkdownPlugin[];
+  /** 回答类型 */
+  answerType?: 'thinking' | 'answer';
+}
+
 export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
-  /** 回答类型 */
-  answerType?: 'thinking' | 'answer';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭打字机效果 */
@@ -77,17 +88,6 @@ export interface MarkdownBaseProps {
    * @param index 字符索引
    */
   onTypedChar?: (data?: ITypedChar) => void;
-  /** 主题 */
-  theme?: Theme;
-
-  /** 数学公式配置 */
-  math?: IMarkdownMath;
-
-  codeBlock?: IMarkdownCode;
-
-  /** 插件配置 */
-  plugins?: IMarkdownPlugin[];
-
   /** 是否自动开启打字动画 */
   autoStartTyping?: boolean;
 }
@@ -100,12 +100,12 @@ export interface IMarkdownCode {
   headerActions?: boolean | React.ReactNode;
 }
 
-export interface MarkdownProps extends MarkdownBaseProps {
+export interface MarkdownProps extends MarkdownBaseProps, IMarkdownThemeProps {
   children: string | undefined;
 }
 
 /**  MarkdownCMD 组件不需要 children */
-export interface MarkdownCMDProps extends MarkdownBaseProps {
+export interface MarkdownCMDProps extends MarkdownBaseProps, IMarkdownThemeProps {
   children?: undefined;
   isInnerRender?: boolean;
 }
