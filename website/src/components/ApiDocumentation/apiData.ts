@@ -1,28 +1,7 @@
 // API 数据定义
-export interface ApiProperty {
-  prop: string;
-  type: string;
-  description: string;
-  defaultValue: string;
-}
-
-export interface RefMethod {
-  method: string;
-  description: string;
-}
-
-export interface ComparisonRow {
-  feature: string;
-  requestAnimationFrame: string;
-  setTimeout: string;
-}
-
-export interface FormulaType {
-  type: string;
-  inline: string;
-  block: string;
-  example: string;
-}
+import zh from 'ds-markdown/i18n/zh';
+import { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './type';
+import { getObjectKeys } from './util';
 
 // Props 属性数据
 export const propsData: ApiProperty[] = [
@@ -90,7 +69,7 @@ export const propsData: ApiProperty[] = [
     prop: 'codeBlock',
     type: 'IMarkdownCode',
     description: '代码块配置',
-    defaultValue: 'undefined',
+    defaultValue: 'true',
   },
   {
     prop: 'plugins',
@@ -282,7 +261,7 @@ export const iMarkdownCodeData: ApiProperty[] = [
     prop: 'headerActions',
     type: 'boolean | React.ReactNode',
     description: '是否显示头部操作按钮。true显示默认按钮，React.ReactNode显示自定义按钮',
-    defaultValue: 'undefined',
+    defaultValue: 'true',
   },
 ];
 
@@ -681,7 +660,7 @@ export const configProviderPropsData: ApiProperty[] = [
 export const localeTypeData: ApiProperty[] = [
   {
     prop: 'codeBlock',
-    type: '{ copy: string; copied: string; download: string; [key: string]: string }',
+    type: 'I18nData',
     description: '代码块相关文案分组',
     defaultValue: '-',
   },
@@ -692,3 +671,10 @@ export const localeTypeData: ApiProperty[] = [
     defaultValue: '-',
   },
 ];
+
+export const i18nData: ApiProperty[] = getObjectKeys(zh).map((key) => ({
+  prop: key,
+  type: 'string',
+  description: key,
+  defaultValue: '-',
+}));

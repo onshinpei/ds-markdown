@@ -26,7 +26,7 @@ export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ dat
             </td>
             <td>
               {(() => {
-                const typeNames = ['IMarkdownCode', 'IMarkdownMath', 'IMarkdownPlugin', 'ITypedChar', 'IBeforeTypedChar', 'IEndData', 'IStartData'];
+                const typeNames = ['IMarkdownCode', 'IMarkdownMath', 'IMarkdownPlugin', 'ITypedChar', 'IBeforeTypedChar', 'IEndData', 'IStartData', 'I18nData'];
                 const typeStr = item.type;
 
                 // 检查是否包含已知类型名

@@ -21,11 +21,19 @@ import typingAnimationDemoSource from './components/Demos/TypingAnimationDemo/in
 import customThemeDemoSource from './components/Demos/CustomThemeDemo/index.tsx?raw';
 import streamingDemoSource from './components/Demos/StreamingDemo/index.tsx?raw';
 
-import basicUsageDemoMarkdown from './components/Demos/BasicUsageDemo/markdown.md?raw';
-import mathSupportDemoMarkdown from './components/Demos/MathSupportDemo/markdown.md?raw';
-import typingAnimationDemoMarkdown from './components/Demos/TypingAnimationDemo/markdown.md?raw';
-import customThemeDemoMarkdown from './components/Demos/CustomThemeDemo/markdown.md?raw';
-import streamingDemoMarkdown from './components/Demos/StreamingDemo/markdown.md?raw';
+import basicUsageDemoMarkdownZh from './components/Demos/BasicUsageDemo/markdown.md?raw';
+import basicUsageDemoMarkdownEn from './components/Demos/BasicUsageDemo/markdown.en.md?raw';
+import mathSupportDemoMarkdownZh from './components/Demos/MathSupportDemo/markdown.md?raw';
+import mathSupportDemoMarkdownEn from './components/Demos/MathSupportDemo/markdown.en.md?raw';
+import typingAnimationDemoMarkdownZh from './components/Demos/TypingAnimationDemo/markdown.md?raw';
+import typingAnimationDemoMarkdownEn from './components/Demos/TypingAnimationDemo/markdown.en.md?raw';
+import customThemeDemoMarkdownZh from './components/Demos/CustomThemeDemo/markdown.md?raw';
+import customThemeDemoMarkdownEn from './components/Demos/CustomThemeDemo/markdown.en.md?raw';
+import streamingDemoMarkdownZh from './components/Demos/StreamingDemo/markdown.md?raw';
+import streamingDemoMarkdownEn from './components/Demos/StreamingDemo/markdown.en.md?raw';
+
+import { LanguageProvider } from './LanguageContext';
+import { useI18n } from './hooks/useI18n';
 
 const installationSource = `// npm
 npm install ds-markdown
@@ -34,18 +42,46 @@ yarn add ds-markdown
 // pnpm
 pnpm add ds-markdown
 `;
-// 主App组件
-const App: React.FC = () => {
+
+const markdownMap = {
+  zh: {
+    basicUsage: basicUsageDemoMarkdownZh,
+    mathSupport: mathSupportDemoMarkdownZh,
+    typingAnimation: typingAnimationDemoMarkdownZh,
+    customTheme: customThemeDemoMarkdownZh,
+    streaming: streamingDemoMarkdownZh,
+  },
+  en: {
+    basicUsage: basicUsageDemoMarkdownEn,
+    mathSupport: mathSupportDemoMarkdownEn,
+    typingAnimation: typingAnimationDemoMarkdownEn,
+    customTheme: customThemeDemoMarkdownEn,
+    streaming: streamingDemoMarkdownEn,
+  },
+};
+
+const LangSwitcher: React.FC = () => {
+  const { lang, setLang, t } = useI18n();
+  return (
+    <select className="lang-switcher" value={lang} onChange={(e) => setLang(e.target.value as 'zh' | 'en')} aria-label="Language Switcher">
+      <option value="zh">中文</option>
+      <option value="en">English</option>
+    </select>
+  );
+};
+
+const AppContent: React.FC = () => {
+  const { lang, t } = useI18n();
   return (
     <div id="app">
+      <LangSwitcher />
       <Header />
       <Navigation />
-
       <main className="main">
         <div className="container">
           <DemoSection
             id="installation"
-            title="📦 安装"
+            title={t('installTitle')}
             sourceCode={{
               code: installationSource,
               markdownString: installationSource,
@@ -54,48 +90,49 @@ const App: React.FC = () => {
             showHeader={false}
             onlyShowCode={true}
           />
-
           <DemoSection
             id="basic-usage"
-            title="🚀 基础用法"
-            sourceCode={{ code: basicUsageDemoSource, markdownString: basicUsageDemoMarkdown }}
-            renderComponent={React.createElement(BasicUsageDemo, { markdown: basicUsageDemoMarkdown })}
+            title={t('basicUsageTitle')}
+            sourceCode={{ code: basicUsageDemoSource, markdownString: markdownMap[lang].basicUsage }}
+            renderComponent={React.createElement(BasicUsageDemo, { markdown: markdownMap[lang].basicUsage })}
           />
-
           <DemoSection
             id="math-support"
-            title="🧮 数学公式支持"
-            sourceCode={{ code: mathSupportDemoSource, markdownString: mathSupportDemoMarkdown }}
-            renderComponent={React.createElement(MathSupportDemo, { markdown: mathSupportDemoMarkdown })}
+            title={t('mathSupportTitle')}
+            sourceCode={{ code: mathSupportDemoSource, markdownString: markdownMap[lang].mathSupport }}
+            renderComponent={React.createElement(MathSupportDemo, { markdown: markdownMap[lang].mathSupport })}
           />
-
           <DemoSection
             id="typing-animation"
-            title="⌨️ 打字动画控制"
-            sourceCode={{ code: typingAnimationDemoSource, markdownString: typingAnimationDemoMarkdown }}
-            renderComponent={React.createElement(TypingAnimationDemo, { markdown: typingAnimationDemoMarkdown })}
+            title={t('typingAnimationTitle')}
+            sourceCode={{ code: typingAnimationDemoSource, markdownString: markdownMap[lang].typingAnimation }}
+            renderComponent={React.createElement(TypingAnimationDemo, { markdown: markdownMap[lang].typingAnimation })}
           />
-
           <DemoSection
             id="themes"
-            title="🎨 主题切换"
-            sourceCode={{ code: customThemeDemoSource, markdownString: customThemeDemoMarkdown }}
-            renderComponent={React.createElement(CustomThemeDemo, { markdown: customThemeDemoMarkdown })}
+            title={t('themesTitle')}
+            sourceCode={{ code: customThemeDemoSource, markdownString: markdownMap[lang].customTheme }}
+            renderComponent={React.createElement(CustomThemeDemo, { markdown: markdownMap[lang].customTheme })}
           />
-
           <DemoSection
             id="streaming"
-            title="📺 流式演示"
-            sourceCode={{ code: streamingDemoSource, markdownString: streamingDemoMarkdown }}
-            renderComponent={React.createElement(StreamingDemo, { markdown: streamingDemoMarkdown })}
+            title={t('streamingTitle')}
+            sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
+            renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
           />
-
           <ApiDocumentation />
         </div>
       </main>
-
       <Footer />
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 };
 
