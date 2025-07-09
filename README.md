@@ -481,6 +481,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `onTypedChar`       | `(data: ITypedChar) => void`                | 每字符打字后的回调                                            | -                                                           |
 | `disableTyping`     | `boolean`                                   | 禁用打字动画效果                                              | `false`                                                     |
 | `autoStartTyping`   | `boolean`                                   | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true`                                                      |
+| `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
 
 > 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`，则在下一个打字触发时，会把剩下的所有字一次性显示
 
