@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /**
  * 回答类型，思考和回答
  */
@@ -47,6 +48,8 @@ export interface IOnTypedCharData {
   prevStr: string;
 }
 
+export interface IStartData extends IOnTypedCharData {}
+
 export interface ITypedChar extends IOnTypedCharData {
   percent: number;
   currentStr: string;
@@ -79,7 +82,7 @@ export interface MarkdownBaseProps {
   /** 打字完成后回调,  */
   onEnd?: (data?: IEndData) => void;
   /** 开始打字回调 */
-  onStart?: (data?: IOnTypedCharData) => void;
+  onStart?: (data?: IStartData) => void;
   /** 打字前回调 */
   onBeforeTypedChar?: (data?: IBeforeTypedChar) => Promise<void>;
   /**

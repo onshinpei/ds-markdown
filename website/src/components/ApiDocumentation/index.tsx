@@ -8,10 +8,15 @@ import {
   iBeforeTypedCharData,
   iMarkdownMathData,
   iMarkdownPluginData,
+  iMarkdownCodeData,
+  iEndData,
+  iStartData,
   timerComparisonData,
   formulaTypesData,
   bestPractices,
   codeExamples,
+  configProviderPropsData,
+  localeTypeData,
 } from './apiData';
 
 // API文档组件
@@ -27,11 +32,28 @@ const ApiDocumentation: React.FC = () => (
     <RefMethodTable data={markdownCMDMethods} title="Ref 方法 - MarkdownCMD" />
 
     {/* 类型定义 */}
-    <h3>类型定义</h3>
-    <ApiTable data={iTypedCharData} title="ITypedChar" />
-    <ApiTable data={iBeforeTypedCharData} title="IBeforeTypedChar" />
-    <ApiTable data={iMarkdownMathData} title="IMarkdownMath" />
-    <ApiTable data={iMarkdownPluginData} title="IMarkdownPlugin" />
+    <h3 id="类型定义">类型定义</h3>
+    <div id="ITypedChar">
+      <ApiTable data={iTypedCharData} title="ITypedChar" />
+    </div>
+    <div id="IBeforeTypedChar">
+      <ApiTable data={iBeforeTypedCharData} title="IBeforeTypedChar" />
+    </div>
+    <div id="IMarkdownMath">
+      <ApiTable data={iMarkdownMathData} title="IMarkdownMath" />
+    </div>
+    <div id="IMarkdownPlugin">
+      <ApiTable data={iMarkdownPluginData} title="IMarkdownPlugin" />
+    </div>
+    <div id="IMarkdownCode">
+      <ApiTable data={iMarkdownCodeData} title="IMarkdownCode" />
+    </div>
+    <div id="IEndData">
+      <ApiTable data={iEndData} title="IEndData" />
+    </div>
+    <div id="IStartData">
+      <ApiTable data={iStartData} title="IStartData" />
+    </div>
 
     {/* 内置插件 */}
     <PluginSection title="内置插件" codeExample={codeExamples.katexPlugin} />
@@ -51,6 +73,12 @@ const ApiDocumentation: React.FC = () => (
     <CodeExample code={codeExamples.callbackExample} title="回调函数示例" />
     <CodeExample code={codeExamples.startExample} title="手动开始动画示例" />
     <CodeExample code={codeExamples.restartExample} title="重新开始动画示例" />
+    <CodeExample code={codeExamples.codeBlockExample} title="代码块配置示例" />
+
+    {/* ConfigProvider 多语言相关 */}
+    <h3>ConfigProvider 多语言</h3>
+    <ApiTable data={configProviderPropsData} title="ConfigProvider Props" />
+    <ApiTable data={localeTypeData} title="Locale 类型结构" />
   </section>
 );
 

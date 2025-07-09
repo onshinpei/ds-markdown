@@ -25,7 +25,25 @@ export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ dat
               <code>{item.prop}</code>
             </td>
             <td>
-              <code>{item.type}</code>
+              {(() => {
+                const typeNames = ['IMarkdownCode', 'IMarkdownMath', 'IMarkdownPlugin', 'ITypedChar', 'IBeforeTypedChar', 'IEndData', 'IStartData'];
+                const typeStr = item.type;
+
+                // 检查是否包含已知类型名
+                const hasKnownType = typeNames.some((name) => typeStr.includes(name));
+
+                if (hasKnownType) {
+                  // 如果有已知类型，替换为锚点链接
+                  let result = typeStr;
+                  typeNames.forEach((name) => {
+                    const regex = new RegExp(`\\b${name}\\b`, 'g');
+                    result = result.replace(regex, `<a href="#${name}" class="anchor-link">${name}</a>`);
+                  });
+                  return <span dangerouslySetInnerHTML={{ __html: result }} />;
+                } else {
+                  return <code>{typeStr}</code>;
+                }
+              })()}
             </td>
             <td>{item.description}</td>
             <td>

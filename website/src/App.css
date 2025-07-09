@@ -878,3 +878,24 @@ html {
     padding-right: 28px;
   }
 }
+
+/* 锚点链接样式 */
+.anchor-link {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.anchor-link:hover {
+  color: #5a6fd8;
+  text-decoration: underline;
+}
+
+/* 锚点目标元素的滚动间距 */
+#ITypedChar,
+#IBeforeTypedChar,
+#IMarkdownMath,
+#IMarkdownPlugin,
+#IMarkdownCode {
+  scroll-margin-top: 85px;
+}
