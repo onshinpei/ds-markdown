@@ -1967,7 +1967,7 @@ const convertData = (data: string) => {
           answerType: _answerType,
         });
       } catch (error) {
-        debugger;
+        console.error('Failed to parse JSON:', error);
       }
     }
 
@@ -1978,5 +1978,12 @@ const convertData = (data: string) => {
 };
 
 export const cozeData = convertData(data);
+
+// 类型声明
+declare global {
+  interface Window {
+    data: string;
+  }
+}
 
 window.data = cozeData.map((i) => i.content).join('');

@@ -35,7 +35,9 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
           if (data.answerType === 'thinking') {
             continue;
           }
-          cmdRef.current.push(data.content, data.answerType);
+          // 只处理支持的答案类型，其他类型跳过或映射为 'answer'
+          const supportedAnswerType = data.answerType === 'answer' ? 'answer' : 'answer';
+          cmdRef.current.push(data.content, supportedAnswerType);
         }
 
         if (!data || cozeData.length === 0) {

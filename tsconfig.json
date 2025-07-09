@@ -8,7 +8,7 @@
       ],
       "@/test/*": [
         "./test/*"
-      ],
+      ]
     },
     "noEmit": true,
     "types": [
