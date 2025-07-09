@@ -34,6 +34,9 @@ import streamingDemoMarkdownEn from './components/Demos/StreamingDemo/markdown.e
 
 import { LanguageProvider } from './LanguageContext';
 import { useI18n } from './hooks/useI18n';
+import { ConfigProvider } from 'ds-markdown';
+import zh from 'ds-markdown/i18n/zh';
+import en from 'ds-markdown/i18n/en';
 
 const installationSource = `// npm
 npm install ds-markdown
@@ -72,56 +75,59 @@ const LangSwitcher: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const { lang, t } = useI18n();
+  const locale = lang === 'zh' ? zh : en;
   return (
     <div id="app">
       <LangSwitcher />
       <Header />
       <Navigation />
       <main className="main">
-        <div className="container">
-          <DemoSection
-            id="installation"
-            title={t('installTitle')}
-            sourceCode={{
-              code: installationSource,
-              markdownString: installationSource,
-              lang: 'bash',
-            }}
-            showHeader={false}
-            onlyShowCode={true}
-          />
-          <DemoSection
-            id="basic-usage"
-            title={t('basicUsageTitle')}
-            sourceCode={{ code: basicUsageDemoSource, markdownString: markdownMap[lang].basicUsage }}
-            renderComponent={React.createElement(BasicUsageDemo, { markdown: markdownMap[lang].basicUsage })}
-          />
-          <DemoSection
-            id="math-support"
-            title={t('mathSupportTitle')}
-            sourceCode={{ code: mathSupportDemoSource, markdownString: markdownMap[lang].mathSupport }}
-            renderComponent={React.createElement(MathSupportDemo, { markdown: markdownMap[lang].mathSupport })}
-          />
-          <DemoSection
-            id="typing-animation"
-            title={t('typingAnimationTitle')}
-            sourceCode={{ code: typingAnimationDemoSource, markdownString: markdownMap[lang].typingAnimation }}
-            renderComponent={React.createElement(TypingAnimationDemo, { markdown: markdownMap[lang].typingAnimation })}
-          />
-          <DemoSection
-            id="themes"
-            title={t('themesTitle')}
-            sourceCode={{ code: customThemeDemoSource, markdownString: markdownMap[lang].customTheme }}
-            renderComponent={React.createElement(CustomThemeDemo, { markdown: markdownMap[lang].customTheme })}
-          />
-          <DemoSection
-            id="streaming"
-            title={t('streamingTitle')}
-            sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
-            renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
-          />
-          <ApiDocumentation />
-        </div>
+        <ConfigProvider locale={locale}>
+          <div className="container">
+            <DemoSection
+              id="installation"
+              title={t('installTitle')}
+              sourceCode={{
+                code: installationSource,
+                markdownString: installationSource,
+                lang: 'bash',
+              }}
+              showHeader={false}
+              onlyShowCode={true}
+            />
+            <DemoSection
+              id="basic-usage"
+              title={t('basicUsageTitle')}
+              sourceCode={{ code: basicUsageDemoSource, markdownString: markdownMap[lang].basicUsage }}
+              renderComponent={React.createElement(BasicUsageDemo, { markdown: markdownMap[lang].basicUsage })}
+            />
+            <DemoSection
+              id="math-support"
+              title={t('mathSupportTitle')}
+              sourceCode={{ code: mathSupportDemoSource, markdownString: markdownMap[lang].mathSupport }}
+              renderComponent={React.createElement(MathSupportDemo, { markdown: markdownMap[lang].mathSupport })}
+            />
+            <DemoSection
+              id="typing-animation"
+              title={t('typingAnimationTitle')}
+              sourceCode={{ code: typingAnimationDemoSource, markdownString: markdownMap[lang].typingAnimation }}
+              renderComponent={React.createElement(TypingAnimationDemo, { markdown: markdownMap[lang].typingAnimation })}
+            />
+            <DemoSection
+              id="themes"
+              title={t('themesTitle')}
+              sourceCode={{ code: customThemeDemoSource, markdownString: markdownMap[lang].customTheme }}
+              renderComponent={React.createElement(CustomThemeDemo, { markdown: markdownMap[lang].customTheme })}
+            />
+            <DemoSection
+              id="streaming"
+              title={t('streamingTitle')}
+              sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
+              renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
+            />
+            <ApiDocumentation />
+          </div>
+        </ConfigProvider>
       </main>
       <Footer />
     </div>
