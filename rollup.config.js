@@ -100,4 +100,90 @@ const pluginsDtsConfig = {
   plugins: [dts()],
 };
 
-export default defineConfig([esmConfig, cjsConfig, pluginsConfig, dtsConfig, pluginsDtsConfig]);
+// 中文语言包配置
+const zhConfig = {
+  input: 'src/i18n/zh/index.ts',
+  external: [],
+  output: [
+    {
+      file: 'dist/esm/i18n/zh/index.js',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/cjs/i18n/zh/index.js',
+      format: 'cjs',
+      sourcemap: true,
+    },
+  ],
+  plugins: [
+    resolve(),
+    commonjs(),
+    typescript({
+      tsconfig: './tsconfig-rollup.json',
+      declaration: false,
+      outDir: undefined,
+    }),
+  ],
+};
+
+// 英文语言包配置
+const enConfig = {
+  input: 'src/i18n/en/index.ts',
+  external: [],
+  output: [
+    {
+      file: 'dist/esm/i18n/en/index.js',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/cjs/i18n/en/index.js',
+      format: 'cjs',
+      sourcemap: true,
+    },
+  ],
+  plugins: [
+    resolve(),
+    commonjs(),
+    typescript({
+      tsconfig: './tsconfig-rollup.json',
+      declaration: false,
+      outDir: undefined,
+    }),
+  ],
+};
+
+// 中文语言包类型声明文件配置
+const zhDtsConfig = {
+  input: 'src/i18n/zh/index.ts',
+  output: [
+    {
+      file: 'dist/esm/i18n/zh/index.d.ts',
+      format: 'esm',
+    },
+    {
+      file: 'dist/cjs/i18n/zh/index.d.ts',
+      format: 'cjs',
+    },
+  ],
+  plugins: [dts()],
+};
+
+// 英文语言包类型声明文件配置
+const enDtsConfig = {
+  input: 'src/i18n/en/index.ts',
+  output: [
+    {
+      file: 'dist/esm/i18n/en/index.d.ts',
+      format: 'esm',
+    },
+    {
+      file: 'dist/cjs/i18n/en/index.d.ts',
+      format: 'cjs',
+    },
+  ],
+  plugins: [dts()],
+};
+
+export default defineConfig([esmConfig, cjsConfig, pluginsConfig, dtsConfig, pluginsDtsConfig, zhConfig, enConfig, zhDtsConfig, enDtsConfig]);

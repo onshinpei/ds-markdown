@@ -38,6 +38,7 @@ A React component designed specifically for modern AI applications, providing sm
 - [🎛️ Timer Mode Details](#️-timer-mode-details)
 - [💡 Practical Examples](#-practical-examples)
 - [🔧 Best Practices](#-best-practices)
+- [ConfigProvider Internationalization (i18n)](<#ConfigProvider-Internationalization-(i18n)>)
 
 ---
 
@@ -1102,3 +1103,111 @@ import { MarkdownCMDRef } from 'ds-markdown';
 const ref = useRef<MarkdownCMDRef>(null);
 // Complete TypeScript type hints
 ```
+
+## ConfigProvider Internationalization (i18n)
+
+ConfigProvider is a component provided by ds-markdown for managing internationalized text in your application.
+
+### Basic Usage
+
+```tsx
+import React from 'react';
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+
+const App: React.FC = () => {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <YourApp />
+    </ConfigProvider>
+  );
+};
+```
+
+### Available Locales
+
+#### Chinese (zhCN)
+
+```tsx
+import zhCN from 'ds-markdown/i18n/zh';
+```
+
+#### English (enUS)
+
+```tsx
+import enUS from 'ds-markdown/i18n/en';
+```
+
+### Using Locale in Components
+
+Use the `useLocale` hook to get the current locale:
+
+```tsx
+import React from 'react';
+import { useLocale } from 'ds-markdown';
+
+const MyComponent: React.FC = () => {
+  const locale = useLocale();
+
+  return (
+    <div>
+      <button>{locale.codeBlock.copy}</button>
+      <span>{locale.codeBlock.copied}</span>
+      <button>{locale.codeBlock.download}</button>
+    </div>
+  );
+};
+```
+
+### Locale Structure
+
+Currently supported locale fields:
+
+```typescript
+interface Locale {
+  codeBlock: {
+    copy: string;
+    copied: string;
+    download: string;
+  };
+  [key: string]: string;
+}
+```
+
+### Full Example
+
+```tsx
+import React from 'react';
+import { ConfigProvider, useLocale } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+
+const ExampleComponent: React.FC = () => {
+  const locale = useLocale();
+
+  return (
+    <div>
+      <h2>i18n Example</h2>
+      <p>Copy button: {locale.codeBlock.copy}</p>
+      <p>Copied tip: {locale.codeBlock.copied}</p>
+      <p>Download button: {locale.codeBlock.download}</p>
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <ExampleComponent />
+    </ConfigProvider>
+  );
+};
+
+export default App;
+```
+
+### Notes
+
+1. `ConfigProvider` must wrap components that use `useLocale`.
+2. The locale object is memoized to avoid unnecessary re-renders.
+3. You can extend the locale object with custom fields.
+4. If `ConfigProvider` is not provided, the default locale is Chinese.

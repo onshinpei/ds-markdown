@@ -35,8 +35,39 @@
   margin-left: 8px;
   font-size: 12px;
   line-height: 18px;
+  display: flex;
+  align-items: center;
 }
 
 .md-code-block-content {
   padding: 4px 12px;
+}
+
+/* Header actions container */
+.md-code-block-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Action button base styles */
+.md-code-block-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: inherit;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.md-code-block-action-btn span {
+  font-weight: 500;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /**
  * 回答类型，思考和回答
  */
@@ -47,6 +48,8 @@ export interface IOnTypedCharData {
   prevStr: string;
 }
 
+export interface IStartData extends IOnTypedCharData {}
+
 export interface ITypedChar extends IOnTypedCharData {
   percent: number;
   currentStr: string;
@@ -56,11 +59,22 @@ export interface IBeforeTypedChar extends IOnTypedCharData {
   percent: number;
 }
 
+export interface IMarkdownThemeProps {
+  /** 主题 */
+  theme?: Theme;
+  /** 数学公式配置 */
+  math?: IMarkdownMath;
+  /** 代码块配置 */
+  codeBlock?: IMarkdownCode;
+  /** 插件配置 */
+  plugins?: IMarkdownPlugin[];
+  /** 回答类型 */
+  answerType?: 'thinking' | 'answer';
+}
+
 export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
-  /** 回答类型 */
-  answerType?: 'thinking' | 'answer';
   /** 打字机效果间隔时间 */
   interval: number;
   /** 是否关闭打字机效果 */
@@ -68,7 +82,7 @@ export interface MarkdownBaseProps {
   /** 打字完成后回调,  */
   onEnd?: (data?: IEndData) => void;
   /** 开始打字回调 */
-  onStart?: (data?: IOnTypedCharData) => void;
+  onStart?: (data?: IStartData) => void;
   /** 打字前回调 */
   onBeforeTypedChar?: (data?: IBeforeTypedChar) => Promise<void>;
   /**
@@ -77,26 +91,26 @@ export interface MarkdownBaseProps {
    * @param index 字符索引
    */
   onTypedChar?: (data?: ITypedChar) => void;
-  /** 主题 */
-  theme?: Theme;
-
-  /** 数学公式配置 */
-  math?: IMarkdownMath;
-
-  /** 插件配置 */
-  plugins?: IMarkdownPlugin[];
-
   /** 是否自动开启打字动画 */
   autoStartTyping?: boolean;
 }
 
-export interface MarkdownProps extends MarkdownBaseProps {
+export interface IMarkdownCode {
+  /** 是否显示头部操作按钮
+   * 如果为true，则显示头部操作按钮
+   * 如果为React.ReactNode，则显示自定义头部操作按钮
+   */
+  headerActions?: boolean | React.ReactNode;
+}
+
+export interface MarkdownProps extends MarkdownBaseProps, IMarkdownThemeProps {
   children: string | undefined;
 }
 
 /**  MarkdownCMD 组件不需要 children */
-export interface MarkdownCMDProps extends MarkdownBaseProps {
+export interface MarkdownCMDProps extends MarkdownBaseProps, IMarkdownThemeProps {
   children?: undefined;
+  isInnerRender?: boolean;
 }
 
 export interface IMarkdownPlugin {

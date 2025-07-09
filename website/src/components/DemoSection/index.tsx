@@ -4,11 +4,12 @@
 import React, { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import type { DemoSectionProps } from '../../defined';
+import { useI18n } from '../../hooks/useI18n';
 
 // Demo组件
 const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children, onlyShowCode = false }) => {
   const [activeTab, setActiveTab] = useState<'code' | 'markdown'>(onlyShowCode ? 'code' : 'markdown');
-
+  const { t } = useI18n();
   return (
     <section id={id} className="section">
       <h2 className="section-title">{title}</h2>
@@ -43,7 +44,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
         </div>
         {showHeader && renderComponent && (
           <div className="demo-effect">
-            <h3 className="demo-effect-header">显示效果：</h3>
+            <h3 className="demo-effect-header">{t('demoEffect')}</h3>
             <div className={`demo-box`}>{renderComponent}</div>
           </div>
         )}
