@@ -722,6 +722,81 @@ const customPlugin = createBuildInPlugin({
 
 高频推荐`requestAnimationFrame`,低频推荐 `setTimeout`
 
+## 多语言配置
+
+ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
+
+### 基本用法
+
+```tsx
+import React from 'react';
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+
+const App: React.FC = () => {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <YourApp />
+    </ConfigProvider>
+  );
+};
+```
+
+### 可用的语言包
+
+#### 中文 (zhCN)
+
+```tsx
+import zhCN from 'ds-markdown/i18n/zh';
+```
+
+#### 英文 (enUS)
+
+```tsx
+import enUS from 'ds-markdown/i18n/en';
+```
+
+### 在组件中使用语言包
+
+使用 `locale` 属性来切换自己想要的语言包，例如切换到英文
+
+```tsx
+import React from 'react';
+import DsMarkdown from 'ds-markdown';
+import { ConfigProvider } from 'ds-markdown';
+import en from 'ds-markdown/i18n/en';
+
+const MyComponent: React.FC = () => {
+  return (
+    <ConfigProvider locale={en}>
+      <DsMarkdown {...props} />
+    </ConfigProvider>
+  );
+};
+```
+
+### 语言包结构
+
+当前支持的语言包包含以下字段：
+
+```typescript
+interface Locale {
+  codeBlock: {
+    copy: string;
+    copied: string;
+    download: string;
+  };
+  [key: string]: string;
+}
+```
+
+### 注意事项
+
+1. `ConfigProvider` 必须包裹在使用 `useLocale` 的组件外层
+2. 语言包对象会被缓存，避免不必要的重新渲染
+3. 支持扩展自定义的语言包字段
+4. 如果没有提供 `ConfigProvider`，会使用默认的中文语言包
+
 ---
 
 ## 💡 实战示例
@@ -956,78 +1031,3 @@ import { MarkdownCMDRef } from 'ds-markdown';
 const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
-
-## 多语言配置
-
-ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
-
-### 基本用法
-
-```tsx
-import React from 'react';
-import { ConfigProvider } from 'ds-markdown';
-import zhCN from 'ds-markdown/i18n/zh';
-
-const App: React.FC = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <YourApp />
-    </ConfigProvider>
-  );
-};
-```
-
-### 可用的语言包
-
-#### 中文 (zhCN)
-
-```tsx
-import zhCN from 'ds-markdown/i18n/zh';
-```
-
-#### 英文 (enUS)
-
-```tsx
-import enUS from 'ds-markdown/i18n/en';
-```
-
-### 在组件中使用语言包
-
-使用 `locale` 属性来切换自己想要的语言包，例如切换到英文
-
-```tsx
-import React from 'react';
-import DsMarkdown from 'ds-markdown';
-import { ConfigProvider } from 'ds-markdown';
-import en from 'ds-markdown/i18n/en';
-
-const MyComponent: React.FC = () => {
-  return (
-    <ConfigProvider locale={en}>
-      <DsMarkdown {...props} />
-    </ConfigProvider>
-  );
-};
-```
-
-### 语言包结构
-
-当前支持的语言包包含以下字段：
-
-```typescript
-interface Locale {
-  codeBlock: {
-    copy: string;
-    copied: string;
-    download: string;
-  };
-  [key: string]: string;
-}
-```
-
-### 注意事项
-
-1. `ConfigProvider` 必须包裹在使用 `useLocale` 的组件外层
-2. 语言包对象会被缓存，避免不必要的重新渲染
-3. 支持扩展自定义的语言包字段
-4. 如果没有提供 `ConfigProvider`，会使用默认的中文语言包
