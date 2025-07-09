@@ -50,6 +50,8 @@
   --dsr-border-1: rgb(var(--ds-rgb-neutral-350));
   --dsr-border-2: rgb(var(--ds-rgb-neutral-200));
 
+  --ds-button-hover-color: rgba(0, 0, 0, 0.04);
+
   --ds-md-inline-code-color: #ececec;
   --dsr-bg: #ffffff;
   --ds-thinking-border-color: #e5e5e5;
@@ -59,8 +61,10 @@
   --ds-rgb-label-1: var(--ds-rgb-neutral-50);
   --ds-rgb-label-2: var(--ds-rgb-neutral-400);
   --dsr-border-2: rgb(var(--ds-rgb-neutral-600));
-  --ds-md-inline-code-color: #424242;
 
+  --ds-button-hover-color: rgba(255, 255, 255, 0.04);
+
+  --ds-md-inline-code-color: #424242;
   --dsr-bg: #292a2d;
   --ds-thinking-border-color: #4e4e56;
 }
@@ -376,4 +380,8 @@ ds-markdown-math {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.ds-button:hover {
+  background-color: var(--ds-button-hover-color);
 }

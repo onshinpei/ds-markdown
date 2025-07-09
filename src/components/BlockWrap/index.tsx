@@ -118,10 +118,10 @@ const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, codeContent }
     if (headerActions === true) {
       return (
         <div className="md-code-block-header-actions">
-          <DsButton style={{ fontSize: 13 }} icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
+          <DsButton style={{ fontSize: 13, padding: '0 4px' }} icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
             <span>{copyText}</span>
           </DsButton>
-          <DsButton style={{ fontSize: 13 }} icon={<DownloadIcon size={24} />} onClick={handleDownload}>
+          <DsButton style={{ fontSize: 13, padding: '0 4px' }} icon={<DownloadIcon size={24} />} onClick={handleDownload}>
             <span>{locale.codeBlock.download}</span>
           </DsButton>
         </div>
