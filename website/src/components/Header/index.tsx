@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useI18n } from '../../hooks/useI18n';
 
 // 数字雨背景组件
 const DigitalRain: React.FC = () => {
@@ -85,30 +86,33 @@ const DigitalRain: React.FC = () => {
 };
 
 // Header 组件
-const Header: React.FC = () => (
-  <header className="header">
-    <DigitalRain />
-    <div className="container">
-      <h1 className="logo" data-text="ds-markdown">
-        ds-markdown
-      </h1>
-      <p className="subtitle">🚀 智能 Markdown 打字动画渲染引擎</p>
-      <div className="badges">
-        <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.shields.io/npm/v/ds-markdown" alt="NPM Version" />
-        </a>
-        <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.shields.io/npm/l/ds-markdown" alt="License" />
-        </a>
-        <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.shields.io/npm/dt/ds-markdown" alt="Downloads" />
-        </a>
-        <a href="https://github.com/onshinpei/ds-markdown" target="_blank" rel="noopener noreferrer">
-          <img src="https://img.shields.io/github/stars/onshinpei/ds-markdown" alt="GitHub Stars" />
-        </a>
+const Header: React.FC = () => {
+  const { t } = useI18n();
+  return (
+    <header className="header">
+      <DigitalRain />
+      <div className="container">
+        <h1 className="logo" data-text="ds-markdown">
+          ds-markdown
+        </h1>
+        <p className="subtitle">🚀 {t('headerSubtitle')}</p>
+        <div className="badges">
+          <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/v/ds-markdown" alt="NPM Version" />
+          </a>
+          <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/l/ds-markdown" alt="License" />
+          </a>
+          <a href="https://www.npmjs.com/package/ds-markdown" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/dt/ds-markdown" alt="Downloads" />
+          </a>
+          <a href="https://github.com/onshinpei/ds-markdown" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/github/stars/onshinpei/ds-markdown" alt="GitHub Stars" />
+          </a>
+        </div>
       </div>
-    </div>
-  </header>
-);
+    </header>
+  );
+};
 
 export default Header;

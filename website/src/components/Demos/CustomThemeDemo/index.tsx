@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
+import { useI18n } from '../../../../src/hooks/useI18n';
 
 interface DemoProps {
   markdown: string;
 }
 
 const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
+  const { t } = useI18n();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const markdownRef = useRef<MarkdownRef>(null);
   const [isTyping, setIsTyping] = useState(false);
@@ -77,7 +79,7 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
             marginRight: '10px',
           }}
         >
-          切换为{theme === 'light' ? '暗色' : '亮色'}主题
+          {theme === 'light' ? t('switchToDark') : t('switchToLight')}
         </button>
         <span
           style={{
@@ -90,22 +92,22 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
           }}
         >
-          当前: {theme === 'light' ? '☀️ 亮色模式' : '🌙 暗色模式'}
+          {theme === 'light' ? t('themeLight') : t('themeDark')}
         </span>
         <button className="btn btn-primary" onClick={handleToggleMath}>
-          {mathOpen ? '关闭公式转换' : '开启公式转换'}
+          {mathOpen ? t('disableMath') : t('enableMath')}
         </button>
         <button className="btn btn-outline" onClick={handleToggleTyping}>
-          {disableTyping ? '开启打字效果' : '关闭打字效果'}
+          {disableTyping ? t('enableTyping') : t('disableTyping')}
         </button>
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
-          {isStarted ? '🔄 重新开始' : '▶️ 开始'}
+          {isStarted ? t('restart') : t('start')}
         </button>
         <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
-          ⏹️ 停止
+          {t('stop')}
         </button>
         <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
-          ⏭️ 继续
+          {t('resume')}
         </button>
       </div>
       <div>

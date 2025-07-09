@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
+import { useI18n } from '../../../../src/hooks/useI18n';
 
 interface DemoProps {
   markdown: string;
@@ -15,6 +16,7 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const [mathOpen, setMathOpen] = useState(true);
+  const { t } = useI18n();
 
   // 事件处理函数
   const handleStart = () => {
@@ -68,22 +70,22 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
-          {isStarted ? '🔄 重新开始' : '▶️ 开始'}
+          {isStarted ? t('restart') : t('start')}
         </button>
         <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
-          ⏹️ 停止
+          {t('stop')}
         </button>
         <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
-          ⏭️ 继续
+          {t('resume')}
         </button>
         <button className="btn btn-secondary" onClick={handleToggleTheme}>
-          {theme === 'light' ? '🌙 暗色主题' : '☀️ 亮色主题'}
+          {theme === 'light' ? t('themeDark') : t('themeLight')}
         </button>
         <button className="btn btn-primary" onClick={handleToggleMath}>
-          {mathOpen ? '关闭公式转换' : '开启公式转换'}
+          {mathOpen ? t('disableMath') : t('enableMath')}
         </button>
         <button className="btn btn-outline" onClick={handleToggleTyping}>
-          {disableTyping ? '开启打字效果' : '关闭打字效果'}
+          {disableTyping ? t('enableTyping') : t('disableTyping')}
         </button>
       </div>
       <DsMarkdown

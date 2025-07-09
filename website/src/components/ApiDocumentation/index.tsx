@@ -1,57 +1,108 @@
 import React from 'react';
 import { ApiTable, RefMethodTable, ComparisonTable, FormulaTypeTable, CodeExample, BestPracticesList, PluginSection } from './components';
-import {
-  propsData,
-  dsMarkdownMethods,
-  markdownCMDMethods,
-  iTypedCharData,
-  iBeforeTypedCharData,
-  iMarkdownMathData,
-  iMarkdownPluginData,
-  timerComparisonData,
-  formulaTypesData,
-  bestPractices,
-  codeExamples,
-} from './apiData';
+import * as zhApiData from './apiData';
+import * as enApiData from './apiData.en';
+import { useI18n } from '../../hooks/useI18n';
 
-// API文档组件
-const ApiDocumentation: React.FC = () => (
-  <section id="api" className="section">
-    <h2>📚 API 文档</h2>
+const titles = {
+  zh: {
+    api: '📚 API 文档',
+    props: 'Props 属性',
+    refDs: 'Ref 方法 - DsMarkdown',
+    refCmd: 'Ref 方法 - MarkdownCMD',
+    typeDef: '类型定义',
+    plugin: '内置插件',
+    timer: '定时器模式对比',
+    formula: '数学公式分隔符说明',
+    best: '最佳实践建议',
+    example: '使用示例',
+    codeStream: '流式对话示例',
+    codeCallback: '回调函数示例',
+    codeStart: '手动开始动画示例',
+    codeRestart: '重新开始动画示例',
+    codeBlock: '代码块配置示例',
+    config: 'ConfigProvider 多语言',
+    configProps: 'ConfigProvider Props',
+    localeType: 'Locale 类型结构',
+    i18n: 'I18nData keys',
+  },
+  en: {
+    api: '📚 API',
+    props: 'Props',
+    refDs: 'Ref Methods - DsMarkdown',
+    refCmd: 'Ref Methods - MarkdownCMD',
+    typeDef: 'Type Definitions',
+    plugin: 'Built-in Plugins',
+    timer: 'Timer Comparison',
+    formula: 'Math Formula Delimiters',
+    best: 'Best Practices',
+    example: 'Examples',
+    codeStream: 'Streaming Chat Example',
+    codeCallback: 'Callback Example',
+    codeStart: 'Manual Start Example',
+    codeRestart: 'Restart Example',
+    codeBlock: 'Code Block Example',
+    config: 'ConfigProvider & i18n',
+    configProps: 'ConfigProvider Props',
+    localeType: 'Locale Type Structure',
+    i18n: 'I18nData keys',
+  },
+};
 
-    {/* Props 属性 */}
-    <ApiTable data={propsData} title="Props 属性" />
+const ApiDocumentation: React.FC = () => {
+  const { lang } = useI18n();
+  const data = lang === 'en' ? enApiData : zhApiData;
+  const t = titles[lang];
 
-    {/* Ref 方法 */}
-    <RefMethodTable data={dsMarkdownMethods} title="Ref 方法 - DsMarkdown" />
-    <RefMethodTable data={markdownCMDMethods} title="Ref 方法 - MarkdownCMD" />
+  return (
+    <section id="api" className="section">
+      <h2>{t.api}</h2>
+      <ApiTable data={data.propsData} title={t.props} />
+      <RefMethodTable data={data.dsMarkdownMethods} title={t.refDs} />
+      <RefMethodTable data={data.markdownCMDMethods} title={t.refCmd} />
+      <h3 id="类型定义">{t.typeDef}</h3>
+      <div id="ITypedChar">
+        <ApiTable data={data.iTypedCharData} title="ITypedChar" />
+      </div>
+      <div id="IBeforeTypedChar">
+        <ApiTable data={data.iBeforeTypedCharData} title="IBeforeTypedChar" />
+      </div>
+      <div id="IMarkdownMath">
+        <ApiTable data={data.iMarkdownMathData} title="IMarkdownMath" />
+      </div>
+      <div id="IMarkdownPlugin">
+        <ApiTable data={data.iMarkdownPluginData} title="IMarkdownPlugin" />
+      </div>
+      <div id="IMarkdownCode">
+        <ApiTable data={data.iMarkdownCodeData} title="IMarkdownCode" />
+      </div>
+      <div id="IEndData">
+        <ApiTable data={data.iEndData} title="IEndData" />
+      </div>
+      <div id="IStartData">
+        <ApiTable data={data.iStartData} title="IStartData" />
+      </div>
+      <PluginSection title={t.plugin} codeExample={data.codeExamples.katexPlugin} />
+      <ComparisonTable data={data.timerComparisonData} title={t.timer} />
+      <FormulaTypeTable data={data.formulaTypesData} title={t.formula} />
 
-    {/* 类型定义 */}
-    <h3>类型定义</h3>
-    <ApiTable data={iTypedCharData} title="ITypedChar" />
-    <ApiTable data={iBeforeTypedCharData} title="IBeforeTypedChar" />
-    <ApiTable data={iMarkdownMathData} title="IMarkdownMath" />
-    <ApiTable data={iMarkdownPluginData} title="IMarkdownPlugin" />
+      <h3>{t.config}</h3>
+      <ApiTable data={data.configProviderPropsData} title={t.configProps} />
+      <ApiTable data={data.localeTypeData} title={t.localeType} />
+      <div id="I18nData">
+        <ApiTable data={data.i18nData} title={t.i18n} />
+      </div>
 
-    {/* 内置插件 */}
-    <PluginSection title="内置插件" codeExample={codeExamples.katexPlugin} />
+      <BestPracticesList practices={data.bestPractices} title={t.best} />
 
-    {/* 定时器模式对比 */}
-    <ComparisonTable data={timerComparisonData} title="定时器模式对比" />
-
-    {/* 数学公式分隔符说明 */}
-    <FormulaTypeTable data={formulaTypesData} title="数学公式分隔符说明" />
-
-    {/* 最佳实践建议 */}
-    <BestPracticesList practices={bestPractices} title="最佳实践建议" />
-
-    {/* 使用示例 */}
-    <h3>使用示例</h3>
-    <CodeExample code={codeExamples.streamingChat} title="流式对话示例" />
-    <CodeExample code={codeExamples.callbackExample} title="回调函数示例" />
-    <CodeExample code={codeExamples.startExample} title="手动开始动画示例" />
-    <CodeExample code={codeExamples.restartExample} title="重新开始动画示例" />
-  </section>
-);
+      <h3>{t.example}</h3>
+      <CodeExample code={data.codeExamples.streamingChat} title={t.codeStream} />
+      <CodeExample code={data.codeExamples.callbackExample} title={t.codeCallback} />
+      <CodeExample code={data.codeExamples.startExample} title={t.codeStart} />
+      <CodeExample code={data.codeExamples.restartExample} title={t.codeRestart} />
+      <CodeExample code={data.codeExamples.codeBlockExample} title={t.codeBlock} />
+    </section>
+  );
+};
 
 export default ApiDocumentation;

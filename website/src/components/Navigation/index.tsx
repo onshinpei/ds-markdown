@@ -1,7 +1,9 @@
 import React from 'react';
+import { useI18n } from '../../hooks/useI18n';
 
 // Navigation 组件
 const Navigation: React.FC = () => {
+  const { t } = useI18n();
   const scrollToSection = (sectionId: string): void => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -20,37 +22,37 @@ const Navigation: React.FC = () => {
         <ul className="nav-list">
           <li>
             <a href="#installation" onClick={(e) => handleNavClick(e, 'installation')}>
-              安装
+              {t('navInstall')}
             </a>
           </li>
           <li>
             <a href="#basic-usage" onClick={(e) => handleNavClick(e, 'basic-usage')}>
-              基础用法
+              {t('navBasicUsage')}
             </a>
           </li>
           <li>
             <a href="#math-support" onClick={(e) => handleNavClick(e, 'math-support')}>
-              数学公式
+              {t('navMathSupport')}
             </a>
           </li>
           <li>
             <a href="#typing-animation" onClick={(e) => handleNavClick(e, 'typing-animation')}>
-              打字动画
+              {t('navTypingAnimation')}
             </a>
           </li>
           <li>
             <a href="#themes" onClick={(e) => handleNavClick(e, 'themes')}>
-              主题切换
+              {t('navThemes')}
             </a>
           </li>
           <li>
             <a href="#streaming" onClick={(e) => handleNavClick(e, 'streaming')}>
-              流式演示
+              {t('navStreaming')}
             </a>
           </li>
           <li>
             <a href="#api" onClick={(e) => handleNavClick(e, 'api')}>
-              API 文档
+              {t('navApi')}
             </a>
           </li>
         </ul>

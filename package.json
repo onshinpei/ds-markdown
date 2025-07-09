@@ -1,7 +1,7 @@
 {
   "name": "ds-markdown",
   "private": false,
-  "version": "0.1.6",
+  "version": "0.1.7-beta.1",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "module": "./dist/esm/index.js",
@@ -25,6 +25,26 @@
       "require": {
         "types": "./dist/cjs/index.d.ts",
         "default": "./dist/cjs/index.js"
+      }
+    },
+    "./i18n/zh": {
+      "import": {
+        "types": "./dist/esm/i18n/zh/index.d.ts",
+        "default": "./dist/esm/i18n/zh/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/i18n/zh/index.d.ts",
+        "default": "./dist/cjs/i18n/zh/index.js"
+      }
+    },
+    "./i18n/en": {
+      "import": {
+        "types": "./dist/esm/i18n/en/index.d.ts",
+        "default": "./dist/esm/i18n/en/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/i18n/en/index.d.ts",
+        "default": "./dist/cjs/i18n/en/index.js"
       }
     },
     "./plugins": {
@@ -135,6 +155,6 @@
     "react-markdown"
   ],
   "publishConfig": {
-    "tag": "latest"
+    "tag": "beta"
   }
 }

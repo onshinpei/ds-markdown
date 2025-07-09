@@ -1,102 +1,93 @@
 // API 数据定义
-export interface ApiProperty {
-  prop: string;
-  type: string;
-  description: string;
-  defaultValue: string;
-}
-
-export interface RefMethod {
-  method: string;
-  description: string;
-}
-
-export interface ComparisonRow {
-  feature: string;
-  requestAnimationFrame: string;
-  setTimeout: string;
-}
-
-export interface FormulaType {
-  type: string;
-  inline: string;
-  block: string;
-  example: string;
-}
+import zh from 'ds-markdown/i18n/zh';
+import { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './type';
+import { getObjectKeys } from './util';
 
 // Props 属性数据
 export const propsData: ApiProperty[] = [
   {
     prop: 'interval',
     type: 'number',
-    description: '打字间隔 (毫秒)',
+    description: '打字机效果间隔时间',
     defaultValue: '30',
   },
   {
     prop: 'timerType',
     type: "'setTimeout' | 'requestAnimationFrame'",
-    description: '定时器类型，推荐使用 requestAnimationFrame。不支持动态修改',
+    description: '计时类型：支持setTimeout和requestAnimationFrame',
     defaultValue: "'setTimeout'",
-  },
-  {
-    prop: 'answerType',
-    type: "'thinking' | 'answer'",
-    description: '内容类型，影响样式主题。thinking为思考模式，answer为回答模式。不支持动态修改',
-    defaultValue: "'answer'",
-  },
-  {
-    prop: 'theme',
-    type: "'light' | 'dark'",
-    description: '主题类型，支持亮色和暗色模式',
-    defaultValue: "'light'",
   },
   {
     prop: 'disableTyping',
     type: 'boolean',
-    description: '禁用打字动画，设为true时立即显示全部内容',
+    description: '是否关闭打字机效果',
     defaultValue: 'false',
   },
   {
-    prop: 'plugins',
-    type: 'IMarkdownPlugin[]',
-    description: '插件配置，支持 remark/rehype 插件扩展',
-    defaultValue: '[]',
-  },
-  {
-    prop: 'math',
-    type: 'IMarkdownMath',
-    description: '数学公式配置，支持 KaTeX 渲染',
-    defaultValue: "{ splitSymbol: 'dollar' }",
-  },
-  {
-    prop: 'onStart',
-    type: '(data: StartData) => void',
-    description: '打字开始时的回调函数',
+    prop: 'onEnd',
+    type: '(data?: IEndData) => void',
+    description: '打字完成后回调',
     defaultValue: 'undefined',
   },
   {
-    prop: 'onEnd',
-    type: '(data: EndData) => void',
-    description: '打字结束时的回调函数',
+    prop: 'onStart',
+    type: '(data?: IStartData) => void',
+    description: '开始打字回调',
     defaultValue: 'undefined',
   },
   {
     prop: 'onBeforeTypedChar',
-    type: '(data: IBeforeTypedChar) => Promise<void>',
-    description: '字符打字前的回调函数，支持异步操作，会阻塞之后的打字',
+    type: '(data?: IBeforeTypedChar) => Promise<void>',
+    description: '打字前回调',
     defaultValue: 'undefined',
   },
   {
     prop: 'onTypedChar',
-    type: '(data: ITypedChar) => void',
-    description: '每个字符打字后的回调函数',
+    type: '(data?: ITypedChar) => void',
+    description: '打字机打完一个字符回调',
     defaultValue: 'undefined',
   },
   {
     prop: 'autoStartTyping',
     type: 'boolean',
-    description: '是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改',
+    description: '是否自动开启打字动画',
     defaultValue: 'true',
+  },
+  {
+    prop: 'theme',
+    type: 'Theme',
+    description: '主题',
+    defaultValue: 'light',
+  },
+  {
+    prop: 'math',
+    type: 'IMarkdownMath',
+    description: '数学公式配置',
+    defaultValue: '{ splitSymbol: "dollar" }',
+  },
+  {
+    prop: 'codeBlock',
+    type: 'IMarkdownCode',
+    description: '代码块配置',
+    defaultValue: 'true',
+  },
+  {
+    prop: 'plugins',
+    type: 'IMarkdownPlugin[]',
+    description: '插件配置',
+    defaultValue: '[]',
+  },
+  {
+    prop: 'answerType',
+    type: "'thinking' | 'answer'",
+    description: '回答类型',
+    defaultValue: 'answer',
+  },
+  {
+    prop: 'children',
+    type: 'string | undefined',
+    description: 'Markdown 内容',
+    defaultValue: '-',
   },
 ];
 
@@ -264,6 +255,32 @@ export const iMarkdownPluginData: ApiProperty[] = [
   },
 ];
 
+// IMarkdownCode 类型定义
+export const iMarkdownCodeData: ApiProperty[] = [
+  {
+    prop: 'headerActions',
+    type: 'boolean | React.ReactNode',
+    description: '是否显示头部操作按钮。true显示默认按钮，React.ReactNode显示自定义按钮',
+    defaultValue: 'true',
+  },
+];
+
+// IEndData 类型定义
+export const iEndData: ApiProperty[] = [
+  { prop: 'manual', type: 'boolean', description: '是否手动触发', defaultValue: '-' },
+  { prop: 'answerStr', type: 'string', description: '回答字符串', defaultValue: '-' },
+  { prop: 'thinkingStr', type: 'string', description: '思考字符串', defaultValue: '-' },
+  { prop: 'str', type: 'string', description: '打字机打过的字符串, 和answerStr相同', defaultValue: '-' },
+];
+
+// IStartData 类型定义
+export const iStartData: ApiProperty[] = [
+  { prop: 'currentIndex', type: 'number', description: '当前字符在整个字符串中的索引', defaultValue: '0' },
+  { prop: 'currentChar', type: 'string', description: '当前已打字的字符', defaultValue: '-' },
+  { prop: 'answerType', type: 'AnswerType', description: '内容类型 (thinking/answer)', defaultValue: '-' },
+  { prop: 'prevStr', type: 'string', description: '当前类型内容的前缀字符串', defaultValue: '-' },
+];
+
 // 定时器模式对比数据
 export const timerComparisonData: ComparisonRow[] = [
   {
@@ -327,6 +344,10 @@ export const bestPractices = [
   {
     title: '数学公式',
     description: "按需引入 'ds-markdown/katex.css' 样式文件",
+  },
+  {
+    title: '代码块配置',
+    description: '使用 codeBlock.headerActions 自定义代码块操作按钮，提升用户体验',
   },
   {
     title: '类型安全',
@@ -541,4 +562,119 @@ function StartDemo() {
     </div>
   );
 }`,
+
+  codeBlockExample: `import { DsMarkdown } from 'ds-markdown';
+
+function CodeBlockDemo() {
+  // 默认头部操作按钮
+  const defaultHeaderActions = (
+    <DsMarkdown 
+      codeBlock={{ headerActions: true }}
+    >
+      \`\`\`javascript
+      console.log('Hello, World!');
+      \`\`\`
+    </DsMarkdown>
+  );
+
+  // 自定义头部操作按钮
+  const customHeaderActions = (
+    <DsMarkdown 
+      codeBlock={{ 
+        headerActions: (
+          <div style={{ display: 'flex', gap: '8px', padding: '8px' }}>
+            <button onClick={() => console.log('复制代码')}>
+              📋 复制
+            </button>
+            <button onClick={() => console.log('下载文件')}>
+              💾 下载
+            </button>
+            <button onClick={() => console.log('分享代码')}>
+              🔗 分享
+            </button>
+          </div>
+        )
+      }}
+    >
+      \`\`\`typescript
+      interface User {
+        id: number;
+        name: string;
+        email: string;
+      }
+      
+      const user: User = {
+        id: 1,
+        name: 'John Doe',
+        email: 'john@example.com'
+      };
+      \`\`\`
+    </DsMarkdown>
+  );
+
+  // 禁用头部操作按钮
+  const noHeaderActions = (
+    <DsMarkdown 
+      codeBlock={{ headerActions: false }}
+    >
+      \`\`\`python
+      def fibonacci(n):
+          if n <= 1:
+              return n
+          return fibonacci(n-1) + fibonacci(n-2)
+      \`\`\`
+    </DsMarkdown>
+  );
+
+  return (
+    <div>
+      <h3>默认头部操作按钮</h3>
+      {defaultHeaderActions}
+      
+      <h3>自定义头部操作按钮</h3>
+      {customHeaderActions}
+      
+      <h3>禁用头部操作按钮</h3>
+      {noHeaderActions}
+    </div>
+  );
+}`,
 };
+
+// ConfigProvider & i18n 相关属性
+export const configProviderPropsData: ApiProperty[] = [
+  {
+    prop: 'locale',
+    type: 'Locale',
+    description: '语言包对象，支持分组结构。默认中文，可选英文等',
+    defaultValue: 'zhCN',
+  },
+  {
+    prop: 'children',
+    type: 'React.ReactNode',
+    description: '需要被多语言包裹的子组件',
+    defaultValue: '-',
+  },
+];
+
+export const localeTypeData: ApiProperty[] = [
+  {
+    prop: 'codeBlock',
+    type: 'I18nData',
+    description: '代码块相关文案分组',
+    defaultValue: '-',
+  },
+  {
+    prop: '[key: string]',
+    type: 'any',
+    description: '支持自定义分组和字段',
+    defaultValue: '-',
+  },
+];
+
+export const i18nData: ApiProperty[] = getObjectKeys(zh).map((key) => ({
+  prop: key,
+  type: 'string',
+  description: key,
+  defaultValue: '-',
+}));
