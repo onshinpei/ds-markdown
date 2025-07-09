@@ -993,21 +993,19 @@ import enUS from 'ds-markdown/i18n/en';
 
 ### 在组件中使用语言包
 
-使用 `useLocale` hook 来获取当前的语言包：
+使用 `locale` 属性来切换自己想要的语言包，例如切换到英文
 
 ```tsx
 import React from 'react';
-import { useLocale } from 'ds-markdown';
+import DsMarkdown from 'ds-markdown';
+import { ConfigProvider } from 'ds-markdown';
+import en from 'ds-markdown/i18n/en';
 
 const MyComponent: React.FC = () => {
-  const locale = useLocale();
-
   return (
-    <div>
-      <button>{locale.codeBlock.copy}</button>
-      <span>{locale.codeBlock.copied}</span>
-      <button>{locale.codeBlock.download}</button>
-    </div>
+    <ConfigProvider locale={en}>
+      <DsMarkdown {...props} />
+    </ConfigProvider>
   );
 };
 ```
@@ -1025,37 +1023,6 @@ interface Locale {
   };
   [key: string]: string;
 }
-```
-
-### 完整示例
-
-```tsx
-import React from 'react';
-import { ConfigProvider, useLocale } from 'ds-markdown';
-import zhCN from 'ds-markdown/i18n/zh';
-
-const ExampleComponent: React.FC = () => {
-  const locale = useLocale();
-
-  return (
-    <div>
-      <h2>多语言示例</h2>
-      <p>复制按钮: {locale.codeBlock.copy}</p>
-      <p>已复制提示: {locale.codeBlock.copied}</p>
-      <p>下载按钮: {locale.codeBlock.download}</p>
-    </div>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <ExampleComponent />
-    </ConfigProvider>
-  );
-};
-
-export default App;
 ```
 
 ### 注意事项
