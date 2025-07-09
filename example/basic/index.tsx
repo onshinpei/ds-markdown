@@ -1,12 +1,11 @@
-import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import { useMemo, useRef, useState } from 'react';
 
 import Markdown, { MarkdownRef } from '../../src';
 import json from './data.json';
 
-function throttle(fn: (...args: any[]) => void, delay: number) {
+function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
   let lastTime = 0;
-  return (...args: unknown[]) => {
+  return (...args: T) => {
     const now = Date.now();
     if (now - lastTime > delay) {
       fn(...args);
@@ -44,7 +43,7 @@ const BasicDemo: React.FC<{
   };
 
   const throttleOnTypedChar = useMemo(() => {
-    return throttle((char) => {
+    return throttle((_char) => {
       if (!scrollCacheRef.current.needAutoScroll) return;
       const messageDiv = messageDivRef.current;
       // 自动滑动到最底部
@@ -98,7 +97,7 @@ const BasicDemo: React.FC<{
           <Markdown
             interval={interval}
             answerType="thinking"
-            onEnd={(args) => {
+            onEnd={(_args) => {
               // console.log('思考完成', args);
               if (thinkingContent) {
                 setAnswerContent(json.content);
