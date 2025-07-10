@@ -3,7 +3,7 @@ import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
 import MarkdownCMD from '../MarkdownCMD';
 import { MarkdownProvider } from '../context/MarkdownProvider';
-import { MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
+import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
 
 interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
@@ -77,11 +77,11 @@ const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
   // 分离主题相关的 props
   const themeProps = useMemo(
     () => ({
-      theme: props.theme,
+      theme: props.theme || DEFAULT_THEME,
       math: props.math,
       codeBlock: props.codeBlock,
-      plugins: props.plugins,
-      answerType: props.answerType,
+      plugins: props.plugins || DEFAULT_PLUGINS,
+      answerType: props.answerType || DEFAULT_ANSWER_TYPE,
     }),
     [props.theme, props.math, props.codeBlock, props.plugins, props.answerType],
   );

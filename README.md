@@ -481,6 +481,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `onTypedChar`       | `(data: ITypedChar) => void`                | 每字符打字后的回调                                            | -                                                           |
 | `disableTyping`     | `boolean`                                   | 禁用打字动画效果                                              | `false`                                                     |
 | `autoStartTyping`   | `boolean`                                   | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true`                                                      |
+| `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
 
 > 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`，则在下一个打字触发时，会把剩下的所有字一次性显示
 
@@ -722,6 +723,81 @@ const customPlugin = createBuildInPlugin({
 
 高频推荐`requestAnimationFrame`,低频推荐 `setTimeout`
 
+## 多语言配置
+
+ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
+
+### 基本用法
+
+```tsx
+import React from 'react';
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+
+const App: React.FC = () => {
+  return (
+    <ConfigProvider locale={zhCN}>
+      <YourApp />
+    </ConfigProvider>
+  );
+};
+```
+
+### 可用的语言包
+
+#### 中文 (zhCN)
+
+```tsx
+import zhCN from 'ds-markdown/i18n/zh';
+```
+
+#### 英文 (enUS)
+
+```tsx
+import enUS from 'ds-markdown/i18n/en';
+```
+
+### 在组件中使用语言包
+
+使用 `locale` 属性来切换自己想要的语言包，例如切换到英文
+
+```tsx
+import React from 'react';
+import DsMarkdown from 'ds-markdown';
+import { ConfigProvider } from 'ds-markdown';
+import en from 'ds-markdown/i18n/en';
+
+const MyComponent: React.FC = () => {
+  return (
+    <ConfigProvider locale={en}>
+      <DsMarkdown {...props} />
+    </ConfigProvider>
+  );
+};
+```
+
+### 语言包结构
+
+当前支持的语言包包含以下字段：
+
+```typescript
+interface Locale {
+  codeBlock: {
+    copy: string;
+    copied: string;
+    download: string;
+  };
+  [key: string]: string;
+}
+```
+
+### 注意事项
+
+1. `ConfigProvider` 必须包裹在使用 `useLocale` 的组件外层
+2. 语言包对象会被缓存，避免不必要的重新渲染
+3. 支持扩展自定义的语言包字段
+4. 如果没有提供 `ConfigProvider`，会使用默认的中文语言包
+
 ---
 
 ## 💡 实战示例
@@ -956,111 +1032,3 @@ import { MarkdownCMDRef } from 'ds-markdown';
 const ref = useRef<MarkdownCMDRef>(null);
 // 完整的 TypeScript 类型提示
 ```
-
-## 多语言配置
-
-ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
-
-### 基本用法
-
-```tsx
-import React from 'react';
-import { ConfigProvider } from 'ds-markdown';
-import zhCN from 'ds-markdown/i18n/zh';
-
-const App: React.FC = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <YourApp />
-    </ConfigProvider>
-  );
-};
-```
-
-### 可用的语言包
-
-#### 中文 (zhCN)
-
-```tsx
-import zhCN from 'ds-markdown/i18n/zh';
-```
-
-#### 英文 (enUS)
-
-```tsx
-import enUS from 'ds-markdown/i18n/en';
-```
-
-### 在组件中使用语言包
-
-使用 `useLocale` hook 来获取当前的语言包：
-
-```tsx
-import React from 'react';
-import { useLocale } from 'ds-markdown';
-
-const MyComponent: React.FC = () => {
-  const locale = useLocale();
-
-  return (
-    <div>
-      <button>{locale.codeBlock.copy}</button>
-      <span>{locale.codeBlock.copied}</span>
-      <button>{locale.codeBlock.download}</button>
-    </div>
-  );
-};
-```
-
-### 语言包结构
-
-当前支持的语言包包含以下字段：
-
-```typescript
-interface Locale {
-  codeBlock: {
-    copy: string;
-    copied: string;
-    download: string;
-  };
-  [key: string]: string;
-}
-```
-
-### 完整示例
-
-```tsx
-import React from 'react';
-import { ConfigProvider, useLocale } from 'ds-markdown';
-import zhCN from 'ds-markdown/i18n/zh';
-
-const ExampleComponent: React.FC = () => {
-  const locale = useLocale();
-
-  return (
-    <div>
-      <h2>多语言示例</h2>
-      <p>复制按钮: {locale.codeBlock.copy}</p>
-      <p>已复制提示: {locale.codeBlock.copied}</p>
-      <p>下载按钮: {locale.codeBlock.download}</p>
-    </div>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <ExampleComponent />
-    </ConfigProvider>
-  );
-};
-
-export default App;
-```
-
-### 注意事项
-
-1. `ConfigProvider` 必须包裹在使用 `useLocale` 的组件外层
-2. 语言包对象会被缓存，避免不必要的重新渲染
-3. 支持扩展自定义的语言包字段
-4. 如果没有提供 `ConfigProvider`，会使用默认的中文语言包
