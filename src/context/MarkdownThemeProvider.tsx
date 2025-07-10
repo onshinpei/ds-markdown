@@ -13,6 +13,10 @@ export type MarkdownThemeContextType = {
   };
 };
 
+export const DEFAULT_THEME = 'light';
+export const DEFAULT_ANSWER_TYPE = 'answer';
+export const DEFAULT_PLUGINS = [];
+
 const MarkdownThemeContext = createContext<MarkdownThemeContextType>({
   state: {},
   methods: {},
@@ -25,8 +29,8 @@ export const MarkdownThemeProvider: React.FC<{
   const contextValue: MarkdownThemeContextType = useMemo(
     () => ({
       state: {
-        theme: 'light',
-        answerType: 'answer',
+        theme: DEFAULT_THEME,
+        answerType: DEFAULT_ANSWER_TYPE,
         ...value,
       },
       methods: {

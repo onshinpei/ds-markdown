@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
 import { __DEV__ } from '../constant';
 import { useTypingTask } from '../hooks/useTypingTask';
-import { MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
+import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
 import { MarkdownProvider } from '../context/MarkdownProvider';
 
 const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
@@ -250,11 +250,11 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>((props, ref) =>
   // 分离主题相关的 props
   const themeProps = useMemo(
     () => ({
-      theme: props.theme,
+      theme: props.theme || DEFAULT_THEME,
       math: props.math,
       codeBlock: props.codeBlock,
-      plugins: props.plugins,
-      answerType: props.answerType,
+      plugins: props.plugins || DEFAULT_PLUGINS,
+      answerType: props.answerType || DEFAULT_ANSWER_TYPE,
     }),
     [props.theme, props.math, props.codeBlock, props.plugins, props.answerType],
   );

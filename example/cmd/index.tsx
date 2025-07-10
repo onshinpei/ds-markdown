@@ -26,7 +26,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
 
     async function pushData() {
       while (true) {
-        const timeout = 100 + Math.random() * 100;
+        const timeout = 10 + Math.random() * 10;
         await new Promise((resolve) => setTimeout(resolve, timeout));
 
         const data = cozeData.shift();
@@ -49,7 +49,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
     // cmdRef.current.push(data.content, 'answer');
   }, []);
 
-  const interval = 16.67;
+  const interval = 5;
   const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
@@ -76,7 +76,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
         </button>
       </div>
       <div className="ds-message-list">
-        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} theme="light" onTypedChar={onTypedChar} />
+        <MarkdownCMD interval={interval} ref={cmdRef} timerType={timerType} onTypedChar={onTypedChar} />
       </div>
     </div>
   );
