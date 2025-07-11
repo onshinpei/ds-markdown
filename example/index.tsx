@@ -10,11 +10,12 @@ import KatexDemo from './katex';
 import ManualStartDemo from './ManualStart';
 import TypingAnimationDemo from './TypingAnimationDemo';
 import CodeDemo from './code';
+import MermaidDemo from './mermaid';
 const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
     <div className={`ds-message ds-message-${theme}`}>
-      <CDMDemo theme={theme} setTheme={setTheme} />
+      <MermaidDemo theme={theme} setTheme={setTheme} />
     </div>
   );
 };

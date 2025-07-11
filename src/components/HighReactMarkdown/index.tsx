@@ -39,7 +39,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
 
   const { remarkPlugins, rehypePlugins, hasKatexPlugin } = useMemo(() => {
     let hasKatexPlugin = false;
-    const remarkPlugins: any[] = [gfmPlugin];
+    const remarkPlugins: any[] = [];
     const rehypePlugins: any[] = [];
     if (!currentPlugins) {
       return {
@@ -52,6 +52,13 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
         hasKatexPlugin = true;
         remarkPlugins.push(plugin.remarkPlugin);
         rehypePlugins.push(plugin.rehypePlugin);
+      } else {
+        if (plugin.rehypePlugin) {
+          rehypePlugins.push(plugin.rehypePlugin);
+        }
+        if (plugin.remarkPlugin) {
+          remarkPlugins.push(plugin.remarkPlugin);
+        }
       }
     });
 
@@ -75,7 +82,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
       remarkPlugins={remarkPlugins}
       rehypePlugins={rehypePlugins}
       components={{
-        code: CodeComponent as any,
+        // code: CodeComponent as any,
         table: ({ children, ...props }) => {
           return (
             <div className="markdown-table-wrapper">
