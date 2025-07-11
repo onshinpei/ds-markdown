@@ -2,6 +2,8 @@ import React, { useState, useRef, useCallback } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import { useI18n } from '../../../../src/hooks/useI18n';
+import { ConfigSection, StatusCard, ControlButtons, ConfigItem } from './components';
+import './TypingAnimationDemo.css';
 
 interface DemoProps {
   markdown: string;
@@ -205,62 +207,49 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   return (
-    <div className={`demo-impl ${config.theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
+    <div className={`demo-impl ${config.theme === 'dark' ? 'demoImplDark' : 'demoImplLight'}`}>
       {/* 配置面板 */}
-      <div style={{ marginBottom: 20, padding: 16, background: config.theme === 'dark' ? '#2d3748' : '#f7fafc', borderRadius: 8 }}>
-        <h4 style={{ margin: '0 0 12px 0', color: config.theme === 'dark' ? '#e2e8f0' : '#2d3748' }}>{t('configPanelTitle')}</h4>
-
+      <div className="configPanel">
+        <h4 className="sectionTitle">{t('configPanelTitle')}</h4>
         {/* 第一组：实时生效的配置 */}
-        <div style={{ marginBottom: 16 }}>
-          <h5 style={{ margin: '0 0 8px 0', fontSize: 14, color: config.theme === 'dark' ? '#cbd5e0' : '#4a5568' }}>{t('realtimeConfigTitle')}</h5>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+        <ConfigSection title={t('realtimeConfigTitle')} style={{ marginBottom: 16 }}>
+          <div className="selectGrid">
             {/* 间隔控制 */}
-            <div className="select-wrapper">
-              <label className="select-label">{t('intervalLabel')}:</label>
+            <ConfigItem label={t('intervalLabel')}>
               <input type="range" min="5" max="2000" value={config.interval} onChange={(e) => updateConfig('interval', parseInt(e.target.value))} style={{ width: '100%' }} />
-              <span style={{ fontSize: 12, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>{config.interval}ms</span>
-            </div>
-
+              <span className="text-muted" style={{ fontSize: 12 }}>
+                {config.interval}ms
+              </span>
+            </ConfigItem>
             {/* 主题 */}
-            <div className="select-wrapper">
-              <label className="select-label">{t('themeLabel')}:</label>
+            <ConfigItem label={t('themeLabel')}>
               <select className="select-control" value={config.theme} onChange={(e) => updateConfig('theme', e.target.value)}>
                 <option value="light">{t('lightTheme')}</option>
                 <option value="dark">{t('darkTheme')}</option>
               </select>
-            </div>
+            </ConfigItem>
           </div>
-
           {/* 实时开关 */}
-          <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div className="flexWrap" style={{ marginTop: 12 }}>
+            <label className="selectLabel">
               <input type="checkbox" checked={config.disableTyping} onChange={(e) => updateConfig('disableTyping', e.target.checked)} />
               <span className="select-label">{t('disableTypingLabel')}</span>
             </label>
-
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <label className="selectLabel">
               <input type="checkbox" checked={config.mathEnabled} onChange={(e) => updateConfig('mathEnabled', e.target.checked)} />
               <span className="select-label">{t('mathEnabledLabel')}</span>
             </label>
           </div>
-        </div>
-
+        </ConfigSection>
         {/* 第二组：需要重新渲染的配置 */}
-        <div
-          style={{
-            padding: 12,
-            border: `1px dashed ${config.theme === 'dark' ? '#4a5568' : '#e2e8f0'}`,
-            borderRadius: 6,
-            background: config.theme === 'dark' ? '#2d3748' : '#f8f9fa',
-          }}
-        >
-          <h5 style={{ margin: '0 0 8px 0', fontSize: 14, color: config.theme === 'dark' ? '#fbb6ce' : '#d53f8c' }}>{t('rerenderConfigTitle')}</h5>
-          <p style={{ fontSize: 12, margin: '0 0 12px 0', color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>{t('rerenderConfigDescription')}</p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+        <div className={`rerenderPanel${config.theme === 'dark' ? ' rerenderPanelDark' : ''}`}>
+          <h5 className="sectionSubTitle sectionSubTitlePink">{t('rerenderConfigTitle')}</h5>
+          <p className="description-text" style={{ fontSize: 12, margin: '0 0 12px 0' }}>
+            {t('rerenderConfigDescription')}
+          </p>
+          <div className="selectGrid">
             {/* 定时器类型 */}
-            <div className="select-wrapper">
-              <label className="select-label">{t('timerTypeLabel')}:</label>
+            <ConfigItem label={t('timerTypeLabel')}>
               <select
                 className="select-control"
                 value={config.timerType}
@@ -272,12 +261,11 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
                 <option value="setTimeout">{t('setTimeout')}</option>
                 <option value="requestAnimationFrame">{t('requestAnimationFrame')}</option>
               </select>
-            </div>
+            </ConfigItem>
           </div>
-
           {/* 重新渲染开关 */}
-          <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div className="flexWrap" style={{ marginTop: 12 }}>
+            <label className="selectLabel">
               <input
                 type="checkbox"
                 checked={config.autoStartTyping}
@@ -290,8 +278,7 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
             </label>
           </div>
           {/* 内容类型 */}
-          <div className="select-wrapper">
-            <label className="select-label">{t('contentTypeLabel')}:</label>
+          <ConfigItem label={t('contentTypeLabel')}>
             <select
               className="select-control"
               value={config.answerType}
@@ -303,116 +290,64 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
               <option value="answer">{t('answerOption')}</option>
               <option value="thinking">{t('thinkingOption')}</option>
             </select>
-          </div>
+          </ConfigItem>
         </div>
       </div>
-
       {/* 控制按钮 */}
-      <div style={{ marginBottom: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <button className="btn btn-success" onClick={handleStartDemo} disabled={isStopped}>
-          {isStarted ? t('restart') : t('startDemo')}
-        </button>
-        <button className="btn btn-danger" onClick={handleStop} disabled={!isTyping || isStopped}>
-          {t('stop')}
-        </button>
-        <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
-          {t('continue')}
-        </button>
-      </div>
-
+      <ControlButtons isStarted={isStarted} isTyping={isTyping} isStopped={isStopped} onStart={handleStartDemo} onStop={handleStop} onResume={handleResume} t={t} />
       {/* 实时状态监控 */}
-      <div style={{ marginBottom: 16, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 12 }}>
+      <div className="statusPanels">
         {/* 打字统计 */}
-        <div
-          style={{
-            padding: 12,
-            background: config.theme === 'dark' ? '#1a202c' : '#fff',
-            borderRadius: 8,
-            border: `1px solid ${config.theme === 'dark' ? '#2d3748' : '#e2e8f0'}`,
-          }}
-        >
-          <h5 style={{ margin: '0 0 8px 0', color: config.theme === 'dark' ? '#e2e8f0' : '#2d3748' }}>{t('typingStatsTitle')}</h5>
-          <div style={{ fontSize: 12, lineHeight: 1.5, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>
-            {/* 进度条 */}
-            <div style={{ marginBottom: 8 }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 4,
-                }}
-              >
-                <span>{t('progress')}</span>
-                <span>{typingStats.percent.toFixed(1)}%</span>
-              </div>
-              <input type="range" min={0} max={100} value={typingStats.percent} style={{ width: '100%' }} />
+        <StatusCard title={t('typingStatsTitle')} theme={config.theme}>
+          {/* 进度条 */}
+          <div className="progressBar">
+            <div className="progressLabel">
+              <span>{t('progress')}</span>
+              <span>{typingStats.percent.toFixed(1)}%</span>
             </div>
-            <div>
-              {t('currentChar')}: "{typingStats.currentChar}"
-            </div>
-            <div>
-              {t('totalChars')}: {typingStats.totalChars}
-            </div>
-            <div>
-              {t('averageSpeed')}: {typingStats.avgSpeed.toFixed(1)} {t('charsPerSecond')}
-            </div>
+            <input type="range" min={0} max={100} value={typingStats.percent} style={{ width: '100%' }} readOnly />
           </div>
-        </div>
-
+          <div>
+            {t('currentChar')}: "{typingStats.currentChar}"
+          </div>
+          <div>
+            {t('totalChars')}: {typingStats.totalChars}
+          </div>
+          <div>
+            {t('averageSpeed')}: {typingStats.avgSpeed.toFixed(1)} {t('charsPerSecond')}
+          </div>
+        </StatusCard>
         {/* 性能监控 */}
-        <div
-          style={{
-            padding: 12,
-            background: config.theme === 'dark' ? '#1a202c' : '#fff',
-            borderRadius: 8,
-            border: `1px solid ${config.theme === 'dark' ? '#2d3748' : '#e2e8f0'}`,
-          }}
-        >
-          <h5 style={{ margin: '0 0 8px 0', color: config.theme === 'dark' ? '#e2e8f0' : '#2d3748' }}>{t('performanceMonitorTitle')}</h5>
-          <div style={{ fontSize: 12, lineHeight: 1.5, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>
-            <div>
-              {t('frameCount')}: {performanceMetrics.frameCount}
-            </div>
-            <div>
-              {t('averageFrameTime')}: {performanceMetrics.avgFrameTime.toFixed(1)}ms
-            </div>
-            <div>
-              {t('timer')}: {config.timerType}
-            </div>
-            <div>
-              {t('status')}: {isTyping ? t('statusPlaying') : t('statusStopped')}
-            </div>
+        <StatusCard title={t('performanceMonitorTitle')} theme={config.theme}>
+          <div>
+            {t('frameCount')}: {performanceMetrics.frameCount}
           </div>
-        </div>
-
+          <div>
+            {t('averageFrameTime')}: {performanceMetrics.avgFrameTime.toFixed(1)}ms
+          </div>
+          <div>
+            {t('timer')}: {config.timerType}
+          </div>
+          <div>
+            {t('status')}: {isTyping ? t('statusPlaying') : t('statusStopped')}
+          </div>
+        </StatusCard>
         {/* 最新回调数据 */}
-        <div
-          style={{
-            padding: 12,
-            background: config.theme === 'dark' ? '#1a202c' : '#fff',
-            borderRadius: 8,
-            border: `1px solid ${config.theme === 'dark' ? '#2d3748' : '#e2e8f0'}`,
-          }}
-        >
-          <h5 style={{ margin: '0 0 8px 0', color: config.theme === 'dark' ? '#e2e8f0' : '#2d3748' }}>{t('callbackDataTitle')}</h5>
-          <div style={{ fontSize: 12, lineHeight: 1.5, color: config.theme === 'dark' ? '#a0aec0' : '#718096' }}>
-            <div>
-              {t('onTypedChar')}: {callbackData.onTypedChar?.currentChar || '-'}
-            </div>
-            <div>
-              {t('progress')}: {callbackData.onTypedChar?.percent?.toFixed(1) || 0}%
-            </div>
-            <div>
-              {t('index')}: {callbackData.onTypedChar?.currentIndex || 0}
-            </div>
-            <div>
-              {t('type')}: {callbackData.onTypedChar?.answerType || config.answerType}
-            </div>
+        <StatusCard title={t('callbackDataTitle')} theme={config.theme}>
+          <div>
+            {t('onTypedChar')}: {callbackData.onTypedChar?.currentChar || '-'}
           </div>
-        </div>
+          <div>
+            {t('progress')}: {callbackData.onTypedChar?.percent?.toFixed(1) || 0}%
+          </div>
+          <div>
+            {t('index')}: {callbackData.onTypedChar?.currentIndex || 0}
+          </div>
+          <div>
+            {t('type')}: {callbackData.onTypedChar?.answerType || config.answerType}
+          </div>
+        </StatusCard>
       </div>
-
       {/* 渲染区域 */}
       <div>
         <DsMarkdown
