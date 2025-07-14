@@ -5,6 +5,7 @@ import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownPr
 
 // 导出 ConfigProvider 相关
 export { ConfigProvider, useConfig, useLocale } from './context/ConfigProvider';
+export * from './context/ConfigProvider/mermaid.type';
 export type { Locale, ConfigProviderProps, ConfigContextType } from './context/ConfigProvider';
 
 export default Markdown;
