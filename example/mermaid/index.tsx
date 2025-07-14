@@ -2,8 +2,6 @@ import { useMemo, useRef, useState } from 'react';
 
 import Markdown, { MarkdownRef } from '../../src';
 
-import { mermaidPlugin } from '../../src/plugins';
-
 import markdownStr from './markdown.md?raw';
 
 function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
@@ -132,7 +130,6 @@ const App: React.FC<{
             interval={interval}
             answerType="answer"
             onTypedChar={throttleOnTypedChar}
-            plugins={[mermaidPlugin]}
             timerType={timerType}
             theme={theme}
             math={{ splitSymbol: 'bracket' }}

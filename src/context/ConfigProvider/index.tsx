@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import defaultLocale from '../i18n/zh';
+import defaultLocale from '../../i18n/zh';
 
 // 定义语言包的基础类型
 export interface Locale {

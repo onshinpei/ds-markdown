@@ -1,7 +1,6 @@
 import remarkMath from 'remark-math';
 import { IMarkdownPlugin } from '../defined';
 import rehypeKatex from 'rehype-katex';
-import rehypeMermaid from 'rehype-mermaid';
 import { katexId, mermaidId } from '../constant';
 
 function createBuildInPlugin(partialPlugin: Partial<IMarkdownPlugin>) {
@@ -19,9 +18,4 @@ const katexPlugin = createBuildInPlugin({
   id: katexId,
 });
 
-const mermaidPlugin = createBuildInPlugin({
-  rehypePlugin: rehypeMermaid,
-  id: mermaidId,
-});
-
-export { createBuildInPlugin, katexPlugin, mermaidPlugin };
+export { createBuildInPlugin, katexPlugin, mermaidId, katexId };
