@@ -75,6 +75,11 @@ export interface IMarkdownThemeProps {
   answerType?: 'thinking' | 'answer';
 }
 
+export interface IMarkdownThemeStateProps extends IMarkdownThemeProps {
+  theme: Theme;
+  answerType: AnswerType;
+}
+
 export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';

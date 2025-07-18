@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-interface DsButtonProps {
+interface ButtonProps {
   className?: string;
   children?: React.ReactNode;
   icon?: React.ReactNode;
@@ -9,7 +9,7 @@ interface DsButtonProps {
   style?: React.CSSProperties;
 }
 
-const DsButton: React.FC<DsButtonProps> = ({ className = '', children, icon, onClick, style }) => {
+const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick, style }) => {
   return (
     <div
       role="button"
@@ -26,4 +26,4 @@ const DsButton: React.FC<DsButtonProps> = ({ className = '', children, icon, onC
   );
 };
 
-export default DsButton;
+export default Button;
