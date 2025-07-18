@@ -23,6 +23,7 @@ export interface ConfigProviderProps {
 // 定义 Context 类型
 export interface ConfigContextType {
   locale: Locale;
+  mermaidConfig?: Mermaid.MermaidConfig;
 }
 
 const ConfigContext = createContext<ConfigContextType>({
@@ -30,13 +31,15 @@ const ConfigContext = createContext<ConfigContextType>({
 });
 
 export const ConfigProvider: React.FC<ConfigProviderProps> = ({ locale, children, mermaidConfig }) => {
-  const contextValue = useMemo(
-    () => ({
+  const contextValue = useMemo(() => {
+    const contextValue: ConfigContextType = {
       locale: locale || defaultLocale,
-      mermaidConfig,
-    }),
-    [locale, mermaidConfig],
-  );
+    };
+    if (mermaidConfig) {
+      contextValue.mermaidConfig = mermaidConfig;
+    }
+    return contextValue;
+  }, [locale, mermaidConfig]);
 
   return <ConfigContext.Provider value={contextValue}>{children}</ConfigContext.Provider>;
 };

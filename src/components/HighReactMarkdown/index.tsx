@@ -37,9 +37,10 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
   const currentPlugins = themeState.plugins;
   const mathSplitSymbol = currentMath?.splitSymbol ?? 'dollar';
 
-  const { remarkPlugins, rehypePlugins, hasKatexPlugin } = useMemo(() => {
+  const { remarkPlugins, rehypePlugins, hasKatexPlugin, components } = useMemo(() => {
     let hasKatexPlugin = false;
-    const remarkPlugins: any[] = [];
+    const components: Record<string, React.ComponentType<unknown>> = {};
+    const remarkPlugins: any[] = [gfmPlugin];
     const rehypePlugins: any[] = [];
     if (!currentPlugins) {
       return {
@@ -60,12 +61,16 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
           remarkPlugins.push(plugin.remarkPlugin);
         }
       }
+      if (plugin.components) {
+        Object.assign(components, plugin.components);
+      }
     });
 
     return {
       remarkPlugins,
       rehypePlugins,
       hasKatexPlugin,
+      components,
     };
   }, [currentPlugins]);
 
@@ -82,7 +87,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
       remarkPlugins={remarkPlugins}
       rehypePlugins={rehypePlugins}
       components={{
-        // code: CodeComponent as any,
+        code: CodeComponent as any,
         table: ({ children, ...props }) => {
           return (
             <div className="markdown-table-wrapper">
@@ -90,6 +95,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
             </div>
           );
         },
+        ...components,
       }}
       {...props}
     >
