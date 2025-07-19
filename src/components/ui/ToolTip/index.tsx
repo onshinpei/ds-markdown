@@ -187,6 +187,31 @@ const ToolTip = forwardRef<HTMLElement, ToolTipProps>(({ title, children, positi
     [children.props],
   );
 
+  // 检查组件是否支持ref
+  const isForwardRef =
+    React.isValidElement(children) &&
+    typeof children.type === 'function' &&
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (children.type as any).$$typeof === Symbol.for('react.forward_ref');
+
+  // 如果组件不支持ref，使用包装div的方式
+  if (!isForwardRef && typeof children.type === 'function') {
+    return (
+      <div
+        ref={triggerRef as React.Ref<HTMLDivElement>}
+        className={classNames('ds-tooltip-trigger', className)}
+        style={style}
+        onMouseEnter={showTooltip}
+        onMouseLeave={hideTooltip}
+        onFocus={showTooltip}
+        onBlur={hideTooltip}
+      >
+        {children}
+        {renderTooltip()}
+      </div>
+    );
+  }
+
   // 使用 cloneElement 直接给子元素添加事件监听器和ref
 
   const enhancedChild = React.cloneElement(children, {
