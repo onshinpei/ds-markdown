@@ -8,8 +8,8 @@ interface IconButtonProps {
   onClick?: () => void;
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ icon, style, className = '', onClick }) => {
-  return <Button icon={icon} className={`ds-icon-button ${className}`} style={style} onClick={onClick} />;
+const IconButton: React.FC<IconButtonProps> = ({ icon, style, className = '', onClick, ...restProps }) => {
+  return <Button icon={icon} className={`ds-icon-button ${className}`} style={style} onClick={onClick} {...restProps} />;
 };
 
 export default IconButton;

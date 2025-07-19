@@ -9,7 +9,7 @@ interface ButtonProps {
   style?: React.CSSProperties;
 }
 
-const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick, style }) => {
+const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick, style, ...restProps }) => {
   return (
     <div
       role="button"
@@ -19,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick
       })}
       onClick={onClick}
       style={style}
+      {...restProps}
     >
       {icon && <div className="ds-button__icon">{icon}</div>}
       {children}
