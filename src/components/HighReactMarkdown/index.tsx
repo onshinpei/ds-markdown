@@ -1,28 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { memo, useMemo } from 'react';
 import Markdown from 'react-markdown';
-import type { ExtraProps, Options } from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import type { Options } from 'react-markdown';
 import gfmPlugin from 'remark-gfm';
 import { replaceMathBracket } from '../../utils/remarkMathBracket';
 import BlockWrap from '../BlockWrap';
 import { katexId } from '../../constant';
+import HighlightCode from '../HighlightCode';
 import { useMarkdownThemeContext } from '../../context/MarkdownThemeProvider';
 
 interface HighReactMarkdownProps extends Options {
   children: string;
 }
 
-const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children }) => {
+const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
   const match = /language-(\w+)/.exec(className || '');
   const codeContent = String(children).replace(/\n$/, '');
-  const { state: themeState } = useMarkdownThemeContext();
-
   return match ? (
     <BlockWrap language={match[1]} codeContent={codeContent}>
-      <SyntaxHighlighter useInlineStyles={false} language={match[1]} style={{}}>
-        {codeContent}
-      </SyntaxHighlighter>
+      <HighlightCode code={codeContent} language={match[1]} />
     </BlockWrap>
   ) : (
     <code className={className}>{children}</code>
