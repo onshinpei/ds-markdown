@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'ds-markdown';
+import Button from '../Button';
 
 interface IconButtonProps {
   icon: React.ReactNode;

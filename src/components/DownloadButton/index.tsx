@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../Button';
+import Button from '../ui/Button';
 import { DownloadIcon } from '../BlockWrap/icon';
 import { useConfig } from '../../context/ConfigProvider';
 
