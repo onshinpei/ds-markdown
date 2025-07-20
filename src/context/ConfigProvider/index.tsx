@@ -10,6 +10,13 @@ export interface Locale {
     download: string;
     [key: string]: string;
   };
+  mermaid: {
+    diagram: string;
+    code: string;
+    zoomOut: string;
+    zoomIn: string;
+    download: string;
+  };
   [key: string]: unknown;
 }
 
