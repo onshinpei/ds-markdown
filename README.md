@@ -29,8 +29,10 @@
   很多 AI/LLM 后端接口（如 OpenAI、DeepSeek 等）推送的数据 chunk 往往一次包含多个字符，普通打字机实现会出现卡顿、跳字等问题。  
   **ds-markdown 会自动将每个 chunk 拆分为单个字符，逐字流畅渲染动画，无论后端一次推送多少字，都能保证每个字都流畅打字。**
 
-- **完整 Markdown & 数学公式支持**  
-  内置 KaTeX，支持所有主流 Markdown 语法和数学公式，适合技术问答、教育、知识库等内容丰富的应用。
+- **完整 Markdown & 数学公式、Diagram支持**
+
+  - 内置 KaTeX，支持所有主流 Markdown 语法和数学公式，适合技术问答、教育、知识库等内容丰富的应用。
+  - 通过插件[mermaid-plugin](https://github.com/onshinpei/ds-markdown-mermaid-plugin)支持`Diagram`的渲染
 
 - **极致开发体验**  
   丰富的命令式 API，支持流式数据、异步回调、插件扩展，开发者可灵活控制动画和内容。
@@ -59,14 +61,16 @@
   - [禁用打字动画](#禁用打字动画)
   - [数学公式支持](#数学公式支持)
   - [AI 对话场景](#ai-对话场景)
-  - [🎯 高级回调控制](#-高级回调控制)
-  - [🔄 重新开始动画演示](#-重新开始动画演示)
-  - [▶️ 手动开始动画演示](#️-手动开始动画演示)
 - [📚 完整 API 文档](#-完整-api-文档)
 - [🧮 数学公式使用指南](#-数学公式使用指南)
 - [🔌 插件系统](#-插件系统)
 - [🎛️ 定时器模式详解](#️-定时器模式详解)
 - [💡 实战示例](#-实战示例)
+  - [🎯 高级回调控制](#-高级回调控制)
+  - [🔄 重新开始动画演示](#-重新开始动画演示)
+  - [▶️ 手动开始动画演示](#️-手动开始动画演示)
+  - [📝 AI 流式对话](#-ai-流式对话)
+  - [🧮 数学公式流式渲染](#-数学公式流式渲染)
 - [多语言配置](#多语言配置)
 - [🔧 最佳实践](#-最佳实践)
 
@@ -231,227 +235,6 @@ React 19 带来了许多激动人心的新特性：
           {answer}
         </DsMarkdown>
       )}
-    </div>
-  );
-}
-```
-
-### 🎯 高级回调控制
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function AdvancedCallbackDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
-
-  const handleBeforeTypedChar = async (data) => {
-    // 在字符打字前进行异步操作
-    console.log('即将打字:', data.currentChar);
-
-    // 可以在这里进行网络请求、数据验证等异步操作
-    if (data.currentChar === '!') {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟
-    }
-  };
-
-  const handleTypedChar = (data) => {
-    // 更新打字统计信息
-    setTypingStats({
-      progress: Math.round(data.percent),
-      currentChar: data.currentChar,
-      totalChars: data.currentIndex + 1,
-    });
-
-    // 可以在这里添加音效、动画等效果
-    if (data.currentChar === '.') {
-      // 播放句号音效
-      console.log('播放句号音效');
-    }
-  };
-
-  const handleStart = (data) => {
-    console.log('开始打字:', data.currentChar);
-  };
-
-  const handleEnd = (data) => {
-    console.log('打字完成:', data.str);
-  };
-
-  const startDemo = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 高级回调演示\n\n' +
-        '这个示例展示了如何使用 `onBeforeTypedChar` 和 `onTypedChar` 回调：\n\n' +
-        '- 🎯 **打字前回调**：可以在字符显示前进行异步操作\n' +
-        '- 📊 **打字后回调**：可以实时更新进度和添加特效\n' +
-        '- ⚡ **性能优化**：支持异步操作，不影响打字流畅度\n\n' +
-        '当前进度：' +
-        typingStats.progress +
-        '%\n' +
-        '已打字数：' +
-        typingStats.totalChars +
-        '\n\n' +
-        '这是一个非常强大的功能！',
-      'answer',
-    );
-  };
-
-  return (
-    <div>
-      <button onClick={startDemo}>🚀 开始高级演示</button>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>打字统计：</strong> 进度 {typingStats.progress}% | 当前字符: "{typingStats.currentChar}" | 总字符数: {typingStats.totalChars}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
-    </div>
-  );
-}
-```
-
-### 🔄 重新开始动画演示
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function RestartDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-
-  const startContent = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 重新开始动画演示\n\n' +
-        '这个示例展示了如何使用 `restart()` 方法：\n\n' +
-        '- 🔄 **重新开始**：从头开始播放当前内容\n' +
-        '- ⏸️ **暂停恢复**：可以随时暂停和恢复\n' +
-        '- 🎯 **精确控制**：完全控制动画播放状态\n\n' +
-        '当前状态：' +
-        (isPlaying ? '播放中' : '已暂停') +
-        '\n\n' +
-        '这是一个非常实用的功能！',
-      'answer',
-    );
-    setIsPlaying(true);
-  };
-
-  const handleStart = () => {
-    if (hasStarted) {
-      // 如果已经开始过，则重新开始
-      markdownRef.current?.restart();
-    } else {
-      // 第一次开始
-      markdownRef.current?.start();
-      setHasStarted(true);
-    }
-    setIsPlaying(true);
-  };
-
-  const handleStop = () => {
-    markdownRef.current?.stop();
-    setIsPlaying(false);
-  };
-
-  const handleResume = () => {
-    markdownRef.current?.resume();
-    setIsPlaying(true);
-  };
-
-  const handleRestart = () => {
-    markdownRef.current?.restart();
-    setIsPlaying(true);
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
-
-  return (
-    <div>
-      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={startContent}>🚀 开始内容</button>
-        <button onClick={handleStart} disabled={isPlaying}>
-          {hasStarted ? '🔄 重新开始' : '▶️ 开始'}
-        </button>
-        <button onClick={handleStop} disabled={!isPlaying}>
-          ⏸️ 暂停
-        </button>
-        <button onClick={handleResume} disabled={isPlaying}>
-          ▶️ 恢复
-        </button>
-        <button onClick={handleRestart}>🔄 重新开始</button>
-      </div>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>动画状态：</strong> {isPlaying ? '🟢 播放中' : '🔴 已暂停'}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
-    </div>
-  );
-}
-```
-
-### ▶️ 手动开始动画演示
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function StartDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-
-  const loadContent = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 手动开始动画演示\n\n' +
-        '这个示例展示了如何使用 `start()` 方法：\n\n' +
-        '- 🎯 **手动控制**：当 `autoStartTyping=false` 时，需要手动调用 `start()`\n' +
-        '- ⏱️ **延迟开始**：可以在用户交互后开始动画\n' +
-        '- 🎮 **游戏化**：适合需要用户主动触发的场景\n\n' +
-        '点击"开始动画"按钮来手动启动打字效果！',
-      'answer',
-    );
-    setIsPlaying(false);
-  };
-
-  const handleStart = () => {
-    if (hasStarted) {
-      // 如果已经开始过，则重新开始
-      markdownRef.current?.restart();
-    } else {
-      // 第一次开始
-      markdownRef.current?.start();
-      setHasStarted(true);
-    }
-    setIsPlaying(true);
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
-
-  return (
-    <div>
-      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={loadContent}>📝 加载内容</button>
-        <button onClick={handleStart} disabled={isPlaying}>
-          {hasStarted ? '🔄 重新开始' : '▶️ 开始动画'}
-        </button>
-      </div>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>状态：</strong> {isPlaying ? '🟢 动画播放中' : '🔴 等待开始'}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
     </div>
   );
 }
@@ -802,6 +585,227 @@ interface Locale {
 
 ## 💡 实战示例
 
+### 🎯 高级回调控制
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function AdvancedCallbackDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
+
+  const handleBeforeTypedChar = async (data) => {
+    // 在字符打字前进行异步操作
+    console.log('即将打字:', data.currentChar);
+
+    // 可以在这里进行网络请求、数据验证等异步操作
+    if (data.currentChar === '!') {
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟
+    }
+  };
+
+  const handleTypedChar = (data) => {
+    // 更新打字统计信息
+    setTypingStats({
+      progress: Math.round(data.percent),
+      currentChar: data.currentChar,
+      totalChars: data.currentIndex + 1,
+    });
+
+    // 可以在这里添加音效、动画等效果
+    if (data.currentChar === '.') {
+      // 播放句号音效
+      console.log('播放句号音效');
+    }
+  };
+
+  const handleStart = (data) => {
+    console.log('开始打字:', data.currentChar);
+  };
+
+  const handleEnd = (data) => {
+    console.log('打字完成:', data.str);
+  };
+
+  const startDemo = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 高级回调演示\n\n' +
+        '这个示例展示了如何使用 `onBeforeTypedChar` 和 `onTypedChar` 回调：\n\n' +
+        '- 🎯 **打字前回调**：可以在字符显示前进行异步操作\n' +
+        '- 📊 **打字后回调**：可以实时更新进度和添加特效\n' +
+        '- ⚡ **性能优化**：支持异步操作，不影响打字流畅度\n\n' +
+        '当前进度：' +
+        typingStats.progress +
+        '%\n' +
+        '已打字数：' +
+        typingStats.totalChars +
+        '\n\n' +
+        '这是一个非常强大的功能！',
+      'answer',
+    );
+  };
+
+  return (
+    <div>
+      <button onClick={startDemo}>🚀 开始高级演示</button>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>打字统计：</strong> 进度 {typingStats.progress}% | 当前字符: "{typingStats.currentChar}" | 总字符数: {typingStats.totalChars}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### 🔄 重新开始动画演示
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function RestartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const startContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 重新开始动画演示\n\n' +
+        '这个示例展示了如何使用 `restart()` 方法：\n\n' +
+        '- 🔄 **重新开始**：从头开始播放当前内容\n' +
+        '- ⏸️ **暂停恢复**：可以随时暂停和恢复\n' +
+        '- 🎯 **精确控制**：完全控制动画播放状态\n\n' +
+        '当前状态：' +
+        (isPlaying ? '播放中' : '已暂停') +
+        '\n\n' +
+        '这是一个非常实用的功能！',
+      'answer',
+    );
+    setIsPlaying(true);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 如果已经开始过，则重新开始
+      markdownRef.current?.restart();
+    } else {
+      // 第一次开始
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    markdownRef.current?.stop();
+    setIsPlaying(false);
+  };
+
+  const handleResume = () => {
+    markdownRef.current?.resume();
+    setIsPlaying(true);
+  };
+
+  const handleRestart = () => {
+    markdownRef.current?.restart();
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={startContent}>🚀 开始内容</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 重新开始' : '▶️ 开始'}
+        </button>
+        <button onClick={handleStop} disabled={!isPlaying}>
+          ⏸️ 暂停
+        </button>
+        <button onClick={handleResume} disabled={isPlaying}>
+          ▶️ 恢复
+        </button>
+        <button onClick={handleRestart}>🔄 重新开始</button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>动画状态：</strong> {isPlaying ? '🟢 播放中' : '🔴 已暂停'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
+### ▶️ 手动开始动画演示
+
+```tsx
+import { useRef, useState } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StartDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const loadContent = () => {
+    markdownRef.current?.clear();
+    markdownRef.current?.push(
+      '# 手动开始动画演示\n\n' +
+        '这个示例展示了如何使用 `start()` 方法：\n\n' +
+        '- 🎯 **手动控制**：当 `autoStartTyping=false` 时，需要手动调用 `start()`\n' +
+        '- ⏱️ **延迟开始**：可以在用户交互后开始动画\n' +
+        '- 🎮 **游戏化**：适合需要用户主动触发的场景\n\n' +
+        '点击"开始动画"按钮来手动启动打字效果！',
+      'answer',
+    );
+    setIsPlaying(false);
+  };
+
+  const handleStart = () => {
+    if (hasStarted) {
+      // 如果已经开始过，则重新开始
+      markdownRef.current?.restart();
+    } else {
+      // 第一次开始
+      markdownRef.current?.start();
+      setHasStarted(true);
+    }
+    setIsPlaying(true);
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={loadContent}>📝 加载内容</button>
+        <button onClick={handleStart} disabled={isPlaying}>
+          {hasStarted ? '🔄 重新开始' : '▶️ 开始动画'}
+        </button>
+      </div>
+
+      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
+        <strong>状态：</strong> {isPlaying ? '🟢 动画播放中' : '🔴 等待开始'}
+      </div>
+
+      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
+    </div>
+  );
+}
+```
+
 ### 📝 AI 流式对话
 
 [DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
@@ -898,82 +902,6 @@ function MathStreamingDemo() {
       <button onClick={simulateMathResponse}>📐 讲解勾股定理</button>
 
       <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
-    </div>
-  );
-}
-```
-
-### 🎯 高级回调控制
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function AdvancedCallbackDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
-
-  const handleBeforeTypedChar = async (data) => {
-    // 在字符打字前进行异步操作
-    console.log('即将打字:', data.currentChar);
-
-    // 可以在这里进行网络请求、数据验证等异步操作
-    if (data.currentChar === '!') {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟
-    }
-  };
-
-  const handleTypedChar = (data) => {
-    // 更新打字统计信息
-    setTypingStats({
-      progress: Math.round(data.percent),
-      currentChar: data.currentChar,
-      totalChars: data.currentIndex + 1,
-    });
-
-    // 可以在这里添加音效、动画等效果
-    if (data.currentChar === '.') {
-      // 播放句号音效
-      console.log('播放句号音效');
-    }
-  };
-
-  const handleStart = (data) => {
-    console.log('开始打字:', data.currentChar);
-  };
-
-  const handleEnd = (data) => {
-    console.log('打字完成:', data.str);
-  };
-
-  const startDemo = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 高级回调演示\n\n' +
-        '这个示例展示了如何使用 `onBeforeTypedChar` 和 `onTypedChar` 回调：\n\n' +
-        '- 🎯 **打字前回调**：可以在字符显示前进行异步操作\n' +
-        '- 📊 **打字后回调**：可以实时更新进度和添加特效\n' +
-        '- ⚡ **性能优化**：支持异步操作，不影响打字流畅度\n\n' +
-        '当前进度：' +
-        typingStats.progress +
-        '%\n' +
-        '已打字数：' +
-        typingStats.totalChars +
-        '\n\n' +
-        '这是一个非常强大的功能！',
-      'answer',
-    );
-  };
-
-  return (
-    <div>
-      <button onClick={startDemo}>🚀 开始高级演示</button>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>打字统计：</strong> 进度 {typingStats.progress}% | 当前字符: "{typingStats.currentChar}" | 总字符数: {typingStats.totalChars}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
     </div>
   );
 }
