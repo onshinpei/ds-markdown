@@ -9,6 +9,9 @@ export default defineConfig({
     sourcemap: false, // 或 'inline',
     outDir: 'dev',
   },
+  server: {
+    sourcemapIgnoreList: false, // 禁用忽略 node_modules 的源码映射
+  },
   define: {
     'process.env.NODE_ENV': JSON.stringify('development'),
   },

@@ -1,9 +1,10 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useMemo } from 'react';
-import type { IMarkdownThemeProps } from '../defined';
+import type { IMarkdownThemeProps, IMarkdownThemeStateProps } from '../defined';
 
 // 定义 Theme Context 类型，包含 state 和 methods
 export type MarkdownThemeContextType = {
-  state: Partial<IMarkdownThemeProps>;
+  state: IMarkdownThemeStateProps;
   methods: {
     // 这里可以添加主题相关的方法
     updateTheme?: (theme: IMarkdownThemeProps['theme']) => void;
@@ -18,7 +19,10 @@ export const DEFAULT_ANSWER_TYPE = 'answer';
 export const DEFAULT_PLUGINS = [];
 
 const MarkdownThemeContext = createContext<MarkdownThemeContextType>({
-  state: {},
+  state: {
+    theme: DEFAULT_THEME,
+    answerType: DEFAULT_ANSWER_TYPE,
+  },
   methods: {},
 });
 
@@ -44,3 +48,6 @@ export const MarkdownThemeProvider: React.FC<{
 };
 
 export const useMarkdownThemeContext = () => useContext(MarkdownThemeContext);
+export const useThemeState = () => {
+  return useContext(MarkdownThemeContext).state;
+};

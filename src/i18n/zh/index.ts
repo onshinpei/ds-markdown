@@ -4,6 +4,13 @@ export const zhCN = {
     copied: '已复制',
     download: '下载',
   },
+  mermaid: {
+    diagram: '图表',
+    code: '代码',
+    zoomOut: '缩小',
+    zoomIn: '放大',
+    download: '下载',
+  },
 } as const;
 
 export type ZhCN = typeof zhCN;

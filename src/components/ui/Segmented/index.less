@@ -1,0 +1,39 @@
+.ds-segmented-container {
+  display: flex;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-width: 120px;
+}
+
+.ds-segmented-item {
+  flex: 1;
+  padding: 8px 16px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s ease;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+.ds-segmented-item:hover {
+  color: #333;
+}
+
+.ds-segmented-item.active {
+  background-color: white;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.ds-segmented-item:not(.active) {
+  color: #999;
+}

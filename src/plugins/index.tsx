@@ -1,7 +1,7 @@
 import remarkMath from 'remark-math';
 import { IMarkdownPlugin } from '../defined';
 import rehypeKatex from 'rehype-katex';
-import { katexId } from '../constant';
+import { katexId, mermaidId } from '../constant';
 
 function createBuildInPlugin(partialPlugin: Partial<IMarkdownPlugin>) {
   const plugin: IMarkdownPlugin = {
@@ -18,4 +18,4 @@ const katexPlugin = createBuildInPlugin({
   id: katexId,
 });
 
-export { createBuildInPlugin, katexPlugin };
+export { createBuildInPlugin, katexPlugin, mermaidId, katexId, IMarkdownPlugin };
