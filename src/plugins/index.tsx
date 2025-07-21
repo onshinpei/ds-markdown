@@ -18,4 +18,4 @@ const katexPlugin = createBuildInPlugin({
   id: katexId,
 });
 
-export { createBuildInPlugin, katexPlugin, mermaidId, katexId };
+export { createBuildInPlugin, katexPlugin, mermaidId, katexId, IMarkdownPlugin };
