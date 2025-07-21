@@ -43,6 +43,9 @@
 - **多主题与插件化架构**  
   支持亮/暗主题切换，兼容 remark/rehype 插件，满足个性化和高级扩展需求。
 
+- **丰富的UI组件系统** 🆕  
+  内置按钮、工具提示、分段控制器等UI组件，支持代码块复制、下载等交互功能。
+
 - **适用场景广泛**
   - AI 聊天机器人/助手
   - 实时问答/知识库
@@ -61,9 +64,12 @@
   - [禁用打字动画](#禁用打字动画)
   - [数学公式支持](#数学公式支持)
   - [AI 对话场景](#ai-对话场景)
+  - [代码块功能](#代码块功能) 🆕
+  - [Mermaid图表支持](#mermaid图表支持) 🆕
 - [📚 完整 API 文档](#-完整-api-文档)
 - [🧮 数学公式使用指南](#-数学公式使用指南)
 - [🔌 插件系统](#-插件系统)
+- [🎨 UI组件系统](#-ui组件系统) 🆕
 - [🎛️ 定时器模式详解](#️-定时器模式详解)
 - [💡 实战示例](#-实战示例)
   - [🎯 高级回调控制](#-高级回调控制)
@@ -71,6 +77,7 @@
   - [▶️ 手动开始动画演示](#️-手动开始动画演示)
   - [📝 AI 流式对话](#-ai-流式对话)
   - [🧮 数学公式流式渲染](#-数学公式流式渲染)
+  - [📊 Mermaid图表流式渲染](#-mermaid图表流式渲染) 🆕
 - [多语言配置](#多语言配置)
 - [🔧 最佳实践](#-最佳实践)
 
@@ -88,13 +95,21 @@
 
 - 完整 Markdown 语法支持，包括代码高亮、表格、列表等
 - 数学公式渲染 (KaTeX)，支持 `$...$` 和 `\[...\]` 语法
+- Mermaid 图表支持，包括流程图、序列图、甘特图、类图等 🆕
 - 支持亮色/暗色主题，适配不同产品风格
 - 插件化架构，支持 remark/rehype 插件扩展
+
+### 🎨 **UI组件系统** 🆕
+
+- 内置丰富的UI组件：Button、IconButton、ToolTip、Segmented等
+- 代码块增强功能：复制、下载、语言标识
+- 完整的交互体验和无障碍支持
 
 ### 🔧 **开发体验**
 
 - 支持打字中断 `stop` 和继续 `resume`
 - 支持打字关闭与开启
+- 完整的TypeScript类型支持
 
 ### 🎬 **流畅动画**
 
@@ -240,6 +255,85 @@ React 19 带来了许多激动人心的新特性：
 }
 ```
 
+### 代码块功能 🆕
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
+
+function CodeBlockDemo() {
+  const codeContent = `# Hello World
+
+\`\`\`javascript
+function greet(name) {
+  console.log(\`Hello, \${name}!\`);
+}
+
+greet('ds-markdown');
+\`\`\`
+
+支持代码高亮、复制和下载功能！`;
+
+  return (
+    <DsMarkdown
+      interval={20}
+      answerType="answer"
+      codeBlock={{
+        headerActions: true, // 启用代码块头部操作按钮
+      }}
+    >
+      {codeContent}
+    </DsMarkdown>
+  );
+}
+```
+
+### Mermaid图表支持 🆕
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import { ConfigProvider } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+import 'ds-markdown/style.css';
+
+function MermaidDemo() {
+  const chartContent = `# 流程图示例
+
+\`\`\`mermaid
+flowchart TD
+    A[开始] --> B{判断条件}
+    B -->|是| C[处理A]
+    B -->|否| D[处理B]
+    C --> E[结束]
+    D --> E
+\`\`\`
+
+## 序列图示例
+
+\`\`\`mermaid
+sequenceDiagram
+    participant 用户
+    participant 系统
+    participant 数据库
+    
+    用户->>系统: 登录请求
+    系统->>数据库: 验证用户
+    数据库-->>系统: 返回结果
+    系统-->>用户: 登录响应
+\`\`\`
+
+支持流程图、序列图、甘特图、类图等多种图表类型！`;
+
+  return (
+    <ConfigProvider>
+      <DsMarkdown interval={20} answerType="answer" plugins={[mermaidPlugin]}>
+        {chartContent}
+      </DsMarkdown>
+    </ConfigProvider>
+  );
+}
+```
+
 ---
 
 ## 📚 完整 API 文档
@@ -300,14 +394,21 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 - `'dollar'`：使用 `$...$` 和 `$$...$$` 语法
 - `'bracket'`：使用 `\(...\)` 和 `\[...\]` 语法
 
+#### IMarkdownCode 🆕
+
+| 属性            | 类型      | 说明                 | 默认值 |
+| --------------- | --------- | -------------------- | ------ |
+| `headerActions` | `boolean` | 是否显示头部操作按钮 | `true` |
+
 #### IMarkdownPlugin
 
-| 属性           | 类型                      | 说明         | 默认值 |
-| -------------- | ------------------------- | ------------ | ------ |
-| `remarkPlugin` | `unknown`                 | remark 插件  | -      |
-| `rehypePlugin` | `unknown`                 | rehype 插件  | -      |
-| `type`         | `'buildIn'` \| `'custom'` | 插件类型     | -      |
-| `id`           | `any`                     | 插件唯一标识 | -      |
+| 属性           | 类型                                           | 说明              | 默认值 |
+| -------------- | ---------------------------------------------- | ----------------- | ------ |
+| `remarkPlugin` | `Pluggable`                                    | remark 插件       | -      |
+| `rehypePlugin` | `Pluggable`                                    | rehype 插件       | -      |
+| `type`         | `'buildIn'` \| `'custom'`                      | 插件类型          | -      |
+| `id`           | `any`                                          | 插件唯一标识      | -      |
+| `components`   | `Record<string, React.ComponentType<unknown>>` | 自定义组件映射 🆕 | -      |
 
 ### 组件暴露的方法
 
@@ -443,6 +544,82 @@ import { katexPlugin } from 'ds-markdown/plugins';
 <DsMarkdown plugins={[katexPlugin]}>数学公式：$E = mc^2$</DsMarkdown>;
 ```
 
+#### Mermaid 图表插件 🆕
+
+**安装 Mermaid 插件：**
+
+```bash
+npm install ds-markdown-mermaid-plugin
+```
+
+**基础用法：**
+
+```tsx
+import { ConfigProvider, Markdown } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+
+function App() {
+  const content = `
+# 流程图示例
+
+\`\`\`mermaid
+flowchart TD
+    A[开始] --> B{判断条件}
+    B -->|是| C[处理A]
+    B -->|否| D[处理B]
+    C --> E[结束]
+    D --> E
+\`\`\`
+`;
+
+  return (
+    <ConfigProvider>
+      <Markdown plugins={[mermaidPlugin]}>{content}</Markdown>
+    </ConfigProvider>
+  );
+}
+```
+
+**支持的图表类型：**
+
+- 🔄 **流程图** (Flowchart) - 展示流程和决策路径
+- 📋 **序列图** (Sequence Diagram) - 展示对象间的交互时序
+- 📅 **甘特图** (Gantt Chart) - 项目计划和时间线
+- 🏗️ **类图** (Class Diagram) - 面向对象设计
+- 🥧 **饼图** (Pie Chart) - 数据比例展示
+- 🔀 **状态图** (State Diagram) - 状态转换流程
+- 📊 **Git图** (Git Graph) - 代码分支历史
+- 🗺️ **用户旅程图** (User Journey) - 用户体验流程
+
+**配置 Mermaid：**
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+
+const mermaidConfig = {
+  theme: 'default', // 主题：default, neutral, dark, forest
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true,
+  },
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+  },
+};
+
+return (
+  <ConfigProvider mermaidConfig={mermaidConfig}>
+    <Markdown plugins={[mermaidPlugin]}>{chartContent}</Markdown>
+  </ConfigProvider>
+);
+```
+
+**相关链接：**
+
+- [ds-markdown-mermaid-plugin GitHub](https://github.com/onshinpei/ds-markdown-mermaid-plugin)
+- [Mermaid 官方文档](https://mermaid.js.org/)
+
 ### 自定义插件
 
 ```tsx
@@ -453,10 +630,205 @@ const customPlugin = createBuildInPlugin({
   remarkPlugin: yourRemarkPlugin,
   rehypePlugin: yourRehypePlugin,
   id: Symbol('custom-plugin'),
+  components: {
+    // 自定义组件映射 🆕
+    CustomComponent: MyCustomComponent,
+  },
 });
 
 // 使用自定义插件
 <DsMarkdown plugins={[katexPlugin, customPlugin]}>内容</DsMarkdown>;
+```
+
+---
+
+## 🎨 UI组件系统 🆕
+
+ds-markdown 提供了一套完整的UI组件系统，可以单独使用或与markdown组件配合。
+
+### Button 组件
+
+通用按钮组件，支持图标和自定义样式。
+
+```tsx
+import { Button } from 'ds-markdown';
+
+function ButtonDemo() {
+  return (
+    <Button icon={<span>📄</span>} onClick={() => console.log('clicked')} className="my-button">
+      点击按钮
+    </Button>
+  );
+}
+```
+
+### IconButton 组件
+
+图标按钮组件，适用于工具栏和操作区域。
+
+```tsx
+import { IconButton } from 'ds-markdown';
+
+function IconButtonDemo() {
+  return <IconButton icon={<span>📋</span>} onClick={() => console.log('copy')} className="my-icon-button" />;
+}
+```
+
+### ToolTip 组件
+
+工具提示组件，提供悬停提示功能。
+
+```tsx
+import { ToolTip } from 'ds-markdown';
+
+function ToolTipDemo() {
+  return (
+    <ToolTip title="这是一个提示信息">
+      <button>悬停查看提示</button>
+    </ToolTip>
+  );
+}
+```
+
+### Segmented 分段控制器
+
+分段控制器组件，适用于选项切换场景。
+
+```tsx
+import { Segmented } from 'ds-markdown';
+import { useState } from 'react';
+
+function SegmentedDemo() {
+  const [value, setValue] = useState('diagram');
+
+  const options = [
+    { label: '图表', value: 'diagram' },
+    { label: '代码', value: 'code' },
+  ];
+
+  return <Segmented Segmented={options} value={value} onChange={setValue} />;
+}
+```
+
+### 代码块组件
+
+代码块相关的交互组件，提供复制、下载等功能。
+
+```tsx
+import { CodeBlockActions, CopyButton, DownloadButton, CodeBlockWrap, HighlightCode } from 'ds-markdown';
+
+function MyCodeBlock() {
+  const codeContent = 'console.log("Hello World");';
+
+  return (
+    <div className="code-block">
+      {/* 完整的代码块操作组件 */}
+      <CodeBlockActions codeContent={codeContent} language="javascript" />
+
+      {/* 或者单独使用各个组件 */}
+      <CopyButton codeContent={codeContent} />
+      <DownloadButton codeContent={codeContent} language="javascript" />
+
+      {/* 代码块包装器 */}
+      <CodeBlockWrap language="javascript">
+        <HighlightCode code={codeContent} language="javascript" />
+      </CodeBlockWrap>
+    </div>
+  );
+}
+```
+
+### UI组件完整API
+
+#### Button Props
+
+| 属性        | 类型                  | 说明       | 默认值 |
+| ----------- | --------------------- | ---------- | ------ |
+| `className` | `string`              | 自定义类名 | -      |
+| `children`  | `React.ReactNode`     | 按钮内容   | -      |
+| `icon`      | `React.ReactNode`     | 按钮图标   | -      |
+| `onClick`   | `() => void`          | 点击回调   | -      |
+| `style`     | `React.CSSProperties` | 自定义样式 | -      |
+
+#### IconButton Props
+
+| 属性        | 类型                  | 说明       | 默认值 |
+| ----------- | --------------------- | ---------- | ------ |
+| `className` | `string`              | 自定义类名 | -      |
+| `icon`      | `React.ReactNode`     | 图标内容   | -      |
+| `onClick`   | `() => void`          | 点击回调   | -      |
+| `style`     | `React.CSSProperties` | 自定义样式 | -      |
+
+#### ToolTip Props
+
+| 属性       | 类型              | 说明     | 默认值 |
+| ---------- | ----------------- | -------- | ------ |
+| `title`    | `string`          | 提示文本 | -      |
+| `children` | `React.ReactNode` | 子元素   | -      |
+
+#### Segmented Props
+
+| 属性        | 类型                      | 说明       | 默认值 |
+| ----------- | ------------------------- | ---------- | ------ |
+| `Segmented` | `SegmentedItem[]`         | 选项列表   | -      |
+| `value`     | `string`                  | 当前选中值 | -      |
+| `onChange`  | `(value: string) => void` | 值变化回调 | -      |
+
+#### SegmentedItem
+
+| 属性    | 类型     | 说明     | 默认值 |
+| ------- | -------- | -------- | ------ |
+| `label` | `string` | 显示文本 | -      |
+| `value` | `string` | 选项值   | -      |
+
+#### CodeBlockActions Props
+
+| 属性          | 类型     | 说明     | 默认值 |
+| ------------- | -------- | -------- | ------ |
+| `codeContent` | `string` | 代码内容 | -      |
+| `language`    | `string` | 代码语言 | -      |
+
+#### CopyButton Props
+
+| 属性          | 类型                  | 说明       | 默认值 |
+| ------------- | --------------------- | ---------- | ------ |
+| `codeContent` | `string`              | 代码内容   | -      |
+| `style`       | `React.CSSProperties` | 自定义样式 | -      |
+
+#### DownloadButton Props
+
+| 属性          | 类型                  | 说明       | 默认值 |
+| ------------- | --------------------- | ---------- | ------ |
+| `codeContent` | `string`              | 代码内容   | -      |
+| `language`    | `string`              | 代码语言   | -      |
+| `style`       | `React.CSSProperties` | 自定义样式 | -      |
+
+### 样式定制
+
+所有UI组件都支持CSS变量定制：
+
+```css
+:root {
+  /* 按钮样式 */
+  --ds-button-bg-color: #f5f5f5;
+  --ds-button-hover-color: #e0e0e0;
+  --ds-button-text-color: #333;
+
+  /* 工具提示样式 */
+  --ds-tooltip-bg-color: rgba(0, 0, 0, 0.8);
+  --ds-tooltip-text-color: white;
+
+  /* 分段控制器样式 */
+  --ds-segmented-bg-color: #f0f0f0;
+  --ds-segmented-active-color: #1890ff;
+}
+
+/* 暗色主题适配 */
+[data-theme='dark'] {
+  --ds-button-bg-color: #333;
+  --ds-button-hover-color: #444;
+  --ds-button-text-color: #fff;
+}
 ```
 
 ---
@@ -534,10 +906,48 @@ const App: React.FC = () => {
 import zhCN from 'ds-markdown/i18n/zh';
 ```
 
+包含字段：
+
+```typescript
+{
+  codeBlock: {
+    copy: '复制',
+    copied: '已复制',
+    download: '下载',
+  },
+  mermaid: {
+    diagram: '图表',
+    code: '代码',
+    zoomOut: '缩小',
+    zoomIn: '放大',
+    download: '下载',
+  }
+}
+```
+
 #### 英文 (enUS)
 
 ```tsx
 import enUS from 'ds-markdown/i18n/en';
+```
+
+包含字段：
+
+```typescript
+{
+  codeBlock: {
+    copy: 'Copy',
+    copied: 'Copied',
+    download: 'Download',
+  },
+  mermaid: {
+    diagram: 'Diagram',
+    code: 'Code',
+    zoomOut: 'Zoom Out',
+    zoomIn: 'Zoom In',
+    download: 'Download',
+  }
+}
 ```
 
 ### 在组件中使用语言包
@@ -570,7 +980,14 @@ interface Locale {
     copied: string;
     download: string;
   };
-  [key: string]: string;
+  mermaid: {
+    diagram: string;
+    code: string;
+    zoomOut: string;
+    zoomIn: string;
+    download: string;
+  };
+  [key: string]: any;
 }
 ```
 
@@ -907,6 +1324,82 @@ function MathStreamingDemo() {
 }
 ```
 
+### 📊 Mermaid图表流式渲染 🆕
+
+````tsx
+import { useRef } from 'react';
+import { MarkdownCMD, MarkdownCMDRef, ConfigProvider } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+
+function MermaidStreamingDemo() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  const simulateMermaidResponse = async () => {
+    markdownRef.current?.clear();
+
+    const mermaidChunks = [
+      '# 系统架构图\n\n',
+      '```mermaid\n',
+      'flowchart TD\n',
+      '    A[用户请求] --> B[负载均衡器]\n',
+      '    B --> C[Web服务器]\n',
+      '    B --> D[Web服务器]\n',
+      '    C --> E[应用服务器]\n',
+      '    D --> F[应用服务器]\n',
+      '    E --> G[数据库]\n',
+      '    F --> G\n',
+      '```\n\n',
+      '## 用户流程图\n\n',
+      '```mermaid\n',
+      'sequenceDiagram\n',
+      '    participant U as 用户\n',
+      '    participant W as Web服务\n',
+      '    participant A as API服务\n',
+      '    participant D as 数据库\n',
+      '\n',
+      '    U->>W: 访问页面\n',
+      '    W->>A: 请求数据\n',
+      '    A->>D: 查询数据\n',
+      '    D-->>A: 返回结果\n',
+      '    A-->>W: 响应数据\n',
+      '    W-->>U: 渲染页面\n',
+      '```\n\n',
+      '## 项目计划\n\n',
+      '```mermaid\n',
+      'gantt\n',
+      '    title 项目开发计划\n',
+      '    dateFormat  YYYY-MM-DD\n',
+      '    section 设计阶段\n',
+      '    需求分析    :done, des1, 2024-01-01, 2024-01-10\n',
+      '    系统设计    :active, des2, 2024-01-11, 2024-01-25\n',
+      '    section 开发阶段\n',
+      '    前端开发    :des3, 2024-01-26, 2024-02-15\n',
+      '    后端开发    :des4, 2024-01-26, 2024-02-20\n',
+      '    测试调试    :des5, 2024-02-21, 2024-02-28\n',
+      '```\n\n',
+      '支持多种图表类型的流式渲染，让技术文档更加生动！',
+    ];
+
+    for (const chunk of mermaidChunks) {
+      await delay(100);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  return (
+    <div>
+      <button onClick={simulateMermaidResponse}>🎨 展示 Mermaid 图表</button>
+
+      <ConfigProvider>
+        <MarkdownCMD ref={markdownRef} interval={15} timerType="requestAnimationFrame" plugins={[mermaidPlugin]} />
+      </ConfigProvider>
+    </div>
+  );
+}
+````
+
 ## 🔧 最佳实践
 
 ### 1. 性能优化
@@ -952,11 +1445,104 @@ import { katexPlugin } from 'ds-markdown/plugins';
 <DsMarkdown plugins={[katexPlugin]}>数学公式内容</DsMarkdown>;
 ```
 
-### 4. 类型安全
+### 4. UI组件使用 🆕
 
 ```tsx
-import { MarkdownCMDRef } from 'ds-markdown';
+// ✅ 推荐：按需导入UI组件
+import { Button, ToolTip, CopyButton } from 'ds-markdown';
+
+// ✅ 推荐：组合使用UI组件
+<ToolTip title="复制代码">
+  <CopyButton codeContent={code} />
+</ToolTip>
+
+// ✅ 推荐：利用CSS变量定制主题
+:root {
+  --ds-button-bg-color: your-brand-color;
+}
+```
+
+### 5. 代码块最佳实践 🆕
+
+```tsx
+// ✅ 推荐：启用代码块操作
+<DsMarkdown
+  codeBlock={{ headerActions: true }}
+  // 其他配置...
+>
+  {markdownContent}
+</DsMarkdown>;
+
+// ✅ 推荐：自定义代码块组件
+import { CodeBlockWrap, HighlightCode } from 'ds-markdown';
+
+const CustomCodeBlock = ({ code, language }) => (
+  <CodeBlockWrap language={language}>
+    <HighlightCode code={code} language={language} />
+    {/* 添加自定义操作 */}
+  </CodeBlockWrap>
+);
+```
+
+### 6. 类型安全
+
+```tsx
+import { MarkdownCMDRef, useThemeState } from 'ds-markdown';
 
 const ref = useRef<MarkdownCMDRef>(null);
+const themeState = useThemeState(); // 🆕 获取主题状态
 // 完整的 TypeScript 类型提示
 ```
+
+### 7. 国际化最佳实践 🆕
+
+```tsx
+// ✅ 推荐：根据用户语言动态切换
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+import enUS from 'ds-markdown/i18n/en';
+
+const App = () => {
+  const locale = userLanguage === 'zh' ? zhCN : enUS;
+
+  return (
+    <ConfigProvider locale={locale}>
+      <DsMarkdown {...props} />
+    </ConfigProvider>
+  );
+};
+```
+
+### 8. Mermaid图表最佳实践 🆕
+
+````tsx
+// ✅ 推荐：独立安装Mermaid插件
+npm install ds-markdown-mermaid-plugin
+
+// ✅ 推荐：配置适合的主题
+const mermaidConfig = {
+  theme: 'default', // 根据应用主题选择
+  startOnLoad: false, // 提升性能
+  flowchart: {
+    useMaxWidth: true, // 响应式设计
+  },
+};
+
+// ✅ 推荐：在ConfigProvider中统一配置
+<ConfigProvider mermaidConfig={mermaidConfig} locale={locale}>
+  <DsMarkdown plugins={[mermaidPlugin]} />
+</ConfigProvider>
+
+// ✅ 推荐：复杂图表分块渲染
+const complexChart = [
+  '```mermaid\n',
+  'flowchart TD\n',
+  '    A[开始] --> B[处理]\n',
+  '    B --> C[结束]\n',
+  '```\n',
+];
+
+// ✅ 推荐：使用语义化的节点命名
+// 好的例子：A[用户登录] --> B[验证凭据]
+// 避免：n1 --> n2
+````
