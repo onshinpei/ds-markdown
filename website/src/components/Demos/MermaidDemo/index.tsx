@@ -87,7 +87,7 @@ const MermaidDemo: React.FC = () => {
           answerType="answer"
           theme={theme}
           disableTyping={disableTyping}
-          autoStartTyping={true}
+          autoStartTyping={false}
           plugins={[mermaidPlugin]}
           onStart={handleTypingStart}
           onEnd={handleTypingEnd}
