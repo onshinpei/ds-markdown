@@ -13,13 +13,14 @@ import Footer from './components/Footer';
 import ApiDocumentation from './components/ApiDocumentation';
 
 // 导入演示组件
-import { BasicUsageDemo, MathSupportDemo, TypingAnimationDemo, CustomThemeDemo, StreamingDemo } from './components/Demos';
+import { BasicUsageDemo, MathSupportDemo, TypingAnimationDemo, CustomThemeDemo, StreamingDemo, MermaidDemo } from './components/Demos';
 
 import basicUsageDemoSource from './components/Demos/BasicUsageDemo/index.tsx?raw';
 import mathSupportDemoSource from './components/Demos/MathSupportDemo/index.tsx?raw';
 import typingAnimationDemoSource from './components/Demos/TypingAnimationDemo/index.tsx?raw';
 import customThemeDemoSource from './components/Demos/CustomThemeDemo/index.tsx?raw';
 import streamingDemoSource from './components/Demos/StreamingDemo/index.tsx?raw';
+import mermaidDemoSource from './components/Demos/MermaidDemo/index.tsx?raw';
 
 import basicUsageDemoMarkdownZh from './components/Demos/BasicUsageDemo/markdown.md?raw';
 import basicUsageDemoMarkdownEn from './components/Demos/BasicUsageDemo/markdown.en.md?raw';
@@ -31,6 +32,8 @@ import customThemeDemoMarkdownZh from './components/Demos/CustomThemeDemo/markdo
 import customThemeDemoMarkdownEn from './components/Demos/CustomThemeDemo/markdown.en.md?raw';
 import streamingDemoMarkdownZh from './components/Demos/StreamingDemo/markdown.md?raw';
 import streamingDemoMarkdownEn from './components/Demos/StreamingDemo/markdown.en.md?raw';
+import mermaidDemoMarkdownZh from './components/Demos/MermaidDemo/markdown.md?raw';
+import mermaidDemoMarkdownEn from './components/Demos/MermaidDemo/markdown.en.md?raw';
 
 import { LanguageProvider } from './LanguageContext';
 import { useI18n } from './hooks/useI18n';
@@ -53,6 +56,7 @@ const markdownMap = {
     typingAnimation: typingAnimationDemoMarkdownZh,
     customTheme: customThemeDemoMarkdownZh,
     streaming: streamingDemoMarkdownZh,
+    mermaid: mermaidDemoMarkdownZh,
   },
   en: {
     basicUsage: basicUsageDemoMarkdownEn,
@@ -60,6 +64,7 @@ const markdownMap = {
     typingAnimation: typingAnimationDemoMarkdownEn,
     customTheme: customThemeDemoMarkdownEn,
     streaming: streamingDemoMarkdownEn,
+    mermaid: mermaidDemoMarkdownEn,
   },
 };
 
@@ -124,6 +129,12 @@ const AppContent: React.FC = () => {
               title={t('streamingTitle')}
               sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
               renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
+            />
+            <DemoSection
+              id="mermaid-demo"
+              title={t('mermaidDemoTitle') || 'Mermaid 图表示例'}
+              sourceCode={{ code: mermaidDemoSource, markdownString: markdownMap[lang].mermaid }}
+              renderComponent={React.createElement(MermaidDemo)}
             />
             <ApiDocumentation />
           </div>

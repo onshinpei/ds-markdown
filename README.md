@@ -12,7 +12,7 @@
 [![React](https://img.shields.io/badge/React-18.0.0+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-[📖 在线演示](https://onshinpei.github.io/ds-markdown/)
+[使用文档](https://onshinpei.github.io/ds-markdown/)
 
 - [基本用法](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 - [流式数据用法](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)

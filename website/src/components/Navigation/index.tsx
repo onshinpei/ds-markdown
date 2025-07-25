@@ -51,6 +51,11 @@ const Navigation: React.FC = () => {
             </a>
           </li>
           <li>
+            <a href="#mermaid-demo" onClick={(e) => handleNavClick(e, 'mermaid-demo')}>
+              {t('navMermaid')}
+            </a>
+          </li>
+          <li>
             <a href="#api" onClick={(e) => handleNavClick(e, 'api')}>
               {t('navApi')}
             </a>
