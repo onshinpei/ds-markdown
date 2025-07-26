@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
+
+import { Pluggable } from 'unified';
+
 /**
  * 回答类型，思考和回答
  */
@@ -72,6 +75,11 @@ export interface IMarkdownThemeProps {
   answerType?: 'thinking' | 'answer';
 }
 
+export interface IMarkdownThemeStateProps extends IMarkdownThemeProps {
+  theme: Theme;
+  answerType: AnswerType;
+}
+
 export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
@@ -114,11 +122,12 @@ export interface MarkdownCMDProps extends MarkdownBaseProps, IMarkdownThemeProps
 }
 
 export interface IMarkdownPlugin {
-  remarkPlugin?: unknown;
-  rehypePlugin?: unknown;
+  remarkPlugin?: Pluggable;
+  rehypePlugin?: Pluggable;
   type: 'buildIn' | 'custom';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   id?: any;
+  components?: Record<string, React.ComponentType<unknown>>;
 }
 
 export interface IMarkdownMath {

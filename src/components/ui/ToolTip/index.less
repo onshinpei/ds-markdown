@@ -1,0 +1,105 @@
+.ds-tooltip-trigger {
+  position: relative;
+  display: inline-block;
+  /* 确保包装div不影响子元素的样式 */
+  line-height: normal;
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+}
+
+.ds-tooltip {
+  position: fixed;
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  pointer-events: none;
+  animation: ds-tooltip-fade-in 0.2s ease-out;
+  border: none;
+}
+
+.ds-tooltip__title {
+  text-align: center;
+}
+
+.ds-tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+}
+
+// Top arrow
+.ds-tooltip--top .ds-tooltip__arrow {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: #333;
+  border-bottom: none;
+}
+
+// Bottom arrow
+.ds-tooltip--bottom .ds-tooltip__arrow {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: #333;
+  border-top: none;
+}
+
+// Left arrow
+.ds-tooltip--left .ds-tooltip__arrow {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: #333;
+  border-right: none;
+}
+
+// Right arrow
+.ds-tooltip--right .ds-tooltip__arrow {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: #333;
+  border-left: none;
+}
+
+@keyframes ds-tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Dark theme support
+.ds-markdown.ds-markdown-dark .ds-tooltip {
+  background-color: #1a1a1a;
+  border: none;
+}
+
+.ds-markdown.ds-markdown-dark .ds-tooltip--top .ds-tooltip__arrow {
+  border-top-color: #1a1a1a;
+}
+
+.ds-markdown.ds-markdown-dark .ds-tooltip--bottom .ds-tooltip__arrow {
+  border-bottom-color: #1a1a1a;
+}
+
+.ds-markdown.ds-markdown-dark .ds-tooltip--left .ds-tooltip__arrow {
+  border-left-color: #1a1a1a;
+}
+
+.ds-markdown.ds-markdown-dark .ds-tooltip--right .ds-tooltip__arrow {
+  border-right-color: #1a1a1a;
+}

@@ -4,3 +4,4 @@ export { default as MathSupportDemo } from './MathSupportDemo';
 export { default as TypingAnimationDemo } from './TypingAnimationDemo';
 export { default as CustomThemeDemo } from './CustomThemeDemo';
 export { default as StreamingDemo } from './StreamingDemo';
+export { default as MermaidDemo } from './MermaidDemo';

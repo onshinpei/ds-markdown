@@ -12,9 +12,13 @@
 [![React](https://img.shields.io/badge/React-18.0.0+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-[📖 在线演示](https://onshinpei.github.io/ds-markdown/)
+[使用文档](https://onshinpei.github.io/ds-markdown/)
 
-[DEMO：🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+- [基本用法](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+- [流式数据用法](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
+- [mermaid图表](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
+- [数学公式demo1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
+- [数学公式demo2](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=src%2FApp.tsx)
 
 如果你想要一个纯净的`react markdown` 打字组件，可以使用[react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)
 
@@ -29,8 +33,10 @@
   很多 AI/LLM 后端接口（如 OpenAI、DeepSeek 等）推送的数据 chunk 往往一次包含多个字符，普通打字机实现会出现卡顿、跳字等问题。  
   **ds-markdown 会自动将每个 chunk 拆分为单个字符，逐字流畅渲染动画，无论后端一次推送多少字，都能保证每个字都流畅打字。**
 
-- **完整 Markdown & 数学公式支持**  
-  内置 KaTeX，支持所有主流 Markdown 语法和数学公式，适合技术问答、教育、知识库等内容丰富的应用。
+- **完整 Markdown & 数学公式、Diagram支持**
+
+  - 内置 KaTeX，支持所有主流 Markdown 语法和数学公式，适合技术问答、教育、知识库等内容丰富的应用。
+  - 通过插件[mermaid-plugin](https://github.com/onshinpei/ds-markdown-mermaid-plugin)支持`Diagram`的渲染
 
 - **极致开发体验**  
   丰富的命令式 API，支持流式数据、异步回调、插件扩展，开发者可灵活控制动画和内容。
@@ -40,6 +46,9 @@
 
 - **多主题与插件化架构**  
   支持亮/暗主题切换，兼容 remark/rehype 插件，满足个性化和高级扩展需求。
+
+- **丰富的UI组件系统** 🆕  
+  内置按钮、工具提示、分段控制器等UI组件，支持代码块复制、下载等交互功能。
 
 - **适用场景广泛**
   - AI 聊天机器人/助手
@@ -59,15 +68,12 @@
   - [禁用打字动画](#禁用打字动画)
   - [数学公式支持](#数学公式支持)
   - [AI 对话场景](#ai-对话场景)
-  - [🎯 高级回调控制](#-高级回调控制)
-  - [🔄 重新开始动画演示](#-重新开始动画演示)
-  - [▶️ 手动开始动画演示](#️-手动开始动画演示)
+  - [代码块功能](#代码块功能) 🆕
+  - [Mermaid图表支持](#mermaid图表支持) 🆕
 - [📚 完整 API 文档](#-完整-api-文档)
-- [🧮 数学公式使用指南](#-数学公式使用指南)
 - [🔌 插件系统](#-插件系统)
-- [🎛️ 定时器模式详解](#️-定时器模式详解)
+- [🎨 UI组件系统](#-ui组件系统) 🆕
 - [💡 实战示例](#-实战示例)
-- [多语言配置](#多语言配置)
 - [🔧 最佳实践](#-最佳实践)
 
 ---
@@ -84,13 +90,21 @@
 
 - 完整 Markdown 语法支持，包括代码高亮、表格、列表等
 - 数学公式渲染 (KaTeX)，支持 `$...$` 和 `\[...\]` 语法
+- Mermaid 图表支持，包括流程图、序列图、甘特图、类图等 🆕
 - 支持亮色/暗色主题，适配不同产品风格
 - 插件化架构，支持 remark/rehype 插件扩展
+
+### 🎨 **UI组件系统** 🆕
+
+- 内置丰富的UI组件：Button、IconButton、ToolTip、Segmented等
+- 代码块增强功能：复制、下载、语言标识
+- 完整的交互体验和无障碍支持
 
 ### 🔧 **开发体验**
 
 - 支持打字中断 `stop` 和继续 `resume`
 - 支持打字关闭与开启
+- 完整的TypeScript类型支持
 
 ### 🎬 **流畅动画**
 
@@ -236,223 +250,81 @@ React 19 带来了许多激动人心的新特性：
 }
 ```
 
-### 🎯 高级回调控制
+### 代码块功能 🆕
 
 ```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
 
-function AdvancedCallbackDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
+function CodeBlockDemo() {
+  const codeContent = `# Hello World
 
-  const handleBeforeTypedChar = async (data) => {
-    // 在字符打字前进行异步操作
-    console.log('即将打字:', data.currentChar);
+\`\`\`javascript
+function greet(name) {
+  console.log(\`Hello, \${name}!\`);
+}
 
-    // 可以在这里进行网络请求、数据验证等异步操作
-    if (data.currentChar === '!') {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟
-    }
-  };
+greet('ds-markdown');
+\`\`\`
 
-  const handleTypedChar = (data) => {
-    // 更新打字统计信息
-    setTypingStats({
-      progress: Math.round(data.percent),
-      currentChar: data.currentChar,
-      totalChars: data.currentIndex + 1,
-    });
-
-    // 可以在这里添加音效、动画等效果
-    if (data.currentChar === '.') {
-      // 播放句号音效
-      console.log('播放句号音效');
-    }
-  };
-
-  const handleStart = (data) => {
-    console.log('开始打字:', data.currentChar);
-  };
-
-  const handleEnd = (data) => {
-    console.log('打字完成:', data.str);
-  };
-
-  const startDemo = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 高级回调演示\n\n' +
-        '这个示例展示了如何使用 `onBeforeTypedChar` 和 `onTypedChar` 回调：\n\n' +
-        '- 🎯 **打字前回调**：可以在字符显示前进行异步操作\n' +
-        '- 📊 **打字后回调**：可以实时更新进度和添加特效\n' +
-        '- ⚡ **性能优化**：支持异步操作，不影响打字流畅度\n\n' +
-        '当前进度：' +
-        typingStats.progress +
-        '%\n' +
-        '已打字数：' +
-        typingStats.totalChars +
-        '\n\n' +
-        '这是一个非常强大的功能！',
-      'answer',
-    );
-  };
+支持代码高亮、复制和下载功能！`;
 
   return (
-    <div>
-      <button onClick={startDemo}>🚀 开始高级演示</button>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>打字统计：</strong> 进度 {typingStats.progress}% | 当前字符: "{typingStats.currentChar}" | 总字符数: {typingStats.totalChars}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
-    </div>
+    <DsMarkdown
+      interval={20}
+      answerType="answer"
+      codeBlock={{
+        headerActions: true, // 启用代码块头部操作按钮
+      }}
+    >
+      {codeContent}
+    </DsMarkdown>
   );
 }
 ```
 
-### 🔄 重新开始动画演示
+### Mermaid图表支持 🆕
 
 ```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+import DsMarkdown from 'ds-markdown';
+import { ConfigProvider } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+import 'ds-markdown/style.css';
 
-function RestartDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+function MermaidDemo() {
+  const chartContent = `# 流程图示例
 
-  const startContent = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 重新开始动画演示\n\n' +
-        '这个示例展示了如何使用 `restart()` 方法：\n\n' +
-        '- 🔄 **重新开始**：从头开始播放当前内容\n' +
-        '- ⏸️ **暂停恢复**：可以随时暂停和恢复\n' +
-        '- 🎯 **精确控制**：完全控制动画播放状态\n\n' +
-        '当前状态：' +
-        (isPlaying ? '播放中' : '已暂停') +
-        '\n\n' +
-        '这是一个非常实用的功能！',
-      'answer',
-    );
-    setIsPlaying(true);
-  };
+\`\`\`mermaid
+flowchart TD
+    A[开始] --> B{判断条件}
+    B -->|是| C[处理A]
+    B -->|否| D[处理B]
+    C --> E[结束]
+    D --> E
+\`\`\`
 
-  const handleStart = () => {
-    if (hasStarted) {
-      // 如果已经开始过，则重新开始
-      markdownRef.current?.restart();
-    } else {
-      // 第一次开始
-      markdownRef.current?.start();
-      setHasStarted(true);
-    }
-    setIsPlaying(true);
-  };
+## 序列图示例
 
-  const handleStop = () => {
-    markdownRef.current?.stop();
-    setIsPlaying(false);
-  };
+\`\`\`mermaid
+sequenceDiagram
+    participant 用户
+    participant 系统
+    participant 数据库
+    
+    用户->>系统: 登录请求
+    系统->>数据库: 验证用户
+    数据库-->>系统: 返回结果
+    系统-->>用户: 登录响应
+\`\`\`
 
-  const handleResume = () => {
-    markdownRef.current?.resume();
-    setIsPlaying(true);
-  };
-
-  const handleRestart = () => {
-    markdownRef.current?.restart();
-    setIsPlaying(true);
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
+支持流程图、序列图、甘特图、类图等多种图表类型！`;
 
   return (
-    <div>
-      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={startContent}>🚀 开始内容</button>
-        <button onClick={handleStart} disabled={isPlaying}>
-          {hasStarted ? '🔄 重新开始' : '▶️ 开始'}
-        </button>
-        <button onClick={handleStop} disabled={!isPlaying}>
-          ⏸️ 暂停
-        </button>
-        <button onClick={handleResume} disabled={isPlaying}>
-          ▶️ 恢复
-        </button>
-        <button onClick={handleRestart}>🔄 重新开始</button>
-      </div>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>动画状态：</strong> {isPlaying ? '🟢 播放中' : '🔴 已暂停'}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={25} onEnd={handleEnd} />
-    </div>
-  );
-}
-```
-
-### ▶️ 手动开始动画演示
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function StartDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-
-  const loadContent = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 手动开始动画演示\n\n' +
-        '这个示例展示了如何使用 `start()` 方法：\n\n' +
-        '- 🎯 **手动控制**：当 `autoStartTyping=false` 时，需要手动调用 `start()`\n' +
-        '- ⏱️ **延迟开始**：可以在用户交互后开始动画\n' +
-        '- 🎮 **游戏化**：适合需要用户主动触发的场景\n\n' +
-        '点击"开始动画"按钮来手动启动打字效果！',
-      'answer',
-    );
-    setIsPlaying(false);
-  };
-
-  const handleStart = () => {
-    if (hasStarted) {
-      // 如果已经开始过，则重新开始
-      markdownRef.current?.restart();
-    } else {
-      // 第一次开始
-      markdownRef.current?.start();
-      setHasStarted(true);
-    }
-    setIsPlaying(true);
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
-
-  return (
-    <div>
-      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={loadContent}>📝 加载内容</button>
-        <button onClick={handleStart} disabled={isPlaying}>
-          {hasStarted ? '🔄 重新开始' : '▶️ 开始动画'}
-        </button>
-      </div>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>状态：</strong> {isPlaying ? '🟢 动画播放中' : '🔴 等待开始'}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} autoStartTyping={false} onEnd={handleEnd} />
-    </div>
+    <ConfigProvider>
+      <DsMarkdown interval={20} answerType="answer" plugins={[mermaidPlugin]}>
+        {chartContent}
+      </DsMarkdown>
+    </ConfigProvider>
   );
 }
 ```
@@ -517,14 +389,21 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 - `'dollar'`：使用 `$...$` 和 `$$...$$` 语法
 - `'bracket'`：使用 `\(...\)` 和 `\[...\]` 语法
 
+#### IMarkdownCode 🆕
+
+| 属性            | 类型      | 说明                 | 默认值 |
+| --------------- | --------- | -------------------- | ------ |
+| `headerActions` | `boolean` | 是否显示头部操作按钮 | `true` |
+
 #### IMarkdownPlugin
 
-| 属性           | 类型                      | 说明         | 默认值 |
-| -------------- | ------------------------- | ------------ | ------ |
-| `remarkPlugin` | `unknown`                 | remark 插件  | -      |
-| `rehypePlugin` | `unknown`                 | rehype 插件  | -      |
-| `type`         | `'buildIn'` \| `'custom'` | 插件类型     | -      |
-| `id`           | `any`                     | 插件唯一标识 | -      |
+| 属性           | 类型                                           | 说明              | 默认值 |
+| -------------- | ---------------------------------------------- | ----------------- | ------ |
+| `remarkPlugin` | `Pluggable`                                    | remark 插件       | -      |
+| `rehypePlugin` | `Pluggable`                                    | rehype 插件       | -      |
+| `type`         | `'buildIn'` \| `'custom'`                      | 插件类型          | -      |
+| `id`           | `any`                                          | 插件唯一标识      | -      |
+| `components`   | `Record<string, React.ComponentType<unknown>>` | 自定义组件映射 🆕 | -      |
 
 ### 组件暴露的方法
 
@@ -560,98 +439,13 @@ markdownRef.current?.restart(); // 重新开始动画
 
 ---
 
-## 🧮 数学公式使用指南
-
-[DEMO1：勾股定理](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
-
-[DEMO2：题目解答](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=README.md)
-
-### 基本语法
-
-```tsx
-import { katexPlugin } from 'ds-markdown/plugins';
-
-// 1. 启用数学公式支持
-<DsMarkdown plugins={[katexPlugin]}>
-  # 数学公式示例
-
-  // 行内公式
-  这是一个行内公式：$E = mc^2$
-
-  // 块级公式
-  $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
-</DsMarkdown>
-```
-
-### 分隔符选择
-
-```tsx
-// 使用美元符号分隔符（默认）
-<DsMarkdown
-  plugins={[katexPlugin]}
-  math={{ splitSymbol: 'dollar' }}
->
-  行内：$a + b = c$
-  块级：$$\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n$$
-</DsMarkdown>
-
-// 使用括号分隔符
-<DsMarkdown
-  plugins={[katexPlugin]}
-  math={{ splitSymbol: 'bracket' }}
->
-  行内：\(a + b = c\)
-  块级：\[\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n\]
-</DsMarkdown>
-```
-
-### 流式数学公式
-
-```tsx
-// 完美支持流式输出中的数学公式
-const mathContent = [
-  '勾股定理：',
-  '$a^2 + b^2 = c^2$',
-  '\n\n',
-  '其中：',
-  '- $a$ 和 $b$ 是直角边\n',
-  '- $c$ 是斜边\n\n',
-  '对于经典的"勾三股四弦五"：\n',
-  '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
-  '这个定理在几何学中有着广泛的应用！',
-];
-
-mathContent.forEach((chunk) => {
-  markdownRef.current?.push(chunk, 'answer');
-});
-```
-
-### 样式定制
-
-```css
-/* 数学公式样式定制 */
-.katex {
-  font-size: 1.1em;
-}
-
-.katex-display {
-  margin: 1em 0;
-  text-align: center;
-}
-
-/* 暗色主题适配 */
-[data-theme='dark'] .katex {
-  color: #e1e1e1;
-}
-```
-
----
-
 ## 🔌 插件系统
 
 ### 内置插件
 
 #### KaTeX 数学公式插件
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
 
 ```tsx
 import { katexPlugin } from 'ds-markdown/plugins';
@@ -659,6 +453,82 @@ import { katexPlugin } from 'ds-markdown/plugins';
 // 启用数学公式支持
 <DsMarkdown plugins={[katexPlugin]}>数学公式：$E = mc^2$</DsMarkdown>;
 ```
+
+#### Mermaid 图表插件 🆕
+
+**安装 Mermaid 插件：**
+
+```bash
+npm install ds-markdown-mermaid-plugin
+```
+
+**基础用法：**
+
+```tsx
+import { ConfigProvider, Markdown } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+
+function App() {
+  const content = `
+# 流程图示例
+
+\`\`\`mermaid
+flowchart TD
+    A[开始] --> B{判断条件}
+    B -->|是| C[处理A]
+    B -->|否| D[处理B]
+    C --> E[结束]
+    D --> E
+\`\`\`
+`;
+
+  return (
+    <ConfigProvider>
+      <Markdown plugins={[mermaidPlugin]}>{content}</Markdown>
+    </ConfigProvider>
+  );
+}
+```
+
+**支持的图表类型：**
+
+- 🔄 **流程图** (Flowchart) - 展示流程和决策路径
+- 📋 **序列图** (Sequence Diagram) - 展示对象间的交互时序
+- 📅 **甘特图** (Gantt Chart) - 项目计划和时间线
+- 🏗️ **类图** (Class Diagram) - 面向对象设计
+- 🥧 **饼图** (Pie Chart) - 数据比例展示
+- 🔀 **状态图** (State Diagram) - 状态转换流程
+- 📊 **Git图** (Git Graph) - 代码分支历史
+- 🗺️ **用户旅程图** (User Journey) - 用户体验流程
+
+**配置 Mermaid：**
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+
+const mermaidConfig = {
+  theme: 'default', // 主题：default, neutral, dark, forest
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true,
+  },
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+  },
+};
+
+return (
+  <ConfigProvider mermaidConfig={mermaidConfig}>
+    <Markdown plugins={[mermaidPlugin]}>{chartContent}</Markdown>
+  </ConfigProvider>
+);
+```
+
+**相关链接：**
+
+- [ds-markdown-mermaid-plugin GitHub](https://github.com/onshinpei/ds-markdown-mermaid-plugin)
+- [Mermaid 官方文档](https://mermaid.js.org/)
 
 ### 自定义插件
 
@@ -670,6 +540,10 @@ const customPlugin = createBuildInPlugin({
   remarkPlugin: yourRemarkPlugin,
   rehypePlugin: yourRehypePlugin,
   id: Symbol('custom-plugin'),
+  components: {
+    // 自定义组件映射 🆕
+    CustomComponent: MyCustomComponent,
+  },
 });
 
 // 使用自定义插件
@@ -678,125 +552,76 @@ const customPlugin = createBuildInPlugin({
 
 ---
 
-## 🎛️ 定时器模式详解
+## 🎨 UI组件系统 🆕
 
-### `requestAnimationFrame` 模式 🌟 (推荐)
+ds-markdown 提供了丰富的UI组件，可以单独使用或与markdown组件配合。
 
-```typescript
-// 🎯 特性
-- 时间驱动：基于真实经过时间计算字符数量
-- 批量处理：单帧内可处理多个字符
-- 帧同步：与浏览器 60fps 刷新率同步
-- 高频优化：完美支持 interval < 16ms 的高速打字
-
-// 🎯 适用场景
-- 现代 Web 应用的默认选择
-- 追求流畅动画效果
-- 高频打字 (interval > 0 即可)
-- AI 实时对话场景
-```
-
-### `setTimeout` 模式 📟 (兼容)
-
-```typescript
-// 🎯 特性
-- 单字符：每次精确处理一个字符
-- 固定间隔：严格按设定时间执行
-- 节拍感：经典打字机的节奏感
-- 精确控制：适合特定时序要求
-
-// 🎯 适用场景
-- 需要精确时间控制
-- 营造复古打字机效果
-- 兼容性要求较高的场景
-```
-
-### 📊 性能对比
-
-| 特性         | requestAnimationFrame        | setTimeout       |
-| ------------ | ---------------------------- | ---------------- |
-| **字符处理** | 每帧可处理多个字符           | 每次处理一个字符 |
-| **高频间隔** | ✅ 优秀 (5ms → 每帧3字符)    | ❌ 可能卡顿      |
-| **低频间隔** | ✅ 正常 (100ms → 6帧后1字符) | ✅ 精确          |
-| **视觉效果** | 🎬 流畅动画感                | ⚡ 精确节拍感    |
-| **性能开销** | 🟢 低 (帧同步)               | 🟡 中等 (定时器) |
-
-高频推荐`requestAnimationFrame`,低频推荐 `setTimeout`
-
-## 多语言配置
-
-ConfigProvider 是 ds-markdown 提供的多语言配置组件，用于管理应用中的国际化文本。
-
-### 基本用法
+### 核心组件
 
 ```tsx
-import React from 'react';
-import { ConfigProvider } from 'ds-markdown';
-import zhCN from 'ds-markdown/i18n/zh';
+import {
+  Button,
+  IconButton,
+  ToolTip,
+  Segmented,
+  CopyButton,
+  DownloadButton
+} from 'ds-markdown';
 
-const App: React.FC = () => {
-  return (
-    <ConfigProvider locale={zhCN}>
-      <YourApp />
-    </ConfigProvider>
-  );
-};
+// 按钮组件
+<Button icon={<span>📄</span>} onClick={() => {}}>
+  点击按钮
+</Button>
+
+// 工具提示
+<ToolTip title="提示信息">
+  <IconButton icon={<span>📋</span>} onClick={() => {}} />
+</ToolTip>
+
+// 分段控制器
+<Segmented
+  Segmented={[
+    { label: '图表', value: 'diagram' },
+    { label: '代码', value: 'code' }
+  ]}
+  value={value}
+  onChange={setValue}
+/>
+
+// 代码块操作
+<CopyButton codeContent="console.log('Hello')" />
+<DownloadButton codeContent="console.log('Hello')" language="javascript" />
 ```
 
-### 可用的语言包
+### 样式定制
 
-#### 中文 (zhCN)
-
-```tsx
-import zhCN from 'ds-markdown/i18n/zh';
-```
-
-#### 英文 (enUS)
-
-```tsx
-import enUS from 'ds-markdown/i18n/en';
-```
-
-### 在组件中使用语言包
-
-使用 `locale` 属性来切换自己想要的语言包，例如切换到英文
-
-```tsx
-import React from 'react';
-import DsMarkdown from 'ds-markdown';
-import { ConfigProvider } from 'ds-markdown';
-import en from 'ds-markdown/i18n/en';
-
-const MyComponent: React.FC = () => {
-  return (
-    <ConfigProvider locale={en}>
-      <DsMarkdown {...props} />
-    </ConfigProvider>
-  );
-};
-```
-
-### 语言包结构
-
-当前支持的语言包包含以下字段：
-
-```typescript
-interface Locale {
-  codeBlock: {
-    copy: string;
-    copied: string;
-    download: string;
-  };
-  [key: string]: string;
+```css
+:root {
+  --ds-button-bg-color: #f5f5f5;
+  --ds-button-hover-color: #e0e0e0;
+  --ds-tooltip-bg-color: rgba(0, 0, 0, 0.8);
 }
 ```
 
-### 注意事项
+---
 
-1. `ConfigProvider` 必须包裹在使用 `useLocale` 的组件外层
-2. 语言包对象会被缓存，避免不必要的重新渲染
-3. 支持扩展自定义的语言包字段
-4. 如果没有提供 `ConfigProvider`，会使用默认的中文语言包
+## 多语言配置
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+import enUS from 'ds-markdown/i18n/en';
+
+// 中文
+<ConfigProvider locale={zhCN}>
+  <DsMarkdown {...props} />
+</ConfigProvider>
+
+// 英文
+<ConfigProvider locale={enUS}>
+  <DsMarkdown {...props} />
+</ConfigProvider>
+```
 
 ---
 
@@ -806,7 +631,7 @@ interface Locale {
 
 [DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
-````tsx
+```tsx
 import { useRef } from 'react';
 import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
@@ -830,19 +655,6 @@ function StreamingChat() {
       '- 🎯 **自动优化**：无需手动 memo 和 useMemo\n',
       '- ⚡ **性能提升**：编译时优化，运行时零开销\n',
       '- 🔧 **向后兼容**：现有代码无需修改\n\n',
-      '## 📝 Actions 简化表单\n',
-      '新的 Actions API 让表单处理变得更简单：\n\n',
-      '```tsx\n',
-      'function ContactForm({ action }) {\n',
-      '  const [state, formAction] = useActionState(action, null);\n',
-      '  return (\n',
-      '    <form action={formAction}>\n',
-      '      <input name="email" type="email" />\n',
-      '      <button>提交</button>\n',
-      '    </form>\n',
-      '  );\n',
-      '}\n',
-      '```\n\n',
       '希望这个解答对您有帮助！🎉',
     ];
 
@@ -852,128 +664,12 @@ function StreamingChat() {
     }
   };
 
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
   return (
     <div className="chat-container">
       <button onClick={simulateAIResponse}>🤖 询问 React 19 新特性</button>
-
-      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" onEnd={(data) => console.log('段落完成:', data)} />
-    </div>
-  );
-}
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-````
-
-### 🧮 数学公式流式渲染
-
-```tsx
-import { katexPlugin } from 'ds-markdown/plugins';
-
-function MathStreamingDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-
-  const simulateMathResponse = async () => {
-    markdownRef.current?.clear();
-
-    const mathChunks = [
-      '# 勾股定理详解\n\n',
-      '在直角三角形中，斜边的平方等于两条直角边的平方和：\n\n',
-      '$a^2 + b^2 = c^2$\n\n',
-      '其中：\n',
-      '- $a$ 和 $b$ 是直角边\n',
-      '- $c$ 是斜边\n\n',
-      '对于经典的"勾三股四弦五"：\n',
-      '$c = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$\n\n',
-      '这个定理在几何学中有着广泛的应用！',
-    ];
-
-    for (const chunk of mathChunks) {
-      await delay(150);
-      markdownRef.current?.push(chunk, 'answer');
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={simulateMathResponse}>📐 讲解勾股定理</button>
-
-      <MarkdownCMD ref={markdownRef} interval={20} timerType="requestAnimationFrame" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }} />
-    </div>
-  );
-}
-```
-
-### 🎯 高级回调控制
-
-```tsx
-import { useRef, useState } from 'react';
-import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-function AdvancedCallbackDemo() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
-  const [typingStats, setTypingStats] = useState({ progress: 0, currentChar: '', totalChars: 0 });
-
-  const handleBeforeTypedChar = async (data) => {
-    // 在字符打字前进行异步操作
-    console.log('即将打字:', data.currentChar);
-
-    // 可以在这里进行网络请求、数据验证等异步操作
-    if (data.currentChar === '!') {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 模拟延迟
-    }
-  };
-
-  const handleTypedChar = (data) => {
-    // 更新打字统计信息
-    setTypingStats({
-      progress: Math.round(data.percent),
-      currentChar: data.currentChar,
-      totalChars: data.currentIndex + 1,
-    });
-
-    // 可以在这里添加音效、动画等效果
-    if (data.currentChar === '.') {
-      // 播放句号音效
-      console.log('播放句号音效');
-    }
-  };
-
-  const handleStart = (data) => {
-    console.log('开始打字:', data.currentChar);
-  };
-
-  const handleEnd = (data) => {
-    console.log('打字完成:', data.str);
-  };
-
-  const startDemo = () => {
-    markdownRef.current?.clear();
-    markdownRef.current?.push(
-      '# 高级回调演示\n\n' +
-        '这个示例展示了如何使用 `onBeforeTypedChar` 和 `onTypedChar` 回调：\n\n' +
-        '- 🎯 **打字前回调**：可以在字符显示前进行异步操作\n' +
-        '- 📊 **打字后回调**：可以实时更新进度和添加特效\n' +
-        '- ⚡ **性能优化**：支持异步操作，不影响打字流畅度\n\n' +
-        '当前进度：' +
-        typingStats.progress +
-        '%\n' +
-        '已打字数：' +
-        typingStats.totalChars +
-        '\n\n' +
-        '这是一个非常强大的功能！',
-      'answer',
-    );
-  };
-
-  return (
-    <div>
-      <button onClick={startDemo}>🚀 开始高级演示</button>
-
-      <div style={{ margin: '10px 0', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-        <strong>打字统计：</strong> 进度 {typingStats.progress}% | 当前字符: "{typingStats.currentChar}" | 总字符数: {typingStats.totalChars}
-      </div>
-
-      <MarkdownCMD ref={markdownRef} interval={30} onBeforeTypedChar={handleBeforeTypedChar} onTypedChar={handleTypedChar} onStart={handleStart} onEnd={handleEnd} />
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
     </div>
   );
 }
@@ -989,9 +685,6 @@ function AdvancedCallbackDemo() {
   timerType="requestAnimationFrame"
   interval={15} // 15-30ms 为最佳体验
 />
-
-// ❌ 避免过小间隔
-<DsMarkdown interval={1} /> // 可能导致性能问题
 ```
 
 ### 2. 流式数据处理
@@ -1002,33 +695,31 @@ const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
   ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
-
-// ❌ 避免：频繁更新 children
-const [content, setContent] = useState('');
-// 每次更新都会重新解析整个内容
 ```
 
 ### 3. 数学公式优化
 
 ```tsx
-// ✅ 推荐：按需加载数学公式样式
-import 'ds-markdown/style.css';
+// ✅ 推荐：按需加载
+import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/katex.css'; // 仅在需要时引入
 
-// ✅ 推荐：合理使用分隔符
-// 对于简单公式，使用 $...$ 更简洁
-// 对于复杂公式，使用 $$...$$ 更清晰
-
-// ✅ 推荐：插件化配置
-import { katexPlugin } from 'ds-markdown/plugins';
 <DsMarkdown plugins={[katexPlugin]}>数学公式内容</DsMarkdown>;
 ```
 
-### 4. 类型安全
+### 4. Mermaid图表最佳实践 🆕
 
 ```tsx
-import { MarkdownCMDRef } from 'ds-markdown';
+// ✅ 推荐：独立安装插件
+npm install ds-markdown-mermaid-plugin
 
-const ref = useRef<MarkdownCMDRef>(null);
-// 完整的 TypeScript 类型提示
+// ✅ 推荐：配置适合的主题
+const mermaidConfig = {
+  theme: 'default', // 根据应用主题选择
+  flowchart: { useMaxWidth: true },
+};
+
+<ConfigProvider mermaidConfig={mermaidConfig}>
+  <DsMarkdown plugins={[mermaidPlugin]} />
+</ConfigProvider>
 ```

@@ -57,9 +57,15 @@ const ApiDocumentation: React.FC = () => {
   return (
     <section id="api" className="section">
       <h2>{t.api}</h2>
-      <ApiTable data={data.propsData} title={t.props} />
-      <RefMethodTable data={data.dsMarkdownMethods} title={t.refDs} />
-      <RefMethodTable data={data.markdownCMDMethods} title={t.refCmd} />
+      <div id="api-props">
+        <ApiTable data={data.propsData} title={t.props} />
+      </div>
+      <div id="api-ref-ds">
+        <RefMethodTable data={data.dsMarkdownMethods} title={t.refDs} />
+      </div>
+      <div id="api-ref-cmd">
+        <RefMethodTable data={data.markdownCMDMethods} title={t.refCmd} />
+      </div>
       <h3 id="类型定义">{t.typeDef}</h3>
       <div id="ITypedChar">
         <ApiTable data={data.iTypedCharData} title="ITypedChar" />
@@ -82,20 +88,25 @@ const ApiDocumentation: React.FC = () => {
       <div id="IStartData">
         <ApiTable data={data.iStartData} title="IStartData" />
       </div>
-      <PluginSection title={t.plugin} codeExample={data.codeExamples.katexPlugin} />
-      <ComparisonTable data={data.timerComparisonData} title={t.timer} />
-      <FormulaTypeTable data={data.formulaTypesData} title={t.formula} />
-
-      <h3>{t.config}</h3>
+      <div id="api-plugin">
+        <PluginSection title={t.plugin} codeExample={data.codeExamples.katexPlugin} />
+      </div>
+      <div id="api-timer">
+        <ComparisonTable data={data.timerComparisonData} title={t.timer} />
+      </div>
+      <div id="api-formula">
+        <FormulaTypeTable data={data.formulaTypesData} title={t.formula} />
+      </div>
+      <h3 id="api-config">{t.config}</h3>
       <ApiTable data={data.configProviderPropsData} title={t.configProps} />
       <ApiTable data={data.localeTypeData} title={t.localeType} />
       <div id="I18nData">
         <ApiTable data={data.i18nData} title={t.i18n} />
       </div>
-
-      <BestPracticesList practices={data.bestPractices} title={t.best} />
-
-      <h3>{t.example}</h3>
+      <div id="api-best">
+        <BestPracticesList practices={data.bestPractices} title={t.best} />
+      </div>
+      <h3 id="api-example">{t.example}</h3>
       <CodeExample code={data.codeExamples.streamingChat} title={t.codeStream} />
       <CodeExample code={data.codeExamples.callbackExample} title={t.codeCallback} />
       <CodeExample code={data.codeExamples.startExample} title={t.codeStart} />

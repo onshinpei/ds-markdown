@@ -1,0 +1,118 @@
+.demoImpl {
+  border-radius: 8px;
+}
+.demoImplLight {
+  /* background: #f7fafc; */
+}
+.demoImplDark {
+  background: #292a2d;
+}
+
+/* 基于根主题类的选择器 */
+.demoImplLight .sectionTitle {
+  color: #2d3748;
+}
+.demoImplDark .sectionTitle {
+  color: #e2e8f0;
+}
+
+.demoImplLight .sectionSubTitle {
+  color: #4a5568;
+}
+.demoImplDark .sectionSubTitle {
+  color: #cbd5e0;
+}
+
+.demoImplLight .sectionSubTitlePink {
+  color: #d53f8c;
+}
+.demoImplDark .sectionSubTitlePink {
+  color: #fbb6ce;
+}
+
+.demoImplLight .statusCardTitle {
+  color: #2d3748;
+}
+.demoImplDark .statusCardTitle {
+  color: #e2e8f0;
+}
+
+/* 文本颜色选择器 */
+.demoImplLight .text-muted {
+  color: #718096;
+}
+.demoImplDark .text-muted {
+  color: #a0aec0;
+}
+
+.demoImplLight .description-text {
+  color: #718096;
+}
+.demoImplDark .description-text {
+  color: #a0aec0;
+}
+
+.configPanel {
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+.sectionTitle {
+  margin: 0 0 12px 0;
+}
+.sectionSubTitle {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+.rerenderPanel {
+  padding: 12px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  border: 1px dashed #e2e8f0;
+}
+.rerenderPanelDark {
+  background: #2d3748;
+  border: 1px dashed #4a5568;
+}
+.selectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.flexWrap {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.selectLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.statusPanels {
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+.statusCard {
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+.statusCardDark {
+  background: #1a202c;
+  border: 1px solid #2d3748;
+}
+.statusCardTitle {
+  margin: 0 0 8px 0;
+}
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.progressBar {
+  margin-bottom: 8px;
+}

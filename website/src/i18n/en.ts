@@ -80,5 +80,6 @@ export default {
   onTypedChar: 'Typed Char',
   index: 'Index',
   type: 'Type',
+  mermaidDemoTitle: '🧩 Mermaid Chart Demo',
   // ... more as needed
 };

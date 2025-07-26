@@ -7,10 +7,52 @@
     <meta name="description" content="ds-markdown,一个类似deepseek官网效果的Markdown组件">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ds-markdown</title>
+    <style>
+        #global-loading {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        #global-loading .spinner {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #e0e0e0;
+            border-top: 5px solid #0078ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #global-loading .loading-text {
+            font-size: 1.1rem;
+            color: #0078ff;
+            letter-spacing: 2px;
+            font-family: system-ui, sans-serif;
+        }
+    </style>
 </head>
 
 <body class="apple">
-    <div id="root"></div>
+
+    <div id="root">
+        <div id="global-loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
     <script type="module" src="/example/index.tsx"></script>
 </body>
 

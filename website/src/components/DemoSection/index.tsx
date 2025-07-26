@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import type { DemoSectionProps } from '../../defined';
 import { useI18n } from '../../hooks/useI18n';
+import DsMarkdown from 'ds-markdown';
 
 // Demo组件
 const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children, onlyShowCode = false }) => {
@@ -35,9 +36,15 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
           ) : (
             <div className="ds-markdown code-block">
               <div className="md-code-block md-code-block-light">
-                <SyntaxHighlighter useInlineStyles={false} language={activeTab === 'code' ? sourceCode.lang || 'tsx' : 'markdown'} style={{}}>
-                  {sourceCode.code.trim()}
-                </SyntaxHighlighter>
+                {onlyShowCode ? (
+                  <>
+                    <DsMarkdown interval={16.67}>{sourceCode.code.trim()}</DsMarkdown>
+                  </>
+                ) : (
+                  <SyntaxHighlighter useInlineStyles={false} language={activeTab === 'code' ? sourceCode.lang || 'tsx' : 'markdown'} style={{}}>
+                    {sourceCode.code.trim()}
+                  </SyntaxHighlighter>
+                )}
               </div>
             </div>
           )}

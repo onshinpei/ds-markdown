@@ -22,7 +22,8 @@
     "src",
     "test",
     "**/*.test.*",
-    "example"
+    "example",
+    "shim.d.ts"
   ],
   "exclude": [
     "website"
