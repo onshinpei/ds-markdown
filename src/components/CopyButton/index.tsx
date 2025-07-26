@@ -55,7 +55,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ codeContent, style, className }
 
   return (
     <Button style={style} className={className} icon={showCheckmark ? <CheckMarkIcon size={24} /> : <CopyIcon size={24} />} onClick={handleCopy}>
-      <span>{copyText}</span>
+      <span>{isCopying ? locale.codeBlock.copying : locale.codeBlock.copy}</span>
     </Button>
   );
 };
