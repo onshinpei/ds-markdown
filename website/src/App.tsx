@@ -11,6 +11,7 @@ import Navigation from './components/Navigation';
 import DemoSection from './components/DemoSection';
 import Footer from './components/Footer';
 import ApiDocumentation from './components/ApiDocumentation';
+import FloatingToc from './components/FloatingToc';
 
 // 导入演示组件
 import { BasicUsageDemo, MathSupportDemo, TypingAnimationDemo, CustomThemeDemo, StreamingDemo, MermaidDemo } from './components/Demos';
@@ -87,58 +88,63 @@ const AppContent: React.FC = () => {
       <Header />
       <Navigation />
       <main className="main">
-        <ConfigProvider locale={locale}>
-          <div className="container">
-            <DemoSection
-              id="installation"
-              title={t('installTitle')}
-              sourceCode={{
-                code: installationSource,
-                markdownString: installationSource,
-                lang: 'bash',
-              }}
-              showHeader={false}
-              onlyShowCode={true}
-            />
-            <DemoSection
-              id="basic-usage"
-              title={t('basicUsageTitle')}
-              sourceCode={{ code: basicUsageDemoSource, markdownString: markdownMap[lang].basicUsage }}
-              renderComponent={React.createElement(BasicUsageDemo, { markdown: markdownMap[lang].basicUsage })}
-            />
-            <DemoSection
-              id="math-support"
-              title={t('mathSupportTitle')}
-              sourceCode={{ code: mathSupportDemoSource, markdownString: markdownMap[lang].mathSupport }}
-              renderComponent={React.createElement(MathSupportDemo, { markdown: markdownMap[lang].mathSupport })}
-            />
-            <DemoSection
-              id="typing-animation"
-              title={t('typingAnimationTitle')}
-              sourceCode={{ code: typingAnimationDemoSource, markdownString: markdownMap[lang].typingAnimation }}
-              renderComponent={React.createElement(TypingAnimationDemo, { markdown: markdownMap[lang].typingAnimation })}
-            />
-            <DemoSection
-              id="themes"
-              title={t('themesTitle')}
-              sourceCode={{ code: customThemeDemoSource, markdownString: markdownMap[lang].customTheme }}
-              renderComponent={React.createElement(CustomThemeDemo, { markdown: markdownMap[lang].customTheme })}
-            />
-            <DemoSection
-              id="streaming"
-              title={t('streamingTitle')}
-              sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
-              renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
-            />
-            <DemoSection
-              id="mermaid-demo"
-              title={t('mermaidDemoTitle') || 'Mermaid 图表示例'}
-              sourceCode={{ code: mermaidDemoSource, markdownString: markdownMap[lang].mermaid }}
-              renderComponent={React.createElement(MermaidDemo)}
-            />
-            <ApiDocumentation />
-          </div>
-        </ConfigProvider>
+        <div className="main-nav">
+          <FloatingToc />
+        </div>
+        <div className="main-content">
+          <ConfigProvider locale={locale}>
+            <div className="container">
+              <DemoSection
+                id="installation"
+                title={t('installTitle')}
+                sourceCode={{
+                  code: installationSource,
+                  markdownString: installationSource,
+                  lang: 'bash',
+                }}
+                showHeader={false}
+                onlyShowCode={true}
+              />
+              <DemoSection
+                id="basic-usage"
+                title={t('basicUsageTitle')}
+                sourceCode={{ code: basicUsageDemoSource, markdownString: markdownMap[lang].basicUsage }}
+                renderComponent={React.createElement(BasicUsageDemo, { markdown: markdownMap[lang].basicUsage })}
+              />
+              <DemoSection
+                id="math-support"
+                title={t('mathSupportTitle')}
+                sourceCode={{ code: mathSupportDemoSource, markdownString: markdownMap[lang].mathSupport }}
+                renderComponent={React.createElement(MathSupportDemo, { markdown: markdownMap[lang].mathSupport })}
+              />
+              <DemoSection
+                id="typing-animation"
+                title={t('typingAnimationTitle')}
+                sourceCode={{ code: typingAnimationDemoSource, markdownString: markdownMap[lang].typingAnimation }}
+                renderComponent={React.createElement(TypingAnimationDemo, { markdown: markdownMap[lang].typingAnimation })}
+              />
+              <DemoSection
+                id="themes"
+                title={t('themesTitle')}
+                sourceCode={{ code: customThemeDemoSource, markdownString: markdownMap[lang].customTheme }}
+                renderComponent={React.createElement(CustomThemeDemo, { markdown: markdownMap[lang].customTheme })}
+              />
+              <DemoSection
+                id="streaming"
+                title={t('streamingTitle')}
+                sourceCode={{ code: streamingDemoSource, markdownString: markdownMap[lang].streaming }}
+                renderComponent={React.createElement(StreamingDemo, { markdown: markdownMap[lang].streaming })}
+              />
+              <DemoSection
+                id="mermaid-demo"
+                title={t('mermaidDemoTitle') || 'Mermaid 图表示例'}
+                sourceCode={{ code: mermaidDemoSource, markdownString: markdownMap[lang].mermaid }}
+                renderComponent={React.createElement(MermaidDemo)}
+              />
+              <ApiDocumentation />
+            </div>
+          </ConfigProvider>
+        </div>
       </main>
       <Footer />
     </div>
