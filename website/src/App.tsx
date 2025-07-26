@@ -42,12 +42,16 @@ import { ConfigProvider } from 'ds-markdown';
 import zh from 'ds-markdown/i18n/zh';
 import en from 'ds-markdown/i18n/en';
 
-const installationSource = `// npm
+const installationSource = `
+\`\`\`npm
 npm install ds-markdown
-// yarn
+\`\`\`
+\`\`\`yarn
 yarn add ds-markdown
-// pnpm
+\`\`\`
+\`\`\`pnpm
 pnpm add ds-markdown
+\`\`\`
 `;
 
 const markdownMap = {
