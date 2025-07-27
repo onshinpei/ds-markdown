@@ -6,6 +6,7 @@ interface IconButtonProps {
   style?: React.CSSProperties;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({ icon, style, className = '', onClick, ...restProps }) => {

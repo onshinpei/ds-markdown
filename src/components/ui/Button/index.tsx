@@ -7,18 +7,29 @@ interface ButtonProps {
   icon?: React.ReactNode;
   onClick?: () => void;
   style?: React.CSSProperties;
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick, style, ...restProps }) => {
+const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick, style, disabled = false, ...restProps }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
+    onClick?.();
+  };
+
   return (
     <div
       role="button"
       className={classNames({
         'ds-button': true,
+        'ds-button__disabled': disabled,
         [className]: !!className,
       })}
-      onClick={onClick}
+      onClick={handleClick}
       style={style}
+      aria-disabled={disabled}
       {...restProps}
     >
       {icon && <div className="ds-button__icon">{icon}</div>}
