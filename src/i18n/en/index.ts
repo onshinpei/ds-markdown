@@ -10,6 +10,8 @@ export const enUS = {
     zoomOut: 'Zoom Out',
     zoomIn: 'Zoom In',
     download: 'Download',
+    fullScreen: 'Full Screen',
+    exitFullScreen: 'Exit Full Screen',
   },
 } as const;
 

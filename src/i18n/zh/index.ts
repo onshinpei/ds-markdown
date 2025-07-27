@@ -10,6 +10,8 @@ export const zhCN = {
     zoomOut: '缩小',
     zoomIn: '放大',
     download: '下载',
+    fullScreen: '全屏',
+    exitFullScreen: '退出全屏',
   },
 } as const;
 
