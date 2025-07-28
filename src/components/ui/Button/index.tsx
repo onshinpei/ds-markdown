@@ -22,11 +22,13 @@ const Button: React.FC<ButtonProps> = ({ className = '', children, icon, onClick
   return (
     <div
       role="button"
-      className={classNames({
-        'ds-button': true,
-        'ds-button__disabled': disabled,
-        [className]: !!className,
-      })}
+      className={classNames(
+        {
+          'ds-button': true,
+          'ds-button__disabled': disabled,
+        },
+        className,
+      )}
       onClick={handleClick}
       style={style}
       aria-disabled={disabled}
