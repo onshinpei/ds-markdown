@@ -1,0 +1,113 @@
+.floating-toc {
+  position: static;
+  top: auto;
+  left: auto;
+  z-index: auto;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 20px;
+  min-width: auto;
+  max-width: none;
+  font-size: 15px;
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+  transition: all 0.3s ease;
+  max-height: none;
+  overflow-y: visible;
+}
+
+/* 移除吸附效果相关样式，因为现在是固定布局 */
+.floating-toc.sticky {
+  top: auto;
+  box-shadow: none;
+  transform: none;
+}
+
+/* 移除初始状态的偏移 */
+.floating-toc {
+  transform: none;
+}
+
+.floating-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.floating-toc li {
+  margin-bottom: 8px;
+}
+
+.floating-toc li:last-child {
+  margin-bottom: 0;
+}
+
+.floating-toc .toc-divider {
+  border-top: 1px solid #e5e7ef;
+  margin: 14px 0 10px 0;
+  height: 0;
+}
+
+.floating-toc a {
+  color: #4c63d2;
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  padding: 7px 0 7px 12px;
+  display: block;
+  border-radius: 6px;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  position: relative;
+}
+
+.floating-toc a.active {
+  color: #fff;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-left: 3px solid #764ba2;
+  box-shadow: 0 2px 8px rgba(118, 75, 178, 0.08);
+}
+
+.floating-toc a.active::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #764ba2;
+}
+
+.floating-toc a:hover:not(.active) {
+  background: #f0f4ff;
+  color: #333;
+}
+
+.floating-toc ul ul {
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+.floating-toc ul ul a {
+  font-size: 13px;
+  font-weight: 400;
+  padding: 5px 0 5px 18px;
+  border-radius: 4px;
+}
+
+.floating-toc ul ul a.active {
+  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
+  color: #fff;
+  border-left: 3px solid #a18cd1;
+}
+
+@media (max-width: 1100px) {
+  .floating-toc {
+    display: block;
+  }
+}

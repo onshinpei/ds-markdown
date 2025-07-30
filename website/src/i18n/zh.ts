@@ -48,6 +48,8 @@ export default {
   navThemes: '主题切换',
   navStreaming: '流式演示',
   navApi: 'API 文档',
+  navMermaid: 'Mermaid 图表示例',
+  mermaidDemoTitle: '🧩 Mermaid 图表示例',
   demoEffect: '显示效果：',
   configPanelTitle: '控制面板',
   realtimeConfigTitle: '实时配置',
