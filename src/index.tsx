@@ -14,7 +14,7 @@ import CodeBlockActions from './components/CodeBlockActions';
 import CodeBlockWrap from './components/CodeBlockWrap';
 import HighlightCode from './components/HighlightCode';
 
-export { CopyIcon, DownloadIcon } from './components/BlockWrap/icon';
+export { CopyIcon, DownloadIcon, CheckMarkIcon } from './components/BlockWrap/icon';
 
 // 导出 ConfigProvider 相关
 export { ConfigProvider, useConfig, useLocale } from './context/ConfigProvider';
