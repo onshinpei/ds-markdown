@@ -32,6 +32,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
   const currentMath = themeState.math;
   const currentPlugins = themeState.plugins;
   const mathSplitSymbol = currentMath?.splitSymbol ?? 'dollar';
+  const finalReplaceMathBracket = currentMath?.replaceMathBracket ?? replaceMathBracket;
 
   const { remarkPlugins, rehypePlugins, hasKatexPlugin, components } = useMemo(() => {
     let hasKatexPlugin = false;
@@ -73,10 +74,10 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
   const children = useMemo(() => {
     /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
     if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
-      return replaceMathBracket(_children);
+      return finalReplaceMathBracket(_children);
     }
     return _children;
-  }, [hasKatexPlugin, mathSplitSymbol, _children]);
+  }, [hasKatexPlugin, mathSplitSymbol, finalReplaceMathBracket, _children]);
 
   return (
     <Markdown

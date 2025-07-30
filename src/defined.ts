@@ -133,6 +133,8 @@ export interface IMarkdownPlugin {
 export interface IMarkdownMath {
   /** 是括号还是$作为分隔符, 默认是$ */
   splitSymbol: 'bracket' | 'dollar';
+  /** 数学公式替换函数 */
+  replaceMathBracket?: (value: string) => string;
 }
 
 export interface IWholeContent {
