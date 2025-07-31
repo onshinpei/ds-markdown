@@ -28,41 +28,27 @@ const remarkMathBracket: Plugin = () => (tree, file) => {
  * @returns 转换后的字符串
  */
 export const replaceMathBracket = (value: string) => {
-  // 1. 提取并保护所有 Markdown 链接（包括图片和普通链接）
-  // 匹配 ![alt](url) 或 [text](url) 形式
-  const mdLinkMatches: string[] = [];
-  const protectedValue = value.replace(/!?\[[^\]]*\]\([^)]*\)/g, (m) => {
-    mdLinkMatches.push(m);
-    return `__MD_LINK_${mdLinkMatches.length - 1}__`;
-  });
-
-  // 2. 提取所有块级公式内容，临时替换为占位符
-  // 处理 \[...\] 格式的块级公式
+  // 1. 提取所有块级公式内容，临时替换为占位符, [...]
   const blockMatches: string[] = [];
-  let replaced = protectedValue.replace(/\\*\[([\s\S]+?)\\*\]/g, (_m, p1) => {
+  let replaced = value.replace(/\\+\[([\s\S]+?)\\+\]/g, (_m, p1) => {
     blockMatches.push(p1);
     return `__BLOCK_MATH_${blockMatches.length - 1}__`;
   });
 
-  // 处理 $$...$$ 格式的块级公式（兼容性处理）
+  // 也需要兼容 $$ xxxx $$ 这种写法
   replaced = replaced.replace(/\$\$([\s\S]+?)\$\$/g, (_m, p1) => {
     blockMatches.push(p1);
     return `__BLOCK_MATH_${blockMatches.length - 1}__`;
   });
 
-  // 3. 替换块级公式外部的 \(...\) 为 $...$（行内公式）
-  replaced = replaced.replace(/\\*\(([^)]+?)\\*\)/g, (_m, p1) => {
+  // 2. 替换块级公式外部的 ( ... ) 为 $...$
+  replaced = replaced.replace(/\\+\(([^)]+?)\\+\)/g, (_m, p1) => {
     return '$' + p1 + '$';
   });
 
-  // 4. 还原块级公式内容，保持其内部小括号原样
+  // 3. 还原块级公式内容，保持其内部小括号原样
   replaced = replaced.replace(/__BLOCK_MATH_(\d+)__/g, (_m, idx) => {
     return '$$' + blockMatches[Number(idx)] + '$$';
-  });
-
-  // 5. 还原被保护的 Markdown 链接
-  replaced = replaced.replace(/__MD_LINK_(\d+)__/g, (_m, idx) => {
-    return mdLinkMatches[Number(idx)];
   });
 
   return replaced;
