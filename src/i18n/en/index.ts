@@ -3,6 +3,7 @@ export const enUS = {
     copy: 'Copy',
     copied: 'Copied',
     download: 'Download',
+    downloaded: 'Downloaded',
   },
   mermaid: {
     diagram: 'Diagram',
@@ -12,8 +13,12 @@ export const enUS = {
     download: 'Download',
     fullScreen: 'Full Screen',
     exitFullScreen: 'Exit Full Screen',
+    downloadImage: 'Download Image',
+    downloadedImage: 'Downloaded',
+    copiedImage: 'Copied',
+    copyImage: 'Copy Image',
   },
-} as const;
+};
 
 export type EnUS = typeof enUS;
 

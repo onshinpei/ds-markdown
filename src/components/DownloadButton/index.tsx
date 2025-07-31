@@ -1,7 +1,7 @@
 import React from 'react';
-import Button from '../ui/Button';
-import { DownloadIcon } from '../BlockWrap/icon';
+import { DownloadIcon } from '../Icon';
 import { useConfig } from '../../context/ConfigProvider';
+import SuccessButton from '../ui/SuccessButton';
 
 interface DownloadButtonProps {
   codeContent?: string;
@@ -13,8 +13,8 @@ interface DownloadButtonProps {
 const DownloadButton: React.FC<DownloadButtonProps> = ({ codeContent, language, style, className }) => {
   const { locale } = useConfig();
   // 下载文件
-  const handleDownload = () => {
-    if (!codeContent) return;
+  const handleDownload = async () => {
+    if (!codeContent) return false;
 
     const blob = new Blob([codeContent], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -63,12 +63,13 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ codeContent, language, 
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    return true;
   };
 
   return (
-    <Button style={style} className={className} icon={<DownloadIcon size={24} />} onClick={handleDownload}>
-      <span>{locale.codeBlock.download}</span>
-    </Button>
+    <SuccessButton onClick={handleDownload} icon={<DownloadIcon size={24} />} executeText={locale.codeBlock.downloaded || 'Downloaded'} style={style} className={className}>
+      {locale.codeBlock.download || 'Download'}
+    </SuccessButton>
   );
 };
 

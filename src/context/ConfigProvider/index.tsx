@@ -1,24 +1,9 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import defaultLocale from '../../i18n/zh';
+import defaultLocale, { ZhCN } from '../../i18n/zh';
 import Mermaid from './mermaid.type';
 
 // 定义语言包的基础类型
-export interface Locale {
-  codeBlock: {
-    copy: string;
-    copied: string;
-    download: string;
-    [key: string]: string;
-  };
-  mermaid: {
-    diagram: string;
-    code: string;
-    zoomOut: string;
-    zoomIn: string;
-    download: string;
-  };
-  [key: string]: unknown;
-}
+export type Locale = ZhCN;
 
 // 定义 ConfigProvider 的 props 类型
 export interface ConfigProviderProps {
