@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 
 import Markdown, { MarkdownRef } from '../../src';
-import dataJson from './data.json';
+import markdown from './data.md?raw';
 
 import 'katex/dist/katex.min.css';
 import { katexPlugin } from '../../src/plugins';
@@ -140,7 +140,7 @@ const App: React.FC<{
             disableTyping={disableTyping}
             autoStartTyping={false}
           >
-            {dataJson.content}
+            {markdown}
           </Markdown>
         </div>
       </div>

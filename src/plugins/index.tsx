@@ -1,5 +1,5 @@
 import remarkMath from 'remark-math';
-import { IMarkdownPlugin } from '../defined';
+import type { IMarkdownPlugin } from '../defined';
 import rehypeKatex from 'rehype-katex';
 import { katexId, mermaidId } from '../constant';
 

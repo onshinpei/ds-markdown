@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import MarkdownCMD from './MarkdownCMD';
 import Markdown from './Markdown';
-import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps } from './defined';
+import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin } from './defined';
 
 import Button from './components/ui/Button';
 import IconButton from './components/ui/IconButton';
@@ -24,5 +24,5 @@ export * from './context/ConfigProvider/mermaid.type';
 export type { Locale, ConfigProviderProps, ConfigContextType } from './context/ConfigProvider';
 
 export default Markdown;
-export type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps };
+export type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin };
 export { Markdown, MarkdownCMD, Button, IconButton, ToolTip, CopyButton, DownloadButton, SuccessButton, CodeBlockActions, CodeBlockWrap, HighlightCode, Segmented };
