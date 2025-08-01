@@ -5,7 +5,6 @@ import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownPr
 
 import Button from './components/ui/Button';
 import IconButton from './components/ui/IconButton';
-import ToolTip from './components/ui/ToolTip';
 import Segmented from './components/ui/Segmented';
 import SuccessButton from './components/ui/SuccessButton';
 
@@ -25,4 +24,4 @@ export type { Locale, ConfigProviderProps, ConfigContextType } from './context/C
 
 export default Markdown;
 export type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin };
-export { Markdown, MarkdownCMD, Button, IconButton, ToolTip, CopyButton, DownloadButton, SuccessButton, CodeBlockActions, CodeBlockWrap, HighlightCode, Segmented };
+export { Markdown, MarkdownCMD, Button, IconButton, CopyButton, DownloadButton, SuccessButton, CodeBlockActions, CodeBlockWrap, HighlightCode, Segmented };

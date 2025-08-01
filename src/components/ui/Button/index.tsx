@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-interface ButtonProps {
+export interface ButtonProps {
   className?: string;
   children?: React.ReactNode;
   icon?: React.ReactNode;
