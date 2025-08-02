@@ -17,6 +17,7 @@ export const enUS = {
     downloadedImage: 'Downloaded',
     copiedImage: 'Copied',
     copyImage: 'Copy Image',
+    fitInView: 'Fit in view',
   },
 };
 

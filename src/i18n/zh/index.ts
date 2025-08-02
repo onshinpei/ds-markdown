@@ -17,6 +17,7 @@ export const zhCN = {
     downloadedImage: '已下载',
     copyImage: '复制图片',
     copiedImage: '已复制',
+    fitInView: '适应页面',
   },
 };
 
