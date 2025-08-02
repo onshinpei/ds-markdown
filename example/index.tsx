@@ -15,7 +15,7 @@ const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
     <div className={`ds-message ds-message-${theme}`}>
-      <MermaidDemo theme={theme} setTheme={setTheme} />
+      <KatexDemo theme={theme} setTheme={setTheme} />
     </div>
   );
 };

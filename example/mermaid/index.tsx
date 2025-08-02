@@ -74,7 +74,7 @@ const App: React.FC<{
   };
 
   const interval = 5;
-  const flag = true;
+  const flag = false;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
