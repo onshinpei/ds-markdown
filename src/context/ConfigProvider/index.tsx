@@ -10,7 +10,7 @@ export interface ConfigProviderProps {
   locale?: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
   children: React.ReactNode;
-  katexConfig?: IMarkdownKatexConfig;
+  // katexConfig?: IMarkdownKatexConfig;
 }
 
 // 定义 Context 类型
