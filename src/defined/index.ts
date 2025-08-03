@@ -185,7 +185,7 @@ export interface IMarkdownMermaidConfig extends Mermaid.MermaidConfig {
    * 如果为true，则显示头部操作按钮
    * 如果为React.ReactNode，则显示自定义头部操作按钮
    */
-  headerActions?: boolean | React.ReactNode | ((svgElement: SVGSVGElement) => React.ReactNode);
+  headerActions?: boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode);
 }
 
 // export interface IMarkdownKatexConfig extends KatexOptions {}
