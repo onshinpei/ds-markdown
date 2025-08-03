@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 
 import { Pluggable } from 'unified';
+import Mermaid from './mermaid.type';
+// import { KatexOptions } from 'katex';
 
 /**
  * 回答类型，思考和回答
@@ -177,3 +179,13 @@ export interface IEndData {
   /** 打字机打过的字符串, 和answerStr 相同 */
   str: string;
 }
+
+export interface IMarkdownMermaidConfig extends Mermaid.MermaidConfig {
+  /** 是否显示头部操作按钮
+   * 如果为true，则显示头部操作按钮
+   * 如果为React.ReactNode，则显示自定义头部操作按钮
+   */
+  headerActions?: boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode);
+}
+
+// export interface IMarkdownKatexConfig extends KatexOptions {}

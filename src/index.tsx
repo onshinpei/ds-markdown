@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import MarkdownCMD from './MarkdownCMD';
 import Markdown from './Markdown';
-import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin } from './defined';
+import type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin, IMarkdownMermaidConfig } from './defined';
 
 import Button from './components/ui/Button';
 import IconButton from './components/ui/IconButton';
@@ -19,9 +19,9 @@ export { CopyIcon, DownloadIcon, CheckMarkIcon } from './components/Icon';
 // 导出 ConfigProvider 相关
 export { ConfigProvider, useConfig, useLocale } from './context/ConfigProvider';
 export { useThemeState } from './context/MarkdownThemeProvider';
-export * from './context/ConfigProvider/mermaid.type';
+export * from './defined/mermaid.type';
 export type { Locale, ConfigProviderProps, ConfigContextType } from './context/ConfigProvider';
 
 export default Markdown;
-export type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin };
+export type { MarkdownCMDRef, MarkdownRef, IMarkdownMath, ITypedChar, MarkdownProps, MarkdownCMDProps, IMarkdownPlugin, IMarkdownMermaidConfig };
 export { Markdown, MarkdownCMD, Button, IconButton, CopyButton, DownloadButton, SuccessButton, CodeBlockActions, CodeBlockWrap, HighlightCode, Segmented };

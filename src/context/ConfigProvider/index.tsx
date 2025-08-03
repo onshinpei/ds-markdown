@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import defaultLocale, { ZhCN } from '../../i18n/zh';
-import Mermaid from './mermaid.type';
+import { IMarkdownMermaidConfig } from '../../defined';
 
 // 定义语言包的基础类型
 export type Locale = ZhCN;
@@ -8,14 +8,15 @@ export type Locale = ZhCN;
 // 定义 ConfigProvider 的 props 类型
 export interface ConfigProviderProps {
   locale?: Locale;
-  mermaidConfig?: Mermaid.MermaidConfig;
+  mermaidConfig?: IMarkdownMermaidConfig;
   children: React.ReactNode;
+  // katexConfig?: IMarkdownKatexConfig;
 }
 
 // 定义 Context 类型
 export interface ConfigContextType {
   locale: Locale;
-  mermaidConfig?: Mermaid.MermaidConfig;
+  mermaidConfig?: IMarkdownMermaidConfig;
 }
 
 const ConfigContext = createContext<ConfigContextType>({
