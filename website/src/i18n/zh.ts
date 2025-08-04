@@ -92,5 +92,15 @@ export default {
   tableInline: '行内公式',
   tableBlock: '块级公式',
   tableExample: '示例',
+  // TryIt 页面翻译
+  tryItTitle: 'Markdown 编辑器',
+  tryItSubtitle: '实时预览，所见即所得',
+  editorTitle: '编辑器',
+  editorSubtitle: '输入 Markdown 内容',
+  editorPlaceholder: '在这里输入 Markdown 内容...',
+  previewTitle: '预览',
+  previewSubtitle: '实时渲染效果',
+  clearButton: '清空',
+  resetButton: '重置',
   // ... 可继续补充
 };

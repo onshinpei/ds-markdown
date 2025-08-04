@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Markdown } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+import { useI18n } from '../hooks/useI18n';
 import './TryIt.css';
 
-const defaultMarkdown = `# 欢迎使用 Markdown 编辑器\n\n这是一个功能强大的 Markdown 编辑器，支持实时预览、代码高亮、数学公式和 Mermaid 图表。
+const defaultMarkdown = `# 欢迎使用 Markdown 编辑器
+
+这是一个功能强大的 Markdown 编辑器，支持实时预览、代码高亮、数学公式和 Mermaid 图表。
 ## 代码块示例
 \`\`\`javascript
 function hello() {
@@ -12,7 +15,7 @@ function hello() {
 }
 \`\`\`
 
-## 数学公式示例\
+## 数学公式示例
 积分高斯函数：
 $$
 \\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}
@@ -30,8 +33,43 @@ flowchart TD
 ---
 *开始编辑上面的内容，体验实时预览效果！*`;
 
+const defaultMarkdownEn = `# Welcome to Markdown Editor
+
+This is a powerful Markdown editor that supports real-time preview, code highlighting, mathematical formulas, and Mermaid charts.
+
+## Code Block Example
+\`\`\`javascript
+function hello() {
+  console.log("Hello, Markdown!");
+}
+\`\`\`
+
+## Math Formula Example
+Gaussian integral:
+$$
+\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}
+$$
+
+## Mermaid Chart Example
+\`\`\`mermaid
+flowchart TD
+  A[Start] --> B{Condition}
+  B -->|Yes| C[Action A]
+  B -->|No| D[Action B]
+  C --> E[End]
+  D --> E
+\`\`\`
+---
+*Start editing the content above to experience real-time preview!*`;
+
 const TryIt: React.FC = () => {
-  const [markdown, setMarkdown] = useState(defaultMarkdown);
+  const { t, lang } = useI18n();
+  const [markdown, setMarkdown] = useState(lang === 'zh' ? defaultMarkdown : defaultMarkdownEn);
+
+  // 监听语言变化，自动更新默认内容
+  useEffect(() => {
+    setMarkdown(lang === 'zh' ? defaultMarkdown : defaultMarkdownEn);
+  }, [lang]);
 
   const handleEditorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMarkdown(e.target.value);
@@ -42,22 +80,22 @@ const TryIt: React.FC = () => {
   };
 
   const handleReset = () => {
-    setMarkdown(defaultMarkdown);
+    setMarkdown(lang === 'zh' ? defaultMarkdown : defaultMarkdownEn);
   };
 
   return (
     <div className="try-it-page">
       <div className="page-header">
-        <h1>Markdown 编辑器</h1>
-        <p>实时预览，所见即所得</p>
+        <h1>{t('tryItTitle')}</h1>
+        <p>{t('tryItSubtitle')}</p>
       </div>
       <div className="try-it-container">
         <div className="editor-section">
           <div className="section-header">
-            <h3>编辑器</h3>
-            <span className="section-subtitle">输入 Markdown 内容</span>
+            <h3>{t('editorTitle')}</h3>
+            <span className="section-subtitle">{t('editorSubtitle')}</span>
           </div>
-          <textarea value={markdown} onChange={handleEditorChange} className="markdown-editor" placeholder="在这里输入 Markdown 内容..." />
+          <textarea value={markdown} onChange={handleEditorChange} className="markdown-editor" placeholder={t('editorPlaceholder')} />
           <div className="editor-actions">
             <button onClick={handleClear} className="action-btn clear-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -65,7 +103,7 @@ const TryIt: React.FC = () => {
                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
                 <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
               </svg>
-              清空
+              {t('clearButton')}
             </button>
             <button onClick={handleReset} className="action-btn reset-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -74,14 +112,14 @@ const TryIt: React.FC = () => {
                 <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
                 <path d="M3 21v-5h5"></path>
               </svg>
-              重置
+              {t('resetButton')}
             </button>
           </div>
         </div>
         <div className="preview-section">
           <div className="section-header">
-            <h3>预览</h3>
-            <span className="section-subtitle">实时渲染效果</span>
+            <h3>{t('previewTitle')}</h3>
+            <span className="section-subtitle">{t('previewSubtitle')}</span>
           </div>
           <div className="markdown-preview">
             <Markdown interval={0} plugins={[katexPlugin, mermaidPlugin]}>
