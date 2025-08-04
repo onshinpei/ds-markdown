@@ -1,64 +1,57 @@
 import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
+import { Link, useLocation } from 'react-router-dom';
+
+const navText = {
+  zh: {
+    getStarted: '快速开始',
+    examples: '示例',
+    docs: '文档',
+    try: '在线体验',
+  },
+  en: {
+    getStarted: 'Get Started',
+    examples: 'Examples',
+    docs: 'Docs',
+    try: 'Try It',
+  },
+};
 
 // Navigation 组件
 const Navigation: React.FC = () => {
-  const { t } = useI18n();
-  const scrollToSection = (sectionId: string): void => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string): void => {
-    e.preventDefault();
-    scrollToSection(sectionId);
-  };
+  const { t, lang, setLang } = useI18n();
+  const location = useLocation();
+  const text = navText[lang];
 
   return (
     <nav className="nav">
       <div className="container">
         <ul className="nav-list">
           <li>
-            <a href="#installation" onClick={(e) => handleNavClick(e, 'installation')}>
-              {t('navInstall')}
-            </a>
+            <Link to="/get-started" className={location.pathname === '/get-started' ? 'active' : ''}>
+              {text.getStarted}
+            </Link>
           </li>
           <li>
-            <a href="#basic-usage" onClick={(e) => handleNavClick(e, 'basic-usage')}>
-              {t('navBasicUsage')}
-            </a>
+            <Link to="/examples" className={location.pathname === '/examples' ? 'active' : ''}>
+              {text.examples}
+            </Link>
           </li>
           <li>
-            <a href="#math-support" onClick={(e) => handleNavClick(e, 'math-support')}>
-              {t('navMathSupport')}
-            </a>
+            <Link to="/docs" className={location.pathname === '/docs' ? 'active' : ''}>
+              {text.docs}
+            </Link>
           </li>
           <li>
-            <a href="#typing-animation" onClick={(e) => handleNavClick(e, 'typing-animation')}>
-              {t('navTypingAnimation')}
-            </a>
+            <Link to="/try" className={location.pathname === '/try' ? 'active' : ''}>
+              {text.try}
+            </Link>
           </li>
-          <li>
-            <a href="#themes" onClick={(e) => handleNavClick(e, 'themes')}>
-              {t('navThemes')}
-            </a>
-          </li>
-          <li>
-            <a href="#streaming" onClick={(e) => handleNavClick(e, 'streaming')}>
-              {t('navStreaming')}
-            </a>
-          </li>
-          <li>
-            <a href="#mermaid-demo" onClick={(e) => handleNavClick(e, 'mermaid-demo')}>
-              {t('navMermaid')}
-            </a>
-          </li>
-          <li>
-            <a href="#api" onClick={(e) => handleNavClick(e, 'api')}>
-              {t('navApi')}
-            </a>
+          <li className="lang-switcher-container">
+            <select className="lang-switcher" value={lang} onChange={(e) => setLang(e.target.value as 'zh' | 'en')} aria-label="Language Switcher">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
           </li>
         </ul>
       </div>

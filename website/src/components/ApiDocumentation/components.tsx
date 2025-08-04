@@ -4,142 +4,159 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import type { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './apiData';
+import { useI18n } from '../../hooks/useI18n';
 
 // API 属性表格组件
-export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ data, title }) => (
-  <div>
-    <h3>{title}</h3>
-    <table className="api-table">
-      <thead>
-        <tr>
-          <th>属性</th>
-          <th>类型</th>
-          <th>说明</th>
-          <th>默认值</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>
-              <code>{item.prop}</code>
-            </td>
-            <td>
-              {(() => {
-                const typeNames = ['IMarkdownCode', 'IMarkdownMath', 'IMarkdownPlugin', 'ITypedChar', 'IBeforeTypedChar', 'IEndData', 'IStartData', 'I18nData'];
-                const typeStr = item.type;
+export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ data, title }) => {
+  const { t } = useI18n();
 
-                // 检查是否包含已知类型名
-                const hasKnownType = typeNames.some((name) => typeStr.includes(name));
-
-                if (hasKnownType) {
-                  // 如果有已知类型，替换为锚点链接
-                  let result = typeStr;
-                  typeNames.forEach((name) => {
-                    const regex = new RegExp(`\\b${name}\\b`, 'g');
-                    result = result.replace(regex, `<a href="#${name}" class="anchor-link">${name}</a>`);
-                  });
-                  return <span dangerouslySetInnerHTML={{ __html: result }} />;
-                } else {
-                  return <code>{typeStr}</code>;
-                }
-              })()}
-            </td>
-            <td>{item.description}</td>
-            <td>
-              <code>{item.defaultValue}</code>
-            </td>
+  return (
+    <div>
+      <h3>{title}</h3>
+      <table className="api-table">
+        <thead>
+          <tr>
+            <th>{t('tableProp')}</th>
+            <th>{t('tableType')}</th>
+            <th>{t('tableDescription')}</th>
+            <th>{t('tableDefaultValue')}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <code>{item.prop}</code>
+              </td>
+              <td>
+                {(() => {
+                  const typeNames = ['IMarkdownCode', 'IMarkdownMath', 'IMarkdownPlugin', 'ITypedChar', 'IBeforeTypedChar', 'IEndData', 'IStartData', 'I18nData'];
+                  const typeStr = item.type;
+
+                  // 检查是否包含已知类型名
+                  const hasKnownType = typeNames.some((name) => typeStr.includes(name));
+
+                  if (hasKnownType) {
+                    // 如果有已知类型，替换为锚点链接
+                    let result = typeStr;
+                    typeNames.forEach((name) => {
+                      const regex = new RegExp(`\\b${name}\\b`, 'g');
+                      result = result.replace(regex, `<a href="#${name}" class="anchor-link">${name}</a>`);
+                    });
+                    return <span dangerouslySetInnerHTML={{ __html: result }} />;
+                  } else {
+                    return <code>{typeStr}</code>;
+                  }
+                })()}
+              </td>
+              <td>{item.description}</td>
+              <td>
+                <code>{item.defaultValue}</code>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 // Ref 方法表格组件
-export const RefMethodTable: React.FC<{ data: RefMethod[]; title: string }> = ({ data, title }) => (
-  <div>
-    <h3>{title}</h3>
-    <table className="api-table">
-      <thead>
-        <tr>
-          <th>方法</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>
-              <code>{item.method}</code>
-            </td>
-            <td>{item.description}</td>
+export const RefMethodTable: React.FC<{ data: RefMethod[]; title: string }> = ({ data, title }) => {
+  const { t } = useI18n();
+
+  return (
+    <div>
+      <h3>{title}</h3>
+      <table className="api-table">
+        <thead>
+          <tr>
+            <th>{t('tableMethod')}</th>
+            <th>{t('tableDescription')}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <code>{item.method}</code>
+              </td>
+              <td>{item.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 // 对比表格组件
-export const ComparisonTable: React.FC<{ data: ComparisonRow[]; title: string }> = ({ data, title }) => (
-  <div>
-    <h3>{title}</h3>
-    <table className="api-table">
-      <thead>
-        <tr>
-          <th>特性</th>
-          <th>requestAnimationFrame</th>
-          <th>setTimeout</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>
-              <strong>{item.feature}</strong>
-            </td>
-            <td>{item.requestAnimationFrame}</td>
-            <td>{item.setTimeout}</td>
+export const ComparisonTable: React.FC<{ data: ComparisonRow[]; title: string }> = ({ data, title }) => {
+  const { t } = useI18n();
+
+  return (
+    <div>
+      <h3>{title}</h3>
+      <table className="api-table">
+        <thead>
+          <tr>
+            <th>{t('tableFeature')}</th>
+            <th>requestAnimationFrame</th>
+            <th>setTimeout</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <strong>{item.feature}</strong>
+              </td>
+              <td>{item.requestAnimationFrame}</td>
+              <td>{item.setTimeout}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 // 公式类型表格组件
-export const FormulaTypeTable: React.FC<{ data: FormulaType[]; title: string }> = ({ data, title }) => (
-  <div>
-    <h3>{title}</h3>
-    <table className="api-table">
-      <thead>
-        <tr>
-          <th>类型</th>
-          <th>行内公式</th>
-          <th>块级公式</th>
-          <th>示例</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>
-              <code>{item.type}</code>
-            </td>
-            <td>
-              <code>{item.inline}</code>
-            </td>
-            <td>
-              <code>{item.block}</code>
-            </td>
-            <td>{item.example}</td>
+export const FormulaTypeTable: React.FC<{ data: FormulaType[]; title: string }> = ({ data, title }) => {
+  const { t } = useI18n();
+
+  return (
+    <div>
+      <h3>{title}</h3>
+      <table className="api-table">
+        <thead>
+          <tr>
+            <th>{t('tableType')}</th>
+            <th>{t('tableInline')}</th>
+            <th>{t('tableBlock')}</th>
+            <th>{t('tableExample')}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <code>{item.type}</code>
+              </td>
+              <td>
+                <code>{item.inline}</code>
+              </td>
+              <td>
+                <code>{item.block}</code>
+              </td>
+              <td>{item.example}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 // 代码示例组件
 export const CodeExample: React.FC<{

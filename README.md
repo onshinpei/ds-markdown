@@ -47,33 +47,27 @@
 
 ---
 
-## 📋 目录
+## 目录
 
-- [ds-markdown](#ds-markdown)
-  - [❓ 为什么要用 ds-markdown？](#-为什么要用-ds-markdown)
-    - [🎯 **解决的核心问题**](#-解决的核心问题)
-    - [🚀 **带来的价值**](#-带来的价值)
-  - [📋 目录](#-目录)
-  - [✨ 核心特性](#-核心特性)
-    - [🤖 **AI 对话场景**](#-ai-对话场景)
-    - [📊 **内容展示场景**](#-内容展示场景)
-    - [🎨 **UI组件系统** 🆕](#-ui组件系统-)
-    - [🔧 **开发体验**](#-开发体验)
-    - [🎬 **流畅动画**](#-流畅动画)
-    - [⚡ **性能优化**](#-性能优化)
-  - [📦 快速安装](#-快速安装)
-    - [通过 ESM CDN 使用](#通过-esm-cdn-使用)
-  - [🚀 5分钟上手](#-5分钟上手)
-    - [基础用法](#基础用法)
-    - [禁用打字动画](#禁用打字动画)
-    - [数学公式支持](#数学公式支持)
-    - [AI 对话场景](#ai-对话场景)
-    - [代码块功能 🆕](#代码块功能-)
-    - [Mermaid图表支持](#mermaid图表支持)
-  - [📚 完整 API 文档](#-完整-api-文档)
-    - [默认导出 DsMarkdown 和 MarkdownCMD 的 props](#默认导出-dsmarkdown-和-markdowncmd-的-props)
-
----
+- [核心特性](#-核心特性)
+- [快速安装](#-快速安装)
+  - [通过 ESM CDN 使用](#通过-esm-cdn-使用)
+- [5分钟上手](#-5分钟上手)
+  - [基础用法](#基础用法)
+  - [禁用打字动画](#禁用打字动画)
+  - [数学公式支持](#数学公式支持)
+  - [AI 对话场景](#ai-对话场景)
+  - [代码块功能 🆕](#代码块功能-)
+  - [Mermaid图表支持](#mermaid图表支持)
+- [完整 API 文档](#-完整-api-文档)
+- [插件系统](#-插件系统)
+  - [内置插件](#内置插件)
+    - [KaTeX 数学公式插件](#katex-数学公式插件)
+    - [Mermaid 图表插件 🆕](#mermaid-图表插件-)
+  - [自定义插件](#自定义插件)
+- [多语言配置](#多语言配置)
+- [实战示例](#-实战示例)
+- [最佳实践](#-最佳实践)
 
 ## ✨ 核心特性
 
@@ -359,3 +353,370 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
 
 > 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`
+
+### IBeforeTypedChar
+
+| 属性           | 类型         | 说明                         | 默认值 |
+| -------------- | ------------ | ---------------------------- | ------ |
+| `currentIndex` | `number`     | 当前字符在整个字符串中的索引 | `0`    |
+| `currentChar`  | `string`     | 当前即将打字的字符           | -      |
+| `answerType`   | `AnswerType` | 内容类型 (thinking/answer)   | -      |
+| `prevStr`      | `string`     | 当前类型内容的前缀字符串     | -      |
+| `percent`      | `number`     | 打字进度百分比 (0-100)       | `0`    |
+
+### ITypedChar
+
+| 属性           | 类型         | 说明                         | 默认值 |
+| -------------- | ------------ | ---------------------------- | ------ |
+| `currentIndex` | `number`     | 当前字符在整个字符串中的索引 | `0`    |
+| `currentChar`  | `string`     | 当前已打字的字符             | -      |
+| `answerType`   | `AnswerType` | 内容类型 (thinking/answer)   | -      |
+| `prevStr`      | `string`     | 当前类型内容的前缀字符串     | -      |
+| `currentStr`   | `string`     | 当前类型内容的完整字符串     | -      |
+| `percent`      | `number`     | 打字进度百分比 (0-100)       | `0`    |
+
+#### IMarkdownMath
+
+| 属性          | 类型                      | 说明               | 默认值     |
+| ------------- | ------------------------- | ------------------ | ---------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | 数学公式分隔符类型 | `'dollar'` |
+
+**分隔符说明：**
+
+- `'dollar'`：使用 `$...$` 和 `$$...$$` 语法
+- `'bracket'`：使用 `\(...\)` 和 `\[...\]` 语法
+
+#### IMarkdownCode 🆕
+
+| 属性            | 类型      | 说明                 | 默认值 |
+| --------------- | --------- | -------------------- | ------ |
+| `headerActions` | `boolean` | 是否显示头部操作按钮 | `true` |
+
+#### IMarkdownPlugin
+
+| 属性           | 类型                                           | 说明              | 默认值 |
+| -------------- | ---------------------------------------------- | ----------------- | ------ |
+| `remarkPlugin` | `Pluggable`                                    | remark 插件       | -      |
+| `rehypePlugin` | `Pluggable`                                    | rehype 插件       | -      |
+| `type`         | `'buildIn'` \| `'custom'`                      | 插件类型          | -      |
+| `id`           | `any`                                          | 插件唯一标识      | -      |
+| `components`   | `Record<string, React.ComponentType<unknown>>` | 自定义组件映射 🆕 | -      |
+
+### 组件暴露的方法
+
+#### 默认导出 DsMarkdown
+
+| 方法      | 参数 | 说明                                   |
+| --------- | ---- | -------------------------------------- |
+| `start`   | -    | 开始打字动画                           |
+| `stop`    | -    | 暂停打字动画                           |
+| `resume`  | -    | 恢复打字动画                           |
+| `restart` | -    | 重新开始打字动画，从头开始播放当前内容 |
+
+#### MarkdownCMD 暴露的方法
+
+| 方法              | 参数                                        | 说明                                   |
+| ----------------- | ------------------------------------------- | -------------------------------------- |
+| `push`            | `(content: string, answerType: AnswerType)` | 添加内容并开始打字                     |
+| `clear`           | -                                           | 清空所有内容和状态                     |
+| `triggerWholeEnd` | -                                           | 手动触发完成回调                       |
+| `start`           | -                                           | 开始打字动画                           |
+| `stop`            | -                                           | 暂停打字动画                           |
+| `resume`          | -                                           | 恢复打字动画                           |
+| `restart`         | -                                           | 重新开始打字动画，从头开始播放当前内容 |
+
+**用法示例：**
+
+```tsx
+markdownRef.current?.start(); // 开始动画
+markdownRef.current?.stop(); // 暂停动画
+markdownRef.current?.resume(); // 恢复动画
+markdownRef.current?.restart(); // 重新开始动画
+```
+
+---
+
+## 🔌 插件系统
+
+### 内置插件
+
+#### KaTeX 数学公式插件
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
+
+```tsx
+import { katexPlugin } from 'ds-markdown/plugins';
+
+// 启用数学公式支持
+<DsMarkdown plugins={[katexPlugin]}>数学公式：$E = mc^2$</DsMarkdown>;
+```
+
+#### Mermaid 图表插件 🆕
+
+**安装 Mermaid 插件：**
+
+```bash
+npm install ds-markdown-mermaid-plugin
+```
+
+**基础用法：**
+
+```tsx
+import { ConfigProvider, Markdown } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+
+function App() {
+  const content = `
+# 流程图示例
+
+\`\`\`mermaid
+flowchart TD
+    A[开始] --> B{判断条件}
+    B -->|是| C[处理A]
+    B -->|否| D[处理B]
+    C --> E[结束]
+    D --> E
+\`\`\`
+`;
+
+  return (
+    <ConfigProvider>
+      <Markdown plugins={[mermaidPlugin]}>{content}</Markdown>
+    </ConfigProvider>
+  );
+}
+```
+
+**支持的图表类型：**
+
+- 🔄 **流程图** (Flowchart) - 展示流程和决策路径
+- 📋 **序列图** (Sequence Diagram) - 展示对象间的交互时序
+- 📅 **甘特图** (Gantt Chart) - 项目计划和时间线
+- 🏗️ **类图** (Class Diagram) - 面向对象设计
+- 🥧 **饼图** (Pie Chart) - 数据比例展示
+- 🔀 **状态图** (State Diagram) - 状态转换流程
+- 📊 **Git图** (Git Graph) - 代码分支历史
+- 🗺️ **用户旅程图** (User Journey) - 用户体验流程
+
+**配置 Mermaid：**
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+
+const mermaidConfig = {
+  theme: 'default', // 主题：default, neutral, dark, forest
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true,
+  },
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+  },
+};
+
+return (
+  <ConfigProvider mermaidConfig={mermaidConfig}>
+    <Markdown plugins={[mermaidPlugin]}>{chartContent}</Markdown>
+  </ConfigProvider>
+);
+```
+
+**相关链接：**
+
+- [ds-markdown-mermaid-plugin GitHub](https://github.com/onshinpei/ds-markdown-mermaid-plugin)
+- [Mermaid 官方文档](https://mermaid.js.org/)
+
+### 自定义插件
+
+```tsx
+import { createBuildInPlugin } from 'ds-markdown/plugins';
+
+// 创建自定义插件
+const customPlugin = createBuildInPlugin({
+  remarkPlugin: yourRemarkPlugin,
+  rehypePlugin: yourRehypePlugin,
+  id: Symbol('custom-plugin'),
+  components: {
+    // 自定义组件映射 🆕
+    CustomComponent: MyCustomComponent,
+  },
+});
+
+// 使用自定义插件
+<DsMarkdown plugins={[katexPlugin, customPlugin]}>内容</DsMarkdown>;
+```
+
+---
+
+## 🎨 UI组件系统 🆕
+
+ds-markdown 提供了丰富的UI组件，可以单独使用或与markdown组件配合。
+
+### 核心组件
+
+```tsx
+import {
+  Button,
+  IconButton,
+  ToolTip,
+  Segmented,
+  CopyButton,
+  DownloadButton
+} from 'ds-markdown';
+
+// 按钮组件
+<Button icon={<span>📄</span>} onClick={() => {}}>
+  点击按钮
+</Button>
+
+// 工具提示
+<ToolTip title="提示信息">
+  <IconButton icon={<span>📋</span>} onClick={() => {}} />
+</ToolTip>
+
+// 分段控制器
+<Segmented
+  Segmented={[
+    { label: '图表', value: 'diagram' },
+    { label: '代码', value: 'code' }
+  ]}
+  value={value}
+  onChange={setValue}
+/>
+
+// 代码块操作
+<CopyButton codeContent="console.log('Hello')" />
+<DownloadButton codeContent="console.log('Hello')" language="javascript" />
+```
+
+### 样式定制
+
+```css
+:root {
+  --ds-button-bg-color: #f5f5f5;
+  --ds-button-hover-color: #e0e0e0;
+  --ds-tooltip-bg-color: rgba(0, 0, 0, 0.8);
+}
+```
+
+---
+
+## 多语言配置
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+import enUS from 'ds-markdown/i18n/en';
+
+// 中文
+<ConfigProvider locale={zhCN}>
+  <DsMarkdown {...props} />
+</ConfigProvider>
+
+// 英文
+<ConfigProvider locale={enUS}>
+  <DsMarkdown {...props} />
+</ConfigProvider>
+```
+
+---
+
+## 💡 实战示例
+
+### 📝 AI 流式对话
+
+[DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
+
+```tsx
+import { useRef } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StreamingChat() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  // 模拟 AI 流式响应
+  const simulateAIResponse = async () => {
+    markdownRef.current?.clear();
+
+    // 思考阶段
+    markdownRef.current?.push('🤔 正在分析您的问题...', 'thinking');
+    await delay(1000);
+    markdownRef.current?.push('\n\n✅ 分析完成，开始回答', 'thinking');
+
+    // 流式回答
+    const chunks = [
+      '# React 19 新特性解析\n\n',
+      '## 🚀 React Compiler\n',
+      'React 19 最大的亮点是引入了 **React Compiler**：\n\n',
+      '- 🎯 **自动优化**：无需手动 memo 和 useMemo\n',
+      '- ⚡ **性能提升**：编译时优化，运行时零开销\n',
+      '- 🔧 **向后兼容**：现有代码无需修改\n\n',
+      '希望这个解答对您有帮助！🎉',
+    ];
+
+    for (const chunk of chunks) {
+      await delay(100);
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  return (
+    <div className="chat-container">
+      <button onClick={simulateAIResponse}>🤖 询问 React 19 新特性</button>
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
+    </div>
+  );
+}
+```
+
+## 🔧 最佳实践
+
+### 1. 性能优化
+
+```tsx
+// ✅ 推荐配置
+<DsMarkdown
+  timerType="requestAnimationFrame"
+  interval={15} // 15-30ms 为最佳体验
+/>
+```
+
+### 2. 流式数据处理
+
+```tsx
+// ✅ 推荐：命令式 API
+const ref = useRef<MarkdownCMDRef>(null);
+useEffect(() => {
+  ref.current?.push(newChunk, 'answer');
+}, [newChunk]);
+```
+
+### 3. 数学公式优化
+
+```tsx
+// ✅ 推荐：按需加载
+import { katexPlugin } from 'ds-markdown/plugins';
+import 'ds-markdown/katex.css'; // 仅在需要时引入
+
+<DsMarkdown plugins={[katexPlugin]}>数学公式内容</DsMarkdown>;
+```
+
+### 4. Mermaid图表最佳实践 🆕
+
+```tsx
+// ✅ 推荐：独立安装插件
+npm install ds-markdown-mermaid-plugin
+
+// ✅ 推荐：配置适合的主题
+const mermaidConfig = {
+  theme: 'default', // 根据应用主题选择
+  flowchart: { useMaxWidth: true },
+};
+
+<ConfigProvider mermaidConfig={mermaidConfig}>
+  <DsMarkdown plugins={[mermaidPlugin]} />
+</ConfigProvider>
+```

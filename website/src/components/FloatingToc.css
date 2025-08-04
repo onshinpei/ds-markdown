@@ -1,31 +1,7 @@
 .floating-toc {
-  position: static;
-  top: auto;
-  left: auto;
-  z-index: auto;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
   padding: 0 20px;
-  min-width: auto;
-  max-width: none;
   font-size: 15px;
-  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
   transition: all 0.3s ease;
-  max-height: none;
-  overflow-y: visible;
-}
-
-/* 移除吸附效果相关样式，因为现在是固定布局 */
-.floating-toc.sticky {
-  top: auto;
-  box-shadow: none;
-  transform: none;
-}
-
-/* 移除初始状态的偏移 */
-.floating-toc {
-  transform: none;
 }
 
 .floating-toc ul {

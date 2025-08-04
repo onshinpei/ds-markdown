@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import { useI18n } from '../../../../src/hooks/useI18n';
+import './CustomThemeDemo.css';
 
 interface DemoProps {
   markdown: string;
@@ -11,11 +12,40 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   const { t } = useI18n();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const markdownRef = useRef<MarkdownRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const [mathOpen, setMathOpen] = useState(true);
   const [disableTyping, setDisableTyping] = useState(false);
+
+  // 视口检测
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isStarted) {
+          setIsInViewport(true);
+          // 延迟一点开始打字，给用户一个视觉缓冲
+          setTimeout(() => {
+            handleStart();
+          }, 500);
+        }
+      },
+      {
+        threshold: 0.3, // 当30%的内容可见时触发
+        rootMargin: '0px 0px -100px 0px', // 提前100px触发
+      },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isStarted]);
 
   // 事件处理函数
   const handleToggleTheme = () => {
@@ -69,37 +99,8 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownContent = markdown.replace('{{THEME}}', theme === 'light' ? '亮色' : '暗色');
 
   return (
-    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
-      <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <button
-          className="btn btn-primary btn-round"
-          onClick={handleToggleTheme}
-          style={{
-            background: theme === 'dark' ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            marginRight: '10px',
-          }}
-        >
-          {theme === 'light' ? t('switchToDark') : t('switchToLight')}
-        </button>
-        <span
-          style={{
-            padding: '8px 12px',
-            background: theme === 'dark' ? '#2d3748' : '#f7fafc',
-            color: theme === 'dark' ? '#e2e8f0' : '#2d3748',
-            borderRadius: '8px',
-            fontSize: '14px',
-            border: `1px solid ${theme === 'dark' ? '#4a5568' : '#e2e8f0'}`,
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          {theme === 'light' ? t('themeLight') : t('themeDark')}
-        </span>
-        <button className="btn btn-primary" onClick={handleToggleMath}>
-          {mathOpen ? t('disableMath') : t('enableMath')}
-        </button>
-        <button className="btn btn-outline" onClick={handleToggleTyping}>
-          {disableTyping ? t('enableTyping') : t('disableTyping')}
-        </button>
+    <div ref={containerRef} className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
+      <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}
         </button>
@@ -109,6 +110,30 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
         <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
           {t('resume')}
         </button>
+        <button className="btn btn-secondary" onClick={handleToggleTheme}>
+          {theme === 'light' ? t('themeDark') : t('themeLight')}
+        </button>
+        <button className="btn btn-outline" onClick={handleToggleTyping}>
+          {disableTyping ? t('enableTyping') : t('disableTyping')}
+        </button>
+      </div>
+      <div className="theme-preview">
+        <div className="theme-preview-light">
+          <h4>浅色主题预览</h4>
+          <div className="theme-sample light-theme">
+            <div className="theme-header">Header</div>
+            <div className="theme-content">Content</div>
+            <div className="theme-footer">Footer</div>
+          </div>
+        </div>
+        <div className="theme-preview-dark">
+          <h4>深色主题预览</h4>
+          <div className="theme-sample dark-theme">
+            <div className="theme-header">Header</div>
+            <div className="theme-content">Content</div>
+            <div className="theme-footer">Footer</div>
+          </div>
+        </div>
       </div>
       <div>
         <DsMarkdown

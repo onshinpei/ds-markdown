@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import { useI18n } from '../../../../src/hooks/useI18n';
@@ -64,6 +64,7 @@ const DEFAULT_CONFIG: TypingStats = {
 // 全面的打字动画演示组件
 const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownRef = useRef<MarkdownRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useI18n();
 
   // 组件配置状态
@@ -81,6 +82,34 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
+
+  // 视口检测
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isStarted) {
+          setIsInViewport(true);
+          // 延迟一点开始打字，给用户一个视觉缓冲
+          setTimeout(() => {
+            handleStartDemo();
+          }, 500);
+        }
+      },
+      {
+        threshold: 0.3, // 当30%的内容可见时触发
+        rootMargin: '0px 0px -100px 0px', // 提前100px触发
+      },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isStarted]);
 
   const resetStatus = () => {
     setIsTyping(false);
@@ -207,7 +236,7 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   return (
-    <div className={`demo-impl ${config.theme === 'dark' ? 'demoImplDark' : 'demoImplLight'}`}>
+    <div ref={containerRef} className={`demo-impl ${config.theme === 'dark' ? 'demoImplDark' : 'demoImplLight'}`}>
       {/* 配置面板 */}
       <div className="configPanel">
         <h4 className="sectionTitle">{t('configPanelTitle')}</h4>
