@@ -2,10 +2,26 @@ import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
 
+const navText = {
+  zh: {
+    getStarted: '快速开始',
+    examples: '示例',
+    docs: '文档',
+    try: '在线体验',
+  },
+  en: {
+    getStarted: 'Get Started',
+    examples: 'Examples',
+    docs: 'Docs',
+    try: 'Try It',
+  },
+};
+
 // Navigation 组件
 const Navigation: React.FC = () => {
   const { t, lang, setLang } = useI18n();
   const location = useLocation();
+  const text = navText[lang];
 
   return (
     <nav className="nav">
@@ -13,22 +29,22 @@ const Navigation: React.FC = () => {
         <ul className="nav-list">
           <li>
             <Link to="/get-started" className={location.pathname === '/get-started' ? 'active' : ''}>
-              Get Started
-            </Link>
-          </li>
-          <li>
-            <Link to="/try" className={location.pathname === '/try' ? 'active' : ''}>
-              我试试
+              {text.getStarted}
             </Link>
           </li>
           <li>
             <Link to="/examples" className={location.pathname === '/examples' ? 'active' : ''}>
-              Examples
+              {text.examples}
             </Link>
           </li>
           <li>
             <Link to="/docs" className={location.pathname === '/docs' ? 'active' : ''}>
-              Docs
+              {text.docs}
+            </Link>
+          </li>
+          <li>
+            <Link to="/try" className={location.pathname === '/try' ? 'active' : ''}>
+              {text.try}
             </Link>
           </li>
           <li className="lang-switcher-container">

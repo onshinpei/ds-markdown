@@ -1,48 +1,355 @@
+.try-it-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
 .try-it-container {
   display: flex;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 200px);
+  margin: 0 auto;
+  max-width: 1400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.editor-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+
+.section-header {
+  padding: 16px 24px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.section-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 400;
 }
 
 .markdown-editor {
-  width: 50%;
-  padding: 16px;
-  font-size: 16px;
+  flex: 1;
+  padding: 24px;
+  font-size: 14px;
   border: none;
   outline: none;
   resize: none;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  line-height: 1.5;
-  background: #fff;
-  color: #333;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+  line-height: 1.6;
+  background: transparent;
+  color: #1a202c;
+  transition: all 0.2s ease;
 }
 
 .markdown-editor:focus {
-  background: #fafbfc;
+  background: #fff;
+}
+
+.markdown-editor::placeholder {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.clear-btn {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.clear-btn:hover {
+  background: #feb2b2;
+}
+
+.reset-btn {
+  background: #c6f6d5;
+  color: #2f855a;
+}
+
+.reset-btn:hover {
+  background: #9ae6b4;
+}
+
+.preview-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
 }
 
 .markdown-preview {
-  width: 50%;
-  padding: 16px;
-  background: #fafbfc;
+  flex: 1;
+  padding: 24px;
+  background: #fff;
   overflow: auto;
-  border-left: 1px solid #e1e8ed;
+  line-height: 1.6;
+}
+
+/* 滚动条样式 */
+.markdown-editor::-webkit-scrollbar,
+.markdown-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.markdown-editor::-webkit-scrollbar-track,
+.markdown-preview::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.markdown-editor::-webkit-scrollbar-thumb,
+.markdown-preview::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.markdown-editor::-webkit-scrollbar-thumb:hover,
+.markdown-preview::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .try-it-page {
+    padding: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
   .try-it-container {
-    flex-direction: column;
-    height: auto;
+    height: calc(100vh - 160px);
   }
 
   .markdown-editor,
   .markdown-preview {
-    width: 100%;
-    height: 50vh;
+    padding: 20px;
   }
 
+  .editor-actions {
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .try-it-page {
+    padding: 12px;
+  }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+
+  .try-it-container {
+    flex-direction: column;
+    height: calc(100vh - 140px);
+  }
+
+  .editor-section,
+  .preview-section {
+    width: 100%;
+  }
+
+  .editor-section {
+    height: 45%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .preview-section {
+    height: 55%;
+  }
+
+  .markdown-editor,
   .markdown-preview {
-    border-left: none;
-    border-top: 1px solid #e1e8ed;
+    padding: 16px;
+  }
+
+  .editor-actions {
+    padding: 10px 16px;
+  }
+
+  .action-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .try-it-page {
+    padding: 8px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-header p {
+    font-size: 0.9rem;
+  }
+
+  .try-it-container {
+    height: calc(100vh - 120px);
+    border-radius: 8px;
+  }
+
+  .markdown-editor,
+  .markdown-preview {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .editor-actions {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .action-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .section-header {
+    padding: 12px 16px;
+  }
+
+  .section-header h3 {
+    font-size: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .try-it-page {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  }
+
+  .try-it-container {
+    background: #1a202c;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .editor-section {
+    background: #2d3748;
+    border-right-color: #4a5568;
+  }
+
+  .section-header {
+    background: #2d3748;
+    border-bottom-color: #4a5568;
+  }
+
+  .section-header h3 {
+    color: #e2e8f0;
+  }
+
+  .section-subtitle {
+    color: #a0aec0;
+  }
+
+  .markdown-editor {
+    color: #e2e8f0;
+    background: transparent;
+  }
+
+  .markdown-editor:focus {
+    background: #2d3748;
+  }
+
+  .markdown-editor::placeholder {
+    color: #718096;
+  }
+
+  .editor-actions {
+    background: #2d3748;
+    border-top-color: #4a5568;
+  }
+
+  /* .markdown-preview {
+    background: #1a202c;
+  } */
+
+  .clear-btn {
+    background: #742a2a;
+    color: #feb2b2;
+  }
+
+  .clear-btn:hover {
+    background: #9b2c2c;
+  }
+
+  .reset-btn {
+    background: #22543d;
+    color: #9ae6b4;
+  }
+
+  .reset-btn:hover {
+    background: #276749;
   }
 }

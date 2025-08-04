@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Markdown, { type MarkdownRef } from 'ds-markdown';
 import { ConfigProvider } from 'ds-markdown';
 import mermaidPlugin from 'ds-markdown-mermaid-plugin';
@@ -9,9 +9,11 @@ import 'ds-markdown/style.css';
 
 const MermaidDemo: React.FC = () => {
   const markdownRef = useRef<MarkdownRef>(null);
-  const [isTyping, setIsTyping] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
-  const [isStarted, setIsStarted] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const { t, lang } = useI18n();
@@ -19,6 +21,33 @@ const MermaidDemo: React.FC = () => {
   const mermaidConfig = {
     flowchart: { useMaxWidth: true, htmlLabels: true },
   };
+
+  // 视口检测
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isStarted) {
+          setIsInViewport(true);
+          // 延迟一点开始打字，给用户一个视觉缓冲
+          setTimeout(() => {
+            handleStart();
+          }, 500);
+        }
+      },
+      {
+        threshold: 0.3, // 当30%的内容可见时触发
+        rootMargin: '0px 0px -100px 0px', // 提前100px触发
+      },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isStarted]);
 
   const handleStart = () => {
     if (isStarted) {
@@ -62,7 +91,7 @@ const MermaidDemo: React.FC = () => {
   };
 
   return (
-    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
+    <div ref={containerRef} className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}

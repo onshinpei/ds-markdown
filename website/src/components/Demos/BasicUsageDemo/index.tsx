@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { useI18n } from '../../../../src/hooks/useI18n';
 
@@ -9,12 +9,41 @@ interface DemoProps {
 // 基础用法演示组件
 const BasicUsageDemo: React.FC<DemoProps> = ({ markdown }) => {
   const markdownRef = useRef<MarkdownRef>(null);
-  const [isTyping, setIsTyping] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
-  const [isStarted, setIsStarted] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const { t } = useI18n();
+
+  // 视口检测
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isStarted) {
+          setIsInViewport(true);
+          // 延迟一点开始打字，给用户一个视觉缓冲
+          setTimeout(() => {
+            handleStart();
+          }, 500);
+        }
+      },
+      {
+        threshold: 0.3, // 当30%的内容可见时触发
+        rootMargin: '0px 0px -100px 0px', // 提前100px触发
+      },
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isStarted]);
 
   // 事件处理函数
   const handleStart = () => {
@@ -61,7 +90,7 @@ const BasicUsageDemo: React.FC<DemoProps> = ({ markdown }) => {
   };
 
   return (
-    <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
+    <div ref={containerRef} className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
       <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}
@@ -79,7 +108,7 @@ const BasicUsageDemo: React.FC<DemoProps> = ({ markdown }) => {
           {disableTyping ? t('enableTyping') : t('disableTyping')}
         </button>
       </div>
-      <DsMarkdown ref={markdownRef} interval={25} answerType="answer" theme={theme} disableTyping={disableTyping} autoStartTyping={true} onStart={handleTypingStart} onEnd={handleTypingEnd}>
+      <DsMarkdown ref={markdownRef} interval={25} answerType="answer" theme={theme} disableTyping={disableTyping} autoStartTyping={false} onStart={handleTypingStart} onEnd={handleTypingEnd}>
         {markdown}
       </DsMarkdown>
     </div>

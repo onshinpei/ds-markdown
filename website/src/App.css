@@ -217,7 +217,7 @@ body {
   background: #f8f9fa;
   border-right: 1px solid #e1e8ed;
   position: sticky;
-  top: 0;
+  top: 50px;
   height: calc(100vh - 200px);
   overflow-y: auto;
   padding: 20px 0;
