@@ -57,6 +57,7 @@ const GetStarted: React.FC = () => {
             sourceCode={{ code: data.quickStart.content, markdownString: data.quickStart.content, lang: 'tsx' }}
             showHeader={false}
             onlyShowCode={true}
+            key={data.quickStart.content}
           />
 
           {/* 基础用法演示 */}

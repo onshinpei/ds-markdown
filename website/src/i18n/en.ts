@@ -91,5 +91,15 @@ export default {
   tableInline: 'Inline',
   tableBlock: 'Block',
   tableExample: 'Example',
+  // TryIt page translations
+  tryItTitle: 'Markdown Editor',
+  tryItSubtitle: 'Real-time preview, WYSIWYG',
+  editorTitle: 'Editor',
+  editorSubtitle: 'Input Markdown content',
+  editorPlaceholder: 'Enter Markdown content here...',
+  previewTitle: 'Preview',
+  previewSubtitle: 'Real-time rendering effect',
+  clearButton: 'Clear',
+  resetButton: 'Reset',
   // ... more as needed
 };
