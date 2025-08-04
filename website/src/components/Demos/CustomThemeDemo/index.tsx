@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import { useI18n } from '../../../../src/hooks/useI18n';
+import './CustomThemeDemo.css';
 
 interface DemoProps {
   markdown: string;
@@ -70,36 +71,7 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
 
   return (
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
-      <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-        <button
-          className="btn btn-primary btn-round"
-          onClick={handleToggleTheme}
-          style={{
-            background: theme === 'dark' ? 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            marginRight: '10px',
-          }}
-        >
-          {theme === 'light' ? t('switchToDark') : t('switchToLight')}
-        </button>
-        <span
-          style={{
-            padding: '8px 12px',
-            background: theme === 'dark' ? '#2d3748' : '#f7fafc',
-            color: theme === 'dark' ? '#e2e8f0' : '#2d3748',
-            borderRadius: '8px',
-            fontSize: '14px',
-            border: `1px solid ${theme === 'dark' ? '#4a5568' : '#e2e8f0'}`,
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          {theme === 'light' ? t('themeLight') : t('themeDark')}
-        </span>
-        <button className="btn btn-primary" onClick={handleToggleMath}>
-          {mathOpen ? t('disableMath') : t('enableMath')}
-        </button>
-        <button className="btn btn-outline" onClick={handleToggleTyping}>
-          {disableTyping ? t('enableTyping') : t('disableTyping')}
-        </button>
+      <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}
         </button>
@@ -109,6 +81,30 @@ const CustomThemeDemo: React.FC<DemoProps> = ({ markdown }) => {
         <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>
           {t('resume')}
         </button>
+        <button className="btn btn-secondary" onClick={handleToggleTheme}>
+          {theme === 'light' ? t('themeDark') : t('themeLight')}
+        </button>
+        <button className="btn btn-outline" onClick={handleToggleTyping}>
+          {disableTyping ? t('enableTyping') : t('disableTyping')}
+        </button>
+      </div>
+      <div className="theme-preview">
+        <div className="theme-preview-light">
+          <h4>浅色主题预览</h4>
+          <div className="theme-sample light-theme">
+            <div className="theme-header">Header</div>
+            <div className="theme-content">Content</div>
+            <div className="theme-footer">Footer</div>
+          </div>
+        </div>
+        <div className="theme-preview-dark">
+          <h4>深色主题预览</h4>
+          <div className="theme-sample dark-theme">
+            <div className="theme-header">Header</div>
+            <div className="theme-content">Content</div>
+            <div className="theme-footer">Footer</div>
+          </div>
+        </div>
       </div>
       <div>
         <DsMarkdown

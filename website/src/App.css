@@ -140,6 +140,7 @@ body {
   display: flex;
   list-style: none;
   gap: 0;
+  align-items: center;
 }
 
 .nav-list li {
@@ -160,6 +161,47 @@ body {
 .nav-list a:hover {
   background-color: #f8f9fa;
   border-bottom-color: #667eea;
+}
+
+.nav-list a.active {
+  background-color: #f8f9fa;
+  border-bottom-color: #667eea;
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* 语言切换器容器 */
+.lang-switcher-container {
+  flex: 0 0 auto;
+  padding: 0 20px;
+}
+
+.nav .lang-switcher {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e1e8ed;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.nav .lang-switcher:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.nav .lang-switcher:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.nav .lang-switcher option {
+  background: #fff;
+  color: #333;
 }
 
 /* Main */
@@ -970,4 +1012,18 @@ html {
 }
 .lang-switcher option {
   font-size: 15px;
+}
+
+/* Demo 控制按钮组样式 */
+.demo-controls {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* TOC 子项样式 */
+.toc-children {
+  margin-left: 12px;
+  margin-top: 4px;
 }

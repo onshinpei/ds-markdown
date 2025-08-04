@@ -62,7 +62,7 @@ const BasicUsageDemo: React.FC<DemoProps> = ({ markdown }) => {
 
   return (
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
-      <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+      <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}
         </button>

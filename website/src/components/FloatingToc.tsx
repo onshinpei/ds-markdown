@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useI18n } from '../hooks/useI18n';
+import { useLocation } from 'react-router-dom';
 import './FloatingToc.css';
 
-const demoToc = [
+const getStartedToc = [
+  { id: 'installation', i18n: 'navInstall' },
+  { id: 'quick-start', i18n: 'navQuickStart' },
+  { id: 'basic-usage', i18n: 'navBasicUsage' },
+  { id: 'features', i18n: 'navFeatures' },
+  { id: 'next-steps', i18n: 'navNextSteps' },
+  { id: 'community', i18n: 'navCommunity' },
+];
+
+const examplesToc = [
   { id: 'installation', i18n: 'navInstall' },
   { id: 'basic-usage', i18n: 'navBasicUsage' },
   { id: 'math-support', i18n: 'navMathSupport' },
@@ -41,7 +51,20 @@ const apiToc = [
 
 const FloatingToc: React.FC = () => {
   const { t, lang } = useI18n();
+  const location = useLocation();
   const [activeId, setActiveId] = useState('');
+
+  // 根据当前页面选择目录
+  const getCurrentToc = () => {
+    if (location.pathname === '/get-started') {
+      return getStartedToc;
+    } else if (location.pathname === '/examples') {
+      return examplesToc;
+    }
+    return [];
+  };
+
+  const currentToc = getCurrentToc();
 
   // 处理 API 区标题多语言
   const apiLabels = {
@@ -62,8 +85,8 @@ const FloatingToc: React.FC = () => {
       // 处理活跃状态
       let current = '';
 
-      // 处理 demo 部分
-      for (const item of demoToc) {
+      // 处理当前页面的目录
+      for (const item of currentToc) {
         const el = document.getElementById(item.id);
         if (el) {
           const rect = el.getBoundingClientRect();
@@ -73,24 +96,26 @@ const FloatingToc: React.FC = () => {
         }
       }
 
-      // 处理 API 部分
-      for (const item of apiToc) {
-        const el = document.getElementById(item.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top < 120) {
-            current = item.id;
+      // 处理 API 部分（仅在 examples 页面）
+      if (location.pathname === '/examples') {
+        for (const item of apiToc) {
+          const el = document.getElementById(item.id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < 120) {
+              current = item.id;
+            }
           }
-        }
 
-        // 处理子项
-        if (item.children) {
-          for (const child of item.children) {
-            const childEl = document.getElementById(child.id);
-            if (childEl) {
-              const rect = childEl.getBoundingClientRect();
-              if (rect.top < 120) {
-                current = child.id;
+          // 处理子项
+          if (item.children) {
+            for (const child of item.children) {
+              const childEl = document.getElementById(child.id);
+              if (childEl) {
+                const rect = childEl.getBoundingClientRect();
+                if (rect.top < 120) {
+                  current = child.id;
+                }
               }
             }
           }
@@ -102,7 +127,7 @@ const FloatingToc: React.FC = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lang]);
+  }, [lang, location.pathname, currentToc]);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -111,10 +136,15 @@ const FloatingToc: React.FC = () => {
     }
   };
 
+  // 如果不在支持的页面，不显示目录
+  if (!currentToc.length && location.pathname !== '/examples') {
+    return null;
+  }
+
   return (
     <nav className="floating-toc">
       <ul>
-        {demoToc.map((item) => (
+        {currentToc.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
@@ -128,41 +158,45 @@ const FloatingToc: React.FC = () => {
             </a>
           </li>
         ))}
-        <li className="toc-divider" />
-        {apiToc.map((item) => (
-          <React.Fragment key={item.id}>
-            <li>
-              <a
-                href={`#${item.id}`}
-                className={activeId === item.id ? 'active' : ''}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.id);
-                }}
-              >
-                {item.i18n ? t(item.i18n) : (item.label && apiLabels[item.label as keyof typeof apiLabels]) || item.label}
-              </a>
-              {item.children && (
-                <ul style={{ marginLeft: 12, marginTop: 4 }}>
-                  {item.children.map((child) => (
-                    <li key={child.id}>
-                      <a
-                        href={`#${child.id}`}
-                        className={activeId === child.id ? 'active' : ''}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          scrollToSection(child.id);
-                        }}
-                      >
-                        {child.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          </React.Fragment>
-        ))}
+        {location.pathname === '/examples' && (
+          <>
+            <li className="toc-divider" />
+            {apiToc.map((item) => (
+              <React.Fragment key={item.id}>
+                <li>
+                  <a
+                    href={`#${item.id}`}
+                    className={activeId === item.id ? 'active' : ''}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(item.id);
+                    }}
+                  >
+                    {item.i18n ? t(item.i18n) : (item.label && apiLabels[item.label as keyof typeof apiLabels]) || item.label}
+                  </a>
+                  {item.children && (
+                    <ul className="toc-children">
+                      {item.children.map((child) => (
+                        <li key={child.id}>
+                          <a
+                            href={`#${child.id}`}
+                            className={activeId === child.id ? 'active' : ''}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              scrollToSection(child.id);
+                            }}
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              </React.Fragment>
+            ))}
+          </>
+        )}
       </ul>
     </nav>
   );

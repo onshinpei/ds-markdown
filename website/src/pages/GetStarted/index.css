@@ -1,0 +1,172 @@
+#get-started-page {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 欢迎区域 */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 0;
+}
+
+.welcome-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #666;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+/* 下一步区域 */
+.next-steps {
+  margin: 80px 0;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.step-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #e1e8ed;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.step-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.step-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.step-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.step-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.step-link:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: translateX(5px);
+}
+
+/* 社区支持区域 */
+.community-section {
+  margin: 80px 0;
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.community-item {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+  transition: all 0.3s ease;
+}
+
+.community-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.community-item h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.community-item p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.community-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.community-link:hover {
+  background: rgba(102, 126, 234, 0.2);
+  text-decoration: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .welcome-section {
+    padding: 20px 0;
+    margin-bottom: 40px;
+  }
+
+  .welcome-description {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+
+  .steps-grid,
+  .community-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  .step-card,
+  .community-item {
+    padding: 20px;
+  }
+
+  .step-icon {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+
+  .next-steps,
+  .community-section {
+    margin: 60px 0;
+  }
+}

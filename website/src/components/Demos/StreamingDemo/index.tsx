@@ -92,8 +92,8 @@ const StreamingDemo: React.FC<DemoProps> = ({ markdown }) => {
 
   return (
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
-      <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-        <div className="select-wrapper" style={{ marginRight: 16 }}>
+      <div className="demo-controls">
+        <div className="select-wrapper">
           <label className="select-label">{t('selectScene')}</label>
           <select className="select-control" value={streamingType} onChange={(e) => handleStreamingTypeChange(e.target.value as StreamingType)} disabled={isStreaming}>
             <option value="ai-chat">{t('aiChat')}</option>
@@ -102,9 +102,9 @@ const StreamingDemo: React.FC<DemoProps> = ({ markdown }) => {
           </select>
         </div>
         <button className="btn btn-success" onClick={handleStartStreaming} disabled={isStreaming}>
-          {t('startDemo')}
+          {t('startStreaming')}
         </button>
-        <button className="btn btn-danger" onClick={handleStop} disabled={!isStreaming}>
+        <button className="btn btn-danger" onClick={handleStop} disabled={!isStreaming || isStopped}>
           {t('stop')}
         </button>
         <button className="btn btn-warning" onClick={handleResume} disabled={!isStopped}>

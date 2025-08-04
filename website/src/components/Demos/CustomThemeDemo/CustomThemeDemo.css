@@ -1,0 +1,82 @@
+.theme-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.theme-preview-light,
+.theme-preview-dark {
+  text-align: center;
+}
+
+.theme-preview h4 {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.theme-sample {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.light-theme {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.dark-theme {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+}
+
+.theme-header {
+  padding: 8px 12px;
+  background: #667eea;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dark-theme .theme-header {
+  background: #4a5568;
+}
+
+.theme-content {
+  padding: 12px;
+  flex: 1;
+  background: #f7fafc;
+  color: #2d3748;
+  font-size: 12px;
+}
+
+.dark-theme .theme-content {
+  background: #1a202c;
+  color: #e2e8f0;
+}
+
+.theme-footer {
+  padding: 8px 12px;
+  background: #e2e8f0;
+  color: #4a5568;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dark-theme .theme-footer {
+  background: #4a5568;
+  color: #e2e8f0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .theme-preview {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

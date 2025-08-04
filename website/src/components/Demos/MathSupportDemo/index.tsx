@@ -68,7 +68,7 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
 
   return (
     <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
-      <div style={{ marginBottom: 16, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+      <div className="demo-controls">
         <button className="btn btn-success" onClick={handleStart} disabled={isStopped}>
           {isStarted ? t('restart') : t('start')}
         </button>
@@ -80,9 +80,6 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
         </button>
         <button className="btn btn-secondary" onClick={handleToggleTheme}>
           {theme === 'light' ? t('themeDark') : t('themeLight')}
-        </button>
-        <button className="btn btn-primary" onClick={handleToggleMath}>
-          {mathOpen ? t('disableMath') : t('enableMath')}
         </button>
         <button className="btn btn-outline" onClick={handleToggleTyping}>
           {disableTyping ? t('enableTyping') : t('disableTyping')}
