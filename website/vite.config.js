@@ -36,9 +36,10 @@ export default defineConfig(({ command, mode }) => {
       rollupOptions: {
         output: {
           // 生产环境使用哈希，开发环境不使用
-          entryFileNames: mode === 'production' ? '[name]-[hash].js' : '[name].js',
-          chunkFileNames: mode === 'production' ? '[name]-[hash].js' : '[name].js',
-          assetFileNames: mode === 'production' ? '[name]-[hash].[ext]' : '[name].[ext]',
+          // 使用 'chunk' 前缀避免下划线开头的文件名
+          entryFileNames: mode === 'production' ? 'chunk-[name]-[hash].js' : 'chunk-[name].js',
+          chunkFileNames: mode === 'production' ? 'chunk-[name]-[hash].js' : 'chunk-[name].js',
+          assetFileNames: mode === 'production' ? 'asset-[name]-[hash].[ext]' : 'asset-[name].[ext]',
         },
       },
     },

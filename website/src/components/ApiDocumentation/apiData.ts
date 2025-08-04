@@ -665,6 +665,12 @@ export const localeTypeData: ApiProperty[] = [
     defaultValue: '-',
   },
   {
+    prop: 'mermaid',
+    type: 'I18nData',
+    description: '代码块相关文案分组',
+    defaultValue: '-',
+  },
+  {
     prop: '[key: string]',
     type: 'any',
     description: '支持自定义分组和字段',

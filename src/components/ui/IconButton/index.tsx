@@ -1,15 +1,14 @@
 import React from 'react';
 import Button from '../Button';
+import type { ButtonProps } from '../Button';
 
-interface IconButtonProps {
+interface IconButtonProps extends ButtonProps {
   icon: React.ReactNode;
-  style?: React.CSSProperties;
   className?: string;
-  onClick?: () => void;
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ icon, style, className = '', onClick, ...restProps }) => {
-  return <Button icon={icon} className={`ds-icon-button ${className}`} style={style} onClick={onClick} {...restProps} />;
+const IconButton: React.FC<IconButtonProps> = ({ icon, className = '', ...restProps }) => {
+  return <Button icon={icon} className={`ds-icon-button ${className}`} {...restProps} />;
 };
 
 export default IconButton;
