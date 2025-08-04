@@ -1,4 +1,5 @@
 // API 数据定义
+import React from 'react';
 import zh from 'ds-markdown/i18n/zh';
 import { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './type';
 import { getObjectKeys } from './util';
@@ -650,9 +651,37 @@ export const configProviderPropsData: ApiProperty[] = [
     defaultValue: 'zhCN',
   },
   {
+    prop: 'mermaidConfig',
+    type: 'IMarkdownMermaidConfig',
+    description: 'Mermaid 配置',
+    defaultValue: '-',
+  },
+  {
     prop: 'children',
     type: 'React.ReactNode',
     description: '需要被多语言包裹的子组件',
+    defaultValue: '-',
+  },
+];
+
+export const mermaidConfigData: ApiProperty[] = [
+  {
+    prop: 'headerActions',
+    type: 'boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode)',
+    description: '是否显示头部操作按钮',
+    defaultValue: 'true',
+  },
+  {
+    prop: '...rest',
+    type: 'Mermaid.MermaidConfig',
+    description: (
+      <>
+        其他配置项, 请参考{' '}
+        <a href="https://mermaid.js.org/config/setup/mermaid/interfaces/MermaidConfig.html" target="_blank">
+          Mermaid 配置
+        </a>
+      </>
+    ),
     defaultValue: '-',
   },
 ];
@@ -678,9 +707,9 @@ export const localeTypeData: ApiProperty[] = [
   },
 ];
 
-export const i18nData: ApiProperty[] = getObjectKeys(zh).map((key) => ({
-  prop: key,
+export const i18nData: ApiProperty[] = getObjectKeys(zh).map((item) => ({
+  prop: item.key,
   type: 'string',
-  description: key,
+  description: item.value,
   defaultValue: '-',
 }));

@@ -1,7 +1,7 @@
 export interface ApiProperty {
   prop: string;
   type: string;
-  description: string;
+  description: React.ReactNode;
   defaultValue: string;
 }
 

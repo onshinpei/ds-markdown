@@ -82,5 +82,15 @@ export default {
   onTypedChar: '已打字符',
   index: '索引',
   type: '类型',
+  // 表格表头翻译
+  tableProp: '属性',
+  tableType: '类型',
+  tableDescription: '说明',
+  tableDefaultValue: '默认值',
+  tableMethod: '方法',
+  tableFeature: '特性',
+  tableInline: '行内公式',
+  tableBlock: '块级公式',
+  tableExample: '示例',
   // ... 可继续补充
 };

@@ -1,6 +1,6 @@
 import { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './type';
 // API 数据定义
-import zh from 'ds-markdown/i18n/en';
+import en from 'ds-markdown/i18n/en';
 import { getObjectKeys } from './util';
 // Props Data
 export const propsData: ApiProperty[] = [
@@ -354,9 +354,9 @@ export const localeTypeData: ApiProperty[] = [
   },
 ];
 
-export const i18nData: ApiProperty[] = getObjectKeys(zh).map((key) => ({
-  prop: key,
+export const i18nData: ApiProperty[] = getObjectKeys(en).map((item) => ({
+  prop: item.key,
   type: 'string',
-  description: key,
+  description: item.value,
   defaultValue: '-',
 }));

@@ -40,7 +40,7 @@ export default {
   mathSupportTitle: '🧮 Math Support',
   typingAnimationTitle: '⌨️ Typing Animation',
   themesTitle: '🎨 Theme Switch',
-  streamingTitle: '�� Streaming Demo',
+  streamingTitle: '📺 Streaming Demo',
   navInstall: 'Installation',
   navBasicUsage: 'Basic Usage',
   navMathSupport: 'Math',
@@ -81,5 +81,15 @@ export default {
   index: 'Index',
   type: 'Type',
   mermaidDemoTitle: '🧩 Mermaid Chart Demo',
+  // 表格表头翻译
+  tableProp: 'Property',
+  tableType: 'Type',
+  tableDescription: 'Description',
+  tableDefaultValue: 'Default Value',
+  tableMethod: 'Method',
+  tableFeature: 'Feature',
+  tableInline: 'Inline',
+  tableBlock: 'Block',
+  tableExample: 'Example',
   // ... more as needed
 };
