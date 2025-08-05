@@ -720,3 +720,5 @@ const mermaidConfig = {
   <DsMarkdown plugins={[mermaidPlugin]} />
 </ConfigProvider>
 ```
+
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown&label=Visitors&countColor=%23263759&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown)
