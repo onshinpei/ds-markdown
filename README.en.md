@@ -2,7 +2,7 @@
 
 > 🚀 High-performance React Markdown typing animation component, perfectly replicating DeepSeek chat interface effects
 
-**[🇨🇳 中文](./README.md) | 🇺🇸 English**
+**🇺🇸 English | [🇨🇳 中文](./README.md)**
 
 A React component designed specifically for modern AI applications, providing smooth real-time typing animations and complete Markdown rendering capabilities.
 
@@ -17,101 +17,126 @@ A React component designed specifically for modern AI applications, providing sm
   - [Basic Usage](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
   - [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
   - [Mermaid Charts](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
-  - [Math Formula Demo 1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
-  - [Math Formula Demo 2](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=src%2FApp.tsx)
+  - [Math Formulas Demo 1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
+  - [Math Formulas Demo 2](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=src%2FApp.tsx)
 
-If you want a pure `react markdown` typing component, you can use [react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)
+If you want a clean `react markdown` typing component, you can use [react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)
 
 ---
 
 ## ❓ Why use ds-markdown?
 
-- **Ultimate AI Chat Experience**  
-  1:1 recreation of DeepSeek and other mainstream AI chat interface typing animations and streaming responses, delivering an authentic "AI is thinking/answering" experience that greatly enhances user immersion.
+### 🎯 **Core Problems Solved**
 
-- **Perfect for Streaming Backend Data**  
-  Many AI/LLM backend interfaces (like OpenAI, DeepSeek, etc.) push data chunks containing multiple characters at once, which can cause stuttering and character jumping issues with ordinary typewriter implementations.  
-  **ds-markdown automatically splits each chunk into single characters and renders them one by one with smooth animations, ensuring fluent typing regardless of how many characters the backend pushes at once.**
+- **Streaming Data Typing Stuttering Issues**  
+  Traditional typewriter components experience stuttering and character jumping when processing AI backend streaming data, as each chunk contains multiple characters. ds-markdown intelligently splits each chunk to ensure smooth typing for every character.
 
-- **Complete Markdown & Math Formula, Diagram Support**
+- **Markdown Rendering and Typing Animation Disconnection**  
+  Most typewriter components only support plain text and cannot render Markdown syntax, mathematical formulas, charts, and other rich media content in real-time during typing.
 
-  - Built-in KaTeX, supporting all mainstream Markdown syntax and math formulas, suitable for technical Q&A, education, knowledge bases, and other content-rich applications.
-  - Support for `Diagram` rendering through the [mermaid-plugin](https://github.com/onshinpei/ds-markdown-mermaid-plugin)
+### 🚀 **Value Delivered**
 
-- **Excellent Developer Experience**  
-  Rich imperative API, supporting streaming data, async callbacks, and plugin extensions, allowing developers to flexibly control animations and content.
+- **Enhanced User Immersion**  
+  Provides professional-level AI chat experience, allowing users to feel authentic AI interaction processes, greatly improving product professionalism and user satisfaction.
 
-- **Lightweight & High Performance**  
-  Small size, excellent performance, compatible with mobile and desktop. Core dependency is [react-markdown](https://github.com/remarkjs/react-markdown) (industry mainstream, mature Markdown rendering library), with no other heavyweight dependencies - works out of the box.
+- **Out-of-the-box, Reduces Development Complexity**  
+  Complete solution that requires no additional configuration to support streaming data, Markdown rendering, mathematical formulas, charts, and other complex features.
 
-- **Multi-theme & Plugin Architecture**  
-  Support for light/dark theme switching, compatible with remark/rehype plugins, meeting personalized and advanced extension needs.
-
-- **Rich UI Component System** 🆕  
-  Built-in UI components: Button, IconButton, ToolTip, Segmented, etc., supporting code block copy, download, and other interactive features.
-
-- **Wide Range of Use Cases**
-  - AI chatbots/assistants
-  - Real-time Q&A/knowledge bases
-  - Education/math/programming content display
-  - Product demos, interactive documentation
-  - Any scenario requiring "typewriter" animation and streaming Markdown rendering
+- **Adapts to Multiple Application Scenarios**  
+  From AI chatbots to educational content display, from technical documentation to product demos, one component meets multiple needs.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [✨ Core Features](#-core-features)
-- [📦 Quick Installation](#-quick-installation)
-- [🚀 5-Minute Quick Start](#-5-minute-quick-start)
-  - [Basic Usage](#basic-usage)
-  - [Disable Typing Animation](#disable-typing-animation)
-  - [Mathematical Formula Support](#mathematical-formula-support)
-  - [AI Conversation Scenario](#ai-conversation-scenario)
-  - [Code Block Features](#code-block-features) 🆕
-  - [Mermaid Chart Support](#mermaid-chart-support) 🆕
-- [📚 Complete API Documentation](#-complete-api-documentation)
-- [🔌 Plugin System](#-plugin-system)
-- [🎨 UI Component System](#-ui-component-system) 🆕
-- [💡 Practical Examples](#-practical-examples)
-- [🔧 Best Practices](#-best-practices)
-
----
+- [ds-markdown](#ds-markdown)
+  - [❓ Why use ds-markdown?](#-why-use-ds-markdown)
+    - [🎯 **Core Problems Solved**](#-core-problems-solved)
+    - [🚀 **Value Delivered**](#-value-delivered)
+  - [Table of Contents](#table-of-contents)
+  - [✨ Core Features](#-core-features)
+    - [🤖 **AI Chat Scenarios**](#-ai-chat-scenarios)
+    - [📊 **Content Display Scenarios**](#-content-display-scenarios)
+    - [🎨 **UI Component System 🆕**](#-ui-component-system-)
+    - [🔧 **Development Experience**](#-development-experience)
+    - [🎬 **Smooth Animation**](#-smooth-animation)
+    - [⚡ **Performance Optimization**](#-performance-optimization)
+  - [📦 Quick Installation](#-quick-installation)
+    - [Using via ESM CDN](#using-via-esm-cdn)
+  - [🚀 5-Minute Quick Start](#-5-minute-quick-start)
+    - [Basic Usage](#basic-usage)
+    - [Disable Typing Animation](#disable-typing-animation)
+    - [Mathematical Formula Support](#mathematical-formula-support)
+    - [AI Chat Scenarios](#ai-chat-scenarios)
+    - [Code Block Features 🆕](#code-block-features-)
+    - [Mermaid Chart Support](#mermaid-chart-support)
+  - [📚 Complete API Documentation](#-complete-api-documentation)
+    - [Default export DsMarkdown and MarkdownCMD props](#default-export-dsmarkdown-and-markdowncmd-props)
+    - [IBeforeTypedChar](#ibeforetypedchar)
+    - [ITypedChar](#itypedchar)
+      - [IMarkdownMath](#imarkdownmath)
+      - [IMarkdownCode 🆕](#imarkdowncode-)
+      - [IMarkdownPlugin](#imarkdownplugin)
+    - [Component Exposed Methods](#component-exposed-methods)
+      - [Default export DsMarkdown](#default-export-dsmarkdown)
+      - [MarkdownCMD Exposed Methods](#markdowncmd-exposed-methods)
+  - [🔌 Plugin System](#-plugin-system)
+    - [Built-in Plugins](#built-in-plugins)
+      - [KaTeX Mathematical Formula Plugin](#katex-mathematical-formula-plugin)
+      - [Mermaid Chart Plugin 🆕](#mermaid-chart-plugin-)
+    - [Custom Plugins](#custom-plugins)
+  - [🎨 UI Component System 🆕](#-ui-component-system--1)
+    - [Core Components](#core-components)
+    - [Style Customization](#style-customization)
+  - [Multi-language Configuration](#multi-language-configuration)
+  - [💡 Practical Examples](#-practical-examples)
+    - [📝 AI Streaming Chat](#-ai-streaming-chat)
+  - [🔧 Best Practices](#-best-practices)
+    - [1. Performance Optimization](#1-performance-optimization)
+    - [2. Streaming Data Processing](#2-streaming-data-processing)
+    - [3. Mathematical Formula Optimization](#3-mathematical-formula-optimization)
+    - [4. Mermaid Chart Best Practices 🆕](#4-mermaid-chart-best-practices-)
 
 ## ✨ Core Features
 
-### 🤖 **AI Conversation Scenarios**
+### 🤖 **AI Chat Scenarios**
 
-- 1:1 recreation of [DeepSeek website](https://chat.deepseek.com/) chat response effects
-- Support for both thinking process (`thinking`) and answer content (`answer`) modes
-- Perfect adaptation to streaming data with zero-delay response to user input
+- Professional-level AI chat response effects, comparable to mainstream AI platform experiences
+- Supports thinking process (`thinking`) and answer content `answer`) dual modes
+- Perfect streaming data adaptation with zero-delay response to user input
 
 ### 📊 **Content Display Scenarios**
 
 - Complete Markdown syntax support, including code highlighting, tables, lists, etc.
 - Mathematical formula rendering (KaTeX), supporting `$...$` and `\[...\]` syntax
 - Mermaid chart support, including flowcharts, sequence diagrams, Gantt charts, class diagrams, etc. 🆕
-- Support for light/dark themes, adapting to different product styles
+- Supports light/dark themes, adapting to different product styles
 - Plugin architecture supporting remark/rehype plugin extensions
 
-### 🎨 **UI Component System** 🆕
+### 🎨 **UI Component System 🆕**
 
+- Code block and chart enhancement features: copy, download, language, etc.
 - Built-in rich UI components: Button, IconButton, ToolTip, Segmented, etc.
-- Code block enhancement features: copy, download, language identification
 - Complete interactive experience and accessibility support
 
-### 🔧 **Developer Experience**
+### 🔧 **Development Experience**
 
-- Support for typing interruption `stop` and resume `resume`
-- Support for enabling and disabling typing
+- Rich imperative API: `start`, `stop`, `resume`, `restart`, etc.
+- Supports typing interruption and continuation, flexible control of animation states
+- Supports typing on/off, meeting different scenario requirements
 - Complete TypeScript type support
 
 ### 🎬 **Smooth Animation**
 
-- Dual timer mode optimization, supporting `requestAnimationFrame` and `setTimeout` modes
-- High-frequency typing support (`requestAnimationFrame` mode supports typing intervals as low as `0ms`)
-- Frame-synchronized rendering, perfectly matching browser refresh rate
-- Smart character batch processing for more natural visual effects
+- Dual-mode timer optimization, supporting `requestAnimationFrame` and `setTimeout` modes
+- High-frequency typing support (typing interval can be as low as close to `0ms` in `requestAnimationFrame` mode)
+- Frame-synchronized rendering, perfectly coordinated with browser refresh
+- Intelligent character batch processing for more natural visual effects
+
+### ⚡ **Performance Optimization**
+
+- Lightweight design, small size and excellent performance
+- Core dependency [react-markdown](https://github.com/remarkjs/react-markdown), no heavyweight dependencies
 
 ---
 
@@ -130,7 +155,7 @@ pnpm add ds-markdown
 
 ### Using via ESM CDN
 
-No installation required, use directly in browser:
+No installation required, use directly in the browser:
 
 [DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
 
@@ -138,7 +163,7 @@ No installation required, use directly in browser:
 <!-- Import styles, required -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
 
-<!-- Import katex math formula styles, only if needed -->
+<!-- Import KaTeX math formula styles, only import if needed -->
 <link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
 
 <!-- Import component -->
@@ -177,11 +202,11 @@ function StaticDemo() {
 
   return (
     <div>
-      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? 'Enable' : 'Disable'} Typing Effect</button>
+      <button onClick={() => setDisableTyping(!disableTyping)}>{disableTyping ? 'Enable' : 'Disable'} Typewriter Effect</button>
 
       <DsMarkdown interval={20} answerType="answer" disableTyping={disableTyping}>
-        # Static Display Mode When `disableTyping` is `true`, content will be displayed immediately without typing animation. This is very useful in certain scenarios: - 📄 Static document display -
-        🔄 Toggle display modes - ⚡ Quick content preview
+        # Static Display Mode When `disableTyping` is `true`, content will be displayed immediately without typing animation effects. This is very useful in certain scenarios: - 📄 Static document
+        display - 🔄 Switching display modes - ⚡ Quick content preview
       </DsMarkdown>
     </div>
   );
@@ -192,23 +217,23 @@ function StaticDemo() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-// If you need to display formulas, import the formula conversion plugin
+// If you need to display formulas, you need to import the formula conversion plugin
 import { katexPlugin } from 'ds-markdown/plugins';
 import 'ds-markdown/style.css';
-// If you need to display formulas, import mathematical formula styles
+// If you need to display formulas, you need to import math formula styles
 import 'ds-markdown/katex.css';
 
 function MathDemo() {
   return (
     <DsMarkdown interval={20} answerType="answer" plugins={[katexPlugin]} math={{ splitSymbol: 'dollar' }}>
-      # Pythagorean Theorem In a right triangle, the square of the hypotenuse equals the sum of squares of the two legs: $a^2 + b^2 = c^2$ Where: - $a$ and $b$ are the legs - $c$ is the hypotenuse For
-      the classic "3-4-5" triangle: $c = \sqrt{3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
+      # Pythagorean Theorem In a right triangle, the square of the hypotenuse equals the sum of the squares of the two legs: $a^2 + b^2 = c^2$ Where: - $a$ and $b$ are the legs - $c$ is the hypotenuse
+      For the classic "3-4-5 triangle": $c = \sqrt{3 ^ (2 + 4) ^ 2} = \sqrt{25} = 5$
     </DsMarkdown>
   );
 }
 ```
 
-### AI Conversation Scenario
+### AI Chat Scenarios
 
 ```tsx
 function ChatDemo() {
@@ -269,7 +294,7 @@ function greet(name) {
 greet('ds-markdown');
 \`\`\`
 
-Supports code highlighting, copy, and download features!`;
+Supports code highlighting, copying, and downloading!`;
 
   return (
     <DsMarkdown
@@ -285,7 +310,9 @@ Supports code highlighting, copy, and download features!`;
 }
 ```
 
-### Mermaid Chart Support 🆕
+### Mermaid Chart Support
+
+[DEMO](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=README.md)
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -294,32 +321,28 @@ import mermaidPlugin from 'ds-markdown-mermaid-plugin';
 import 'ds-markdown/style.css';
 
 function MermaidDemo() {
-  const chartContent = `# Flowchart Example
+  const chartContent = `Here's a simplified learning to drive flowchart, keeping only the **most core steps**, suitable for quickly mastering key nodes:
 
 \`\`\`mermaid
-flowchart TD
-    A[Start] --> B{Decision}
-    B -->|Yes| C[Process A]
-    B -->|No| D[Process B]
-    C --> E[End]
-    D --> E
+graph TD
+    A[Start] --> B[Subject 1: Theory Exam]
+    B --> C[Subject 2: Field Five Items]
+    C --> D[Subject 3: Road Test]
+    D --> E[Subject 4: Safety Written Test]
+    E --> F[Get Driver's License]
+    F --> G[Actual Driving Practice]
 \`\`\`
 
-## Sequence Diagram Example
+### Minimalist Explanation:
+1. **Theory First**: Pass traffic rules written test (Subject 1).
+2. **Field Basics**: Practice reversing, hill starts, etc. (Subject 2).
+3. **Road Combat**: Actual road driving test (Subject 3).
+4. **Safety Finish**: Pass Subject 4 to get license.
+5. **Continuous Proficiency**: Continue practicing after getting license to adapt to real road conditions.
 
-\`\`\`mermaid
-sequenceDiagram
-    participant User
-    participant System
-    participant Database
-    
-    User->>System: Login Request
-    System->>Database: Verify User
-    Database-->>System: Return Result
-    System-->>User: Login Response
-\`\`\`
-
-Supports flowcharts, sequence diagrams, Gantt charts, class diagrams, and many other chart types!`;
+### Visualization Suggestions:
+- When sketching with phone memo or white paper, write steps in **arrow order**.
+- Want more intuitive? Use circular sticky notes for each subject, connect them into a flow.`;
 
   return (
     <ConfigProvider>
@@ -331,6 +354,8 @@ Supports flowcharts, sequence diagrams, Gantt charts, class diagrams, and many o
 }
 ```
 
+![Effect Preview](./assets/images/mermaid.gif)
+
 ---
 
 ## 📚 Complete API Documentation
@@ -341,71 +366,71 @@ Supports flowcharts, sequence diagrams, Gantt charts, class diagrams, and many o
 import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 ```
 
-| Property            | Type                                        | Description                                                                        | Default                                                                       |
-| ------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `interval`          | `number`                                    | Typing interval (milliseconds)                                                     | `30`                                                                          |
-| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type, cannot be modified dynamically                                         | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
-| `answerType`        | `'thinking'` \| `'answer'`                  | Content type (affects styling), cannot be modified dynamically                     | `'answer'`                                                                    |
-| `theme`             | `'light'` \| `'dark'`                       | Theme type                                                                         | `'light'`                                                                     |
-| `plugins`           | `IMarkdownPlugin[]`                         | Plugin configuration                                                               | `[]`                                                                          |
-| `math`              | [IMarkdownMath](#IMarkdownMath)             | Mathematical formula config                                                        | `{ splitSymbol: 'dollar' }`                                                   |
-| `onEnd`             | `(data: EndData) => void`                   | Typing completion callback                                                         | -                                                                             |
-| `onStart`           | `(data: StartData) => void`                 | Typing start callback                                                              | -                                                                             |
-| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | Character typing pre-callback, supports async operations, blocks subsequent typing | -                                                                             |
-| `onTypedChar`       | `(data: ITypedChar) => void`                | Character typing post-callback                                                     | -                                                                             |
-| `disableTyping`     | `boolean`                                   | Disable typing animation                                                           | `false`                                                                       |
-| `autoStartTyping`   | `boolean`                                   | Whether to auto-start typing animation, set to false for manual trigger            | `true`                                                                        |
-| `codeBlock`         | `IMarkdownCode`                             | Code block configuration                                                           | `{headerActions: true}`                                                       |
+| Property            | Type                                        | Description                                                                                                             | Default Value                                                                 |
+| ------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `interval`          | `number`                                    | Typing interval (milliseconds)                                                                                          | `30`                                                                          |
+| `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | Timer type, does not support dynamic modification                                                                       | Current default is `setTimeout`, will change to `requestAnimationFrame` later |
+| `answerType`        | `'thinking'` \| `'answer'`                  | Content type (affects style theme), does not support dynamic modification                                               | `'answer'`                                                                    |
+| `theme`             | `'light'` \| `'dark'`                       | Theme type                                                                                                              | `'light'`                                                                     |
+| `plugins`           | `IMarkdownPlugin[]`                         | Plugin configuration                                                                                                    | `[]`                                                                          |
+| `math`              | [IMarkdownMath](#IMarkdownMath)             | Mathematical formula configuration                                                                                      | `{ splitSymbol: 'dollar' }`                                                   |
+| `onEnd`             | `(data: EndData) => void`                   | Typing completion callback                                                                                              | -                                                                             |
+| `onStart`           | `(data: StartData) => void`                 | Typing start callback                                                                                                   | -                                                                             |
+| `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | Callback before character typing, supports async operations, blocks subsequent typing                                   | -                                                                             |
+| `onTypedChar`       | `(data: ITypedChar) => void`                | Callback after each character typing                                                                                    | -                                                                             |
+| `disableTyping`     | `boolean`                                   | Disable typing animation effects                                                                                        | `false`                                                                       |
+| `autoStartTyping`   | `boolean`                                   | Whether to automatically start typing animation, set to false for manual trigger, does not support dynamic modification | `true`                                                                        |
+| `codeBlock`         | `IMarkdownCode`                             | Code block configuration                                                                                                | `{headerActions: true}`                                                       |
 
-> Note: If `disableTyping` changes from `true` to `false` during typing, all remaining characters will be displayed at once on the next typing trigger.
+> Note: If `disableTyping` changes from `true` to `false` during typing
 
 ### IBeforeTypedChar
 
-| Property       | Type         | Description                                  | Default |
-| -------------- | ------------ | -------------------------------------------- | ------- |
-| `currentIndex` | `number`     | Current character index in the entire string | `0`     |
-| `currentChar`  | `string`     | Character about to be typed                  | -       |
-| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -       |
-| `prevStr`      | `string`     | Previous string of current type content      | -       |
-| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`     |
+| Property       | Type         | Description                                  | Default Value |
+| -------------- | ------------ | -------------------------------------------- | ------------- |
+| `currentIndex` | `number`     | Current character index in the entire string | `0`           |
+| `currentChar`  | `string`     | Current character about to be typed          | -             |
+| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -             |
+| `prevStr`      | `string`     | Prefix string of current type content        | -             |
+| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`           |
 
 ### ITypedChar
 
-| Property       | Type         | Description                                  | Default |
-| -------------- | ------------ | -------------------------------------------- | ------- |
-| `currentIndex` | `number`     | Current character index in the entire string | `0`     |
-| `currentChar`  | `string`     | Character that was just typed                | -       |
-| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -       |
-| `prevStr`      | `string`     | Previous string of current type content      | -       |
-| `currentStr`   | `string`     | Complete string of current type content      | -       |
-| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`     |
+| Property       | Type         | Description                                  | Default Value |
+| -------------- | ------------ | -------------------------------------------- | ------------- |
+| `currentIndex` | `number`     | Current character index in the entire string | `0`           |
+| `currentChar`  | `string`     | Current typed character                      | -             |
+| `answerType`   | `AnswerType` | Content type (thinking/answer)               | -             |
+| `prevStr`      | `string`     | Prefix string of current type content        | -             |
+| `currentStr`   | `string`     | Complete string of current type content      | -             |
+| `percent`      | `number`     | Typing progress percentage (0-100)           | `0`           |
 
 #### IMarkdownMath
 
-| Property      | Type                      | Description                    | Default    |
-| ------------- | ------------------------- | ------------------------------ | ---------- |
-| `splitSymbol` | `'dollar'` \| `'bracket'` | Mathematical formula delimiter | `'dollar'` |
+| Property      | Type                      | Description                 | Default Value |
+| ------------- | ------------------------- | --------------------------- | ------------- |
+| `splitSymbol` | `'dollar'` \| `'bracket'` | Math formula delimiter type | `'dollar'`    |
 
-**Delimiter explanation:**
+**Delimiter Description:**
 
 - `'dollar'`: Uses `$...$` and `$$...$$` syntax
 - `'bracket'`: Uses `\(...\)` and `\[...\]` syntax
 
 #### IMarkdownCode 🆕
 
-| Property        | Type      | Description                | Default |
-| --------------- | --------- | -------------------------- | ------- |
-| `headerActions` | `boolean` | Show header action buttons | `true`  |
+| Property        | Type      | Description                           | Default Value |
+| --------------- | --------- | ------------------------------------- | ------------- |
+| `headerActions` | `boolean` | Whether to show header action buttons | `true`        |
 
 #### IMarkdownPlugin
 
-| Property       | Type                                           | Description                 | Default |
-| -------------- | ---------------------------------------------- | --------------------------- | ------- |
-| `remarkPlugin` | `Pluggable`                                    | remark plugin               | -       |
-| `rehypePlugin` | `Pluggable`                                    | rehype plugin               | -       |
-| `type`         | `'buildIn'` \| `'custom'`                      | Plugin type                 | -       |
-| `id`           | `any`                                          | Plugin unique identifier    | -       |
-| `components`   | `Record<string, React.ComponentType<unknown>>` | Custom component mapping 🆕 | -       |
+| Property       | Type                                           | Description                 | Default Value |
+| -------------- | ---------------------------------------------- | --------------------------- | ------------- |
+| `remarkPlugin` | `Pluggable`                                    | remark plugin               | -             |
+| `rehypePlugin` | `Pluggable`                                    | rehype plugin               | -             |
+| `type`         | `'buildIn'` \| `'custom'`                      | Plugin type                 | -             |
+| `id`           | `any`                                          | Plugin unique identifier    | -             |
+| `components`   | `Record<string, React.ComponentType<unknown>>` | Custom component mapping 🆕 | -             |
 
 ### Component Exposed Methods
 
@@ -414,8 +439,8 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | Method    | Parameters | Description                                                   |
 | --------- | ---------- | ------------------------------------------------------------- |
 | `start`   | -          | Start typing animation                                        |
-| `stop`    | -          | Pause typing                                                  |
-| `resume`  | -          | Resume typing                                                 |
+| `stop`    | -          | Pause typing animation                                        |
+| `resume`  | -          | Resume typing animation                                       |
 | `restart` | -          | Restart typing animation, play current content from beginning |
 
 #### MarkdownCMD Exposed Methods
@@ -424,13 +449,13 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | ----------------- | ------------------------------------------- | ------------------------------------------------------------- |
 | `push`            | `(content: string, answerType: AnswerType)` | Add content and start typing                                  |
 | `clear`           | -                                           | Clear all content and state                                   |
-| `triggerWholeEnd` | -                                           | Manually trigger end callback                                 |
+| `triggerWholeEnd` | -                                           | Manually trigger completion callback                          |
 | `start`           | -                                           | Start typing animation                                        |
-| `stop`            | -                                           | Pause typing                                                  |
-| `resume`          | -                                           | Resume typing                                                 |
+| `stop`            | -                                           | Pause typing animation                                        |
+| `resume`          | -                                           | Resume typing animation                                       |
 | `restart`         | -                                           | Restart typing animation, play current content from beginning |
 
-**Usage example:**
+**Usage Examples:**
 
 ```tsx
 markdownRef.current?.start(); // Start animation
@@ -453,18 +478,18 @@ markdownRef.current?.restart(); // Restart animation
 import { katexPlugin } from 'ds-markdown/plugins';
 
 // Enable mathematical formula support
-<DsMarkdown plugins={[katexPlugin]}>Mathematical formula: $E = mc^2$</DsMarkdown>;
+<DsMarkdown plugins={[katexPlugin]}>Math formula: $E = mc^2$</DsMarkdown>;
 ```
 
 #### Mermaid Chart Plugin 🆕
 
-**Install Mermaid plugin:**
+**Install Mermaid Plugin:**
 
 ```bash
 npm install ds-markdown-mermaid-plugin
 ```
 
-**Basic usage:**
+**Basic Usage:**
 
 ```tsx
 import { ConfigProvider, Markdown } from 'ds-markdown';
@@ -492,7 +517,7 @@ flowchart TD
 }
 ```
 
-**Supported chart types:**
+**Supported Chart Types:**
 
 - 🔄 **Flowchart** - Display processes and decision paths
 - 📋 **Sequence Diagram** - Display interaction timing between objects
@@ -501,7 +526,7 @@ flowchart TD
 - 🥧 **Pie Chart** - Data proportion display
 - 🔀 **State Diagram** - State transition processes
 - 📊 **Git Graph** - Code branch history
-- 🗺️ **User Journey** - User experience processes
+- 🗺️ **User Journey** - User experience flow
 
 **Configure Mermaid:**
 
@@ -509,7 +534,7 @@ flowchart TD
 import { ConfigProvider } from 'ds-markdown';
 
 const mermaidConfig = {
-  theme: 'default', // Themes: default, neutral, dark, forest
+  theme: 'default', // Theme: default, neutral, dark, forest
   flowchart: {
     useMaxWidth: true,
     htmlLabels: true,
@@ -527,7 +552,7 @@ return (
 );
 ```
 
-**Related links:**
+**Related Links:**
 
 - [ds-markdown-mermaid-plugin GitHub](https://github.com/onshinpei/ds-markdown-mermaid-plugin)
 - [Mermaid Official Documentation](https://mermaid.js.org/)
@@ -556,7 +581,7 @@ const customPlugin = createBuildInPlugin({
 
 ## 🎨 UI Component System 🆕
 
-ds-markdown provides rich UI components that can be used independently or in combination with markdown components.
+ds-markdown provides rich UI components that can be used individually or in combination with markdown components.
 
 ### Core Components
 
@@ -582,7 +607,7 @@ import {
 
 // Segmented controller
 <Segmented
-  Segmented={[
+  options={[
     { label: 'Chart', value: 'diagram' },
     { label: 'Code', value: 'code' }
   ]}
@@ -607,7 +632,7 @@ import {
 
 ---
 
-## Internationalization Configuration
+## Multi-language Configuration
 
 ```tsx
 import { ConfigProvider } from 'ds-markdown';
@@ -629,7 +654,7 @@ import enUS from 'ds-markdown/i18n/en';
 
 ## 💡 Practical Examples
 
-### 📝 AI Streaming Conversation
+### 📝 AI Streaming Chat
 
 [DEMO: 🔧 StackBlitz Experience](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 
@@ -647,16 +672,16 @@ function StreamingChat() {
     // Thinking phase
     markdownRef.current?.push('🤔 Analyzing your question...', 'thinking');
     await delay(1000);
-    markdownRef.current?.push('\n\n✅ Analysis complete, starting answer', 'thinking');
+    markdownRef.current?.push('\n\n✅ Analysis complete, starting to answer', 'thinking');
 
     // Streaming answer
     const chunks = [
-      '# React 19 Feature Analysis\n\n',
+      '# React 19 New Features Analysis\n\n',
       '## 🚀 React Compiler\n',
       'The biggest highlight of React 19 is the introduction of **React Compiler**:\n\n',
-      '- 🎯 **Automatic optimization**: No need for manual memo and useMemo\n',
-      '- ⚡ **Performance boost**: Compile-time optimization, zero runtime overhead\n',
-      '- 🔧 **Backward compatible**: Existing code needs no modification\n\n',
+      '- 🎯 **Automatic Optimization**: No need for manual memo and useMemo\n',
+      '- ⚡ **Performance Boost**: Compile-time optimization, zero runtime overhead\n',
+      '- 🔧 **Backward Compatible**: Existing code requires no modification\n\n',
       'Hope this answer helps you! 🎉',
     ];
 
@@ -670,7 +695,7 @@ function StreamingChat() {
 
   return (
     <div className="chat-container">
-      <button onClick={simulateAIResponse}>🤖 Ask about React 19 features</button>
+      <button onClick={simulateAIResponse}>🤖 Ask about React 19 New Features</button>
       <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
     </div>
   );
@@ -715,7 +740,7 @@ import 'ds-markdown/katex.css'; // Only import when needed
 // ✅ Recommended: Install plugin separately
 npm install ds-markdown-mermaid-plugin
 
-// ✅ Recommended: Configure suitable theme
+// ✅ Recommended: Configure suitable themes
 const mermaidConfig = {
   theme: 'default', // Choose based on application theme
   flowchart: { useMaxWidth: true },
@@ -725,3 +750,5 @@ const mermaidConfig = {
   <DsMarkdown plugins={[mermaidPlugin]} />
 </ConfigProvider>
 ```
+
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown&label=Visitors&countColor=%23263759&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown)
