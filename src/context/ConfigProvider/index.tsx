@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import defaultLocale, { ZhCN } from '../../i18n/zh';
-import { IMarkdownMermaidConfig } from '../../defined';
+import { IMarkdownKatexConfig, IMarkdownMermaidConfig } from '../../defined';
 
 // 定义语言包的基础类型
 export type Locale = ZhCN;
@@ -9,6 +9,7 @@ export type Locale = ZhCN;
 export interface ConfigProviderProps {
   locale?: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
+  katexConfig?: IMarkdownKatexConfig;
   children: React.ReactNode;
   // katexConfig?: IMarkdownKatexConfig;
 }
