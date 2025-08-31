@@ -4,13 +4,13 @@ import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
   interval: number;
-  charsRef: React.RefObject<IChar[]>;
+  charsRef: React.MutableRefObject<IChar[]>;
   onEnd?: (data?: IEndData) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
   onBeforeTypedChar?: (data?: IBeforeTypedChar) => Promise<void>;
   onTypedChar?: (data?: ITypedChar) => void;
   processCharDisplay: (char: IChar) => void;
-  wholeContentRef: React.RefObject<IWholeContent>;
+  wholeContentRef: React.MutableRefObject<IWholeContent>;
   disableTyping: boolean;
   triggerUpdate: () => void;
   resetWholeContent: () => void;
