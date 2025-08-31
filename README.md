@@ -622,6 +622,144 @@ import enUS from 'ds-markdown/i18n/en';
 
 ---
 
+## 📚 ConfigProvider API
+
+`ConfigProvider` 是一个全局配置提供者，用于为 ds-markdown 组件提供多语言、Mermaid 图表和 KaTeX 数学公式的配置。
+
+### Props 类型
+
+```tsx
+interface ConfigProviderProps {
+  locale?: Locale; // 语言包配置
+  mermaidConfig?: IMarkdownMermaidConfig; // Mermaid 图表配置
+  katexConfig?: IMarkdownKatexConfig; // KaTeX 数学公式配置
+  children: React.ReactNode; // 子组件
+}
+```
+
+### 配置选项详解
+
+#### 1. 多语言配置 (locale)
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+import enUS from 'ds-markdown/i18n/en';
+
+<ConfigProvider locale={zhCN}>
+  <DsMarkdown {...props} />
+</ConfigProvider>;
+```
+
+#### 2. Mermaid 图表配置 (mermaidConfig)
+
+```tsx
+const mermaidConfig = {
+  theme: 'dark', // 主题：'default' | 'forest' | 'dark' | 'neutral'
+  fontFamily: 'Arial', // 字体
+  logLevel: 'warn', // 日志级别
+  securityLevel: 'strict', // 安全级别
+  startOnLoad: true, // 页面加载时自动启动
+  // ... 更多 Mermaid 配置选项
+};
+
+<ConfigProvider mermaidConfig={mermaidConfig}>
+  <DsMarkdown {...props} />
+</ConfigProvider>;
+```
+
+#### 3. KaTeX 数学公式配置 (katexConfig)
+
+```tsx
+const katexConfig = {
+  throwOnError: false, // 错误时不抛出异常
+  errorColor: '#cc0000', // 错误颜色
+  macros: {
+    // 自定义宏
+    '\\RR': '\\mathbb{R}',
+    '\\NN': '\\mathbb{N}',
+  },
+  minRuleThickness: 0.05, // 最小规则厚度
+  colorIsTextColor: false, // 颜色是否为文本颜色
+  // ... 更多 KaTeX 配置选项
+};
+
+<ConfigProvider katexConfig={katexConfig}>
+  <DsMarkdown {...props} />
+</ConfigProvider>;
+```
+
+### 使用 Hooks
+
+#### useConfig
+
+获取完整的配置上下文：
+
+```tsx
+import { useConfig } from 'ds-markdown';
+
+function MyComponent() {
+  const { locale, mermaidConfig, katexConfig } = useConfig();
+
+  return (
+    <div>
+      <p>当前语言: {locale.language}</p>
+      <p>Mermaid 主题: {mermaidConfig?.theme}</p>
+    </div>
+  );
+}
+```
+
+#### useLocale
+
+仅获取语言包配置：
+
+```tsx
+import { useLocale } from 'ds-markdown';
+
+function MyComponent() {
+  const locale = useLocale();
+
+  return (
+    <div>
+      <p>当前语言: {locale.language}</p>
+      <p>复制按钮文本: {locale.copyButton}</p>
+    </div>
+  );
+}
+```
+
+### 完整配置示例
+
+```tsx
+import { ConfigProvider } from 'ds-markdown';
+import zhCN from 'ds-markdown/i18n/zh';
+
+const mermaidConfig = {
+  theme: 'dark',
+  fontFamily: 'Consolas, monospace',
+  logLevel: 'warn',
+};
+
+const katexConfig = {
+  throwOnError: false,
+  errorColor: '#cc0000',
+  macros: {
+    '\\RR': '\\mathbb{R}',
+  },
+};
+
+function App() {
+  return (
+    <ConfigProvider locale={zhCN} mermaidConfig={mermaidConfig} katexConfig={katexConfig}>
+      <DsMarkdown content="# Hello World" />
+    </ConfigProvider>
+  );
+}
+```
+
+---
+
 ## 💡 实战示例
 
 ### 📝 AI 流式对话
