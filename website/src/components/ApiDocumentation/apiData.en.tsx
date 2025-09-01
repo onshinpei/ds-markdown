@@ -332,9 +332,30 @@ export const configProviderPropsData: ApiProperty[] = [
     defaultValue: 'zhCN',
   },
   {
+    prop: 'mermaidConfig',
+    type: 'IMarkdownMermaidConfig',
+    description: 'Mermaid config',
+    defaultValue: '-',
+  },
+  {
+    prop: 'katexConfig',
+    type: 'IMarkdownKatexConfig',
+    description: 'KaTeX config',
+    defaultValue: '-',
+  },
+  {
     prop: 'children',
     type: 'React.ReactNode',
     description: 'Child components to be wrapped by multi-language provider',
+    defaultValue: '-',
+  },
+];
+
+export const katexConfigData: ApiProperty[] = [
+  {
+    prop: '...rest',
+    type: 'Katex.KatexConfig',
+    description: 'Katex config, please refer to <a href="https://katex.org/docs/options.html" target="_blank">Katex config</a>',
     defaultValue: '-',
   },
 ];
