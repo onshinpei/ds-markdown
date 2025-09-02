@@ -8,6 +8,7 @@ import BlockWrap from '../BlockWrap';
 import { katexId } from '../../constant';
 import HighlightCode from '../HighlightCode';
 import { useMarkdownThemeContext } from '../../context/MarkdownThemeProvider';
+import { useConfig } from '../../i18n';
 
 interface HighReactMarkdownProps extends Options {
   children: string;
@@ -27,6 +28,7 @@ const CodeComponent: React.FC<{ className: string; children: string }> = ({ clas
 
 const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _children, ...props }) => {
   const { state: themeState } = useMarkdownThemeContext();
+  const { katexConfig } = useConfig();
 
   // 从 context 中获取主题配置
   const currentMath = themeState.math;
@@ -49,7 +51,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
       if (plugin.id === katexId) {
         hasKatexPlugin = true;
         remarkPlugins.push(plugin.remarkPlugin);
-        rehypePlugins.push(plugin.rehypePlugin);
+        rehypePlugins.push([plugin.rehypePlugin, katexConfig]);
       } else {
         if (plugin.rehypePlugin) {
           rehypePlugins.push(plugin.rehypePlugin);

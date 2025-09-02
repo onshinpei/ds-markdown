@@ -23,6 +23,8 @@ const titles = {
     codeBlock: '代码块配置示例',
     config: 'ConfigProvider 多语言',
     configProps: 'ConfigProvider Props',
+    katexConfig: 'KaTeX 配置',
+    mermaidConfig: 'Mermaid 配置',
     localeType: 'Locale 类型结构',
     i18n: 'I18nData keys',
   },
@@ -44,6 +46,8 @@ const titles = {
     codeBlock: 'Code Block Example',
     config: 'ConfigProvider & i18n',
     configProps: 'ConfigProvider Props',
+    katexConfig: 'KaTeX Config',
+    mermaidConfig: 'Mermaid Config',
     localeType: 'Locale Type Structure',
     i18n: 'I18nData keys',
   },
@@ -99,6 +103,8 @@ const ApiDocumentation: React.FC = () => {
       </div>
       <h3 id="api-config">{t.config}</h3>
       <ApiTable data={data.configProviderPropsData} title={t.configProps} />
+      <ApiTable data={data.katexConfigData} title={t.katexConfig} />
+      <ApiTable data={data.mermaidConfigData} title={t.mermaidConfig} />
       <ApiTable data={data.localeTypeData} title={t.localeType} />
       <div id="I18nData">
         <ApiTable data={data.i18nData} title={t.i18n} />

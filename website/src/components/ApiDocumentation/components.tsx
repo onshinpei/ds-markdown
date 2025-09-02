@@ -5,6 +5,7 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import type { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './apiData';
 import { useI18n } from '../../hooks/useI18n';
+import AnchorLink from './AnchorLink';
 
 // API 属性表格组件
 export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ data, title }) => {
@@ -37,13 +38,34 @@ export const ApiTable: React.FC<{ data: ApiProperty[]; title: string }> = ({ dat
                   const hasKnownType = typeNames.some((name) => typeStr.includes(name));
 
                   if (hasKnownType) {
-                    // 如果有已知类型，替换为锚点链接
-                    let result = typeStr;
+                    // 如果有已知类型，使用React组件渲染锚点链接
+                    const parts = [];
+                    let lastIndex = 0;
+
                     typeNames.forEach((name) => {
                       const regex = new RegExp(`\\b${name}\\b`, 'g');
-                      result = result.replace(regex, `<a href="#${name}" class="anchor-link">${name}</a>`);
+                      let match;
+                      while ((match = regex.exec(typeStr)) !== null) {
+                        // 添加匹配前的文本
+                        if (match.index > lastIndex) {
+                          parts.push(typeStr.slice(lastIndex, match.index));
+                        }
+                        // 添加锚点链接
+                        parts.push(
+                          <AnchorLink key={`${name}-${match.index}`} href={`#${name}`} className="anchor-link">
+                            {name}
+                          </AnchorLink>,
+                        );
+                        lastIndex = match.index + name.length;
+                      }
                     });
-                    return <span dangerouslySetInnerHTML={{ __html: result }} />;
+
+                    // 添加剩余文本
+                    if (lastIndex < typeStr.length) {
+                      parts.push(typeStr.slice(lastIndex));
+                    }
+
+                    return <span>{parts}</span>;
                   } else {
                     return <code>{typeStr}</code>;
                   }

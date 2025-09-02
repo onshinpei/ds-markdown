@@ -2,6 +2,7 @@
 
 import { Pluggable } from 'unified';
 import Mermaid from './mermaid.type';
+import { KatexOptions } from 'katex';
 // import { KatexOptions } from 'katex';
 
 /**
@@ -187,5 +188,7 @@ export interface IMarkdownMermaidConfig extends Mermaid.MermaidConfig {
    */
   headerActions?: boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode);
 }
+
+export interface IMarkdownKatexConfig extends KatexOptions {}
 
 // export interface IMarkdownKatexConfig extends KatexOptions {}

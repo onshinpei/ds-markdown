@@ -11,11 +11,18 @@ import ManualStartDemo from './ManualStart';
 import TypingAnimationDemo from './TypingAnimationDemo';
 import CodeDemo from './code';
 import MermaidDemo from './mermaid';
+import { ConfigProvider } from '../src';
 const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   return (
     <div className={`ds-message ds-message-${theme}`}>
-      <KatexDemo theme={theme} setTheme={setTheme} />
+      <ConfigProvider
+        katexConfig={{
+          errorColor: '#0f0',
+        }}
+      >
+        <KatexDemo theme={theme} setTheme={setTheme} />
+      </ConfigProvider>
     </div>
   );
 };
