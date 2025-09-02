@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import defaultLocale, { ZhCN } from '../../i18n/zh';
-import { IMarkdownMermaidConfig } from '../../defined';
+import { IMarkdownKatexConfig, IMarkdownMermaidConfig } from '../../defined';
 
 // 定义语言包的基础类型
 export type Locale = ZhCN;
@@ -9,6 +9,7 @@ export type Locale = ZhCN;
 export interface ConfigProviderProps {
   locale?: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
+  katexConfig?: IMarkdownKatexConfig;
   children: React.ReactNode;
   // katexConfig?: IMarkdownKatexConfig;
 }
@@ -17,13 +18,14 @@ export interface ConfigProviderProps {
 export interface ConfigContextType {
   locale: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
+  katexConfig?: IMarkdownKatexConfig;
 }
 
 const ConfigContext = createContext<ConfigContextType>({
   locale: defaultLocale,
 });
 
-export const ConfigProvider: React.FC<ConfigProviderProps> = ({ locale, children, mermaidConfig }) => {
+export const ConfigProvider: React.FC<ConfigProviderProps> = ({ locale, children, mermaidConfig, katexConfig }) => {
   const contextValue = useMemo(() => {
     const contextValue: ConfigContextType = {
       locale: locale || defaultLocale,
@@ -31,8 +33,11 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({ locale, children
     if (mermaidConfig) {
       contextValue.mermaidConfig = mermaidConfig;
     }
+    if (katexConfig) {
+      contextValue.katexConfig = katexConfig;
+    }
     return contextValue;
-  }, [locale, mermaidConfig]);
+  }, [locale, mermaidConfig, katexConfig]);
 
   return <ConfigContext.Provider value={contextValue}>{children}</ConfigContext.Provider>;
 };

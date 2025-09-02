@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 
-import Markdown, { MarkdownRef } from '../../src';
+import Markdown, { MarkdownRef, ConfigProvider } from '../../src';
 import markdown from './data.md?raw';
 
 import 'katex/dist/katex.min.css';

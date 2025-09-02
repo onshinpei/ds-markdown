@@ -657,6 +657,12 @@ export const configProviderPropsData: ApiProperty[] = [
     defaultValue: '-',
   },
   {
+    prop: 'katexConfig',
+    type: 'IMarkdownKatexConfig',
+    description: 'KaTeX 配置',
+    defaultValue: '-',
+  },
+  {
     prop: 'children',
     type: 'React.ReactNode',
     description: '需要被多语言包裹的子组件',
@@ -679,6 +685,23 @@ export const mermaidConfigData: ApiProperty[] = [
         其他配置项, 请参考{' '}
         <a href="https://mermaid.js.org/config/setup/mermaid/interfaces/MermaidConfig.html" target="_blank">
           Mermaid 配置
+        </a>
+      </>
+    ),
+    defaultValue: '-',
+  },
+];
+
+export const katexConfigData: ApiProperty[] = [
+  {
+    prop: '...rest',
+    type: 'Katex.KatexConfig',
+    // description: 'Katex 配置, 请参考<a href="https://katex.org/docs/options.html" target="_blank">Katex 配置</a>',
+    description: (
+      <>
+        Katex 配置, 请参考{' '}
+        <a href="https://katex.org/docs/options.html" target="_blank">
+          Katex 配置
         </a>
       </>
     ),
