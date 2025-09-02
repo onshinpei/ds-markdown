@@ -351,11 +351,40 @@ export const configProviderPropsData: ApiProperty[] = [
   },
 ];
 
+export const mermaidConfigData: ApiProperty[] = [
+  {
+    prop: 'headerActions',
+    type: 'boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode)',
+    description: 'Show header action buttons. true for default, React.ReactNode for custom',
+    defaultValue: 'true',
+  },
+  {
+    prop: '...rest',
+    type: 'Mermaid.MermaidConfig',
+    description: (
+      <>
+        Other configuration items, please refer to{' '}
+        <a href="https://mermaid.js.org/config/setup/mermaid/interfaces/MermaidConfig.html" target="_blank">
+          Mermaid config
+        </a>
+      </>
+    ),
+    defaultValue: '-',
+  },
+];
+
 export const katexConfigData: ApiProperty[] = [
   {
     prop: '...rest',
     type: 'Katex.KatexConfig',
-    description: 'Katex config, please refer to <a href="https://katex.org/docs/options.html" target="_blank">Katex config</a>',
+    description: (
+      <>
+        Katex config, please refer to{' '}
+        <a href="https://katex.org/docs/options.html" target="_blank">
+          Katex config
+        </a>
+      </>
+    ),
     defaultValue: '-',
   },
 ];
