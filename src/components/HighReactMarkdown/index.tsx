@@ -71,7 +71,7 @@ const HighReactMarkdown: React.FC<HighReactMarkdownProps> = ({ children: _childr
       hasKatexPlugin,
       components,
     };
-  }, [currentPlugins]);
+  }, [currentPlugins, katexConfig]);
 
   const children = useMemo(() => {
     /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */

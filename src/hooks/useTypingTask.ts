@@ -22,7 +22,7 @@ export interface TypingTaskController {
   clear: () => void;
   isTyping: () => boolean;
   /** 是否主动调用 stop 方法 */
-  typedIsManualStopRef: React.RefObject<boolean>;
+  typedIsManualStopRef: React.MutableRefObject<boolean>;
   resume: () => void;
   restart: () => void;
 }
