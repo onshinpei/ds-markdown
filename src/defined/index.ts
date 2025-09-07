@@ -141,17 +141,9 @@ export interface IMarkdownMath {
 }
 
 export interface IWholeContent {
-  thinking: {
-    content: string;
-    length: number;
-    prevLength: number;
-  };
-  answer: {
-    content: string;
-    length: number;
-    prevLength: number;
-  };
-  allLength: number;
+  content: string;
+  length: number;
+  prevLength: number;
 }
 
 export interface MarkdownBaseRef {
@@ -173,10 +165,6 @@ export interface MarkdownCMDRef extends MarkdownBaseRef {
 
 export interface IEndData {
   manual: boolean;
-  /** 回答字符串 */
-  answerStr: string;
-  /** 思考字符串 */
-  thinkingStr: string;
   /** 打字机打过的字符串, 和answerStr 相同 */
   str: string;
 }

@@ -1,7 +1,10 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
-import MarkdownCMD from '../MarkdownCMD';
+// import MarkdownCMD from '../MarkdownCMD';
+
+import { MarkdownCMD } from 'react-markdown-typer';
+
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
 
