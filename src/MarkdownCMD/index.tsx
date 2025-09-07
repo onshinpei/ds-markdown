@@ -1,15 +1,21 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 
-import HighReactMarkdown from '../components/HighReactMarkdown';
 import classNames from 'classnames';
-import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
+import { AnswerType, IMarkdownCode, IMarkdownPlugin, MarkdownCMDRef, Theme } from '../defined';
 import { __DEV__ } from '../constant';
-import { useTypingTask } from '../hooks/useTypingTask';
-import { MarkdownCMD as MarkdownCMDTyper, MarkdownCMDRef as MarkdownCMDTyperRef, MarkdownCMDProps as MarkdownCMDTyperProps } from 'react-markdown-typer';
+import { MarkdownCMD as MarkdownCMDTyper, MarkdownCMDRef as MarkdownCMDTyperRef, MarkdownCMDProps as MarkdownCMDTyperProps, IMarkdownMath } from 'react-markdown-typer';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
 import { MarkdownProvider } from '../context/MarkdownProvider';
 
-const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & { answerType: AnswerType }>(({ answerType = 'answer', ...rest }, ref) => {
+interface IMarkdownCustom {
+  answerType: AnswerType;
+  theme: Theme;
+  codeBlock: IMarkdownCode;
+  plugins: IMarkdownPlugin[];
+  math: IMarkdownMath;
+}
+
+const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
   const cmdRef = useRef<MarkdownCMDTyperRef>(null!);
 
@@ -34,12 +40,8 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & { an
         'ds-markdown-dark': currentTheme === 'dark',
       })}
     >
-      {/* <div className="ds-markdown-thinking">{getParagraphs('thinking')}</div>
-
-        <div className="ds-markdown-answer">{getParagraphs('answer')}</div> */}
-
       <div className={`ds-markdown-${answerType}`}>
-        <MarkdownCMDTyper ref={cmdRef} {...rest} />
+        <MarkdownCMDTyper ref={cmdRef} {...rest} reactMarkdownProps={{}} />
       </div>
     </div>
   );
@@ -49,7 +51,7 @@ if (__DEV__) {
   MarkdownCMDInner.displayName = 'MarkdownCMD';
 }
 
-const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDProps>((props, ref) => {
+const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMarkdownCustom>((props, ref) => {
   const { children = '', answerType = 'answer', isInnerRender, ...reset } = props;
 
   if (__DEV__) {
