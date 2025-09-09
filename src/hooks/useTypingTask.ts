@@ -3,7 +3,16 @@ import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, 
 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
-  interval: number;
+  interval:
+    | number
+    | {
+        max: number;
+        min: number;
+        /** 曲线函数自定义 */
+        curveFn: (x: number) => number;
+        /** 曲线函数，如果配置了curveFn，则curve无效 */
+        curve: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end';
+      };
   charsRef: React.MutableRefObject<IChar[]>;
   onEnd?: (data?: IEndData) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
