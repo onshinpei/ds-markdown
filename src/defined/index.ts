@@ -13,7 +13,9 @@ export type AnswerType = 'answer' | 'thinking';
 export type IntervalType =
   | number
   | {
+      /** 最大间隔 */
       max: number;
+      /** 最小间隔 */
       min: number;
       /** 曲线函数自定义 */
       curveFn?: (x: number) => number;
