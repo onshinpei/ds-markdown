@@ -104,6 +104,7 @@
 - 高频打字支持（`requestAnimationFrame`模式下打字间隔最低可接近于`0ms`）
 - 帧同步渲染，与浏览器刷新完美配合
 - 智能字符批量处理，视觉效果更自然
+- **动态速度控制** 🆕：根据剩余字符数量自动调整打字速度，流式数据场景下提供更自然的阅读体验
 
 ### ⚡ **性能优化**
 
@@ -338,7 +339,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 
 | 属性                | 类型                                        | 说明                                                          | 默认值                                                      |
 | ------------------- | ------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
-| `interval`          | `number`                                    | 打字间隔 (毫秒)                                               | `30`                                                        |
+| `interval`          | `number` \| `IntervalConfig`                | 打字间隔配置，支持固定间隔或动态速度控制                      | `30`                                                        |
 | `timerType`         | `'setTimeout'` \| `'requestAnimationFrame'` | 定时器类型，不支持动态修改                                    | 当前默认值是`setTimeout`，后期会改为`requestAnimationFrame` |
 | `answerType`        | `'thinking'` \| `'answer'`                  | 内容类型 (影响样式主题)，不支持动态修改                       | `'answer'`                                                  |
 | `theme`             | `'light'` \| `'dark'`                       | 主题类型                                                      | `'light'`                                                   |
@@ -374,6 +375,51 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `prevStr`      | `string`     | 当前类型内容的前缀字符串     | -      |
 | `currentStr`   | `string`     | 当前类型内容的完整字符串     | -      |
 | `percent`      | `number`     | 打字进度百分比 (0-100)       | `0`    |
+
+#### IntervalConfig 🆕
+
+| 属性      | 类型                                                                                                       | 说明                                   | 默认值   |
+| --------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
+| `max`     | `number`                                                                                                   | 最大间隔时间 (毫秒)，剩余字符多时使用  | -        |
+| `min`     | `number`                                                                                                   | 最小间隔时间 (毫秒)，剩余字符少时使用  | -        |
+| `curveFn` | `(x: number) => number`                                                                                    | 自定义曲线函数，x 为剩余字符占比 [0,1] | -        |
+| `curve`   | `'ease'` \| `'ease-in'` \| `'ease-out'` \| `'ease-in-out'` \| `'linear'` \| `'step-start'` \| `'step-end'` | 预设曲线函数，curveFn 存在时无效       | `'ease'` |
+
+**动态速度控制说明：**
+
+- **剩余字符越多，打字越快**：当后端流式推送大量字符时，组件会自动加快打字速度
+- **剩余字符越少，打字越慢**：接近完成时，打字速度会逐渐放缓，提供更好的阅读体验
+- **流式数据适配**：自动适应流式场景中字符数量的动态变化
+- **曲线函数**：通过 `curve` 或 `curveFn` 控制速度变化曲线
+
+**使用示例：**
+
+```tsx
+// 固定间隔
+<DsMarkdown interval={20}>内容</DsMarkdown>
+
+// 动态速度控制
+<DsMarkdown
+  interval={{
+    min: 10,    // 最快 10ms
+    max: 50,    // 最慢 50ms
+    curve: 'ease-out'  // 减速曲线
+  }}
+>
+  内容
+</DsMarkdown>
+
+// 自定义曲线
+<DsMarkdown
+  interval={{
+    min: 5,
+    max: 100,
+    curveFn: (x) => x * x  // 二次函数曲线
+  }}
+>
+  内容
+</DsMarkdown>
+```
 
 #### IMarkdownMath
 
@@ -762,6 +808,39 @@ function App() {
 
 ## 💡 实战示例
 
+### 🚀 动态速度控制 🆕
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function DynamicSpeedDemo() {
+  const content = `# 动态速度控制示例
+
+这是一个演示动态速度控制的示例。当剩余字符较多时，打字速度会加快；
+当剩余字符较少时，打字速度会放缓，提供更好的阅读体验。
+
+## 流式数据场景
+
+在 AI 流式对话中，后端可能会一次性推送大量文本，使用动态速度控制可以：
+- 快速处理大量文本，减少等待时间
+- 在接近完成时放缓速度，让用户有时间阅读
+- 提供更自然的打字体验`;
+
+  return (
+    <DsMarkdown
+      interval={{
+        min: 8, // 最快 8ms（剩余字符多时）
+        max: 80, // 最慢 80ms（剩余字符少时）
+        curve: 'ease-out', // 减速曲线
+      }}
+      timerType="requestAnimationFrame"
+    >
+      {content}
+    </DsMarkdown>
+  );
+}
+```
+
 ### 📝 AI 流式对话
 
 [DEMO: 🔧 StackBlitz 体验](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
@@ -819,6 +898,16 @@ function StreamingChat() {
 <DsMarkdown
   timerType="requestAnimationFrame"
   interval={15} // 15-30ms 为最佳体验
+/>
+
+// ✅ 流式数据推荐配置
+<DsMarkdown
+  timerType="requestAnimationFrame"
+  interval={{
+    min: 8,     // 快速处理大量文本
+    max: 60,    // 接近完成时放缓
+    curve: 'ease-out'  // 自然减速
+  }}
 />
 ```
 
