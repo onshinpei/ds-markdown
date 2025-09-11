@@ -4,7 +4,7 @@ import en from 'ds-markdown/i18n/en';
 import { getObjectKeys } from './util';
 // Props Data
 export const propsData: ApiProperty[] = [
-  { prop: 'interval', type: 'number', description: 'Typing interval (ms)', defaultValue: '30' },
+  { prop: 'interval', type: 'number | IntervalConfig', description: 'Typing interval config: fixed or dynamic speed', defaultValue: '30' },
   { prop: 'timerType', type: "'setTimeout' | 'requestAnimationFrame'", description: 'Timer type: setTimeout or requestAnimationFrame', defaultValue: "'setTimeout'" },
   { prop: 'disableTyping', type: 'boolean', description: 'Disable typing animation', defaultValue: 'false' },
   { prop: 'onEnd', type: '(data?: IEndData) => void', description: 'Callback when typing ends', defaultValue: 'undefined' },
@@ -60,6 +60,19 @@ export const iBeforeTypedCharData: ApiProperty[] = [
 
 // IMarkdownMath Type Definition
 export const iMarkdownMathData: ApiProperty[] = [{ prop: 'splitSymbol', type: "'dollar' | 'bracket'", description: 'Math formula delimiter type', defaultValue: "'dollar'" }];
+
+// IntervalConfig Type Definition
+export const intervalConfigData: ApiProperty[] = [
+  { prop: 'max', type: 'number', description: 'Max interval (ms), used when many chars remain', defaultValue: '-' },
+  { prop: 'min', type: 'number', description: 'Min interval (ms), used when few chars remain', defaultValue: '-' },
+  { prop: 'curveFn', type: '(x: number) => number', description: 'Custom curve function, x is remaining ratio [0,1]', defaultValue: '-' },
+  {
+    prop: 'curve',
+    type: "'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end'",
+    description: 'Preset curve, ignored if curveFn is provided',
+    defaultValue: "'ease'",
+  },
+];
 
 // IMarkdownPlugin Type Definition
 export const iMarkdownPluginData: ApiProperty[] = [
