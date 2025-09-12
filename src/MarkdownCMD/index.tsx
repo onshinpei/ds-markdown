@@ -3,6 +3,7 @@ import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'reac
 import HighReactMarkdown from '../components/HighReactMarkdown';
 import classNames from 'classnames';
 import { AnswerType, MarkdownCMDProps, IChar, IWholeContent, MarkdownCMDRef } from '../defined';
+import { splitGraphemes } from '../utils/grapheme';
 import { __DEV__ } from '../constant';
 import { useTypingTask } from '../hooks/useTypingTask';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
@@ -102,8 +103,9 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
         return;
       }
 
+      const segments = splitGraphemes(content);
       charsRef.current.push(
-        ...content.split('').map((chatStr) => {
+        ...segments.map((chatStr) => {
           const index = charIndexRef.current++;
           const charObj: IChar = {
             content: chatStr,
@@ -115,7 +117,7 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDProps>(
         }),
       );
 
-      wholeContentRef.current.allLength += content.length;
+      wholeContentRef.current.allLength += segments.length;
 
       // 如果关闭了自动打字， 并且没有打过字， 则不开启打字动画
       if (!autoStartTypingRef.current && !isStartedTypingRef.current) {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { splitGraphemes } from '../utils/grapheme';
 import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, IBeforeTypedChar, IntervalType } from '../defined';
 
 interface UseTypingTaskOptions {
@@ -22,7 +23,7 @@ export interface TypingTaskController {
   clear: () => void;
   isTyping: () => boolean;
   /** 是否主动调用 stop 方法 */
-  typedIsManualStopRef: React.RefObject<boolean>;
+  typedIsManualStopRef: React.MutableRefObject<boolean>;
   resume: () => void;
   restart: () => void;
 }
@@ -435,7 +436,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
     initialRemainTotalRef.current = 0;
     // 将wholeContentRef的内容放到charsRef中
     charsRef.current.unshift(
-      ...wholeContentRef.current.thinking.content.split('').map((charUnit) => {
+      ...splitGraphemes(wholeContentRef.current.thinking.content).map((charUnit) => {
         const char: IChar = {
           content: charUnit,
           answerType: 'thinking',
@@ -446,7 +447,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       }),
     );
     charsRef.current.unshift(
-      ...wholeContentRef.current.answer.content.split('').map((charUnit) => {
+      ...splitGraphemes(wholeContentRef.current.answer.content).map((charUnit) => {
         const char: IChar = {
           content: charUnit,
           answerType: 'answer',
