@@ -80,6 +80,9 @@ const ApiDocumentation: React.FC = () => {
       <div id="IMarkdownMath">
         <ApiTable data={data.iMarkdownMathData} title="IMarkdownMath" />
       </div>
+      <div id="IntervalConfig">
+        <ApiTable data={data.intervalConfigData} title="IntervalConfig" />
+      </div>
       <div id="IMarkdownPlugin">
         <ApiTable data={data.iMarkdownPluginData} title="IMarkdownPlugin" />
       </div>
