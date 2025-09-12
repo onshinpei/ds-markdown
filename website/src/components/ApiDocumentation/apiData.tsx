@@ -1,5 +1,4 @@
 // API 数据定义
-import React from 'react';
 import zh from 'ds-markdown/i18n/zh';
 import { ApiProperty, RefMethod, ComparisonRow, FormulaType } from './type';
 import { getObjectKeys } from './util';
@@ -8,8 +7,8 @@ import { getObjectKeys } from './util';
 export const propsData: ApiProperty[] = [
   {
     prop: 'interval',
-    type: 'number',
-    description: '打字机效果间隔时间',
+    type: 'number | IntervalConfig',
+    description: '打字间隔配置，支持固定间隔或动态速度控制',
     defaultValue: '30',
   },
   {
@@ -225,6 +224,19 @@ export const iMarkdownMathData: ApiProperty[] = [
     type: "'dollar' | 'bracket'",
     description: '数学公式分隔符类型',
     defaultValue: "'dollar'",
+  },
+];
+
+// IntervalConfig 类型定义
+export const intervalConfigData: ApiProperty[] = [
+  { prop: 'max', type: 'number', description: '最大间隔时间 (毫秒)，剩余字符多时使用', defaultValue: '-' },
+  { prop: 'min', type: 'number', description: '最小间隔时间 (毫秒)，剩余字符少时使用', defaultValue: '-' },
+  { prop: 'curveFn', type: '(x: number) => number', description: '自定义曲线函数，x 为剩余字符占比 [0,1]', defaultValue: '-' },
+  {
+    prop: 'curve',
+    type: "'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end'",
+    description: '预设曲线函数，curveFn 存在时无效',
+    defaultValue: "'ease'",
   },
 ];
 
