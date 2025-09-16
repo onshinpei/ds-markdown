@@ -9,6 +9,7 @@ import basicUsageDemoMarkdownEn from '../../components/Demos/BasicUsageDemo/mark
 import { getStartedData as getStartedDataZh } from './data';
 import { getStartedData as getStartedDataEn } from './data.en';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 const markdownMap = {
   zh: {
@@ -27,6 +28,11 @@ const dataMap = {
 const GetStarted: React.FC = () => {
   const { lang } = useI18n();
   const data = dataMap[lang];
+  const navigate = useNavigate();
+
+  const handleClick = (href: string) => {
+    navigate(href);
+  };
 
   return (
     <div id="get-started-page">
@@ -85,7 +91,7 @@ const GetStarted: React.FC = () => {
                 <div className="step-icon">📚</div>
                 <h3>{data.nextSteps.examples.title}</h3>
                 <p>{data.nextSteps.examples.description}</p>
-                <a href={data.nextSteps.examples.href} className="step-link">
+                <a onClick={() => handleClick(data.nextSteps.examples.href)} className="step-link">
                   {data.nextSteps.examples.link}
                 </a>
               </div>
@@ -93,7 +99,7 @@ const GetStarted: React.FC = () => {
                 <div className="step-icon">📖</div>
                 <h3>{data.nextSteps.docs.title}</h3>
                 <p>{data.nextSteps.docs.description}</p>
-                <a href={data.nextSteps.docs.href} className="step-link">
+                <a onClick={() => handleClick(data.nextSteps.docs.href)} className="step-link">
                   {data.nextSteps.docs.link}
                 </a>
               </div>
@@ -101,7 +107,7 @@ const GetStarted: React.FC = () => {
                 <div className="step-icon">🎮</div>
                 <h3>{data.nextSteps.try.title}</h3>
                 <p>{data.nextSteps.try.description}</p>
-                <a href={data.nextSteps.try.href} className="step-link">
+                <a onClick={() => handleClick(data.nextSteps.try.href)} className="step-link">
                   {data.nextSteps.try.link}
                 </a>
               </div>
