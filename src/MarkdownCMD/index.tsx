@@ -1,11 +1,16 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
+import gfmPlugin from 'remark-gfm';
 import classNames from 'classnames';
 import { AnswerType, IMarkdownCode, IMarkdownPlugin, MarkdownCMDRef, Theme } from '../defined';
-import { __DEV__ } from '../constant';
+import { __DEV__, katexId } from '../constant';
 import { MarkdownCMD as MarkdownCMDTyper, MarkdownCMDRef as MarkdownCMDTyperRef, MarkdownCMDProps as MarkdownCMDTyperProps, IMarkdownMath } from 'react-markdown-typer';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
 import { MarkdownProvider } from '../context/MarkdownProvider';
+import { useConfig } from '../context/ConfigProvider';
+import { replaceMathBracket } from '../utils/remarkMathBracket';
+import BlockWrap from '../components/BlockWrap';
+import HighlightCode from '../components/HighlightCode';
 
 interface IMarkdownCustom {
   answerType: AnswerType;
@@ -14,6 +19,18 @@ interface IMarkdownCustom {
   plugins: IMarkdownPlugin[];
   math: IMarkdownMath;
 }
+
+const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
+  const match = /language-(\w+)/.exec(className || '');
+  const codeContent = String(children).replace(/\n$/, '');
+  return match ? (
+    <BlockWrap language={match[1]} codeContent={codeContent}>
+      <HighlightCode code={codeContent} language={match[1]} />
+    </BlockWrap>
+  ) : (
+    <code className={className}>{children}</code>
+  );
+};
 
 const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
@@ -32,6 +49,70 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMar
     restart: cmdRef.current.restart,
   }));
 
+  const { katexConfig } = useConfig();
+
+  // 从 context 中获取主题配置
+  const currentMath = themeState.math;
+  const currentPlugins = themeState.plugins;
+  const mathSplitSymbol = currentMath?.splitSymbol ?? 'dollar';
+  const finalReplaceMathBracket = currentMath?.replaceMathBracket ?? replaceMathBracket;
+
+  const { remarkPlugins, rehypePlugins, hasKatexPlugin, components } = useMemo(() => {
+    let hasKatexPlugin = false;
+    const components: Record<string, React.ComponentType<unknown>> = {};
+    const remarkPlugins: any[] = [gfmPlugin];
+    const rehypePlugins: any[] = [];
+    if (!currentPlugins) {
+      return {
+        remarkPlugins,
+        rehypePlugins,
+      };
+    }
+    currentPlugins.forEach((plugin) => {
+      if (plugin.id === katexId) {
+        hasKatexPlugin = true;
+        remarkPlugins.push(plugin.remarkPlugin);
+        rehypePlugins.push([plugin.rehypePlugin, katexConfig]);
+      } else {
+        if (plugin.rehypePlugin) {
+          rehypePlugins.push(plugin.rehypePlugin);
+        }
+        if (plugin.remarkPlugin) {
+          remarkPlugins.push(plugin.remarkPlugin);
+        }
+      }
+      if (plugin.components) {
+        Object.assign(components, plugin.components);
+      }
+    });
+
+    return {
+      remarkPlugins,
+      rehypePlugins,
+      hasKatexPlugin,
+      components,
+    };
+  }, [currentPlugins, katexConfig]);
+
+  // const children = useMemo(() => {
+  //   /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
+  //   if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
+  //     return finalReplaceMathBracket(_children);
+  //   }
+  //   return _children;
+  // }, [hasKatexPlugin, mathSplitSymbol, finalReplaceMathBracket, _children]);
+
+  const customConvertMarkdownString = useCallback(
+    (markdownString: string) => {
+      /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
+      if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
+        return finalReplaceMathBracket(markdownString);
+      }
+      return markdownString;
+    },
+    [finalReplaceMathBracket, hasKatexPlugin, mathSplitSymbol],
+  );
+
   return (
     <div
       className={classNames({
@@ -41,7 +122,28 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMar
       })}
     >
       <div className={`ds-markdown-${answerType}`}>
-        <MarkdownCMDTyper ref={cmdRef} {...rest} reactMarkdownProps={{}} />
+        {/* <MarkdownCMDTyper ref={cmdRef} {...rest} reactMarkdownProps={{}} /> */}
+
+        <MarkdownCMDTyper
+          ref={cmdRef}
+          customConvertMarkdownString={customConvertMarkdownString}
+          {...rest}
+          reactMarkdownProps={{
+            remarkPlugins,
+            rehypePlugins,
+            components: {
+              code: CodeComponent as any,
+              table: ({ children, ...props }) => {
+                return (
+                  <div className="markdown-table-wrapper">
+                    <table className="ds-markdown-table">{children}</table>
+                  </div>
+                );
+              },
+              ...components,
+            },
+          }}
+        />
       </div>
     </div>
   );

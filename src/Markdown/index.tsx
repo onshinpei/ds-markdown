@@ -1,9 +1,9 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
-// import MarkdownCMD from '../MarkdownCMD';
+import MarkdownCMD from '../MarkdownCMD';
 
-import { MarkdownCMD } from 'react-markdown-typer';
+// import { MarkdownCMD } from 'react-markdown-typer';
 
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
@@ -60,7 +60,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
 
   // 只传递 MarkdownBaseProps 相关的属性
   const { theme, math, plugins, codeBlock, ...baseProps } = rest;
-  return <MarkdownCMD ref={cmdRef} {...baseProps} isInnerRender />;
+  return <MarkdownCMD ref={cmdRef} {...baseProps} answerType={answerType} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {

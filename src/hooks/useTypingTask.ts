@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, IBeforeTypedChar } from '../defined';
+import { splitGraphemes } from '../utils/grapheme';
+import { AnswerType, IChar, ITypedChar, IWholeContent, MarkdownProps, IEndData, IBeforeTypedChar, IntervalType } from '../defined';
 
 interface UseTypingTaskOptions {
   timerType: MarkdownProps['timerType'];
-  interval: number;
+  interval: IntervalType;
   charsRef: React.MutableRefObject<IChar[]>;
   onEnd?: (data?: IEndData) => void;
   onStart?: (data?: { currentIndex: number; currentChar: string; answerType: AnswerType; prevStr: string }) => void;
@@ -60,6 +61,59 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   const intervalRef = useRef(interval);
   intervalRef.current = interval;
+
+  // 记录本次打字任务的初始/最高剩余字符总量，用于计算剩余占比（流式追加时会增大）
+  const initialRemainTotalRef = useRef<number>(0);
+
+  /**
+   * 根据剩余字符数与曲线配置，计算当前打字间隔（毫秒）
+   */
+  const getCurrentInterval = (remainCharsLength: number): number => {
+    const cfg = intervalRef.current;
+    if (typeof cfg === 'number') return cfg;
+
+    // 动态更新初始参考总量，考虑流式场景新增字符
+    if (remainCharsLength > initialRemainTotalRef.current) {
+      initialRemainTotalRef.current = remainCharsLength;
+    }
+    const baseTotal = initialRemainTotalRef.current || remainCharsLength || 1;
+
+    // r: 剩余占比 [0,1]，越大表示剩余越多
+    const r = Math.max(0, Math.min(1, remainCharsLength / baseTotal));
+
+    // 曲线函数（优先使用自定义）
+    const pickCurveFn = (): ((x: number) => number) => {
+      if (typeof cfg.curveFn === 'function') return cfg.curveFn;
+      switch (cfg.curve) {
+        case 'linear':
+          return (x) => x;
+        case 'ease-in':
+          return (x) => x * x; // 加速慢起
+        case 'ease-out':
+          return (x) => 1 - (1 - x) * (1 - x); // 减速快止
+        case 'ease-in-out':
+          return (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+        case 'step-start':
+          return (x) => (x > 0 ? 1 : 0);
+        case 'step-end':
+          return (x) => (x < 1 ? 0 : 1);
+        case 'ease':
+        default:
+          // 近似通用 ease
+          return (x) => 1 - Math.pow(1 - x, 1.6);
+      }
+    };
+
+    const curveFn = pickCurveFn();
+    const y = curveFn(r); // y ∈ [0,1]，随 r 增大而增大
+
+    // 设计：剩余越多 => 越快（更小的间隔）。
+    // interval = min + (max - min) * (1 - y)
+    const min = Math.max(0, cfg.min);
+    const max = Math.max(min, cfg.max);
+    const intervalMs = min + (max - min) * (1 - y);
+    return intervalMs;
+  };
 
   const getChars = () => {
     return charsRef.current;
@@ -252,7 +306,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       }
 
       const deltaTime = currentTime - lastFrameTime;
-      let needToTypingCharsLength = Math.max(0, Math.floor(deltaTime / intervalRef.current));
+      const currentInterval = getCurrentInterval(chars.length);
+      let needToTypingCharsLength = Math.max(0, Math.floor(deltaTime / currentInterval));
       needToTypingCharsLength = Math.min(needToTypingCharsLength, chars.length);
 
       if (needToTypingCharsLength > 0) {
@@ -310,7 +365,8 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
         stopTimeout();
         return;
       }
-      timerRef.current = setTimeout(startTyped, intervalRef.current);
+      const currentInterval = getCurrentInterval(chars.length);
+      timerRef.current = setTimeout(startTyped, currentInterval);
     };
 
     const startTyped = async (isStartPoint = false) => {
@@ -376,9 +432,11 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
 
   function restartTypedTask() {
     endTask();
+    // 重置初始参考总量
+    initialRemainTotalRef.current = 0;
     // 将wholeContentRef的内容放到charsRef中
     charsRef.current.unshift(
-      ...wholeContentRef.current.thinking.content.split('').map((charUnit) => {
+      ...splitGraphemes(wholeContentRef.current.thinking.content).map((charUnit) => {
         const char: IChar = {
           content: charUnit,
           answerType: 'thinking',
@@ -389,7 +447,7 @@ export const useTypingTask = (options: UseTypingTaskOptions): TypingTaskControll
       }),
     );
     charsRef.current.unshift(
-      ...wholeContentRef.current.answer.content.split('').map((charUnit) => {
+      ...splitGraphemes(wholeContentRef.current.answer.content).map((charUnit) => {
         const char: IChar = {
           content: charUnit,
           answerType: 'answer',

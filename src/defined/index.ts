@@ -10,6 +10,19 @@ import { KatexOptions } from 'katex';
  */
 export type AnswerType = 'answer' | 'thinking';
 
+export type IntervalType =
+  | number
+  | {
+      /** 最大间隔 */
+      max: number;
+      /** 最小间隔 */
+      min: number;
+      /** 曲线函数自定义 */
+      curveFn?: (x: number) => number;
+      /** 曲线函数，如果配置了curveFn，则curve无效 */
+      curve?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end';
+    };
+
 export type Theme = 'light' | 'dark';
 
 /**
@@ -87,7 +100,7 @@ export interface MarkdownBaseProps {
   /** 计时类型： 支持setTimeout和requestAnimationFrame */
   timerType?: 'setTimeout' | 'requestAnimationFrame';
   /** 打字机效果间隔时间 */
-  interval: number;
+  interval: IntervalType;
   /** 是否关闭打字机效果 */
   disableTyping?: boolean;
   /** 打字完成后回调,  */
