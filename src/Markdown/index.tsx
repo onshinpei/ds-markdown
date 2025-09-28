@@ -12,7 +12,7 @@ interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
 }
 
-const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType, markdownRef, ...rest }) => {
+const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType = 'answer', markdownRef, ...rest }) => {
   const cmdRef = useRef<MarkdownCMDRef>(null!);
   const prefixRef = useRef('');
   const content = useMemo(() => {

@@ -18,6 +18,7 @@ interface IMarkdownCustom {
   codeBlock: IMarkdownCode;
   plugins: IMarkdownPlugin[];
   math: IMarkdownMath;
+  isInnerRender: boolean;
 }
 
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
