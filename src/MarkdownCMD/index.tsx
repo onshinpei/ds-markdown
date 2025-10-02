@@ -95,14 +95,6 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMar
     };
   }, [currentPlugins, katexConfig]);
 
-  // const children = useMemo(() => {
-  //   /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
-  //   if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
-  //     return finalReplaceMathBracket(_children);
-  //   }
-  //   return _children;
-  // }, [hasKatexPlugin, mathSplitSymbol, finalReplaceMathBracket, _children]);
-
   const customConvertMarkdownString = useCallback(
     (markdownString: string) => {
       /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
