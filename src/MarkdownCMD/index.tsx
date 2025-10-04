@@ -2,9 +2,9 @@
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import gfmPlugin from 'remark-gfm';
 import classNames from 'classnames';
-import { AnswerType, IMarkdownCode, IMarkdownPlugin, MarkdownCMDRef, Theme } from '../defined';
+import { AnswerType, IMarkdownCode, IMarkdownMath, IMarkdownPlugin, MarkdownCMDRef, Theme } from '../defined';
 import { __DEV__, katexId } from '../constant';
-import { MarkdownCMD as MarkdownCMDTyper, MarkdownCMDRef as MarkdownCMDTyperRef, MarkdownCMDProps as MarkdownCMDTyperProps, IMarkdownMath } from 'react-markdown-typer';
+import { MarkdownTyperCMD, MarkdownTyperCMDRef, MarkdownTyperCMDProps } from 'react-markdown-typer';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider, useMarkdownThemeContext } from '../context/MarkdownThemeProvider';
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { useConfig } from '../context/ConfigProvider';
@@ -33,9 +33,9 @@ const CodeComponent: React.FC<{ className: string; children: string }> = ({ clas
   );
 };
 
-const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
+const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
-  const cmdRef = useRef<MarkdownCMDTyperRef>(null!);
+  const cmdRef = useRef<MarkdownTyperCMDRef>(null!);
 
   // 从 context 中获取主题配置
   const currentTheme = themeState.theme;
@@ -115,9 +115,9 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMar
       })}
     >
       <div className={`ds-markdown-${answerType}`}>
-        {/* <MarkdownCMDTyper ref={cmdRef} {...rest} reactMarkdownProps={{}} /> */}
+        {/* <MarkdownTyperCMD ref={cmdRef} {...rest} reactMarkdownProps={{}} /> */}
 
-        <MarkdownCMDTyper
+        <MarkdownTyperCMD
           ref={cmdRef}
           customConvertMarkdownString={customConvertMarkdownString}
           {...rest}
@@ -146,7 +146,7 @@ if (__DEV__) {
   MarkdownCMDInner.displayName = 'MarkdownCMD';
 }
 
-const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownCMDTyperProps & IMarkdownCustom>((props, ref) => {
+const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>((props, ref) => {
   const { children = '', answerType = 'answer', isInnerRender, ...reset } = props;
 
   if (__DEV__) {
