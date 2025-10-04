@@ -3,8 +3,6 @@ import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
 import MarkdownCMD from '../MarkdownCMD';
 
-// import { MarkdownCMD } from 'react-markdown-typer';
-
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
 
@@ -20,7 +18,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
       return _children;
     }
     if (__DEV__) {
-      console.error('Markdown组件的子元素必须是一个字符串');
+      console.error('The children of Markdown component must be a string');
     }
     return '';
   }, [_children]);
@@ -66,10 +64,10 @@ const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
 
   if (__DEV__) {
     if (!['thinking', 'answer'].includes(answerType)) {
-      throw new Error('Markdown组件的answerType必须是thinking或answer');
+      throw new Error('The answerType of Markdown component must be thinking or answer');
     }
     if (typeof children !== 'string') {
-      throw new Error('Markdown组件的子元素必须是一个字符串');
+      throw new Error('The children of Markdown component must be a string');
     }
   }
 

@@ -39,6 +39,8 @@ export interface IMarkdownCode {
   headerActions?: boolean | React.ReactNode;
 }
 
+export interface MarkdownBaseProps extends MarkdownTyperBaseProps {}
+
 export interface MarkdownProps extends MarkdownTyperBaseProps, IMarkdownThemeProps {
   children: string | undefined;
 }

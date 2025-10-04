@@ -151,10 +151,10 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdown
 
   if (__DEV__) {
     if (!['thinking', 'answer'].includes(answerType)) {
-      throw new Error('Markdown组件的answerType必须是thinking或answer');
+      throw new Error('The answerType of MarkdownCMD component must be thinking or answer');
     }
     if (typeof children !== 'string') {
-      throw new Error('Markdown组件的子元素必须是一个字符串');
+      throw new Error('The children of MarkdownCMD component must be a string');
     }
   }
 
