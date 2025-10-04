@@ -58,9 +58,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
     },
   }));
 
-  // 只传递 MarkdownBaseProps 相关的属性
-  const { theme, math, plugins, codeBlock, ...baseProps } = rest;
-  return <MarkdownCMD ref={cmdRef} {...baseProps} answerType={answerType} isInnerRender />;
+  return <MarkdownCMD ref={cmdRef} {...rest} answerType={answerType} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {

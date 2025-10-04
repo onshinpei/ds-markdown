@@ -13,12 +13,12 @@ import BlockWrap from '../components/BlockWrap';
 import HighlightCode from '../components/HighlightCode';
 
 interface IMarkdownCustom {
-  answerType: AnswerType;
-  theme: Theme;
-  codeBlock: IMarkdownCode;
-  plugins: IMarkdownPlugin[];
-  math: IMarkdownMath;
-  isInnerRender: boolean;
+  answerType?: AnswerType;
+  theme?: Theme;
+  codeBlock?: IMarkdownCode;
+  plugins?: IMarkdownPlugin[];
+  math?: IMarkdownMath;
+  isInnerRender?: boolean;
 }
 
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
