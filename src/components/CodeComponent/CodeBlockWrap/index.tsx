@@ -1,5 +1,5 @@
 import React from 'react';
-import { useThemeState } from '../../context/MarkdownThemeProvider';
+import { useThemeState } from '../../../context/MarkdownThemeProvider';
 
 interface CodeBlockWrapProps {
   children: React.ReactNode;

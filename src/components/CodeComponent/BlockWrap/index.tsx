@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMarkdownThemeContext } from '../../context/MarkdownThemeProvider';
+import { useMarkdownThemeContext } from '../../../context/MarkdownThemeProvider';
 import CodeBlockWrap from '../CodeBlockWrap';
 import CodeBlockActions from '../CodeBlockActions';
 
