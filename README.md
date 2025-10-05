@@ -851,16 +851,19 @@ import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
+  const answerRef = useRef<MarkdownCMDRef>(null);
+  const [isShowAnswer, setIsShowAnswer] = useState(false);
 
   // 模拟 AI 流式响应
   const simulateAIResponse = async () => {
     markdownRef.current?.clear();
+    answerRef.current?.clear();
 
     // 思考阶段
     markdownRef.current?.push('🤔 正在分析您的问题...', 'thinking');
     await delay(1000);
     markdownRef.current?.push('\n\n✅ 分析完成，开始回答', 'thinking');
-
+    setIsShowAnswer(true);
     // 流式回答
     const chunks = [
       '# React 19 新特性解析\n\n',
@@ -874,7 +877,7 @@ function StreamingChat() {
 
     for (const chunk of chunks) {
       await delay(100);
-      markdownRef.current?.push(chunk, 'answer');
+      answerRef.current?.push(chunk, 'answer');
     }
   };
 
@@ -883,7 +886,8 @@ function StreamingChat() {
   return (
     <div className="chat-container">
       <button onClick={simulateAIResponse}>🤖 询问 React 19 新特性</button>
-      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
+      <MarkdownCMD answerType="thinking" ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
+      {isShowAnswer && <MarkdownCMD answerType="answer" ref={markdownRef} interval={10} timerType="requestAnimationFrame" />}
     </div>
   );
 }
