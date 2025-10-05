@@ -1,6 +1,6 @@
 import React from 'react';
-import CopyButton from '../CopyButton';
-import DownloadButton from '../DownloadButton';
+import CopyButton from '../../CopyButton';
+import DownloadButton from '../../DownloadButton';
 
 interface CodeBlockActionsProps {
   codeContent?: string;

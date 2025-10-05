@@ -1,6 +1,6 @@
 import React from 'react';
-import BlockWrap from '../BlockWrap';
-import HighlightCode from '../HighlightCode';
+import BlockWrap from './BlockWrap';
+import HighlightCode from './HighlightCode';
 
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
   const match = /language-(\w+)/.exec(className || '');
