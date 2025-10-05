@@ -11,9 +11,9 @@ import SuccessButton from './components/ui/SuccessButton';
 
 import CopyButton from './components/CopyButton';
 import DownloadButton from './components/DownloadButton';
-import CodeBlockActions from './components/CodeBlockActions';
-import CodeBlockWrap from './components/CodeBlockWrap';
-import HighlightCode from './components/HighlightCode';
+import CodeBlockActions from './components/CodeComponent/CodeBlockActions';
+import CodeBlockWrap from './components/CodeComponent/CodeBlockWrap';
+import HighlightCode from './components/CodeComponent/HighlightCode';
 
 export { CopyIcon, DownloadIcon, CheckMarkIcon } from './components/Icon';
 

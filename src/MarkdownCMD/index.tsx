@@ -9,8 +9,7 @@ import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvi
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { useConfig } from '../context/ConfigProvider';
 import { replaceMathBracket } from '../utils/remarkMathBracket';
-import BlockWrap from '../components/BlockWrap';
-import HighlightCode from '../components/HighlightCode';
+import CodeComponent from '../components/CodeComponent';
 
 interface IMarkdownCustom {
   answerType?: AnswerType;
@@ -20,18 +19,6 @@ interface IMarkdownCustom {
   math?: IMarkdownMath;
   isInnerRender?: boolean;
 }
-
-const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
-  const match = /language-(\w+)/.exec(className || '');
-  const codeContent = String(children).replace(/\n$/, '');
-  return match ? (
-    <BlockWrap language={match[1]} codeContent={codeContent}>
-      <HighlightCode code={codeContent} language={match[1]} />
-    </BlockWrap>
-  ) : (
-    <code className={className}>{children}</code>
-  );
-};
 
 const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
