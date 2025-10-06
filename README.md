@@ -353,7 +353,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `autoStartTyping`   | `boolean`                                   | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true`                                                      |
 | `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
 
-> 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`
+> 注意：打字进行中将 `disableTyping` 从 `true` 改为 `false` 只会从当前位置继续，不会回放已跳过的动画；若需从头播放，请调用实例方法 `restart()`。
 
 ### IBeforeTypedChar
 
@@ -887,7 +887,7 @@ function StreamingChat() {
     <div className="chat-container">
       <button onClick={simulateAIResponse}>🤖 询问 React 19 新特性</button>
       <MarkdownCMD answerType="thinking" ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
-      {isShowAnswer && <MarkdownCMD answerType="answer" ref={markdownRef} interval={10} timerType="requestAnimationFrame" />}
+      {isShowAnswer && <MarkdownCMD answerType="answer" ref={answerRef} interval={10} timerType="requestAnimationFrame" />}
     </div>
   );
 }
