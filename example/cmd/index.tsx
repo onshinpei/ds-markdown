@@ -4,7 +4,7 @@ import { MarkdownCMD, MarkdownCMDRef } from '../../src';
 // 导入 ./cozeData.text
 
 import { cozeData } from './cozeData';
-import { IntervalType, ITypedChar } from '../../src/defined';
+import type { IntervalType, ITypedChar } from 'react-markdown-typer';
 
 interface CMDDemoProps {
   id?: number;
@@ -93,7 +93,7 @@ const CMDDemo: React.FC<CMDDemoProps> = (props: CMDDemoProps) => {
         </button>
       </div>
       <div className="ds-message-list">
-        <MarkdownCMD interval={interval} ref={thinkingRef} timerType={timerType} onTypedChar={onTypedChar} />
+        <MarkdownCMD answerType="thinking" interval={interval} ref={thinkingRef} timerType={timerType} onTypedChar={onTypedChar} />
         <MarkdownCMD interval={interval} ref={answerRef} timerType={timerType} onTypedChar={onTypedChar} />
       </div>
     </div>
