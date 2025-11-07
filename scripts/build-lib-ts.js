@@ -75,10 +75,18 @@ async function copyOtherFiles() {
 async function postProcessESM() {
   const jsFiles = glob.sync(`${ES_DIR}/**/*.js`, { nodir: true });
 
-  for (const file of jsFiles) {
-    let content = await fs.readFile(file, 'utf8');
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 2000);
+  });
 
-    console.log('file', file);
+  for (const file of jsFiles) {
+    const filePath = path.resolve(__dirname, '..', file);
+
+    let content = await fs.readFile(filePath, 'utf8');
+
+    console.log('filePath', filePath);
     // 修复相对路径导入，确保使用正确的扩展名
     content = content.replace(/(?:from|import)\s+['"](\.\/[^'"]*|\.\.\/[^'"]*)['"]/g, (match, importPath) => {
       // 如果已经有正确的扩展名，直接返回
