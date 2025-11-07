@@ -17,50 +17,47 @@
   },
   "exports": {
     ".": {
-      "browser": "./dist/esm/index.js",
+      "browser": "./es/index.js",
       "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
+        "types": "./es/index.d.ts",
+        "default": "./es/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
+      "default": {
+        "types": "./es/index.d.ts",
+        "default": "./es/index.js"
       }
     },
     "./i18n/zh": {
       "import": {
-        "types": "./dist/esm/i18n/zh/index.d.ts",
-        "default": "./dist/esm/i18n/zh/index.js"
+        "types": "./es/i18n/zh/index.d.ts",
+        "default": "./es/i18n/zh/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/i18n/zh/index.d.ts",
-        "default": "./dist/cjs/i18n/zh/index.js"
+      "default": {
+        "types": "./es/i18n/zh/index.d.ts",
+        "default": "./es/i18n/zh/index.js"
       }
     },
     "./i18n/en": {
       "import": {
-        "types": "./dist/esm/i18n/en/index.d.ts",
-        "default": "./dist/esm/i18n/en/index.js"
+        "types": "./es/i18n/en/index.d.ts",
+        "default": "./es/i18n/en/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/i18n/en/index.d.ts",
-        "default": "./dist/cjs/i18n/en/index.js"
+      "default": {
+        "types": "./es/i18n/en/index.d.ts",
+        "default": "./es/i18n/en/index.js"
       }
     },
     "./plugins": {
-      "import": "./dist/esm/plugins/index.js",
-      "require": "./dist/cjs/plugins/index.js",
-      "default": "./dist/esm/plugins/index.js"
+      "import": "./es/plugins/index.js",
+      "default": "./es/plugins/index.js"
     },
     "./style.css": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css",
-      "default": "./dist/style.css"
+      "import": "./es/style.css",
+      "default": "./es/style.css"
     },
     "./katex.css": {
-      "import": "./dist/katex.css",
-      "require": "./dist/katex.css",
-      "default": "./dist/katex.css"
+      "import": "./es/katex.css",
+      "default": "./es/katex.css"
     }
   },
   "files": [
