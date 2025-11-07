@@ -3,7 +3,8 @@
 import { Pluggable } from 'unified';
 import Mermaid from './mermaid.type';
 import { KatexOptions } from 'katex';
-import { MarkdownBaseRef, MarkdownTyperBaseProps } from 'react-markdown-typer/es/defined';
+// 但 TypeScript 在编译时可以直接从文件路径导入类型
+import type { MarkdownBaseRef, MarkdownTyperBaseProps } from 'react-markdown-typer/es/defined';
 // import { KatexOptions } from 'katex';
 
 /**

@@ -56,7 +56,9 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
     },
   }));
 
-  return <MarkdownCMD ref={cmdRef} {...rest} answerType={answerType} isInnerRender />;
+  // 从 props 中获取 interval，如果没有则使用默认值 30
+  const interval = 'interval' in rest ? rest.interval : 30;
+  return <MarkdownCMD ref={cmdRef} {...rest} interval={interval} answerType={answerType} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
