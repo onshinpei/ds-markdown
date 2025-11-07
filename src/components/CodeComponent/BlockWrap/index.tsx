@@ -3,6 +3,8 @@ import { useMarkdownThemeContext } from '../../../context/MarkdownThemeProvider'
 import CodeBlockWrap from '../CodeBlockWrap';
 import CodeBlockActions from '../CodeBlockActions';
 
+import './index.less';
+
 interface BlockWrapProps {
   children: React.ReactNode;
   language: string;

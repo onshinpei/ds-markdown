@@ -2,6 +2,8 @@ import React from 'react';
 import BlockWrap from './BlockWrap';
 import HighlightCode from './HighlightCode';
 
+import './index.less';
+
 const CodeComponent: React.FC<{ className: string; children: string }> = ({ className, children = '' }) => {
   const match = /language-(\w+)/.exec(className || '');
   const codeContent = String(children).replace(/\n$/, '');

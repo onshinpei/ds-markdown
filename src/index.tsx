@@ -15,6 +15,8 @@ import CodeBlockActions from './components/CodeComponent/CodeBlockActions';
 import CodeBlockWrap from './components/CodeComponent/CodeBlockWrap';
 import HighlightCode from './components/CodeComponent/HighlightCode';
 
+import './index.less';
+
 export { CopyIcon, DownloadIcon, CheckMarkIcon } from './components/Icon';
 
 // 导出 ConfigProvider 相关
