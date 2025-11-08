@@ -174,13 +174,14 @@ No installation required, use directly in the browser:
 
 ## 🚀 5-Minute Quick Start
 
+> ✅ Starting from v1.0+, you no longer need to manually import `ds-markdown/style.css`; the component automatically injects the required base styles.
+
 ### Basic Usage
 
 [DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function App() {
   return (
@@ -195,7 +196,6 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function StaticDemo() {
   const [disableTyping, setDisableTyping] = useState(false);
@@ -281,7 +281,6 @@ Let's explore these new features together!`);
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function CodeBlockDemo() {
   const codeContent = `# Hello World

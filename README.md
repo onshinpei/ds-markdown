@@ -147,13 +147,14 @@ pnpm add ds-markdown
 
 ## 🚀 5分钟上手
 
+> ✅ v1.0+版本开始，无需再手动 `import 'ds-markdown/style.css'`，组件会自动注入所需的基础样式。
+
 ### 基础用法
 
 [DEMO](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function App() {
   return (
@@ -168,7 +169,6 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function StaticDemo() {
   const [disableTyping, setDisableTyping] = useState(false);
@@ -252,7 +252,6 @@ React 19 带来了许多激动人心的新特性：
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
-import 'ds-markdown/style.css';
 
 function CodeBlockDemo() {
   const codeContent = `# Hello World
