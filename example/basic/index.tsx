@@ -2,11 +2,11 @@ import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'r
 import { createRoot } from 'react-dom/client';
 
 import Markdown, { MarkdownRef } from '../../src';
-import json from './data.json';
+import dataJson from './data.json';
 
-function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) {
+function throttle(fn: (...args: any[]) => void, delay: number) {
   let lastTime = 0;
-  return (...args: T) => {
+  return (...args: unknown[]) => {
     const now = Date.now();
     if (now - lastTime > delay) {
       fn(...args);
@@ -15,15 +15,18 @@ function throttle<T extends unknown[]>(fn: (...args: T) => void, delay: number) 
   };
 }
 
-const BasicDemo: React.FC<{
+const App: React.FC<{
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
 }> = ({ theme, setTheme }) => {
-  const [thinkingContent, setThinkingContent] = useState('');
-  const [answerContent, setAnswerContent] = useState('');
+  const [disableTyping, setDisableTyping] = useState(false);
   const messageDivRef = useRef<HTMLDivElement>(null!);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isStop, setIsStop] = useState(false);
 
   const markdownRef = useRef<MarkdownRef>(null!);
+
+  const [mathOpen, setMathOpen] = useState(true);
 
   const scrollCacheRef = useRef<{
     type: 'manual' | 'auto';
@@ -35,16 +38,8 @@ const BasicDemo: React.FC<{
     prevScrollTop: 0,
   });
 
-  const onClick = () => {
-    setThinkingContent(json.thinking_content);
-  };
-  const onReset = () => {
-    setThinkingContent('');
-    setAnswerContent('');
-  };
-
   const throttleOnTypedChar = useMemo(() => {
-    return throttle((char) => {
+    return throttle(() => {
       if (!scrollCacheRef.current.needAutoScroll) return;
       const messageDiv = messageDivRef.current;
       // 自动滑动到最底部
@@ -68,70 +63,84 @@ const BasicDemo: React.FC<{
     }, 50);
   }, []);
 
-  const interval = 8;
-  const flag = false;
+  const onRestart = () => {
+    markdownRef.current.restart();
+    setIsTyping(true);
+  };
+
+  const onStart = () => {
+    markdownRef.current.start();
+    setIsTyping(true);
+  };
+
+  const interval = 5;
+  const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
   return (
     <>
       <div className="ds-message-actions">
         <div>
-          {thinkingContent ? (
-            <button className="start-btn" onClick={onReset}>
-              重置
+          {isTyping ? (
+            <button className="start-btn" disabled={isStop} onClick={onRestart}>
+              重新开始
             </button>
           ) : (
-            <button className="start-btn" onClick={onClick}>
-              点击显示
+            <button className="start-btn" disabled={isStop} onClick={onStart}>
+              开始任务
             </button>
           )}
-          <span style={{ marginLeft: 30 }}>React 19有哪些新特性</span>
+          <span style={{ marginLeft: 30 }}>React19 有哪些新特性</span>
         </div>
-        <div>
+        <div className="theme-btns">
           <button className="theme-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
             切换为{theme === 'light' ? '暗色' : '亮色'}
+          </button>
+          <button className="theme-btn" onClick={() => setMathOpen(!mathOpen)}>
+            {mathOpen ? '关闭' : '开启'}公式转换
+          </button>
+          <button className="theme-btn" onClick={() => setDisableTyping(!disableTyping)}>
+            {disableTyping ? '开启' : '关闭'}打字机效果
+          </button>
+          <button
+            className="theme-btn"
+            onClick={() => {
+              markdownRef.current.stop();
+              setIsStop(true);
+            }}
+          >
+            暂停
+          </button>
+
+          <button
+            className="theme-btn"
+            onClick={() => {
+              markdownRef.current.resume();
+              setIsStop(false);
+            }}
+          >
+            继续
           </button>
         </div>
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
         <div className="ds-message-list">
           <Markdown
+            ref={markdownRef}
             interval={interval}
-            answerType="thinking"
-            onEnd={(args) => {
-              // console.log('思考完成', args);
-              if (thinkingContent) {
-                setAnswerContent(json.content);
-              }
-            }}
+            answerType="answer"
             onTypedChar={throttleOnTypedChar}
-            // timerType="setTimeout"
             timerType={timerType}
             theme={theme}
-            codeBlock={{ headerActions: true }}
+            disableTyping={disableTyping}
+            autoStartTyping={false}
           >
-            {thinkingContent}
+            {dataJson.content}
           </Markdown>
-
-          {answerContent && (
-            <>
-              <div>
-                <button className="theme-btn" onClick={() => markdownRef.current.stop()}>
-                  停止
-                </button>
-                <button className="theme-btn" onClick={() => markdownRef.current.resume()}>
-                  继续
-                </button>
-              </div>
-              <Markdown interval={interval} ref={markdownRef} answerType="answer" onTypedChar={throttleOnTypedChar} timerType={timerType} theme={theme} codeBlock={{ headerActions: true }}>
-                {answerContent}
-              </Markdown>
-            </>
-          )}
         </div>
       </div>
     </>
   );
 };
 
-export default BasicDemo;
+export default App;
