@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Markdown } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import mermaidPlugin from 'ds-markdown-mermaid-plugin';
-import { useI18n } from '../hooks/useI18n';
-import './TryIt.css';
+import { useI18n } from '../../hooks/useI18n';
+import './index.css';
 
 const defaultMarkdown = `# 欢迎使用 Markdown 编辑器
 

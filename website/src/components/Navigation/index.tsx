@@ -8,18 +8,20 @@ const navText = {
     examples: '示例',
     docs: '文档',
     try: '在线体验',
+    migration: 'v0 → v1 升级',
   },
   en: {
     getStarted: 'Get Started',
     examples: 'Examples',
     docs: 'Docs',
     try: 'Try It',
+    migration: 'v0 → v1 Migration',
   },
 };
 
 // Navigation 组件
 const Navigation: React.FC = () => {
-  const { t, lang, setLang } = useI18n();
+  const { lang, setLang } = useI18n();
   const location = useLocation();
   const text = navText[lang];
 
@@ -45,6 +47,11 @@ const Navigation: React.FC = () => {
           <li>
             <Link to="/try" className={location.pathname === '/try' ? 'active' : ''}>
               {text.try}
+            </Link>
+          </li>
+          <li>
+            <Link to="/migration" className={location.pathname === '/migration' ? 'active' : ''}>
+              {text.migration}
             </Link>
           </li>
           <li className="lang-switcher-container">
