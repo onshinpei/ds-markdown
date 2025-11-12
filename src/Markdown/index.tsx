@@ -10,7 +10,7 @@ interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
 }
 
-const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType = 'answer', markdownRef, ...rest }) => {
+const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType = 'answer', markdownRef, timerType = 'requestAnimationFrame', ...rest }) => {
   const cmdRef = useRef<MarkdownCMDRef>(null!);
   const prefixRef = useRef('');
   const content = useMemo(() => {
@@ -58,7 +58,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
 
   // 从 props 中获取 interval，如果没有则使用默认值 30
   const interval = 'interval' in rest ? rest.interval : 30;
-  return <MarkdownCMD ref={cmdRef} {...rest} interval={interval} answerType={answerType} isInnerRender />;
+  return <MarkdownCMD ref={cmdRef} {...rest} interval={interval} answerType={answerType} timerType={timerType} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {

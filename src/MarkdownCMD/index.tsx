@@ -20,7 +20,7 @@ interface IMarkdownCustom {
   isInnerRender?: boolean;
 }
 
-const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({ answerType = 'answer', ...rest }, ref) => {
+const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({ answerType = 'answer', timerType = 'requestAnimationFrame', ...rest }, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
   const cmdRef = useRef<MarkdownTyperCMDRef>(null!);
 
@@ -106,6 +106,7 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
 
         <MarkdownTyperCMD
           ref={cmdRef}
+          timerType={timerType}
           customConvertMarkdownString={customConvertMarkdownString}
           {...rest}
           reactMarkdownProps={{
