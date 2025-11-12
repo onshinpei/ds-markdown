@@ -51,7 +51,6 @@
 
 - [核心特性](#-核心特性)
 - [快速安装](#-快速安装)
-  - [通过 ESM CDN 使用](#通过-esm-cdn-使用)
 - [5分钟上手](#-5分钟上手)
   - [基础用法](#基础用法)
   - [禁用打字动画](#禁用打字动画)
@@ -124,25 +123,6 @@ yarn add ds-markdown
 
 # pnpm
 pnpm add ds-markdown
-```
-
-### 通过 ESM CDN 使用
-
-无需安装，直接在浏览器中使用：
-
-[DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
-
-```html
-<!-- 导入样式， 必须 -->
-<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
-
-<!-- 导入katex数学公式样式， 非不要不引入 -->
-<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
-
-<!-- 导入组件 -->
-<script type="module">
-  import Markdown from 'https://esm.sh/ds-markdown';
-</script>
 ```
 
 ## 🚀 5分钟上手
@@ -920,7 +900,7 @@ function StreamingChat() {
 // ✅ 推荐：命令式 API
 const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
-  ref.current?.push(newChunk, 'answer');
+  ref.current?.push(newChunk);
 }, [newChunk]);
 ```
 
