@@ -106,5 +106,6 @@ export default {
   previewSubtitle: '实时渲染效果',
   clearButton: '清空',
   resetButton: '重置',
+  migrationGuide: 'v0 升级 v1',
   // ... 可继续补充
 };

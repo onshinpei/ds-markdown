@@ -1070,6 +1070,11 @@ namespace Mermaid {
    * This interface was referenced by `MermaidConfig`'s JSON-Schema
    * via the `definition` "SankeyDiagramConfig".
    */
+  /**
+   * Sankey link color type
+   */
+  export type SankeyLinkColor = 'source' | 'target' | 'path' | string;
+
   export interface SankeyDiagramConfig extends BaseDiagramConfig {
     width?: number;
     height?: number;

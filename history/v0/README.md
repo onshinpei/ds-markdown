@@ -51,6 +51,7 @@
 
 - [核心特性](#-核心特性)
 - [快速安装](#-快速安装)
+  - [通过 ESM CDN 使用](#通过-esm-cdn-使用)
 - [5分钟上手](#-5分钟上手)
   - [基础用法](#基础用法)
   - [禁用打字动画](#禁用打字动画)
@@ -125,9 +126,26 @@ yarn add ds-markdown
 pnpm add ds-markdown
 ```
 
-## 🚀 5分钟上手
+### 通过 ESM CDN 使用
 
-> ✅ v1.0+版本开始，无需再手动 `import 'ds-markdown/style.css'`，组件会自动注入所需的基础样式。
+无需安装，直接在浏览器中使用：
+
+[DEMO](https://stackblitz.com/edit/stackblitz-starters-7vcclcw7?file=index.html)
+
+```html
+<!-- 导入样式， 必须 -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/style.css" />
+
+<!-- 导入katex数学公式样式， 非不要不引入 -->
+<link rel="stylesheet" href="https://esm.sh/ds-markdown/dist/katex.css" />
+
+<!-- 导入组件 -->
+<script type="module">
+  import Markdown from 'https://esm.sh/ds-markdown';
+</script>
+```
+
+## 🚀 5分钟上手
 
 ### 基础用法
 
@@ -135,6 +153,7 @@ pnpm add ds-markdown
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
 
 function App() {
   return (
@@ -149,6 +168,7 @@ function App() {
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
 
 function StaticDemo() {
   const [disableTyping, setDisableTyping] = useState(false);
@@ -232,6 +252,7 @@ React 19 带来了许多激动人心的新特性：
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
+import 'ds-markdown/style.css';
 
 function CodeBlockDemo() {
   const codeContent = `# Hello World
@@ -332,7 +353,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `autoStartTyping`   | `boolean`                                   | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true`                                                      |
 | `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
 
-> 注意：打字进行中将 `disableTyping` 从 `true` 改为 `false` 只会从当前位置继续，不会回放已跳过的动画；若需从头播放，请调用实例方法 `restart()`。
+> 注意： 如果当在打字中 `disableTyping`从 `true` 变为 `false`
 
 ### IBeforeTypedChar
 
@@ -830,19 +851,16 @@ import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
   const markdownRef = useRef<MarkdownCMDRef>(null);
-  const answerRef = useRef<MarkdownCMDRef>(null);
-  const [isShowAnswer, setIsShowAnswer] = useState(false);
 
   // 模拟 AI 流式响应
   const simulateAIResponse = async () => {
     markdownRef.current?.clear();
-    answerRef.current?.clear();
 
     // 思考阶段
     markdownRef.current?.push('🤔 正在分析您的问题...', 'thinking');
     await delay(1000);
     markdownRef.current?.push('\n\n✅ 分析完成，开始回答', 'thinking');
-    setIsShowAnswer(true);
+
     // 流式回答
     const chunks = [
       '# React 19 新特性解析\n\n',
@@ -856,7 +874,7 @@ function StreamingChat() {
 
     for (const chunk of chunks) {
       await delay(100);
-      answerRef.current?.push(chunk, 'answer');
+      markdownRef.current?.push(chunk, 'answer');
     }
   };
 
@@ -865,8 +883,7 @@ function StreamingChat() {
   return (
     <div className="chat-container">
       <button onClick={simulateAIResponse}>🤖 询问 React 19 新特性</button>
-      <MarkdownCMD answerType="thinking" ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
-      {isShowAnswer && <MarkdownCMD answerType="answer" ref={answerRef} interval={10} timerType="requestAnimationFrame" />}
+      <MarkdownCMD ref={markdownRef} interval={10} timerType="requestAnimationFrame" />
     </div>
   );
 }
@@ -900,7 +917,7 @@ function StreamingChat() {
 // ✅ 推荐：命令式 API
 const ref = useRef<MarkdownCMDRef>(null);
 useEffect(() => {
-  ref.current?.push(newChunk);
+  ref.current?.push(newChunk, 'answer');
 }, [newChunk]);
 ```
 

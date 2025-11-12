@@ -18,6 +18,7 @@ import GetStarted from './pages/GetStarted';
 import TryIt from './pages/TryIt';
 import Examples from './pages/Examples';
 import Docs from './pages/Docs';
+import MigrationGuide from './pages/MigrationGuide';
 import { useI18n } from './hooks/useI18n';
 
 const AppContent: React.FC = () => {
@@ -35,6 +36,7 @@ const AppContent: React.FC = () => {
           <Route path="/try" element={<TryIt />} />
           <Route path="/examples" element={<Examples />} />
           <Route path="/docs" element={<Docs />} />
+          <Route path="/migration" element={<MigrationGuide />} />
         </Routes>
         <Footer />
       </HashRouter>

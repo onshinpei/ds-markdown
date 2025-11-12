@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './index.less';
+
 export interface SegmentedItem {
   label: string;
   value: string;

@@ -1,7 +1,6 @@
 import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import '../src/style.less';
 import './index.css';
 
 import BasicDemo from './basic';
@@ -21,7 +20,7 @@ const App = () => {
           errorColor: '#0f0',
         }}
       >
-        <CDMDemo theme={theme} setTheme={setTheme} />
+        <BasicDemo theme={theme} setTheme={setTheme} />
       </ConfigProvider>
     </div>
   );

@@ -1,7 +1,7 @@
 {
   "name": "ds-markdown",
   "private": false,
-  "version": "0.2.3",
+  "version": "1.0.0-beta.1",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "module": "./dist/esm/index.js",
@@ -17,59 +17,56 @@
   },
   "exports": {
     ".": {
-      "browser": "./dist/esm/index.js",
+      "browser": "./es/index.js",
       "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
+        "types": "./es/index.d.ts",
+        "default": "./es/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
+      "default": {
+        "types": "./es/index.d.ts",
+        "default": "./es/index.js"
       }
     },
     "./i18n/zh": {
       "import": {
-        "types": "./dist/esm/i18n/zh/index.d.ts",
-        "default": "./dist/esm/i18n/zh/index.js"
+        "types": "./es/i18n/zh/index.d.ts",
+        "default": "./es/i18n/zh/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/i18n/zh/index.d.ts",
-        "default": "./dist/cjs/i18n/zh/index.js"
+      "default": {
+        "types": "./es/i18n/zh/index.d.ts",
+        "default": "./es/i18n/zh/index.js"
       }
     },
     "./i18n/en": {
       "import": {
-        "types": "./dist/esm/i18n/en/index.d.ts",
-        "default": "./dist/esm/i18n/en/index.js"
+        "types": "./es/i18n/en/index.d.ts",
+        "default": "./es/i18n/en/index.js"
       },
-      "require": {
-        "types": "./dist/cjs/i18n/en/index.d.ts",
-        "default": "./dist/cjs/i18n/en/index.js"
+      "default": {
+        "types": "./es/i18n/en/index.d.ts",
+        "default": "./es/i18n/en/index.js"
       }
     },
     "./plugins": {
-      "import": "./dist/esm/plugins/index.js",
-      "require": "./dist/cjs/plugins/index.js",
-      "default": "./dist/esm/plugins/index.js"
+      "import": "./es/plugins/index.js",
+      "default": "./es/plugins/index.js"
     },
     "./style.css": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css",
-      "default": "./dist/style.css"
+      "import": "./es/style.css",
+      "default": "./es/style.css"
     },
     "./katex.css": {
-      "import": "./dist/katex.css",
-      "require": "./dist/katex.css",
-      "default": "./dist/katex.css"
+      "import": "./es/katex.css",
+      "default": "./es/katex.css"
     }
   },
   "files": [
-    "dist"
+    "es"
   ],
   "scripts": {
     "dev": "vite",
     "build:docs": "rimraf docs && vite build",
-    "build": "rimraf dist && rollup -c && npm run build:less",
+    "build": "node scripts/build-lib-ts.js",
     "build:less": "lessc src/style.less dist/style.css && lessc src/katex.less dist/katex.css",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -82,6 +79,7 @@
     "classnames": "^2.5.1",
     "katex": "^0.16.22",
     "react-markdown": "^10.1.0",
+    "react-markdown-typer": "1.0.2",
     "react-router-dom": "^7.7.1",
     "react-syntax-highlighter": "^15.6.1",
     "rehype-katex": "^7.0.1",
@@ -119,6 +117,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "fs-extra": "^11.3.2",
     "globals": "^16.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
@@ -158,6 +157,6 @@
     "react-markdown"
   ],
   "publishConfig": {
-    "tag": "latest"
+    "tag": "beta"
   }
 }
