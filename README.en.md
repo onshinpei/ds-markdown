@@ -1,6 +1,6 @@
 # ds-markdown
 
-> 🚀 High-performance React Markdown typing animation component, perfectly replicating DeepSeek chat interface effects
+> 🚀 React Markdown typing animation component for modern chat interface effects
 
 **🇺🇸 English | [🇨🇳 中文](./README.md)**
 
