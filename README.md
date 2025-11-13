@@ -1,5 +1,9 @@
 # ds-markdown
 
+<p align="center">
+  <img src="./assets/images/favicon.png" alt="ds-markdown logo" width="120" />
+</p>
+
 > 🚀 React Markdown typing animation component for modern chat interface effects
 
 **🇺🇸 English | [🇨🇳 中文](./README.md)**

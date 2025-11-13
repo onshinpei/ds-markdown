@@ -1,5 +1,9 @@
 # ds-markdown
 
+<p align="center">
+  <img src="./assets/images/favicon.png" alt="ds-markdown logo" width="120" />
+</p>
+
 > 🚀 React Markdown 打字动画组件，提供现代聊天界面效果
 
 **🇨🇳 中文 | [🇺🇸 English](./README.en.md)**
