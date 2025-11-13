@@ -386,42 +386,59 @@ export const codeExamples = {
   $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
 </DsMarkdown>`,
 
-  streamingChat: `import { useRef } from 'react';
+  streamingChat: `import { useRef, useState } from 'react';
 import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 function StreamingChat() {
-  const markdownRef = useRef<MarkdownCMDRef>(null);
+  const thinkingRef = useRef<MarkdownCMDRef>(null);
+  const answerRef = useRef<MarkdownCMDRef>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const simulateAIResponse = async () => {
-    markdownRef.current?.clear();
-    
+    thinkingRef.current?.clear();
+    answerRef.current?.clear();
+
     // 思考阶段
-    markdownRef.current?.push('🤔 正在分析...', 'thinking');
-    
+    thinkingRef.current?.push('🤔 正在分析...', 'thinking');
+    await delay(800);
+    thinkingRef.current?.push('\n\n✅ 分析完成，开始回答', 'thinking');
+    setShowAnswer(true);
+
     // 流式回答
     const chunks = [
-      '# React 19 新特性\\n\\n',
-      '## 🚀 React Compiler\\n',
-      '- 🎯 自动优化性能\\n',
-      '- ⚡ 编译时优化\\n'
+      '# React 19 新特性解析\n\n',
+      '## 🚀 React Compiler\n',
+      '- 🎯 自动优化：无需手动 memo 与 useMemo\n',
+      '- ⚡ 性能提升：编译时优化，运行时零开销\n',
+      '- 🔧 向后兼容：现有代码无需修改\n\n',
+      '希望这个解答对您有帮助！🎉',
     ];
-    
+
     for (const chunk of chunks) {
       await delay(100);
-      markdownRef.current?.push(chunk, 'answer');
+      answerRef.current?.push(chunk, 'answer');
     }
   };
 
   return (
     <div>
-      <button onClick={simulateAIResponse}>
-        🤖 询问 AI
-      </button>
-      <MarkdownCMD 
-        ref={markdownRef}
-        interval={15}
+      <button onClick={simulateAIResponse}>🤖 询问 AI</button>
+      <MarkdownCMD
+        ref={thinkingRef}
+        answerType="thinking"
+        interval={10}
         timerType="requestAnimationFrame"
       />
+      {showAnswer && (
+        <MarkdownCMD
+          ref={answerRef}
+          answerType="answer"
+          interval={{ min: 8, max: 60, curve: 'ease-out' }}
+          timerType="requestAnimationFrame"
+        />
+      )}
     </div>
   );
 }`,

@@ -2,6 +2,7 @@ import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRe
 import { __DEV__ } from '../constant';
 import { MarkdownCMDRef, MarkdownProps, MarkdownRef } from '../defined';
 import MarkdownCMD from '../MarkdownCMD';
+
 import { MarkdownProvider } from '../context/MarkdownProvider';
 import { DEFAULT_ANSWER_TYPE, DEFAULT_PLUGINS, DEFAULT_THEME, MarkdownThemeProvider } from '../context/MarkdownThemeProvider';
 
@@ -9,7 +10,7 @@ interface MarkdownInnerProps extends MarkdownProps {
   markdownRef: React.ForwardedRef<MarkdownRef>;
 }
 
-const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType, markdownRef, ...rest }) => {
+const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '', answerType = 'answer', markdownRef, timerType = 'requestAnimationFrame', ...rest }) => {
   const cmdRef = useRef<MarkdownCMDRef>(null!);
   const prefixRef = useRef('');
   const content = useMemo(() => {
@@ -17,7 +18,7 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
       return _children;
     }
     if (__DEV__) {
-      console.error('Markdown组件的子元素必须是一个字符串');
+      console.error('The children of Markdown component must be a string');
     }
     return '';
   }, [_children]);
@@ -55,9 +56,9 @@ const MarkdownInner: React.FC<MarkdownInnerProps> = ({ children: _children = '',
     },
   }));
 
-  // 只传递 MarkdownBaseProps 相关的属性
-  const { theme, math, plugins, codeBlock, ...baseProps } = rest;
-  return <MarkdownCMD ref={cmdRef} {...baseProps} isInnerRender />;
+  // 从 props 中获取 interval，如果没有则使用默认值 30
+  const interval = 'interval' in rest ? rest.interval : 30;
+  return <MarkdownCMD ref={cmdRef} {...rest} interval={interval} answerType={answerType} timerType={timerType} isInnerRender />;
 };
 
 const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
@@ -65,10 +66,10 @@ const Markdown = forwardRef<MarkdownRef, MarkdownProps>((props, ref) => {
 
   if (__DEV__) {
     if (!['thinking', 'answer'].includes(answerType)) {
-      throw new Error('Markdown组件的answerType必须是thinking或answer');
+      throw new Error('The answerType of Markdown component must be thinking or answer');
     }
     if (typeof children !== 'string') {
-      throw new Error('Markdown组件的子元素必须是一个字符串');
+      throw new Error('The children of Markdown component must be a string');
     }
   }
 

@@ -105,5 +105,6 @@ export default {
   previewSubtitle: 'Real-time rendering effect',
   clearButton: 'Clear',
   resetButton: 'Reset',
+  migrationGuide: 'v0 → v1 Migration',
   // ... more as needed
 };

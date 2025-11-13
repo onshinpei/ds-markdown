@@ -18,3 +18,5 @@ This demo shows how to use the `MarkdownCMD` component to handle streaming data,
 4. **Real-time Chat** - Stream chat messages in real time
 
 Click the "Start Streaming Demo" button to experience different streaming scenarios!
+
+> Tip: Use two `MarkdownCMD` instances for thinking and answer, each with its own `ref` (e.g., `thinkingRef` and `answerRef`). For real streaming, the answer instance is recommended to use a dynamic interval for a natural rhythm: `interval={{ min: 8, max: 60, curve: 'ease-out' }}`.
