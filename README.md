@@ -1,5 +1,9 @@
 # ds-markdown
 
+<p align="center">
+  <img src="./assets/images/favicon.png" alt="ds-markdown logo" width="120" />
+</p>
+
 > 🚀 React Markdown typing animation component for modern chat interface effects
 
 **🇺🇸 English | [🇨🇳 中文](./README.md)**
@@ -14,7 +18,7 @@ A React component designed specifically for modern AI applications, providing sm
 
 - [Documentation](https://onshinpei.github.io/ds-markdown/)
 - Usage Examples
-  - [Basic Usage](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
+  - [Basic Usage](https://stackblitz.com/~/github.com/onshinpei/ds-markdown-base-en?file=src/App.tsx)
   - [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
   - [Mermaid Charts](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
   - [Math Formulas Demo 1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)

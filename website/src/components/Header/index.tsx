@@ -80,6 +80,7 @@ const Header: React.FC = () => {
       <DigitalRain />
       <div className="container">
         <h1 className="logo" data-text="ds-markdown">
+          <img src="https://raw.githubusercontent.com/onshinpei/ds-markdown/main/assets/images/favicon.png" alt="ds-markdown icon" className="logo-icon" />
           ds-markdown
         </h1>
         <p className="subtitle">🚀 {t('headerSubtitle')}</p>

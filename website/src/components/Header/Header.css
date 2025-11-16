@@ -8,3 +8,24 @@
   z-index: 0;
   opacity: 0.3;
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@media (max-width: 768px) {
+  .logo-icon {
+    width: 56px;
+    height: 56px;
+  }
+}
