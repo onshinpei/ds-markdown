@@ -25,7 +25,7 @@ A React component designed specifically for modern AI applications, providing sm
 - [Live Examples](https://onshinpei.github.io/ds-markdown/#examples)
 - [Try it](https://onshinpei.github.io/ds-markdown/#try)
 
-## stackblitz demos
+## Stackblitz demos
 
 - [Basic Usage](https://stackblitz.com/~/github.com/onshinpei/ds-markdown-base-en?file=src/App.tsx)
 - [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
