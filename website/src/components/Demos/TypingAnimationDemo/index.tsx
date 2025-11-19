@@ -69,7 +69,7 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
 
   // 组件配置状态
   const [config, setConfig] = useState<ComponentConfig>({
-    interval: 30,
+    interval: 8,
     timerType: 'setTimeout',
     answerType: 'answer',
     theme: 'light',
@@ -82,34 +82,6 @@ const TypingAnimationDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [isInViewport, setIsInViewport] = useState(false);
-
-  // 视口检测
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isStarted) {
-          setIsInViewport(true);
-          // 延迟一点开始打字，给用户一个视觉缓冲
-          setTimeout(() => {
-            handleStartDemo();
-          }, 500);
-        }
-      },
-      {
-        threshold: 0.3, // 当30%的内容可见时触发
-        rootMargin: '0px 0px -100px 0px', // 提前100px触发
-      },
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isStarted]);
 
   const resetStatus = () => {
     setIsTyping(false);

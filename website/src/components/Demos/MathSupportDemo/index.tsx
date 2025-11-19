@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 import { katexPlugin } from 'ds-markdown/plugins';
 import { useI18n } from '../../../../src/hooks/useI18n';
@@ -14,44 +14,16 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [isInViewport, setIsInViewport] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const [mathOpen, setMathOpen] = useState(true);
   const { t } = useI18n();
 
-  // 视口检测
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isStarted) {
-          setIsInViewport(true);
-          // 延迟一点开始打字，给用户一个视觉缓冲
-          setTimeout(() => {
-            handleStart();
-          }, 500);
-        }
-      },
-      {
-        threshold: 0.3, // 当30%的内容可见时触发
-        rootMargin: '0px 0px -100px 0px', // 提前100px触发
-      },
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isStarted]);
-
   // 事件处理函数
   const handleStart = () => {
     if (isStarted) {
       // 如果已经开始过，则重新开始
-      markdownRef.current?.start();
+      markdownRef.current?.restart();
     } else {
       // 第一次开始
       markdownRef.current?.start();
@@ -76,12 +48,12 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const handleToggleMath = () => {
-    setMathOpen(!mathOpen);
-  };
-
   const handleToggleTyping = () => {
     setDisableTyping(!disableTyping);
+  };
+
+  const handleToggleMath = () => {
+    setMathOpen(!mathOpen);
   };
 
   const handleTypingStart = () => {
@@ -113,10 +85,13 @@ const MathSupportDemo: React.FC<DemoProps> = ({ markdown }) => {
         <button className="btn btn-outline" onClick={handleToggleTyping}>
           {disableTyping ? t('enableTyping') : t('disableTyping')}
         </button>
+        <button className="btn btn-outline" onClick={handleToggleMath}>
+          {mathOpen ? t('disableMath') : t('enableMath')}
+        </button>
       </div>
       <DsMarkdown
         ref={markdownRef}
-        interval={20}
+        interval={8}
         answerType="answer"
         theme={theme}
         plugins={mathOpen ? [katexPlugin] : []}

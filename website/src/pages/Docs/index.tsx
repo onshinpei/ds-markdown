@@ -11,7 +11,6 @@ const Docs: React.FC = () => (
         <FloatingToc />
       </div>
       <div className="main-content">
-        {' '}
         <div className="container">
           <ApiDocumentation />
         </div>

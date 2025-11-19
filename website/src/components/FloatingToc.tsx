@@ -35,6 +35,9 @@ const examplesToc = [
 
 const apiToc = [
   { id: 'api', i18n: 'navApi' },
+  { id: 'api-props', i18n: 'navApiProps' },
+  { id: 'api-ref-ds', i18n: 'navApiRefDs' },
+  { id: 'api-ref-cmd', i18n: 'navApiRefCmd' },
   {
     id: '类型定义',
     i18n: 'navApiTypedef',
@@ -42,20 +45,21 @@ const apiToc = [
       { id: 'ITypedChar', label: 'ITypedChar' },
       { id: 'IBeforeTypedChar', label: 'IBeforeTypedChar' },
       { id: 'IMarkdownMath', label: 'IMarkdownMath' },
+      { id: 'IntervalConfig', label: 'IntervalConfig' },
       { id: 'IMarkdownPlugin', label: 'IMarkdownPlugin' },
       { id: 'IMarkdownCode', label: 'IMarkdownCode' },
       { id: 'IEndData', label: 'IEndData' },
       { id: 'IStartData', label: 'IStartData' },
-      { id: 'I18nData', label: 'I18nData' },
     ],
   },
-  { id: 'api-props', i18n: 'navApiProps' },
-  { id: 'api-ref-ds', i18n: 'navApiRefDs' },
-  { id: 'api-ref-cmd', i18n: 'navApiRefCmd' },
   { id: 'api-plugin', i18n: 'navApiPlugin' },
   { id: 'api-timer', i18n: 'navApiTimer' },
   { id: 'api-formula', i18n: 'navApiFormula' },
-  { id: 'api-config', i18n: 'navApiConfig' },
+  {
+    id: 'api-config',
+    i18n: 'navApiConfig',
+    children: [{ id: 'I18nData', label: 'I18nData' }],
+  },
   { id: 'api-best', i18n: 'navApiBest' },
   { id: 'api-example', i18n: 'navApiExample' },
 ];
