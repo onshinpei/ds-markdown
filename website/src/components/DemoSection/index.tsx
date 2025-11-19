@@ -8,7 +8,7 @@ import { useI18n } from '../../hooks/useI18n';
 import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
 
 // Demo组件
-const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children, onlyShowCode = false }) => {
+const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHeader = true, renderComponent, children, onlyShowCode = false, viewInIsStart = false }) => {
   const [activeTab, setActiveTab] = useState<'code' | 'markdown'>(onlyShowCode ? 'code' : 'markdown');
   const [isInViewport, setIsInViewport] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
@@ -18,6 +18,9 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
 
   // 视口检测
   useEffect(() => {
+    if (!viewInIsStart) {
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isStarted) {
@@ -44,7 +47,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({ id, title, sourceCode, showHe
     return () => {
       observer.disconnect();
     };
-  }, [isStarted]);
+  }, [viewInIsStart, isStarted]);
 
   return (
     <section id={id} className="section">

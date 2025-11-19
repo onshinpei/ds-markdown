@@ -1,7 +1,6 @@
 .floating-toc {
   padding: 0 20px;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  font-size: 14px;
 }
 
 .floating-toc ul {
@@ -11,75 +10,46 @@
 }
 
 .floating-toc li {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .floating-toc li:last-child {
   margin-bottom: 0;
 }
 
-.floating-toc .toc-divider {
-  border-top: 1px solid #e5e7ef;
-  margin: 14px 0 10px 0;
-  height: 0;
-}
-
 .floating-toc a {
-  color: #4c63d2;
+  color: #666;
   text-decoration: none;
-  font-weight: 500;
-  border-left: 3px solid transparent;
-  padding: 7px 0 7px 12px;
+  font-weight: 400;
+  border-left: 2px solid transparent;
+  padding: 6px 0 6px 12px;
   display: block;
-  border-radius: 6px;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  position: relative;
+  transition: all 0.2s ease;
 }
 
 .floating-toc a.active {
-  color: #fff;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  border-left: 3px solid #764ba2;
-  box-shadow: 0 2px 8px rgba(118, 75, 178, 0.08);
+  color: #1a73e8;
+  border-left-color: #1a73e8;
+  font-weight: 500;
 }
 
-.floating-toc a.active::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 7px;
-  height: 7px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px #764ba2;
-}
-
-.floating-toc a:hover:not(.active) {
-  background: #f0f4ff;
-  color: #333;
+.floating-toc a:hover {
+  color: #1a73e8;
 }
 
 .floating-toc ul ul {
-  margin-left: 10px;
-  margin-top: 2px;
+  margin-left: 16px;
+  margin-top: 4px;
 }
 
 .floating-toc ul ul a {
   font-size: 13px;
-  font-weight: 400;
-  padding: 5px 0 5px 18px;
-  border-radius: 4px;
+  padding: 4px 0 4px 12px;
 }
 
 .floating-toc ul ul a.active {
-  background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%);
-  color: #fff;
-  border-left: 3px solid #a18cd1;
+  color: #1a73e8;
+  border-left-color: #1a73e8;
 }
 
 @media (max-width: 1100px) {

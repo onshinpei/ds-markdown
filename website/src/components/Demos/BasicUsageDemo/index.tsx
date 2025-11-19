@@ -108,7 +108,7 @@ const BasicUsageDemo: React.FC<DemoProps> = ({ markdown }) => {
           {disableTyping ? t('enableTyping') : t('disableTyping')}
         </button>
       </div>
-      <DsMarkdown ref={markdownRef} interval={25} answerType="answer" theme={theme} disableTyping={disableTyping} autoStartTyping={false} onStart={handleTypingStart} onEnd={handleTypingEnd}>
+      <DsMarkdown ref={markdownRef} interval={5} answerType="answer" theme={theme} disableTyping={disableTyping} autoStartTyping={false} onStart={handleTypingStart} onEnd={handleTypingEnd}>
         {markdown}
       </DsMarkdown>
     </div>

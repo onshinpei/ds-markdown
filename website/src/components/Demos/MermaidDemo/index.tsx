@@ -13,7 +13,6 @@ const MermaidDemo: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [isInViewport, setIsInViewport] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [disableTyping, setDisableTyping] = useState(false);
   const { t, lang } = useI18n();
@@ -21,33 +20,6 @@ const MermaidDemo: React.FC = () => {
   const mermaidConfig = {
     flowchart: { useMaxWidth: true, htmlLabels: true },
   };
-
-  // 视口检测
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isStarted) {
-          setIsInViewport(true);
-          // 延迟一点开始打字，给用户一个视觉缓冲
-          setTimeout(() => {
-            handleStart();
-          }, 500);
-        }
-      },
-      {
-        threshold: 0.3, // 当30%的内容可见时触发
-        rootMargin: '0px 0px -100px 0px', // 提前100px触发
-      },
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isStarted]);
 
   const handleStart = () => {
     if (isStarted) {

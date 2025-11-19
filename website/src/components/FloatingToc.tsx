@@ -3,6 +3,18 @@ import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
 import './FloatingToc.css';
 
+interface TocChild {
+  id: string;
+  label: string;
+}
+
+interface TocItem {
+  id: string;
+  i18n?: string;
+  label?: string;
+  children?: TocChild[];
+}
+
 const getStartedToc = [
   { id: 'installation', i18n: 'navInstall' },
   { id: 'quick-start', i18n: 'navQuickStart' },
@@ -13,7 +25,6 @@ const getStartedToc = [
 ];
 
 const examplesToc = [
-  { id: 'installation', i18n: 'navInstall' },
   { id: 'basic-usage', i18n: 'navBasicUsage' },
   { id: 'math-support', i18n: 'navMathSupport' },
   { id: 'typing-animation', i18n: 'navTypingAnimation' },
@@ -24,29 +35,33 @@ const examplesToc = [
 
 const apiToc = [
   { id: 'api', i18n: 'navApi' },
+  { id: 'api-props', i18n: 'navApiProps' },
+  { id: 'api-ref-ds', i18n: 'navApiRefDs' },
+  { id: 'api-ref-cmd', i18n: 'navApiRefCmd' },
   {
     id: '类型定义',
-    label: '类型定义',
+    i18n: 'navApiTypedef',
     children: [
       { id: 'ITypedChar', label: 'ITypedChar' },
       { id: 'IBeforeTypedChar', label: 'IBeforeTypedChar' },
       { id: 'IMarkdownMath', label: 'IMarkdownMath' },
+      { id: 'IntervalConfig', label: 'IntervalConfig' },
       { id: 'IMarkdownPlugin', label: 'IMarkdownPlugin' },
       { id: 'IMarkdownCode', label: 'IMarkdownCode' },
       { id: 'IEndData', label: 'IEndData' },
       { id: 'IStartData', label: 'IStartData' },
-      { id: 'I18nData', label: 'I18nData' },
     ],
   },
-  { id: 'api-props', label: 'Props 属性' },
-  { id: 'api-ref-ds', label: 'Ref 方法 - DsMarkdown' },
-  { id: 'api-ref-cmd', label: 'Ref 方法 - MarkdownCMD' },
-  { id: 'api-plugin', label: '内置插件' },
-  { id: 'api-timer', label: '定时器模式对比' },
-  { id: 'api-formula', label: '数学公式分隔符说明' },
-  { id: 'api-config', label: 'ConfigProvider 多语言' },
-  { id: 'api-best', label: '最佳实践建议' },
-  { id: 'api-example', label: '使用示例' },
+  { id: 'api-plugin', i18n: 'navApiPlugin' },
+  { id: 'api-timer', i18n: 'navApiTimer' },
+  { id: 'api-formula', i18n: 'navApiFormula' },
+  {
+    id: 'api-config',
+    i18n: 'navApiConfig',
+    children: [{ id: 'I18nData', label: 'I18nData' }],
+  },
+  { id: 'api-best', i18n: 'navApiBest' },
+  { id: 'api-example', i18n: 'navApiExample' },
 ];
 
 const FloatingToc: React.FC = () => {
@@ -60,25 +75,13 @@ const FloatingToc: React.FC = () => {
       return getStartedToc;
     } else if (location.pathname === '/examples') {
       return examplesToc;
+    } else if (location.pathname === '/docs') {
+      return apiToc;
     }
     return [];
   };
 
   const currentToc = getCurrentToc();
-
-  // 处理 API 区标题多语言
-  const apiLabels = {
-    'Props 属性': lang === 'zh' ? 'Props 属性' : 'Props',
-    'Ref 方法 - DsMarkdown': lang === 'zh' ? 'Ref 方法 - DsMarkdown' : 'Ref Methods - DsMarkdown',
-    'Ref 方法 - MarkdownCMD': lang === 'zh' ? 'Ref 方法 - MarkdownCMD' : 'Ref Methods - MarkdownCMD',
-    类型定义: lang === 'zh' ? '类型定义' : 'Type Definitions',
-    内置插件: lang === 'zh' ? '内置插件' : 'Built-in Plugins',
-    定时器模式对比: lang === 'zh' ? '定时器模式对比' : 'Timer Comparison',
-    数学公式分隔符说明: lang === 'zh' ? '数学公式分隔符说明' : 'Math Formula Delimiters',
-    'ConfigProvider 多语言': lang === 'zh' ? 'ConfigProvider 多语言' : 'ConfigProvider & i18n',
-    最佳实践建议: lang === 'zh' ? '最佳实践建议' : 'Best Practices',
-    使用示例: lang === 'zh' ? '使用示例' : 'Examples',
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -144,7 +147,7 @@ const FloatingToc: React.FC = () => {
   return (
     <nav className="floating-toc">
       <ul>
-        {currentToc.map((item) => (
+        {currentToc.map((item: TocItem) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
@@ -154,49 +157,28 @@ const FloatingToc: React.FC = () => {
                 scrollToSection(item.id);
               }}
             >
-              {t(item.i18n)}
+              {item.i18n ? t(item.i18n) : item.label}
             </a>
+            {item.children && (
+              <ul>
+                {item.children.map((child: TocChild) => (
+                  <li key={child.id}>
+                    <a
+                      href={`#${child.id}`}
+                      className={activeId === child.id ? 'active' : ''}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(child.id);
+                      }}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
-        {location.pathname === '/examples' && (
-          <>
-            <li className="toc-divider" />
-            {apiToc.map((item) => (
-              <React.Fragment key={item.id}>
-                <li>
-                  <a
-                    href={`#${item.id}`}
-                    className={activeId === item.id ? 'active' : ''}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(item.id);
-                    }}
-                  >
-                    {item.i18n ? t(item.i18n) : (item.label && apiLabels[item.label as keyof typeof apiLabels]) || item.label}
-                  </a>
-                  {item.children && (
-                    <ul className="toc-children">
-                      {item.children.map((child) => (
-                        <li key={child.id}>
-                          <a
-                            href={`#${child.id}`}
-                            className={activeId === child.id ? 'active' : ''}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              scrollToSection(child.id);
-                            }}
-                          >
-                            {child.label}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              </React.Fragment>
-            ))}
-          </>
-        )}
       </ul>
     </nav>
   );
