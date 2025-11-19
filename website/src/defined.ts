@@ -25,7 +25,6 @@ export interface DemoSectionProps {
   renderComponent?: ReactElement;
   children?: ReactNode;
   onlyShowCode?: boolean;
-  viewInIsStart?: boolean;
 }
 
 export interface ApiTableRowProps {
