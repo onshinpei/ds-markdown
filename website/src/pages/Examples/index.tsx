@@ -1,6 +1,5 @@
 import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import { ConfigProvider } from 'ds-markdown';
 import zh from 'ds-markdown/i18n/zh';
 import en from 'ds-markdown/i18n/en';
 import DemoSection from '../../components/DemoSection';
