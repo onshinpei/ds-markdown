@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 
 // 导入样式
-import 'ds-markdown/style.css';
 import 'ds-markdown/katex.css';
 
 // 导入组件

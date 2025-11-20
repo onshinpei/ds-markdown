@@ -58,7 +58,6 @@ export const streamingData: Record<StreamingType, StreamingItem[]> = {
     { content: '### 2. 基础使用\n\n', type: 'answer' },
     { content: '```tsx\n', type: 'answer' },
     { content: "import DsMarkdown from 'ds-markdown';\n", type: 'answer' },
-    { content: "import 'ds-markdown/style.css';\n\n", type: 'answer' },
     { content: 'function App() {\n', type: 'answer' },
     { content: '  return (\n', type: 'answer' },
     { content: '    <DsMarkdown interval={20}>\n', type: 'answer' },
