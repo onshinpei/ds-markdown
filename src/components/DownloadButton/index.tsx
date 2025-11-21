@@ -12,7 +12,7 @@ interface DownloadButtonProps {
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({ codeContent, language, style, className }) => {
   const { locale } = useConfig();
-  // 下载文件
+  // Download file
   const handleDownload = async () => {
     if (!codeContent) return false;
 
@@ -20,7 +20,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ codeContent, language, 
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
 
-    // 根据语言设置文件扩展名
+    // Set file extension based on language
     const getFileExtension = (lang: string) => {
       const extensions: Record<string, string> = {
         javascript: 'js',

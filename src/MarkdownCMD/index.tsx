@@ -24,7 +24,7 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
   const { state: themeState } = useMarkdownThemeContext();
   const cmdRef = useRef<MarkdownTyperCMDRef>(null!);
 
-  // 从 context 中获取主题配置
+  // Get theme config from context
   const currentTheme = themeState.theme;
 
   useImperativeHandle(ref, () => ({
@@ -39,7 +39,7 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
 
   const { katexConfig } = useConfig();
 
-  // 从 context 中获取主题配置
+  // Get theme config from context
   const currentMath = themeState.math;
   const currentPlugins = themeState.plugins;
   const mathSplitSymbol = currentMath?.splitSymbol ?? 'dollar';
@@ -84,7 +84,7 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
 
   const customConvertMarkdownString = useCallback(
     (markdownString: string) => {
-      /** 如果存在数学公式插件，并且数学公式分隔符为括号，则替换成 $ 符号 */
+      /** If math plugin exists and math delimiter is bracket, replace with $ symbol */
       if (hasKatexPlugin && mathSplitSymbol === 'bracket') {
         return finalReplaceMathBracket(markdownString);
       }
@@ -148,7 +148,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdown
 
   const contextValue = useMemo(() => ({ ...reset, answerType }), [reset, answerType]);
 
-  // 分离主题相关的 props
+  // Separate theme-related props
   const themeProps = useMemo(
     () => ({
       theme: props.theme || DEFAULT_THEME,
@@ -161,7 +161,7 @@ const MarkdownCMD = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdown
   );
 
   if (isInnerRender) {
-    // 内部渲染，外层已经 context 传递了 props，这里不再重复传递
+    // Inner render, outer layer has already passed props via context, no need to pass again here
     return <MarkdownCMDInner {...props} ref={ref} />;
   }
 

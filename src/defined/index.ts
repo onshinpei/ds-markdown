@@ -3,27 +3,27 @@
 import { Pluggable } from 'unified';
 import Mermaid from './mermaid.type';
 import { KatexOptions } from 'katex';
-// 但 TypeScript 在编译时可以直接从文件路径导入类型
+// But TypeScript can import types directly from file paths at compile time
 import type { MarkdownBaseRef, MarkdownTyperBaseProps } from 'react-markdown-typer/es/defined';
 // import { KatexOptions } from 'katex';
 
 /**
- * 回答类型，思考和回答
+ * Answer type, thinking and answer
  */
 export type AnswerType = 'answer' | 'thinking';
 
 export type Theme = 'light' | 'dark';
 
 export interface IMarkdownThemeProps {
-  /** 主题 */
+  /** Theme */
   theme?: Theme;
-  /** 数学公式配置 */
+  /** Math formula configuration */
   math?: IMarkdownMath;
-  /** 代码块配置 */
+  /** Code block configuration */
   codeBlock?: IMarkdownCode;
-  /** 插件配置 */
+  /** Plugin configuration */
   plugins?: IMarkdownPlugin[];
-  /** 回答类型 */
+  /** Answer type */
   answerType?: 'thinking' | 'answer';
 }
 
@@ -33,9 +33,9 @@ export interface IMarkdownThemeStateProps extends IMarkdownThemeProps {
 }
 
 export interface IMarkdownCode {
-  /** 是否显示头部操作按钮
-   * 如果为true，则显示头部操作按钮
-   * 如果为React.ReactNode，则显示自定义头部操作按钮
+  /** Whether to show header action buttons
+   * If true, show default header action buttons
+   * If React.ReactNode, show custom header action buttons
    */
   headerActions?: boolean | React.ReactNode;
 }
@@ -46,7 +46,7 @@ export interface MarkdownProps extends MarkdownTyperBaseProps, IMarkdownThemePro
   children: string | undefined;
 }
 
-/**  MarkdownCMD 组件不需要 children */
+/** MarkdownCMD component does not need children */
 export interface MarkdownCMDProps extends MarkdownTyperBaseProps, IMarkdownThemeProps {
   children?: undefined;
   isInnerRender?: boolean;
@@ -62,25 +62,25 @@ export interface IMarkdownPlugin {
 }
 
 export interface IMarkdownMath {
-  /** 是括号还是$作为分隔符, 默认是$ */
+  /** Whether to use brackets or $ as delimiter, default is $ */
   splitSymbol: 'bracket' | 'dollar';
-  /** 数学公式替换函数 */
+  /** Math formula replacement function */
   replaceMathBracket?: (value: string) => string;
 }
 
-/** Markdown 组件的ref 类型 */
+/** Markdown component ref type */
 export type MarkdownRef = MarkdownBaseRef;
 
-/** MarkdownCMD 组件的 ref 类型 */
+/** MarkdownCMD component ref type */
 export interface MarkdownCMDRef extends MarkdownBaseRef {
   push: (content: string, answerType?: AnswerType) => void;
   clear: () => void;
   triggerWholeEnd: () => void;
 }
 export interface IMarkdownMermaidConfig extends Mermaid.MermaidConfig {
-  /** 是否显示头部操作按钮
-   * 如果为true，则显示头部操作按钮
-   * 如果为React.ReactNode，则显示自定义头部操作按钮
+  /** Whether to show header action buttons
+   * If true, show default header action buttons
+   * If React.ReactNode, show custom header action buttons
    */
   headerActions?: boolean | React.ReactNode | ((data: { graphSvg: SVGElement }) => React.ReactNode);
 }

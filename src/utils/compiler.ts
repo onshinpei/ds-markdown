@@ -11,10 +11,10 @@ function compile(src: string) {
       break;
     }
 
-    // TODO: 临时方案
+    // TODO: Temporary solution
     if (src.trim().length === 0 && tokens.length > 0) {
       const lastToken = tokens[tokens.length - 1];
-      // 如果只剩下空格或换行符，则加到上一个token中
+      // If only spaces or newlines remain, add to previous token
       if (lastToken.type === 'list') {
         lastToken.raw = lastToken.raw + src;
         break;
@@ -45,8 +45,8 @@ function compile(src: string) {
       continue;
     }
     if (prevScr === src && src) {
-      // 如果src没有变化，则认为是一个段落
-      // todo: 后面会做优化，进行细分
+      // If src hasn't changed, consider it a paragraph
+      // todo: will optimize later, refine segmentation
       tokens.push({
         type: 'segment',
         raw: src,

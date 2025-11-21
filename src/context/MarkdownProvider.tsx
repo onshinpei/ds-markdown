@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import type { MarkdownBaseProps } from '../defined';
 
-// 定义 Context 类型，允许部分属性
+// Define Context type, allowing partial properties
 export type MarkdownContextType = Partial<MarkdownBaseProps>;
 
 const MarkdownContext = createContext<MarkdownContextType>({});

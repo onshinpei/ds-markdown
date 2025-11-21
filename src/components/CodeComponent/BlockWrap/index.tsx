@@ -14,7 +14,7 @@ interface BlockWrapProps {
 const BlockWrap: React.FC<BlockWrapProps> = ({ children, language, codeContent }) => {
   const { state: themeState } = useMarkdownThemeContext();
 
-  // 从 context 中获取主题配置
+  // Get theme config from context
   const currentCodeBlock = themeState.codeBlock;
   const { headerActions = true } = currentCodeBlock || {};
   const renderHeaderActions = () => {

@@ -2,10 +2,10 @@ import React, { createContext, useContext, useMemo } from 'react';
 import defaultLocale, { ZhCN } from '../../i18n/zh';
 import { IMarkdownKatexConfig, IMarkdownMermaidConfig } from '../../defined';
 
-// 定义语言包的基础类型
+// Define base type for locale
 export type Locale = ZhCN;
 
-// 定义 ConfigProvider 的 props 类型
+// Define ConfigProvider props type
 export interface ConfigProviderProps {
   locale?: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
@@ -14,7 +14,7 @@ export interface ConfigProviderProps {
   // katexConfig?: IMarkdownKatexConfig;
 }
 
-// 定义 Context 类型
+// Define Context type
 export interface ConfigContextType {
   locale: Locale;
   mermaidConfig?: IMarkdownMermaidConfig;
@@ -42,13 +42,13 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({ locale, children
   return <ConfigContext.Provider value={contextValue}>{children}</ConfigContext.Provider>;
 };
 
-// Hook 用于在组件中使用配置
+// Hook for using config in components
 export const useConfig = () => {
   const context = useContext(ConfigContext);
   return context;
 };
 
-// Hook 用于获取当前语言包
+// Hook for getting current locale
 export const useLocale = () => {
   const { locale } = useConfig();
   return locale;

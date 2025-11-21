@@ -16,7 +16,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ codeContent, style, className }
       await navigator.clipboard.writeText(codeContent || '');
       return true;
     } catch (err) {
-      // 降级方案：使用传统方法
+      // Fallback: use traditional method
       const textArea = document.createElement('textarea');
       textArea.value = codeContent || '';
       textArea.select();

@@ -1,11 +1,11 @@
-// 导出中文语言包
+// Export Chinese locale
 export { default as zhCN } from './zh';
 export type { ZhCN } from './zh';
 
-// 导出英文语言包
+// Export English locale
 export { default as enUS } from './en';
 export type { EnUS } from './en';
 
-// 导出 ConfigProvider 相关
+// Export ConfigProvider related
 export { ConfigProvider, useConfig, useLocale } from '../context/ConfigProvider';
 export type { Locale, ConfigProviderProps, ConfigContextType } from '../context/ConfigProvider';

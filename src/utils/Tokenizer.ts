@@ -1,4 +1,4 @@
-/** 此文件借鉴 marked 的部分代码 */
+/** This file borrows some code from marked */
 
 import { rules } from './rule';
 
@@ -48,7 +48,7 @@ interface ListItem {
 export type Token = Space | Fence | Segment | List | ListItem;
 
 export class Tokenizer {
-  /** 空行 */
+  /** Empty line */
   space(src: string): Space | undefined {
     const cap = rules.block.newline.exec(src);
     if (cap) {
@@ -59,7 +59,7 @@ export class Tokenizer {
       };
     }
   }
-  /** 围栏 fence */
+  /** Fence */
   fence(src: string): Fence | undefined {
     const cap = rules.block.fences.exec(src);
     if (cap) {
@@ -70,7 +70,7 @@ export class Tokenizer {
       };
     }
   }
-  /** 块 */
+  /** Block */
   segment(src: string): Segment | undefined {
     const cap = rules.block.segment.exec(src);
     if (cap) {
@@ -82,7 +82,7 @@ export class Tokenizer {
     }
   }
 
-  /** 列表 */
+  /** List */
   list(src: string): List | undefined {
     let cap = rules.block.list.exec(src);
 
@@ -119,7 +119,7 @@ export class Tokenizer {
         raw = cap[0];
         src = src.substring(raw.length);
 
-        /** 获取列表项 */
+        /** Get list item */
         let line = cap[2].split('\n', 1)[0].replace(rules.other.listReplaceTabs, (t: string) => ' '.repeat(3 * t.length));
 
         let nextLine = src.split('\n', 1)[0];
