@@ -1,6 +1,8 @@
 import React from 'react';
 import { useThemeState } from '../../../context/MarkdownThemeProvider';
 
+import './index.less';
+
 interface CodeBlockWrapProps {
   children: React.ReactNode;
   title: React.ReactNode;
