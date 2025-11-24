@@ -122,7 +122,7 @@ const TryIt: React.FC = () => {
             <span className="section-subtitle">{t('previewSubtitle')}</span>
           </div>
           <div className="markdown-preview">
-            <Markdown interval={0} plugins={[katexPlugin, mermaidPlugin]}>
+            <Markdown interval={3} plugins={[katexPlugin, mermaidPlugin]}>
               {markdown}
             </Markdown>
           </div>
