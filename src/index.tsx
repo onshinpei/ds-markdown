@@ -19,7 +19,7 @@ import './index.less';
 
 export { CopyIcon, DownloadIcon, CheckMarkIcon } from './components/Icon';
 
-// 导出 ConfigProvider 相关
+// Export ConfigProvider related
 export { ConfigProvider, useConfig, useLocale } from './context/ConfigProvider';
 export { useThemeState } from './context/MarkdownThemeProvider';
 export * from './defined/mermaid.type';

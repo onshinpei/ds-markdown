@@ -1,4 +1,5 @@
 import React from 'react';
+import Markdown from 'react-markdown-typer';
 import { useI18n } from '../../hooks/useI18n';
 import DemoSection from '../../components/DemoSection';
 import FloatingToc from '../../components/FloatingToc';
@@ -44,7 +45,9 @@ const GetStarted: React.FC = () => {
           {/* 欢迎区域 */}
           <section className="welcome-section">
             <h1 className="section-title">{data.welcome.title}</h1>
-            <p className="welcome-description">{data.welcome.description}</p>
+            <p className="welcome-description">
+              <Markdown interval={5}>{data.welcome.description}</Markdown>
+            </p>
           </section>
 
           {/* 安装指南 */}

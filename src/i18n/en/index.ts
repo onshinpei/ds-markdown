@@ -23,5 +23,5 @@ export const enUS = {
 
 export type EnUS = typeof enUS;
 
-// 默认导出，符合使用方式
+// Default export, conforms to usage pattern
 export default enUS;

@@ -2,11 +2,11 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import type { IMarkdownThemeProps, IMarkdownThemeStateProps } from '../defined';
 
-// 定义 Theme Context 类型，包含 state 和 methods
+// Define Theme Context type, including state and methods
 export type MarkdownThemeContextType = {
   state: IMarkdownThemeStateProps;
   methods: {
-    // 这里可以添加主题相关的方法
+    // Theme-related methods can be added here
     updateTheme?: (theme: IMarkdownThemeProps['theme']) => void;
     updateMath?: (math: IMarkdownThemeProps['math']) => void;
     updateCodeBlock?: (codeBlock: IMarkdownThemeProps['codeBlock']) => void;
@@ -38,7 +38,7 @@ export const MarkdownThemeProvider: React.FC<{
         ...value,
       },
       methods: {
-        // 这里可以添加主题相关的方法实现
+        // Theme-related methods can be added here
       },
     }),
     [value],

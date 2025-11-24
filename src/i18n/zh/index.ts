@@ -23,5 +23,5 @@ export const zhCN = {
 
 export type ZhCN = typeof zhCN;
 
-// 默认导出，符合使用方式
+// Default export, conforms to usage pattern
 export default zhCN;

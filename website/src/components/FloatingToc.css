@@ -51,9 +51,3 @@
   color: #1a73e8;
   border-left-color: #1a73e8;
 }
-
-@media (max-width: 1100px) {
-  .floating-toc {
-    display: block;
-  }
-}

@@ -230,24 +230,6 @@ body {
   overflow-y: auto;
 }
 
-@media (max-width: 1100px) {
-  .main {
-    flex-direction: column;
-  }
-
-  .main-nav {
-    width: 100%;
-    height: auto;
-    position: static;
-    border-right: none;
-    border-bottom: 1px solid #e1e8ed;
-  }
-
-  .main-content {
-    padding: 20px; /* 在小屏幕上保持原有的padding */
-  }
-}
-
 .section {
   margin-bottom: 80px;
 }

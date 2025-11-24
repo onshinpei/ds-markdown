@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../ui/Button';
 import { CheckMarkIcon } from '../../Icon';
 
-// 拿到Button的类型
+// Get Button type
 type ButtonProps = React.ComponentProps<typeof Button>;
 
 interface SuccessButtonProps extends Omit<ButtonProps, 'onClick'> {
@@ -21,7 +21,7 @@ const SuccessButton: React.FC<SuccessButtonProps> = (props: SuccessButtonProps) 
       return;
     }
     try {
-      // 如果onClick不是异步函数，则直接调用
+      // If onClick is not async, call directly
       const returnValue = onClick();
       if (returnValue instanceof Promise) {
         setIsLoading(true);

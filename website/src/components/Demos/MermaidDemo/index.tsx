@@ -5,7 +5,7 @@ import mermaidPlugin from 'ds-markdown-mermaid-plugin';
 import { useI18n } from '../../../../src/hooks/useI18n';
 import zhMarkdown from './markdown.md?raw';
 import enMarkdown from './markdown.en.md?raw';
-import 'ds-markdown/style.css';
+import 'ds-markdown-mermaid-plugin/style.css';
 
 const MermaidDemo: React.FC = () => {
   const markdownRef = useRef<MarkdownRef>(null);
