@@ -45,7 +45,7 @@ A React component designed specifically for modern AI applications, providing sm
 
 ## stackblitz Examples
 
-- [Basic Usage](https://stackblitz.com/~/github.com/onshinpei/ds-markdown-base-en?file=src/App.tsx)
+- [Basic Usage](https://stackblitz.com/edit/vitejs-vite-61cs2kga?file=src%2FApp.tsx)
 - [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
 - [Mermaid Charts](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
 - [Math Formulas Demo 1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
