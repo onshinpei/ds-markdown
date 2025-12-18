@@ -43,10 +43,10 @@ A React component designed specifically for modern AI applications, providing sm
 - [Live Examples](https://onshinpei.github.io/ds-markdown/#examples)
 - [Try it Now](https://onshinpei.github.io/ds-markdown/#try)
 
-## stackblitz Examples
+## Stackblitz Examples
 
 - [Basic Usage](https://stackblitz.com/edit/vitejs-vite-61cs2kga?file=src%2FApp.tsx)
-- [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
+- [Streaming Data Usage](https://stackblitz.com/edit/vitejs-vite-lwyevhp6?file=src%2FApp.tsx)
 - [Mermaid Charts](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
 - [Math Formulas Demo 1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
 - [Math Formulas Demo 2](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=src%2FApp.tsx)
