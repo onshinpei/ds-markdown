@@ -34,6 +34,8 @@ A React component designed specifically for modern AI applications, providing sm
 - **Out-of-the-box, Reduces Development Complexity**  
   Complete solution that requires no additional configuration to support streaming data, Markdown rendering, mathematical formulas, charts, and other complex features.
 
+> _If you don't need any styles and want full control over rendering, we recommend using [react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)_
+
 ## Documentation
 
 **👉 [Full Documentation](https://onshinpei.github.io/ds-markdown/)**
