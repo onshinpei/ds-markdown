@@ -47,8 +47,8 @@
 
 - [基本用法](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 - [流式数据用法](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
-- [mermaid图表](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
-- [数学公式demo1](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=index.html)
+- [mermaid图表](https://stackblitz.com/edit/vitejs-vite-iqbyta3j?file=src%2FApp.tsx)
+- [数学公式demo1](https://stackblitz.com/edit/vitejs-vite-z94syu8j?file=src%2FApp.tsx)
 - [数学公式demo2](https://stackblitz.com/edit/vitejs-vite-xk9lxagc?file=src%2FApp.tsx)
 
 ## 核心特性
