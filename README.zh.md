@@ -1,3 +1,8 @@
+
+# 请注意，本仓库已归档，已迁移到新仓库 [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+## 请注意，本仓库已归档，已迁移到新仓库 [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+## 请注意，本仓库已归档，已迁移到新仓库 [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+
 # ds-markdown
 
 > 🚀 React Markdown 打字动画组件，提供现代聊天界面效果
