@@ -1,3 +1,10 @@
+# Please note that this repository has been archived and has been migrated to the new repository [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+
+## Please note that this repository has been archived and has been migrated to the new repository [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+
+### Please note that this repository has been archived and has been migrated to the new repository [react-stream-markdown](https://github.com/onshinpei/react-stream-markdown)
+
+
 # ds-markdown
 
 > 🚀 React Markdown typing animation component for modern chat interface effects
