@@ -1,9 +1,9 @@
-# ds-markdown
+# react-stream-markdown
 
 > 🚀 React Markdown typing animation component for modern chat interface effects
 
 <p align="center">
-  <img src="./assets/images/favicon.png" alt="ds-markdown logo" width="120" />
+  <img src="./assets/images/favicon.png" alt="react-stream-markdown logo" width="120" />
 </p>
 
 **🇺🇸 English | [🇨🇳 中文](./README.zh.md)**
@@ -16,12 +16,12 @@ A React component designed specifically for modern AI applications, providing sm
 [![React](https://img.shields.io/badge/React-18.0.0+-blue)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 
-## Why use ds-markdown?
+## Why use react-stream-markdown?
 
 ### **Core Problems Solved**
 
 - **Streaming Data Typing Stuttering Issues**  
-  Traditional typewriter components experience stuttering and character jumping when processing AI backend streaming data, as each chunk contains multiple characters. ds-markdown intelligently splits each chunk to ensure smooth typing for every character.
+  Traditional typewriter components experience stuttering and character jumping when processing AI backend streaming data, as each chunk contains multiple characters. react-stream-markdown intelligently splits each chunk to ensure smooth typing for every character.
 
 - **Markdown Rendering and Typing Animation Disconnection**  
   Most typewriter components only support plain text and cannot render Markdown syntax, mathematical formulas, charts, and other rich media content in real-time during typing.
@@ -38,12 +38,12 @@ A React component designed specifically for modern AI applications, providing sm
 
 ## Documentation
 
-**👉 [Full Documentation](https://onshinpei.github.io/ds-markdown/)**
+**👉 [Full Documentation](https://onshinpei.github.io/react-stream-markdown/)**
 
-- [Get Started](https://onshinpei.github.io/ds-markdown/#get-started)
-- [API Documentation](https://onshinpei.github.io/ds-markdown/#docs)
-- [Live Examples](https://onshinpei.github.io/ds-markdown/#examples)
-- [Try it Now](https://onshinpei.github.io/ds-markdown/#try)
+- [Get Started](https://onshinpei.github.io/react-stream-markdown/#get-started)
+- [API Documentation](https://onshinpei.github.io/react-stream-markdown/#docs)
+- [Live Examples](https://onshinpei.github.io/react-stream-markdown/#examples)
+- [Try it Now](https://onshinpei.github.io/react-stream-markdown/#try)
 
 ## Stackblitz Examples
 
@@ -121,7 +121,7 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 
 > Note: If `disableTyping` changes from `true` to `false` during typing, it will only continue from the current position and will not replay the skipped animation; to replay from the beginning, please call the instance method `restart()`.
 
-For detailed documentation, please visit: [Full Documentation](https://onshinpei.github.io/ds-markdown/#get-started)
+For detailed documentation, please visit: [Full Documentation](https://onshinpei.github.io/react-stream-markdown/#get-started)
 
 ## Related Projects
 
@@ -136,4 +136,4 @@ MIT © [onshinpei](https://github.com/onshinpei)
 
 Contributions, issues and feature requests are welcome!
 
-[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown&label=Visitors&countColor=%23263759&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Fds-markdown)
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Freact-stream-markdown&label=Visitors&countColor=%23263759&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fonshinpei%2Freact-stream-markdown)
