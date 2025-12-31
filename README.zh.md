@@ -45,7 +45,7 @@
 - [在线示例](https://onshinpei.github.io/ds-markdown/#examples)
 - [马上试试](https://onshinpei.github.io/ds-markdown/#try)
 
-## stackblitz 示例
+## Stackblitz 示例
 
 - [基本用法](https://stackblitz.com/edit/vitejs-vite-ddfw8avb?file=src%2FApp.tsx)
 - [流式数据用法](https://stackblitz.com/edit/vitejs-vite-2ri8kex3?file=src%2FApp.tsx)
