@@ -71,7 +71,6 @@
     "preview": "vite preview",
     "release": "npm run build && node scripts/set-tag.cjs && cross-env RELEASE_MODE=true npm publish",
     "prepublishOnly": "node scripts/prepublish.js",
-    "pretest": "rimraf dist && npm run build:esm",
     "test": "jest"
   },
   "dependencies": {
@@ -102,6 +101,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
     "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.1",
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
