@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../../ui/Button';
 import { CheckMarkIcon } from '../../Icon';
 
@@ -15,8 +15,9 @@ const SuccessButton: React.FC<SuccessButtonProps> = (props: SuccessButtonProps) 
   const { onClick, icon, executeText, children, ...rest } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const isUnmounted = useRef(false);
-  const handleClick = async () => {
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleClick = useCallback(async () => {
     if (isLoading || isSuccess) {
       return;
     }
@@ -28,11 +29,6 @@ const SuccessButton: React.FC<SuccessButtonProps> = (props: SuccessButtonProps) 
         const result = await returnValue;
         if (result) {
           setIsSuccess(true);
-          setTimeout(() => {
-            if (!isUnmounted.current) {
-              setIsSuccess(false);
-            }
-          }, 1000);
         }
       }
     } catch (error) {
@@ -40,14 +36,22 @@ const SuccessButton: React.FC<SuccessButtonProps> = (props: SuccessButtonProps) 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isLoading, isSuccess, onClick]);
 
+  // Handle success state timeout with proper cleanup
   useEffect(() => {
-    isUnmounted.current = false;
+    if (isSuccess) {
+      timerRef.current = setTimeout(() => {
+        setIsSuccess(false);
+      }, 1000);
+    }
     return () => {
-      isUnmounted.current = true;
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     };
-  }, []);
+  }, [isSuccess]);
 
   return (
     <Button {...rest} onClick={handleClick} icon={isSuccess ? <CheckMarkIcon size={24} /> : icon}>
