@@ -18,9 +18,26 @@ interface IMarkdownCustom {
   plugins?: IMarkdownPlugin[];
   math?: IMarkdownMath;
   isInnerRender?: boolean;
+  cursor?: React.ReactNode | string | 'circle' | 'block' | 'underline' | 'line';
 }
 
-const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({ answerType = 'answer', timerType = 'requestAnimationFrame', ...rest }, ref) => {
+// Cursor factory function to create cursor elements
+const createCursor = (className: string) => () => <span className={className} />;
+
+const cursorFactories = {
+  circle: createCursor('ds-markdown-cursor-circle'),
+  block: createCursor('ds-markdown-cursor-block'),
+  underline: createCursor('ds-markdown-cursor-underline'),
+  line: createCursor('ds-markdown-cursor-line'),
+};
+
+const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMarkdownCustom>(({
+  answerType = 'answer',
+  timerType = 'requestAnimationFrame',
+  cursor,
+  showCursor,
+  ...rest
+}, ref) => {
   const { state: themeState } = useMarkdownThemeContext();
   const cmdRef = useRef<MarkdownTyperCMDRef>(null!);
 
@@ -93,6 +110,26 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
     [finalReplaceMathBracket, hasKatexPlugin, mathSplitSymbol],
   );
 
+  // Handle cursor prop: support string types or ReactNode
+  const _cursor = useMemo(() => {
+    if (!showCursor) {
+      return cursor;
+    }
+    
+    // If cursor is not provided, use default 'line' style
+    if (!cursor) {
+      return cursorFactories.line();
+    }
+    
+    // If cursor is a string type, get from cursorFactories and create new instance
+    if (typeof cursor === 'string' && cursor in cursorFactories) {
+      return cursorFactories[cursor as keyof typeof cursorFactories]();
+    }
+    
+    // Otherwise, use the provided cursor (ReactNode or string)
+    return cursor;
+  }, [cursor, showCursor]);
+
   return (
     <div
       className={classNames({
@@ -108,13 +145,15 @@ const MarkdownCMDInner = forwardRef<MarkdownCMDRef, MarkdownTyperCMDProps & IMar
           ref={cmdRef}
           timerType={timerType}
           customConvertMarkdownString={customConvertMarkdownString}
+          showCursor={showCursor}
+          cursor={_cursor}
           {...rest}
           reactMarkdownProps={{
             remarkPlugins,
             rehypePlugins,
             components: {
               code: CodeComponent as any,
-              table: ({ children, ...props }) => {
+              table: ({ children }) => {
                 return (
                   <div className="markdown-table-wrapper">
                     <table className="ds-markdown-table">{children}</table>

@@ -403,3 +403,57 @@ ds-markdown-math {
 .ds-button.ds-icon-button .ds-button__icon {
   margin-right: 0;
 }
+
+// Cursor blinking animation
+@keyframes ds-cursor-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+// Base cursor styles
+.ds-markdown-cursor,
+.ds-markdown-cursor-line,
+.ds-markdown-cursor-block,
+.ds-markdown-cursor-underline,
+.ds-markdown-cursor-circle {
+  display: inline-block;
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: ds-cursor-blink 1s infinite;
+  background-color: rgb(var(--ds-rgb-label-1));
+}
+
+// Line cursor (default) - vertical line
+.ds-markdown-cursor,
+.ds-markdown-cursor-line {
+  width: 2px;
+  height: 1.2em;
+}
+
+// Block cursor - filled block
+.ds-markdown-cursor-block {
+  width: 0.6em;
+  height: 1em;
+  border-radius: 2px;
+}
+
+// Underline cursor - horizontal line at bottom
+.ds-markdown-cursor-underline {
+  width: 0.8em;
+  height: 2px;
+  margin-bottom: -2px;
+  vertical-align: baseline;
+}
+
+// Circle cursor - circular dot
+.ds-markdown-cursor-circle {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  margin-left: 3px;
+  margin-right: 1px;
+}
