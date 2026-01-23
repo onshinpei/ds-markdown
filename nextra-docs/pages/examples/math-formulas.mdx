@@ -1,0 +1,51 @@
+# 数学公式示例
+
+使用 KaTeX 渲染数学公式。
+
+## 行内公式
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+<DsMarkdown interval={20}>
+  这是行内公式：$E = mc^2$
+  
+  另一个例子：$\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n$
+</DsMarkdown>
+```
+
+## 块级公式
+
+```tsx
+<DsMarkdown interval={20}>
+  这是块级公式：
+  
+  $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
+  
+  另一个例子：
+  
+  $$\\begin{pmatrix}
+  a & b \\\\
+  c & d
+  \\end{pmatrix}$$
+</DsMarkdown>
+```
+
+## 配置分隔符
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  math={{ splitSymbol: 'dollar' }}
+>
+  使用 $...$ 和 $$...$$ 语法
+</DsMarkdown>
+
+<DsMarkdown 
+  interval={20}
+  math={{ splitSymbol: 'bracket' }}
+>
+  使用 \\(...\\) 和 \\[...\\] 语法
+</DsMarkdown>
+```
+

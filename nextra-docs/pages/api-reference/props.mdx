@@ -1,0 +1,74 @@
+# Props 属性
+
+## DsMarkdown 和 MarkdownCMD 通用属性
+
+| 属性 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `interval` | `number \| IntervalConfig` | 打字间隔配置，支持固定间隔或动态速度控制 | `30` |
+| `timerType` | `'setTimeout' \| 'requestAnimationFrame'` | 定时器类型，不支持动态修改 | `'setTimeout'` |
+| `answerType` | `'thinking' \| 'answer'` | 内容类型（影响样式主题），不支持动态修改 | `'answer'` |
+| `theme` | `'light' \| 'dark'` | 主题类型 | `'light'` |
+| `plugins` | `IMarkdownPlugin[]` | 插件配置 | `[]` |
+| `math` | `IMarkdownMath` | 数学公式配置 | `{ splitSymbol: 'dollar' }` |
+| `showCursor` | `boolean` | 打字动画时是否显示光标 | `false` |
+| `cursor` | `React.ReactNode \| 'line' \| 'block' \| 'underline' \| 'circle'` | 自定义光标元素或内置光标类型 | `'line'` (当 `showCursor` 为 `true` 时) |
+| `onEnd` | `(data?: IEndData) => void` | 打字完成回调 | - |
+| `onStart` | `(data?: IStartData) => void` | 打字开始回调 | - |
+| `onBeforeTypedChar` | `(data?: IBeforeTypedChar) => Promise<void>` | 字符打字前的回调，支持异步操作，会阻塞之后的打字 | - |
+| `onTypedChar` | `(data?: ITypedChar) => void` | 每字符打字后的回调 | - |
+| `disableTyping` | `boolean` | 禁用打字动画效果 | `false` |
+| `autoStartTyping` | `boolean` | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true` |
+| `codeBlock` | `IMarkdownCode` | 代码块配置 | `{headerActions: true}` |
+
+## DsMarkdown 特有属性
+
+| 属性 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `children` | `string \| undefined` | Markdown 内容 | - |
+
+## MarkdownCMD 特有属性
+
+MarkdownCMD 不需要 `children` 属性，内容通过 `push()` 方法动态添加。
+
+## 使用示例
+
+### 基础配置
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  theme="dark"
+  answerType="answer"
+  showCursor
+  cursor="block"
+>
+  # 内容
+</DsMarkdown>
+```
+
+### 动态速度控制
+
+```tsx
+<DsMarkdown 
+  interval={{
+    min: 10,
+    max: 50,
+    curve: 'ease-out'
+  }}
+>
+  内容...
+</DsMarkdown>
+```
+
+### 回调函数
+
+```tsx
+<DsMarkdown
+  onStart={(data) => console.log('开始', data)}
+  onEnd={(data) => console.log('完成', data)}
+  onTypedChar={(data) => console.log('打字', data)}
+>
+  内容...
+</DsMarkdown>
+```
+

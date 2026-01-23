@@ -1,0 +1,55 @@
+# 流式数据示例
+
+使用 `MarkdownCMD` 组件处理流式数据。
+
+## 代码
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { MarkdownCMD } from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    // 模拟流式数据
+    const chunks = [
+      '# 标题\n\n',
+      '这是第一段内容。\n\n',
+      '这是第二段内容，包含**粗体**和*斜体*。\n\n',
+      '## 子标题\n\n',
+      '- 列表项 1\n',
+      '- 列表项 2\n',
+      '- 列表项 3\n',
+    ];
+
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < chunks.length) {
+        ref.current?.push(chunks[index]);
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 500);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <MarkdownCMD 
+      ref={ref}
+      interval={20}
+      showCursor
+      cursor="block"
+    />
+  );
+}
+```
+
+## 说明
+
+- 使用 `push()` 方法动态添加内容
+- 支持流式数据处理
+- 可以实时显示打字动画
+
