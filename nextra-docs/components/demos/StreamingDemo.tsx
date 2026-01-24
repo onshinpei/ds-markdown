@@ -2,21 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import DemoContainer from './DemoContainer';
-
-// 如果 ds-markdown 已安装，取消下面的注释
-// import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
-
-// 临时占位符组件
-const MarkdownCMD = ({ children, ...props }: any) => (
-  <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9', minHeight: '300px' }}>
-    <p style={{ color: '#666', marginBottom: '10px' }}>
-      ⚠️ 请先安装 ds-markdown: <code>npm install ds-markdown</code>
-    </p>
-    <div style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-      {children || '点击"开始流式输出"按钮查看效果...'}
-    </div>
-  </div>
-);
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
 
 type StreamingType = 'ai-chat' | 'code-generation' | 'documentation';
 

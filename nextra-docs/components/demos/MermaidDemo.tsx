@@ -2,25 +2,9 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import DemoContainer from './DemoContainer';
-
-// 如果 ds-markdown 已安装，取消下面的注释
-// import DsMarkdown, { type MarkdownRef, ConfigProvider } from 'ds-markdown';
-// import mermaidPlugin from 'ds-markdown-mermaid-plugin';
+import DsMarkdown, { type MarkdownRef, ConfigProvider } from 'ds-markdown';
+import mermaidPlugin from 'ds-markdown-mermaid-plugin';
 // import 'ds-markdown-mermaid-plugin/style.css';
-
-// 临时占位符组件
-const DsMarkdown = ({ children, ...props }: any) => (
-  <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-    <p style={{ color: '#666', marginBottom: '10px' }}>
-      ⚠️ 请先安装依赖: <code>npm install ds-markdown ds-markdown-mermaid-plugin</code>
-    </p>
-    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-      {children}
-    </pre>
-  </div>
-);
-
-const ConfigProvider = ({ children }: any) => <>{children}</>;
 
 interface MermaidDemoProps {
   markdown?: string;
@@ -203,7 +187,7 @@ pie title 编程语言使用占比
               theme={theme}
               disableTyping={disableTyping}
               autoStartTyping={false}
-              // plugins={[mermaidPlugin]}
+              plugins={[mermaidPlugin]}
               onStart={handleTypingStart}
               onEnd={handleTypingEnd}
             >

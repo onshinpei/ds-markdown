@@ -2,22 +2,8 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import DemoContainer from './DemoContainer';
-
-// 如果 ds-markdown 已安装，取消下面的注释
-// import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
-// import { katexPlugin } from 'ds-markdown/plugins';
-
-// 临时占位符组件
-const DsMarkdown = ({ children, ...props }: any) => (
-  <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-    <p style={{ color: '#666', marginBottom: '10px' }}>
-      ⚠️ 请先安装 ds-markdown: <code>npm install ds-markdown</code>
-    </p>
-    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-      {children}
-    </pre>
-  </div>
-);
+import DsMarkdown, { type MarkdownRef } from 'ds-markdown';
+import { katexPlugin } from 'ds-markdown/plugins';
 
 interface MathSupportDemoProps {
   markdown?: string;
@@ -197,8 +183,8 @@ $$
             interval={8}
             answerType="answer"
             theme={theme}
-            // plugins={mathOpen ? [katexPlugin] : []}
-            // math={{ splitSymbol: 'dollar' }}
+            plugins={mathOpen ? [katexPlugin] : []}
+            math={{ splitSymbol: 'dollar' }}
             disableTyping={disableTyping}
             autoStartTyping={false}
             onStart={handleTypingStart}

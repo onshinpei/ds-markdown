@@ -13,6 +13,7 @@ const withNextra = nextra({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['ds-markdown-mermaid-plugin'],
 }
 
 export default withNextra(nextConfig)

@@ -9,7 +9,8 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "ds-markdown": "latest",
+    "ds-markdown": "1.0.5-beta.0",
+    "ds-markdown-mermaid-plugin": "^2.0.3",
     "next": "^14.2.0",
     "nextra": "^3.3.1",
     "nextra-theme-docs": "^3.3.1",
