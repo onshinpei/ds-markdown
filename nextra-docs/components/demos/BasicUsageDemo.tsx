@@ -110,10 +110,43 @@ function greet() {
     }
   };
 
+  // 示例代码
+  const exampleCode = `import DsMarkdown from 'ds-markdown';
+import { useRef } from 'react';
+
+function App() {
+  const markdownRef = useRef(null);
+
+  return (
+    <DsMarkdown
+      ref={markdownRef}
+      interval={20}
+      answerType="answer"
+      theme="light"
+      autoStartTyping={false}
+      onStart={() => console.log('开始打字')}
+      onEnd={() => console.log('打字结束')}
+    >
+      # Hello ds-markdown
+
+      这是一个**高性能**的打字动画组件！
+
+      ## 特性
+
+      - ⚡ 零延迟流式处理
+      - 🎬 流畅打字动画
+      - 🎯 完美语法支持
+      - 📝 完整 Markdown 支持
+    </DsMarkdown>
+  );
+}`;
+
   return (
     <DemoContainer 
-      title="🎬 实时演示" 
-      description="点击按钮控制打字动画、切换主题等"
+      title="🎬 基础用法" 
+      description="展示 ds-markdown 的基本打字动画效果，支持主题切换、控制播放等功能"
+      code={exampleCode}
+      language="tsx"
     >
       <div 
         ref={containerRef} 

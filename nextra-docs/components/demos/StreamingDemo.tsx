@@ -148,10 +148,51 @@ export const StreamingDemo: React.FC = () => {
     }
   };
 
+  // 示例代码
+  const exampleCode = `import { useRef } from 'react';
+import { MarkdownCMD, MarkdownCMDRef } from 'ds-markdown';
+
+function StreamingChat() {
+  const markdownRef = useRef<MarkdownCMDRef>(null);
+
+  // 模拟流式数据推送
+  const handleStream = async () => {
+    markdownRef.current?.clear();
+
+    const chunks = [
+      '# AI 回答\\n\\n',
+      '这是**流式输出**的示例。\\n\\n',
+      '## 特点\\n\\n',
+      '- 实时显示内容\\n',
+      '- 支持 Markdown 语法\\n',
+      '- 带打字动画效果\\n',
+    ];
+
+    for (const chunk of chunks) {
+      await new Promise(r => setTimeout(r, 100));
+      markdownRef.current?.push(chunk, 'answer');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleStream}>开始流式输出</button>
+      <MarkdownCMD
+        ref={markdownRef}
+        interval={15}
+        theme="light"
+        autoStartTyping={true}
+      />
+    </div>
+  );
+}`;
+
   return (
     <DemoContainer 
       title="🌊 流式数据演示" 
-      description="模拟 AI 对话、代码生成等流式数据场景"
+      description="模拟 AI 对话、代码生成等流式数据场景，使用 MarkdownCMD 组件"
+      code={exampleCode}
+      language="tsx"
     >
       <div className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}>
         <div className="demo-controls">

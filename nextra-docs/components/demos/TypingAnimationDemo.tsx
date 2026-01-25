@@ -135,10 +135,50 @@ export const TypingAnimationDemo: React.FC<TypingAnimationDemoProps> = ({
     });
   };
 
+  // 示例代码
+  const exampleCode = `import DsMarkdown from 'ds-markdown';
+import { useRef } from 'react';
+
+function TypingAnimation() {
+  const markdownRef = useRef(null);
+
+  return (
+    <DsMarkdown
+      ref={markdownRef}
+      // 打字速度（毫秒）
+      interval={20}
+      // 定时器类型：setTimeout 或 requestAnimationFrame
+      timerType="setTimeout"
+      // 主题：light 或 dark
+      theme="light"
+      // 是否禁用打字动画
+      disableTyping={false}
+      // 是否自动开始打字
+      autoStartTyping={true}
+      // 打字事件回调
+      onStart={() => console.log('开始')}
+      onEnd={() => console.log('结束')}
+      onTypedChar={(data) => {
+        console.log('当前字符:', data.currentChar);
+        console.log('进度:', data.percent + '%');
+      }}
+    >
+      # 打字动画配置
+
+      通过调整参数控制打字效果：
+      - **interval** - 打字速度
+      - **timerType** - 定时器类型
+      - **disableTyping** - 禁用动画
+    </DsMarkdown>
+  );
+}`;
+
   return (
     <DemoContainer 
       title="⚙️ 打字动画配置" 
       description="实时调整各种参数，查看打字动画的不同效果"
+      code={exampleCode}
+      language="tsx"
     >
       <div 
         ref={containerRef} 

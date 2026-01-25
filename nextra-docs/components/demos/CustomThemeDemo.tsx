@@ -112,10 +112,43 @@ const theme = {
   // 根据当前主题替换占位符
   const markdownContent = markdown.replace('{{THEME}}', theme === 'light' ? '亮色' : '暗色');
 
+  // 示例代码
+  const exampleCode = `import DsMarkdown from 'ds-markdown';
+import { useState } from 'react';
+
+function ThemedMarkdown() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <div>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        切换主题
+      </button>
+      
+      <DsMarkdown
+        theme={theme}
+        interval={20}
+        answerType="answer"
+      >
+        # 主题演示
+
+        当前主题：**{theme === 'light' ? '亮色' : '暗色'}**
+
+        ## 特性
+        - 🎨 支持亮色/暗色主题
+        - 🖌️ 可自定义样式
+        - 🔄 实时切换效果
+      </DsMarkdown>
+    </div>
+  );
+}`;
+
   return (
     <DemoContainer 
       title="🎨 主题定制演示" 
       description="展示亮色和暗色主题的自定义样式效果"
+      code={exampleCode}
+      language="tsx"
     >
       <div 
         ref={containerRef} 

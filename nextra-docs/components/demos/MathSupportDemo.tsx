@@ -126,10 +126,44 @@ $$
     }
   };
 
+  // 示例代码
+  const exampleCode = `import DsMarkdown from 'ds-markdown';
+import { katexPlugin } from 'ds-markdown/plugins';
+
+function MathMarkdown() {
+  return (
+    <DsMarkdown
+      interval={20}
+      plugins={[katexPlugin]}
+      math={{ splitSymbol: 'dollar' }}
+    >
+      # 数学公式支持
+
+      ## 行内公式
+
+      质能方程：$E = mc^2$
+
+      ## 块级公式
+
+      $$
+      \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}
+      $$
+
+      ## 求和公式
+
+      $$
+      \\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}
+      $$
+    </DsMarkdown>
+  );
+}`;
+
   return (
     <DemoContainer 
       title="📐 数学公式演示" 
       description="展示 KaTeX 数学公式的渲染效果，支持行内和块级公式"
+      code={exampleCode}
+      language="tsx"
     >
       <div 
         ref={containerRef} 
