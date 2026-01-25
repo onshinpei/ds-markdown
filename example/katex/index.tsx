@@ -76,7 +76,7 @@ const App: React.FC<{
     setIsTyping(true);
   };
 
-  const interval = 5;
+  const interval = 15;
   const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
@@ -139,6 +139,7 @@ const App: React.FC<{
             math={{ splitSymbol: 'bracket' }}
             disableTyping={disableTyping}
             autoStartTyping={false}
+            showCursor
           >
             {markdown}
           </Markdown>
