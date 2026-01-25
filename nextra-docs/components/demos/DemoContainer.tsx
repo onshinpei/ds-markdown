@@ -1,8 +1,10 @@
 'use client';
 
 import React, { ReactNode, useState } from 'react';
+import { useTheme } from 'next-themes';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface DemoContainerProps {
   children: ReactNode;
@@ -26,6 +28,10 @@ export const DemoContainer: React.FC<DemoContainerProps> = ({
 }) => {
   const [showCode, setShowCode] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  // 使用 next-themes 获取主题
+  const { theme, resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark' || theme === 'dark';
 
   const handleCopy = async () => {
     if (code) {
@@ -99,13 +105,13 @@ export const DemoContainer: React.FC<DemoContainerProps> = ({
           <div className="demo-code-block">
             <SyntaxHighlighter
               language={language}
-              style={vscDarkPlus}
+              style={isDark ? vscDarkPlus : oneLight}
               customStyle={{
                 margin: 0,
                 padding: '20px',
                 fontSize: '13px',
                 lineHeight: '1.6',
-                background: '#1e1e1e',
+                background: isDark ? '#1e1e1e' : '#fafafa',
                 borderRadius: 0,
               }}
               showLineNumbers={true}
@@ -113,7 +119,7 @@ export const DemoContainer: React.FC<DemoContainerProps> = ({
               lineNumberStyle={{
                 minWidth: '3em',
                 paddingRight: '1em',
-                color: '#858585',
+                color: isDark ? '#858585' : '#999',
                 userSelect: 'none',
               }}
             >

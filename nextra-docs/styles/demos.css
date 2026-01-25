@@ -86,6 +86,11 @@
 /* 代码展示区 */
 .demo-code-section {
   border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.dark .demo-code-section {
+  border-top-color: #374151;
   background: #1e1e1e;
 }
 
@@ -94,16 +99,25 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dark .demo-code-header {
   background: #2d2d2d;
-  border-bottom: 1px solid #404040;
+  border-bottom-color: #404040;
 }
 
 .demo-code-lang {
   font-size: 12px;
   font-weight: 600;
-  color: #9ca3af;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.dark .demo-code-lang {
+  color: #9ca3af;
 }
 
 .demo-copy-btn {
@@ -113,8 +127,8 @@
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #d1d5db;
+  background: rgba(0, 0, 0, 0.05);
+  color: #6b7280;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -122,6 +136,16 @@
 }
 
 .demo-copy-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #374151;
+}
+
+.dark .demo-copy-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d1d5db;
+}
+
+.dark .demo-copy-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
@@ -135,13 +159,17 @@
   overflow-x: auto;
   max-height: 500px;
   overflow-y: auto;
+  background: #fafafa;
+}
+
+.dark .demo-code-block {
   background: #1e1e1e;
 }
 
 /* react-syntax-highlighter 覆盖样式 */
 .demo-code-block pre {
   margin: 0 !important;
-  background: #1e1e1e !important;
+  background: transparent !important;
 }
 
 .demo-code-block code {
@@ -157,15 +185,27 @@
 }
 
 .demo-code-block::-webkit-scrollbar-track {
+  background: #e5e7eb;
+}
+
+.dark .demo-code-block::-webkit-scrollbar-track {
   background: #2d2d2d;
 }
 
 .demo-code-block::-webkit-scrollbar-thumb {
-  background: #555;
+  background: #9ca3af;
   border-radius: 5px;
 }
 
+.dark .demo-code-block::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
 .demo-code-block::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+.dark .demo-code-block::-webkit-scrollbar-thumb:hover {
   background: #666;
 }
 
