@@ -11,15 +11,10 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/onshinpei/ds-markdown/tree/main/nextra-docs',
   footer: {
-    text: 'ds-markdown Documentation',
+    content: 'ds-markdown Documentation',
   },
-  useNextSeoProps() {
-    return {
-      titleTemplate: '%s – ds-markdown'
-    }
-  },
-  primaryHue: 220,
-  primarySaturation: 100,
+  // primaryHue: 220,
+  // primarySaturation: 100,
 }
 
 export default config

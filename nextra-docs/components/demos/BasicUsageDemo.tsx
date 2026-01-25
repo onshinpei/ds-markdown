@@ -12,7 +12,7 @@ interface BasicUsageDemoProps {
  * 基础用法演示组件
  * 展示 ds-markdown 的基本功能：打字动画、主题切换等
  */
-export const BasicUsageDemo: React.FC<BasicUsageDemoProps> = ({ 
+export const BasicUsageDemo: React.FC<BasicUsageDemoProps> = ({
   markdown = `# Hello ds-markdown
 
 这是一个**高性能**的打字动画组件！
@@ -142,61 +142,63 @@ function App() {
 }`;
 
   return (
-    <DemoContainer 
-      title="🎬 基础用法" 
+    <DemoContainer
+      title="🎬 基础用法"
       description="展示 ds-markdown 的基本打字动画效果，支持主题切换、控制播放等功能"
       code={exampleCode}
       language="tsx"
     >
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}
       >
         <div className="demo-controls">
-          <button 
-            className="demo-btn demo-btn-success" 
-            onClick={handleStart} 
+          <button
+            className="demo-btn demo-btn-success"
+            onClick={handleStart}
             disabled={isStopped}
           >
             {isStarted ? '🔄 重新开始' : '▶️ 开始'}
           </button>
-          <button 
-            className="demo-btn demo-btn-danger" 
-            onClick={handleStop} 
-            disabled={!isTyping || isStopped}
-          >
-            ⏸️ 停止
-          </button>
-          <button 
-            className="demo-btn demo-btn-warning" 
-            onClick={handleResume} 
-            disabled={!isStopped}
-          >
-            ▶️ 继续
-          </button>
-          <button 
-            className="demo-btn demo-btn-secondary" 
+          {isStopped ? (
+            <button
+              className="demo-btn demo-btn-warning"
+              onClick={handleResume}
+            >
+              ▶️ 继续
+            </button>
+          ) : (
+            <button
+              className="demo-btn demo-btn-danger"
+              onClick={handleStop}
+              disabled={!isTyping}
+            >
+              ⏸️ 停止
+            </button>
+          )}
+          <button
+            className="demo-btn demo-btn-secondary"
             onClick={handleToggleTheme}
           >
             {theme === 'light' ? '🌙 暗色主题' : '☀️ 亮色主题'}
           </button>
-          <button 
-            className="demo-btn demo-btn-outline" 
+          <button
+            className="demo-btn demo-btn-outline"
             onClick={handleToggleTyping}
           >
             {disableTyping ? '🎬 启用打字' : '⏭️ 禁用打字'}
           </button>
         </div>
-        
+
         <div className="demo-preview">
-          <DsMarkdown 
-            ref={markdownRef} 
-            interval={5} 
-            answerType="answer" 
-            theme={theme} 
-            disableTyping={disableTyping} 
-            autoStartTyping={false} 
-            onStart={handleTypingStart} 
+          <DsMarkdown
+            ref={markdownRef}
+            interval={5}
+            answerType="answer"
+            theme={theme}
+            disableTyping={disableTyping}
+            autoStartTyping={false}
+            onStart={handleTypingStart}
             onEnd={handleTypingEnd}
           >
             {markdown}

@@ -20,7 +20,7 @@ interface TypingStats {
  * 打字动画配置演示组件
  * 展示各种打字动画参数的效果
  */
-export const TypingAnimationDemo: React.FC<TypingAnimationDemoProps> = ({ 
+export const TypingAnimationDemo: React.FC<TypingAnimationDemoProps> = ({
   markdown = `# 打字动画配置
 
 这个演示展示了各种打字动画的配置选项。
@@ -174,39 +174,41 @@ function TypingAnimation() {
 }`;
 
   return (
-    <DemoContainer 
-      title="⚙️ 打字动画配置" 
+    <DemoContainer
+      title="⚙️ 打字动画配置"
       description="实时调整各种参数，查看打字动画的不同效果"
       code={exampleCode}
       language="tsx"
     >
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         className={`demo-impl ${theme === 'dark' ? 'demo-impl-dark' : 'demo-impl-light'}`}
       >
         {/* 控制按钮 */}
         <div className="demo-controls">
-          <button 
-            className="demo-btn demo-btn-success" 
-            onClick={handleStart} 
+          <button
+            className="demo-btn demo-btn-success"
+            onClick={handleStart}
             disabled={isStopped}
           >
             {isStarted ? '🔄 重新开始' : '▶️ 开始'}
           </button>
-          <button 
-            className="demo-btn demo-btn-danger" 
-            onClick={handleStop} 
-            disabled={!isTyping || isStopped}
-          >
-            ⏸️ 停止
-          </button>
-          <button 
-            className="demo-btn demo-btn-warning" 
-            onClick={handleResume} 
-            disabled={!isStopped}
-          >
-            ▶️ 继续
-          </button>
+          {isStopped ? (
+            <button
+              className="demo-btn demo-btn-warning"
+              onClick={handleResume}
+            >
+              ▶️ 继续
+            </button>
+          ) : (
+            <button
+              className="demo-btn demo-btn-danger"
+              onClick={handleStop}
+              disabled={!isTyping}
+            >
+              ⏸️ 停止
+            </button>
+          )}
         </div>
 
         {/* 配置面板 */}
@@ -215,11 +217,11 @@ function TypingAnimation() {
             <label className="config-label">
               ⚡ 打字速度 (interval): {interval}ms
             </label>
-            <input 
-              type="range" 
-              min="5" 
-              max="100" 
-              value={interval} 
+            <input
+              type="range"
+              min="5"
+              max="100"
+              value={interval}
               onChange={(e) => setInterval(Number(e.target.value))}
               className="config-slider"
             />
@@ -227,8 +229,8 @@ function TypingAnimation() {
 
           <div className="config-row">
             <label className="config-label">⏱️ 定时器类型:</label>
-            <select 
-              value={timerType} 
+            <select
+              value={timerType}
               onChange={(e) => setTimerType(e.target.value as any)}
               className="config-select"
             >
@@ -239,8 +241,8 @@ function TypingAnimation() {
 
           <div className="config-row">
             <label className="config-label">🎨 主题:</label>
-            <select 
-              value={theme} 
+            <select
+              value={theme}
               onChange={(e) => setTheme(e.target.value as any)}
               className="config-select"
             >
@@ -251,9 +253,9 @@ function TypingAnimation() {
 
           <div className="config-row">
             <label className="config-checkbox">
-              <input 
-                type="checkbox" 
-                checked={disableTyping} 
+              <input
+                type="checkbox"
+                checked={disableTyping}
                 onChange={(e) => setDisableTyping(e.target.checked)}
               />
               <span>禁用打字动画</span>
@@ -262,9 +264,9 @@ function TypingAnimation() {
 
           <div className="config-row">
             <label className="config-checkbox">
-              <input 
-                type="checkbox" 
-                checked={autoStartTyping} 
+              <input
+                type="checkbox"
+                checked={autoStartTyping}
                 onChange={(e) => setAutoStartTyping(e.target.checked)}
               />
               <span>自动开始打字</span>

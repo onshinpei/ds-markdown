@@ -177,20 +177,22 @@ function MathMarkdown() {
           >
             {isStarted ? '🔄 重新开始' : '▶️ 开始'}
           </button>
-          <button 
-            className="demo-btn demo-btn-danger" 
-            onClick={handleStop} 
-            disabled={!isTyping || isStopped}
-          >
-            ⏸️ 停止
-          </button>
-          <button 
-            className="demo-btn demo-btn-warning" 
-            onClick={handleResume} 
-            disabled={!isStopped}
-          >
-            ▶️ 继续
-          </button>
+          {isStopped ? (
+            <button 
+              className="demo-btn demo-btn-warning" 
+              onClick={handleResume}
+            >
+              ▶️ 继续
+            </button>
+          ) : (
+            <button 
+              className="demo-btn demo-btn-danger" 
+              onClick={handleStop} 
+              disabled={!isTyping}
+            >
+              ⏸️ 停止
+            </button>
+          )}
           <button 
             className="demo-btn demo-btn-secondary" 
             onClick={handleToggleTheme}

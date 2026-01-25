@@ -263,6 +263,107 @@
   }
 }
 
+/* CursorDemo 样式 */
+.cursor-config-panel {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.demo-impl-dark .cursor-config-panel {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.config-input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  flex: 1;
+  max-width: 200px;
+}
+
+.demo-impl-dark .config-input {
+  background: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.config-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.config-input-small {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #374151;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100px;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.demo-impl-dark .config-input-small {
+  background: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.config-input-small:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.color-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.config-color {
+  width: 50px;
+  height: 38px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 2px;
+  background: white;
+}
+
+.demo-impl-dark .config-color {
+  border-color: #4b5563;
+}
+
+.config-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.config-color::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}
+
+/* 光标闪烁动画 */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0.3;
+  }
+}
+
 /* Demo 实现区域 */
 .demo-impl {
   border-radius: 8px;

@@ -216,20 +216,22 @@ function StreamingChat() {
           >
             🚀 开始流式输出
           </button>
-          <button 
-            className="demo-btn demo-btn-danger" 
-            onClick={handleStop} 
-            disabled={!isStreaming || isStopped}
-          >
-            ⏸️ 停止
-          </button>
-          <button 
-            className="demo-btn demo-btn-warning" 
-            onClick={handleResume} 
-            disabled={!isStopped}
-          >
-            ▶️ 继续
-          </button>
+          {isStopped ? (
+            <button 
+              className="demo-btn demo-btn-warning" 
+              onClick={handleResume}
+            >
+              ▶️ 继续
+            </button>
+          ) : (
+            <button 
+              className="demo-btn demo-btn-danger" 
+              onClick={handleStop} 
+              disabled={!isStreaming}
+            >
+              ⏸️ 停止
+            </button>
+          )}
           <button 
             className="demo-btn demo-btn-secondary" 
             onClick={handleClear}

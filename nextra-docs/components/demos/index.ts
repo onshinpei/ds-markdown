@@ -10,4 +10,5 @@ export { default as MathSupportDemo } from './MathSupportDemo';
 export { default as MermaidDemo } from './MermaidDemo';
 export { default as StreamingDemo } from './StreamingDemo';
 export { default as TypingAnimationDemo } from './TypingAnimationDemo';
+export { default as CursorDemo } from './CursorDemo';
 
