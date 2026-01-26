@@ -4,21 +4,21 @@
 
 | 属性 | 类型 | 说明 | 默认值 |
 |------|------|------|--------|
-| `interval` | `number \| IntervalConfig` | 打字间隔配置，支持固定间隔或动态速度控制 | `30` |
+| `interval` | <code>number</code> \| <a href="/api-reference/types#intervalconfig"><code>IntervalConfig</code></a> | 打字间隔配置，支持固定间隔或动态速度控制 | `30` |
 | `timerType` | `'setTimeout' \| 'requestAnimationFrame'` | 定时器类型，不支持动态修改 | `'setTimeout'` |
-| `answerType` | `'thinking' \| 'answer'` | 内容类型（影响样式主题），不支持动态修改 | `'answer'` |
-| `theme` | `'light' \| 'dark'` | 主题类型 | `'light'` |
-| `plugins` | `IMarkdownPlugin[]` | 插件配置 | `[]` |
-| `math` | `IMarkdownMath` | 数学公式配置 | `{ splitSymbol: 'dollar' }` |
+| `answerType` | <a href="/api-reference/types#answertype"><code>AnswerType</code></a> | 内容类型（影响样式主题），不支持动态修改 | `'answer'` |
+| `theme` | <a href="/api-reference/types#theme"><code>Theme</code></a> | 主题类型 | `'light'` |
+| `plugins` | <a href="/api-reference/types#imarkdownplugin"><code>IMarkdownPlugin</code></a>[] | 插件配置 | `[]` |
+| `math` | <a href="/api-reference/types#imarkdownmath"><code>IMarkdownMath</code></a> | 数学公式配置 | `{ splitSymbol: 'dollar' }` |
 | `showCursor` | `boolean` | 打字动画时是否显示光标 | `false` |
 | `cursor` | `React.ReactNode \| 'line' \| 'block' \| 'underline' \| 'circle'` | 自定义光标元素或内置光标类型 | `'line'` (当 `showCursor` 为 `true` 时) |
-| `onEnd` | `(data?: IEndData) => void` | 打字完成回调 | - |
-| `onStart` | `(data?: IStartData) => void` | 打字开始回调 | - |
-| `onBeforeTypedChar` | `(data?: IBeforeTypedChar) => Promise<void>` | 字符打字前的回调，支持异步操作，会阻塞之后的打字 | - |
-| `onTypedChar` | `(data?: ITypedChar) => void` | 每字符打字后的回调 | - |
+| `onEnd` | <code>(data?: </code><a href="/api-reference/types#ienddata"><code>IEndData</code></a><code>) => void</code> | 打字完成回调 | - |
+| `onStart` | <code>(data?: </code><a href="/api-reference/types#istartdata"><code>IStartData</code></a><code>) => void</code> | 打字开始回调 | - |
+| `onBeforeTypedChar` | <code>(data?: </code><a href="/api-reference/types#ibeforetypedchar"><code>IBeforeTypedChar</code></a><code>) => Promise&lt;void&gt;</code> | 字符打字前的回调，支持异步操作，会阻塞之后的打字 | - |
+| `onTypedChar` | <code>(data?: </code><a href="/api-reference/types#itypedchar"><code>ITypedChar</code></a><code>) => void</code> | 每字符打字后的回调 | - |
 | `disableTyping` | `boolean` | 禁用打字动画效果 | `false` |
 | `autoStartTyping` | `boolean` | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true` |
-| `codeBlock` | `IMarkdownCode` | 代码块配置 | `{headerActions: true}` |
+| `codeBlock` | <a href="/api-reference/types#imarkdowncode"><code>IMarkdownCode</code></a> | 代码块配置 | `{headerActions: true}` |
 
 ## DsMarkdown 特有属性
 

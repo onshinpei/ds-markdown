@@ -364,6 +364,67 @@
   }
 }
 
+/* 类型链接样式 */
+.type-link {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.type-link:hover {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5;
+}
+
+.dark .type-link {
+  color: #818cf8;
+}
+
+.dark .type-link:hover {
+  color: #a5b4fc;
+  border-bottom-color: #a5b4fc;
+}
+
+/* 在代码块中的类型链接 */
+code .type-link {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.dark code .type-link {
+  color: #818cf8;
+}
+
+/* API 文档表格中的类型链接 */
+.api-table a,
+table a {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.api-table a:hover,
+table a:hover {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5;
+}
+
+.dark .api-table a,
+.dark table a {
+  color: #818cf8;
+}
+
+.dark .api-table a:hover,
+.dark table a:hover {
+  color: #a5b4fc;
+  border-bottom-color: #a5b4fc;
+}
+
 /* Demo 实现区域 */
 .demo-impl {
   border-radius: 8px;
