@@ -105,7 +105,7 @@ const App: React.FC<{
           <button className="theme-btn" onClick={() => setDisableTyping(!disableTyping)}>
             {disableTyping ? '开启' : '关闭'}打字机效果
           </button>
-          <button
+          {/* <button
             className="theme-btn"
             onClick={() => {
               markdownRef.current.stop();
@@ -123,7 +123,24 @@ const App: React.FC<{
             }}
           >
             继续
-          </button>
+          </button> */}
+          {
+            isStop ? (
+              <button className="theme-btn" onClick={() => {
+                markdownRef.current.resume();
+                setIsStop(false);
+              }}>
+                继续
+              </button>
+            ) : (
+              <button className="theme-btn" onClick={() => {
+                markdownRef.current.stop();
+                setIsStop(true);
+              }}>
+                暂停
+              </button>
+            )
+          }
         </div>
       </div>
       <div className="ds-message-box" ref={messageDivRef} onScroll={onScroll}>
