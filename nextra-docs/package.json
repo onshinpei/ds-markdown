@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:static": "next build",
     "start": "next start",
-    "export": "next build && next export"
+    "export": "next build"
   },
   "dependencies": {
     "ds-markdown": "1.0.5-beta.1",
