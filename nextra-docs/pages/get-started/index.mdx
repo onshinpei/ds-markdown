@@ -1,0 +1,81 @@
+# 快速开始
+
+欢迎使用 ds-markdown！本指南将帮助你快速上手。
+
+## 安装
+
+```bash
+npm install ds-markdown
+```
+
+## 基础用法
+
+最简单的使用方式：
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20} answerType="answer">
+      # Hello World
+      
+      欢迎使用 **ds-markdown**！
+    </DsMarkdown>
+  );
+}
+```
+
+## 显示打字光标
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown 
+      interval={20} 
+      answerType="answer"
+      showCursor
+      cursor="block"
+    >
+      # Hello World
+      
+      这段文字会显示打字光标效果！
+    </DsMarkdown>
+  );
+}
+```
+
+## 流式数据支持
+
+使用 `MarkdownCMD` 组件处理流式数据：
+
+```tsx
+import { MarkdownCMD } from 'ds-markdown';
+import { useRef } from 'react';
+
+function App() {
+  const ref = useRef(null);
+
+  const handleStream = (chunk: string) => {
+    ref.current?.push(chunk);
+  };
+
+  return (
+    <MarkdownCMD 
+      ref={ref}
+      interval={20}
+      showCursor
+      cursor="line"
+    />
+  );
+}
+```
+
+## 下一步
+
+- 了解 [基础用法](/get-started/basic-usage)
+- 查看 [打字光标](/get-started/typing-cursor) 配置
+- 探索 [核心特性](/get-started/features)
+

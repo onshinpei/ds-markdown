@@ -4,9 +4,8 @@ interface AutoScrollProps {
   children: React.ReactNode;
 }
 
-const modulePrefix = 'AutoScroll';
-const AutoScroll: React.FC<AutoScrollProps> = (props: AutoScrollProps) => {
-  return <div className="ds-markdown_auto_scroll">{props.children}</div>;
+const AutoScroll: React.FC<AutoScrollProps> = ({ children }) => {
+  return <div className="ds-markdown_auto_scroll">{children}</div>;
 };
 
 export default AutoScroll;

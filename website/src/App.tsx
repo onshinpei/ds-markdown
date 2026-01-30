@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 // 导入样式
@@ -12,13 +12,24 @@ import { LanguageProvider } from './LanguageContext';
 import { ConfigProvider } from 'ds-markdown';
 import zh from 'ds-markdown/i18n/zh';
 import en from 'ds-markdown/i18n/en';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import GetStarted from './pages/GetStarted';
 import TryIt from './pages/TryIt';
 import Examples from './pages/Examples';
 import Docs from './pages/Docs';
 import MigrationGuide from './pages/MigrationGuide';
 import { useI18n } from './hooks/useI18n';
+
+// 滚动到顶部组件
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 const AppContent: React.FC = () => {
   const { lang } = useI18n();
@@ -27,6 +38,7 @@ const AppContent: React.FC = () => {
   return (
     <ConfigProvider locale={locale}>
       <HashRouter basename="">
+        <ScrollToTop />
         <Header />
         <Navigation />
         <Routes>

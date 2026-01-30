@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useCallback } from 'react';
 import { CopyIcon } from '../Icon';
 import { useConfig } from '../../context/ConfigProvider';
 import SuccessButton from '../ui/SuccessButton';
@@ -11,7 +11,8 @@ interface CopyButtonProps {
 
 const CopyButton: React.FC<CopyButtonProps> = ({ codeContent, style, className }) => {
   const { locale } = useConfig();
-  const handleCopy = async () => {
+
+  const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(codeContent || '');
       return true;
@@ -19,11 +20,13 @@ const CopyButton: React.FC<CopyButtonProps> = ({ codeContent, style, className }
       // Fallback: use traditional method
       const textArea = document.createElement('textarea');
       textArea.value = codeContent || '';
+      document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
+      document.body.removeChild(textArea);
       return true;
     }
-  };
+  }, [codeContent]);
 
   return (
     <SuccessButton onClick={handleCopy} icon={<CopyIcon size={24} />} executeText={locale.codeBlock.copied || 'copied'} style={style} className={className}>
@@ -32,4 +35,4 @@ const CopyButton: React.FC<CopyButtonProps> = ({ codeContent, style, className }
   );
 };
 
-export default CopyButton;
+export default memo(CopyButton);
