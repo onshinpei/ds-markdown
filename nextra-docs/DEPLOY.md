@@ -13,7 +13,9 @@
 | **`gh-pages` 分支** | 将构建产物推送到专门的分支 | ⭐⭐⭐⭐ |
 | **根目录** | 仅适用于 `username.github.io` 仓库 | ⭐⭐ |
 
-**当前项目配置**：使用 GitHub Actions，构建产物在 `nextra-docs/out` 目录，无需 `docs` 目录。
+**当前项目配置**：使用 GitHub Actions + gh-pages 分支部署，工作流在 main 分支触发，构建产物推送到 gh-pages 分支。
+
+> 📖 **详细配置指南**：查看 [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md)
 
 ## 部署方式
 
@@ -105,7 +107,9 @@ GitHub Pages 支持多种部署方式，**不限于 `docs` 目录**：
 
 **方法 A：使用 GitHub Actions（推荐）⭐**
 
-这是最灵活的方式，可以从任何目录部署。项目已配置好工作流文件 `.github/workflows/deploy-docs.yml`：
+这是最灵活的方式，可以从任何目录部署。项目已配置好工作流文件 `.github/workflows/deploy-docs.yml`。
+
+**详细配置步骤请查看：[GitHub Actions 配置指南](./GITHUB_ACTIONS_SETUP.md)**
 
 ```yaml
 name: Deploy Docs
