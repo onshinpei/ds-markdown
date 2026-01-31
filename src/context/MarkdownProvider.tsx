@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext } from 'react';
 import type { MarkdownBaseProps } from '../defined';
 
 // Define Context type, allowing partial properties
@@ -10,8 +10,8 @@ export const MarkdownProvider: React.FC<{
   value: MarkdownContextType;
   children: React.ReactNode;
 }> = ({ value, children }) => {
-  const contextValue = useMemo(() => value, [value]);
-  return <MarkdownContext.Provider value={contextValue}>{children}</MarkdownContext.Provider>;
+  // Removed unnecessary useMemo - the value is already memoized by the parent component
+  return <MarkdownContext.Provider value={value}>{children}</MarkdownContext.Provider>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

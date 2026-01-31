@@ -93,6 +93,40 @@ function App() {
 }
 ```
 
+### 打字光标示例
+
+```tsx
+// 显示默认竖线光标
+<DsMarkdown showCursor>
+  这里是你的 markdown 内容...
+</DsMarkdown>
+
+// 使用内置光标样式
+<DsMarkdown showCursor cursor="block">
+  你的 markdown 内容...
+</DsMarkdown>
+
+<DsMarkdown showCursor cursor="underline">
+  你的 markdown 内容...
+</DsMarkdown>
+
+<DsMarkdown showCursor cursor="circle">
+  你的 markdown 内容...
+</DsMarkdown>
+
+// 自定义光标元素
+<DsMarkdown showCursor cursor={<span style={{ color: 'red' }}>|</span>}>
+  你的 markdown 内容...
+</DsMarkdown>
+```
+
+**可用的光标类型：**
+- `line` - 竖线（默认）
+- `block` - 实心块
+- `underline` - 下划线
+- `circle` - 圆点
+- 自定义 `React.ReactNode` - 任何自定义的 React 元素
+
 ## 核心API文档
 
 详细文档可查看：[完整文档](https://onshinpei.github.io/ds-markdown/#get-started)
@@ -111,6 +145,8 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `theme`             | `'light'` \| `'dark'`                       | 主题类型                                                      | `'light'`                                                   |
 | `plugins`           | `IMarkdownPlugin[]`                         | 插件配置                                                      | `[]`                                                        |
 | `math`              | `IMarkdownMath`                             | 数学公式配置                                                  | `{ splitSymbol: 'dollar' }`                                 |
+| `showCursor`        | `boolean`                                   | 打字动画时是否显示光标                                        | `false`                                                     |
+| `cursor`            | `React.ReactNode` \| `'line'` \| `'block'` \| `'underline'` \| `'circle'` | 自定义光标元素或内置光标类型         | `'line'` (当 `showCursor` 为 `true` 时)                     |
 | `onEnd`             | `(data: EndData) => void`                   | 打字结束回调                                                  | -                                                           |
 | `onStart`           | `(data: StartData) => void`                 | 打字开始回调                                                  | -                                                           |
 | `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | 字符打字前的回调，支持异步操作，会阻塞之后的打字              | -                                                           |

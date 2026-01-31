@@ -93,6 +93,40 @@ function App() {
 }
 ```
 
+### Typing Cursor Examples
+
+```tsx
+// Show default line cursor
+<DsMarkdown showCursor>
+  Your markdown content here...
+</DsMarkdown>
+
+// Use built-in cursor styles
+<DsMarkdown showCursor cursor="block">
+  Your markdown content...
+</DsMarkdown>
+
+<DsMarkdown showCursor cursor="underline">
+  Your markdown content...
+</DsMarkdown>
+
+<DsMarkdown showCursor cursor="circle">
+  Your markdown content...
+</DsMarkdown>
+
+// Custom cursor element
+<DsMarkdown showCursor cursor={<span style={{ color: 'red' }}>|</span>}>
+  Your markdown content...
+</DsMarkdown>
+```
+
+**Available cursor types:**
+- `line` - Vertical line (default)
+- `block` - Filled block
+- `underline` - Horizontal underline
+- `circle` - Circular dot
+- Custom `React.ReactNode` - Any custom React element
+
 ## Core API Documentation
 
 For detailed documentation, please visit: [Full Documentation](https://onshinpei.github.io/ds-markdown/#get-started)
@@ -111,6 +145,8 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `theme`             | `'light'` \| `'dark'`                       | Theme type                                                                                                              | `'light'`                                                                     |
 | `plugins`           | `IMarkdownPlugin[]`                         | Plugin configuration                                                                                                    | `[]`                                                                          |
 | `math`              | `IMarkdownMath`                             | Mathematical formula configuration                                                                                      | `{ splitSymbol: 'dollar' }`                                                   |
+| `showCursor`        | `boolean`                                   | Whether to show typing cursor during animation                                                                          | `false`                                                                       |
+| `cursor`            | `React.ReactNode` \| `'line'` \| `'block'` \| `'underline'` \| `'circle'` | Custom cursor element or built-in cursor type                                      | `'line'` (when `showCursor` is `true`)                                        |
 | `onEnd`             | `(data: EndData) => void`                   | Typing completion callback                                                                                              | -                                                                             |
 | `onStart`           | `(data: StartData) => void`                 | Typing start callback                                                                                                   | -                                                                             |
 | `onBeforeTypedChar` | `(data: IBeforeTypedChar) => Promise<void>` | Callback before character typing, supports async operations, blocks subsequent typing                                   | -                                                                             |

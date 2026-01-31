@@ -44,6 +44,7 @@ export interface MarkdownBaseProps extends MarkdownTyperBaseProps {}
 
 export interface MarkdownProps extends MarkdownTyperBaseProps, IMarkdownThemeProps {
   children: string | undefined;
+  cursor?: React.ReactNode | string | 'circle' | 'block' | 'underline' | 'line';
 }
 
 /** MarkdownCMD component does not need children */
