@@ -86,6 +86,11 @@ const config: DocsThemeConfig = {
   navbar: {
     extraContent: <LanguageSwitch />,
   },
+  // 多语言配置 - 告诉 Nextra 支持哪些语言
+  i18n: [
+    { locale: 'en', name: 'English', text: 'English' },
+    { locale: 'zh', name: '中文', text: '中文' }
+  ],
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
