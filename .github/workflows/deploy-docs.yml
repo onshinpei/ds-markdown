@@ -42,6 +42,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./nextra-docs/out
           publish_branch: gh-pages
+          force_orphan: true  # 清理历史，只保留最新的部署
           # 如果需要自定义域名，取消下面的注释
           # cname: your-domain.com
 
