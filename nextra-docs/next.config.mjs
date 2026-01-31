@@ -14,6 +14,14 @@ const withNextra = nextra({
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['ds-markdown-mermaid-plugin', 'ds-markdown'],
+  // GitHub Pages 部署配置
+  output: 'export',  // 启用静态导出
+  images: {
+    unoptimized: true,  // 静态导出需要禁用图片优化
+  },
+  // 部署到 GitHub Pages 子路径
+  basePath: '/ds-markdown',
+  assetPrefix: '/ds-markdown/',
 }
 
 export default withNextra(nextConfig)
