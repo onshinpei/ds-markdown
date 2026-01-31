@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd nextra-docs
-          npm ci
+          npm ci --force
 
       - name: Build docs
         run: |
