@@ -1,0 +1,86 @@
+# ds-markdown
+
+> 🚀 React Markdown typing animation component with modern chat interface effects
+
+A React component designed for modern AI applications, providing smooth real-time typing animations and full Markdown rendering capabilities.
+
+## Why Choose ds-markdown?
+
+### Core Problems Solved
+
+- **Streaming Data Typing Stuttering**  
+  Traditional typewriter components struggle with AI backend streaming data. Since each chunk contains multiple characters, stuttering and character skipping occur. ds-markdown intelligently splits each chunk, ensuring smooth typing for every character.
+
+- **Disconnected Markdown Rendering and Typing Animation**  
+  Most typewriter components only support plain text and cannot render Markdown syntax, math formulas, charts, and other rich media content in real-time during typing.
+
+### Value Delivered
+
+- **Enhanced User Immersion**  
+  Provides professional-grade AI chat experience, making users feel the real AI interaction process, greatly improving product professionalism and user satisfaction.
+
+- **Out-of-the-Box, Reduced Development Complexity**  
+  Complete solution that supports streaming data, Markdown rendering, math formulas, charts, and other complex features without additional configuration.
+
+## Core Features
+
+- 🤖 **AI Chat Ready** - Professional AI streaming response typing animation
+- 📝 **Full Markdown Support** - Code highlighting, tables, lists, etc.
+- 🔢 **Math Formulas** - KaTeX support, `$...$` and `$$...$$` syntax
+- 📊 **Mermaid Charts** - Flowcharts, sequence diagrams, Gantt charts, etc.
+- 🎨 **Customizable** - Light/dark themes, configurable typing speed
+- ⚡ **High Performance** - Lightweight, smooth animations
+- 🔌 **Extensible** - Plugin system, supports custom functionality
+- 📦 **TypeScript** - Full type support
+- ✨ **Typing Cursor** - Multiple cursor styles, enhanced visual effects
+
+## Quick Start
+
+```bash
+npm install ds-markdown
+```
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20} answerType="answer" showCursor>
+      # Hello ds-markdown
+      
+      This is a **high-performance** typing animation component!
+      
+      - ⚡ Zero-latency streaming processing
+      - 🎬 Smooth typing animation
+      - 🎯 Perfect syntax support
+    </DsMarkdown>
+  );
+}
+```
+
+## Installation
+
+> ℹ️ **Note**: Requires React 18.0.0 or higher
+
+```bash
+# npm
+npm install ds-markdown
+
+# yarn
+yarn add ds-markdown
+
+# pnpm
+pnpm add ds-markdown
+```
+
+## Next Steps
+
+- Read [Get Started](/en/get-started) to learn basic usage
+- Check [API Documentation](/en/api-reference) to understand all configuration options
+- Browse [Examples](/en/examples) to see real-world use cases
+
+## Related Projects
+
+- **[react-markdown-typer](https://github.com/onshinpei/react-markdown-typer)** - If you need a lightweight markdown typing component
+- **[ds-markdown-mermaid-plugin](https://github.com/onshinpei/ds-markdown-mermaid-plugin)** - Mermaid chart support plugin
+

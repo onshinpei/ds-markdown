@@ -22,6 +22,7 @@ const nextConfig = {
   // 部署到 GitHub Pages 子路径
   basePath: '/ds-markdown',
   assetPrefix: '/ds-markdown/',
+  // 多语言配置（Next.js 静态导出不支持 i18n，使用 Nextra 的内置支持）
 }
 
 export default withNextra(nextConfig)
