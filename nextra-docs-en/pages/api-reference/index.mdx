@@ -1,35 +1,34 @@
-# API 文档
+# API Reference
 
-ds-markdown 提供了两个主要组件：`DsMarkdown` 和 `MarkdownCMD`。
+ds-markdown provides two main components: `DsMarkdown` and `MarkdownCMD`.
 
-## 组件概览
+## Component Overview
 
 ### DsMarkdown
 
-基础的 Markdown 打字动画组件，适合静态内容。
+A basic Markdown typing animation component, suitable for static content.
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
 
 <DsMarkdown interval={20} answerType="answer">
-  # 内容
+  # Content
 </DsMarkdown>
 ```
 
 ### MarkdownCMD
 
-支持流式数据的 Markdown 组件，适合处理实时数据流。
+A Markdown component that supports streaming data, suitable for handling real-time data streams.
 
 ```tsx
 import { MarkdownCMD } from 'ds-markdown';
 
 const ref = useRef(null);
-ref.current?.push('新内容');
+ref.current?.push('New content');
 ```
 
-## 快速导航
+## Quick Navigation
 
-- [Props 属性](/api-reference/props) - 所有可用的属性配置
-- [方法](/api-reference/methods) - 组件实例方法
-- [类型定义](/api-reference/types) - TypeScript 类型说明
-
+- [Props](/api-reference/props) - All available property configurations
+- [Methods](/api-reference/methods) - Component instance methods
+- [Type Definitions](/api-reference/types) - TypeScript type descriptions

@@ -1,14 +1,14 @@
 import { MermaidDemo } from '../../components/demos'
 
-# Mermaid 图表示例
+# Mermaid Charts Example
 
-使用 Mermaid 插件渲染各种图表。
+Use Mermaid plugin to render various charts.
 
-## 在线演示
+## Live Demo
 
 <MermaidDemo />
 
-## 流程图
+## Flowchart
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -20,16 +20,16 @@ import { mermaidPlugin } from 'ds-markdown-mermaid-plugin';
 >
   \`\`\`mermaid
   graph TD
-    A[开始] --> B{判断}
-    B -->|是| C[执行A]
-    B -->|否| D[执行B]
-    C --> E[结束]
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Execute A]
+    B -->|No| D[Execute B]
+    C --> E[End]
     D --> E
   \`\`\`
 </DsMarkdown>
 ```
 
-## 序列图
+## Sequence Diagram
 
 ```tsx
 <DsMarkdown 
@@ -38,15 +38,15 @@ import { mermaidPlugin } from 'ds-markdown-mermaid-plugin';
 >
   \`\`\`mermaid
   sequenceDiagram
-    participant A as 用户
-    participant B as 系统
-    A->>B: 请求
-    B-->>A: 响应
+    participant A as User
+    participant B as System
+    A->>B: Request
+    B-->>A: Response
   \`\`\`
 </DsMarkdown>
 ```
 
-## 甘特图
+## Gantt Chart
 
 ```tsx
 <DsMarkdown 
@@ -55,18 +55,17 @@ import { mermaidPlugin } from 'ds-markdown-mermaid-plugin';
 >
   \`\`\`mermaid
   gantt
-    title 项目计划
+    title Project Plan
     dateFormat YYYY-MM-DD
-    section 阶段1
-    任务1 :a1, 2024-01-01, 30d
-    任务2 :a2, after a1, 20d
+    section Phase 1
+    Task 1 :a1, 2024-01-01, 30d
+    Task 2 :a2, after a1, 20d
   \`\`\`
 </DsMarkdown>
 ```
 
-## 安装插件
+## Install Plugin
 
 ```bash
 npm install ds-markdown-mermaid-plugin
 ```
-

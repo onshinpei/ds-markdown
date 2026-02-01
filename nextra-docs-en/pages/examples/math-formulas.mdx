@@ -1,34 +1,34 @@
 import { MathSupportDemo } from '../../components/demos'
 
-# 数学公式示例
+# Math Formulas Example
 
-使用 KaTeX 渲染数学公式。
+Use KaTeX to render math formulas.
 
-## 在线演示
+## Live Demo
 
 <MathSupportDemo />
 
-## 行内公式
+## Inline Formulas
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
 
 <DsMarkdown interval={20}>
-  这是行内公式：$E = mc^2$
+  This is an inline formula: $E = mc^2$
   
-  另一个例子：$\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n$
+  Another example: $\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n$
 </DsMarkdown>
 ```
 
-## 块级公式
+## Block Formulas
 
 ```tsx
 <DsMarkdown interval={20}>
-  这是块级公式：
+  This is a block formula:
   
   $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
   
-  另一个例子：
+  Another example:
   
   $$\\begin{pmatrix}
   a & b \\\\
@@ -37,21 +37,20 @@ import DsMarkdown from 'ds-markdown';
 </DsMarkdown>
 ```
 
-## 配置分隔符
+## Configure Delimiters
 
 ```tsx
 <DsMarkdown 
   interval={20}
   math={{ splitSymbol: 'dollar' }}
 >
-  使用 $...$ 和 $$...$$ 语法
+  Use $...$ and $$...$$ syntax
 </DsMarkdown>
 
 <DsMarkdown 
   interval={20}
   math={{ splitSymbol: 'bracket' }}
 >
-  使用 \\(...\\) 和 \\[...\\] 语法
+  Use \\(...\\) and \\[...\\] syntax
 </DsMarkdown>
 ```
-

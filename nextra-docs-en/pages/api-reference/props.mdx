@@ -1,38 +1,38 @@
-# Props 属性
+# Props
 
-## DsMarkdown 和 MarkdownCMD 通用属性
+## Common Props for DsMarkdown and MarkdownCMD
 
-| 属性 | 类型 | 说明 | 默认值 |
-|------|------|------|--------|
-| `interval` | <code>number</code> \| <a href="/api-reference/types#intervalconfig"><code>IntervalConfig</code></a> | 打字间隔配置，支持固定间隔或动态速度控制 | `30` |
-| `timerType` | `'setTimeout' \| 'requestAnimationFrame'` | 定时器类型，不支持动态修改 | `'setTimeout'` |
-| `answerType` | <a href="/api-reference/types#answertype"><code>AnswerType</code></a> | 内容类型（影响样式主题），不支持动态修改 | `'answer'` |
-| `theme` | <a href="/api-reference/types#theme"><code>Theme</code></a> | 主题类型 | `'light'` |
-| `plugins` | <a href="/api-reference/types#imarkdownplugin"><code>IMarkdownPlugin</code></a>[] | 插件配置 | `[]` |
-| `math` | <a href="/api-reference/types#imarkdownmath"><code>IMarkdownMath</code></a> | 数学公式配置 | `{ splitSymbol: 'dollar' }` |
-| `showCursor` | `boolean` | 打字动画时是否显示光标 | `false` |
-| `cursor` | `React.ReactNode \| 'line' \| 'block' \| 'underline' \| 'circle'` | 自定义光标元素或内置光标类型 | `'line'` (当 `showCursor` 为 `true` 时) |
-| `onEnd` | <code>(data?: </code><a href="/api-reference/types#ienddata"><code>IEndData</code></a><code>) => void</code> | 打字完成回调 | - |
-| `onStart` | <code>(data?: </code><a href="/api-reference/types#istartdata"><code>IStartData</code></a><code>) => void</code> | 打字开始回调 | - |
-| `onBeforeTypedChar` | <code>(data?: </code><a href="/api-reference/types#ibeforetypedchar"><code>IBeforeTypedChar</code></a><code>) => Promise&lt;void&gt;</code> | 字符打字前的回调，支持异步操作，会阻塞之后的打字 | - |
-| `onTypedChar` | <code>(data?: </code><a href="/api-reference/types#itypedchar"><code>ITypedChar</code></a><code>) => void</code> | 每字符打字后的回调 | - |
-| `disableTyping` | `boolean` | 禁用打字动画效果 | `false` |
-| `autoStartTyping` | `boolean` | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true` |
-| `codeBlock` | <a href="/api-reference/types#imarkdowncode"><code>IMarkdownCode</code></a> | 代码块配置 | `{headerActions: true}` |
+| Prop | Type | Description | Default |
+|------|------|-------------|---------|
+| `interval` | <code>number</code> \| <a href="/api-reference/types#intervalconfig"><code>IntervalConfig</code></a> | Typing interval configuration, supports fixed interval or dynamic speed control | `30` |
+| `timerType` | `'setTimeout' \| 'requestAnimationFrame'` | Timer type, cannot be modified dynamically | `'setTimeout'` |
+| `answerType` | <a href="/api-reference/types#answertype"><code>AnswerType</code></a> | Content type (affects style theme), cannot be modified dynamically | `'answer'` |
+| `theme` | <a href="/api-reference/types#theme"><code>Theme</code></a> | Theme type | `'light'` |
+| `plugins` | <a href="/api-reference/types#imarkdownplugin"><code>IMarkdownPlugin</code></a>[] | Plugin configuration | `[]` |
+| `math` | <a href="/api-reference/types#imarkdownmath"><code>IMarkdownMath</code></a> | Math formula configuration | `{ splitSymbol: 'dollar' }` |
+| `showCursor` | `boolean` | Whether to show cursor during typing animation | `false` |
+| `cursor` | `React.ReactNode \| 'line' \| 'block' \| 'underline' \| 'circle'` | Custom cursor element or built-in cursor type | `'line'` (when `showCursor` is `true`) |
+| `onEnd` | <code>(data?: </code><a href="/api-reference/types#ienddata"><code>IEndData</code></a><code>) => void</code> | Typing completion callback | - |
+| `onStart` | <code>(data?: </code><a href="/api-reference/types#istartdata"><code>IStartData</code></a><code>) => void</code> | Typing start callback | - |
+| `onBeforeTypedChar` | <code>(data?: </code><a href="/api-reference/types#ibeforetypedchar"><code>IBeforeTypedChar</code></a><code>) => Promise&lt;void&gt;</code> | Callback before character typing, supports async operations, will block subsequent typing | - |
+| `onTypedChar` | <code>(data?: </code><a href="/api-reference/types#itypedchar"><code>ITypedChar</code></a><code>) => void</code> | Callback after each character is typed | - |
+| `disableTyping` | `boolean` | Disable typing animation effect | `false` |
+| `autoStartTyping` | `boolean` | Whether to automatically start typing animation, set to false for manual trigger, cannot be modified dynamically | `true` |
+| `codeBlock` | <a href="/api-reference/types#imarkdowncode"><code>IMarkdownCode</code></a> | Code block configuration | `{headerActions: true}` |
 
-## DsMarkdown 特有属性
+## DsMarkdown Specific Props
 
-| 属性 | 类型 | 说明 | 默认值 |
-|------|------|------|--------|
-| `children` | `string \| undefined` | Markdown 内容 | - |
+| Prop | Type | Description | Default |
+|------|------|-------------|---------|
+| `children` | `string \| undefined` | Markdown content | - |
 
-## MarkdownCMD 特有属性
+## MarkdownCMD Specific Props
 
-MarkdownCMD 不需要 `children` 属性，内容通过 `push()` 方法动态添加。
+MarkdownCMD does not require a `children` prop. Content is added dynamically through the `push()` method.
 
-## 使用示例
+## Usage Examples
 
-### 基础配置
+### Basic Configuration
 
 ```tsx
 <DsMarkdown 
@@ -42,11 +42,11 @@ MarkdownCMD 不需要 `children` 属性，内容通过 `push()` 方法动态添�
   showCursor
   cursor="block"
 >
-  # 内容
+  # Content
 </DsMarkdown>
 ```
 
-### 动态速度控制
+### Dynamic Speed Control
 
 ```tsx
 <DsMarkdown 
@@ -56,19 +56,18 @@ MarkdownCMD 不需要 `children` 属性，内容通过 `push()` 方法动态添�
     curve: 'ease-out'
   }}
 >
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-### 回调函数
+### Callback Functions
 
 ```tsx
 <DsMarkdown
-  onStart={(data) => console.log('开始', data)}
-  onEnd={(data) => console.log('完成', data)}
-  onTypedChar={(data) => console.log('打字', data)}
+  onStart={(data) => console.log('Started', data)}
+  onEnd={(data) => console.log('Completed', data)}
+  onTypedChar={(data) => console.log('Typed', data)}
 >
-  内容...
+  Content...
 </DsMarkdown>
 ```
-

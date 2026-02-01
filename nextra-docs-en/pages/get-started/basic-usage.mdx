@@ -1,6 +1,6 @@
-# 基础用法
+# Basic Usage
 
-## 最简单的例子
+## Simplest Example
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -10,25 +10,25 @@ function App() {
     <DsMarkdown interval={20}>
       # Hello ds-markdown
       
-      这是一个简单的例子。
+      This is a simple example.
     </DsMarkdown>
   );
 }
 ```
 
-## 配置打字速度
+## Configure Typing Speed
 
-通过 `interval` 属性控制打字速度：
+Control typing speed through the `interval` prop:
 
 ```tsx
-<DsMarkdown interval={10}>  // 快速打字
-<DsMarkdown interval={50}>  // 慢速打字
-<DsMarkdown interval={30}>  // 默认速度
+<DsMarkdown interval={10}>  // Fast typing
+<DsMarkdown interval={50}>  // Slow typing
+<DsMarkdown interval={30}>  // Default speed
 ```
 
-## 动态速度控制
+## Dynamic Speed Control
 
-使用 `IntervalConfig` 实现动态速度：
+Use `IntervalConfig` to achieve dynamic speed:
 
 ```tsx
 <DsMarkdown 
@@ -38,33 +38,33 @@ function App() {
     curve: 'ease-out'
   }}
 >
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-## 主题配置
+## Theme Configuration
 
 ```tsx
-// 亮色主题（默认）
+// Light theme (default)
 <DsMarkdown theme="light">
-  内容...
+  Content...
 </DsMarkdown>
 
-// 暗色主题
+// Dark theme
 <DsMarkdown theme="dark">
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-## 禁用打字动画
+## Disable Typing Animation
 
 ```tsx
 <DsMarkdown disableTyping>
-  这段内容会立即显示，不会有打字动画。
+  This content will be displayed immediately without typing animation.
 </DsMarkdown>
 ```
 
-## 手动控制
+## Manual Control
 
 ```tsx
 import { useRef } from 'react';
@@ -75,33 +75,32 @@ function App() {
 
   return (
     <>
-      <button onClick={() => ref.current?.start()}>开始</button>
-      <button onClick={() => ref.current?.stop()}>暂停</button>
-      <button onClick={() => ref.current?.resume()}>继续</button>
-      <button onClick={() => ref.current?.restart()}>重启</button>
+      <button onClick={() => ref.current?.start()}>Start</button>
+      <button onClick={() => ref.current?.stop()}>Pause</button>
+      <button onClick={() => ref.current?.resume()}>Resume</button>
+      <button onClick={() => ref.current?.restart()}>Restart</button>
       
       <DsMarkdown 
         ref={ref}
         autoStartTyping={false}
         interval={20}
       >
-        内容...
+        Content...
       </DsMarkdown>
     </>
   );
 }
 ```
 
-## 回调函数
+## Callback Functions
 
 ```tsx
 <DsMarkdown
-  onStart={(data) => console.log('开始打字', data)}
-  onEnd={(data) => console.log('打字完成', data)}
-  onTypedChar={(data) => console.log('已打字', data)}
-  onBeforeTypedChar={(data) => console.log('即将打字', data)}
+  onStart={(data) => console.log('Started typing', data)}
+  onEnd={(data) => console.log('Typing completed', data)}
+  onTypedChar={(data) => console.log('Typed', data)}
+  onBeforeTypedChar={(data) => console.log('About to type', data)}
 >
-  内容...
+  Content...
 </DsMarkdown>
 ```
-

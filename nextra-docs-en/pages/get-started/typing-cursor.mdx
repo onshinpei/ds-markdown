@@ -1,8 +1,8 @@
-# 打字光标
+# Typing Cursor
 
-ds-markdown 支持在打字动画过程中显示光标，增强视觉效果。
+ds-markdown supports displaying a cursor during typing animation to enhance visual effects.
 
-## 基本用法
+## Basic Usage
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -10,64 +10,64 @@ import DsMarkdown from 'ds-markdown';
 function App() {
   return (
     <DsMarkdown showCursor>
-      这段文字会显示默认的光标效果。
+      This text will show the default cursor effect.
     </DsMarkdown>
   );
 }
 ```
 
-## 内置光标样式
+## Built-in Cursor Styles
 
-ds-markdown 提供了四种内置光标样式：
+ds-markdown provides four built-in cursor styles:
 
-### 竖线光标（默认）
+### Line Cursor (default)
 
 ```tsx
 <DsMarkdown showCursor cursor="line">
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-### 实心块光标
+### Block Cursor
 
 ```tsx
 <DsMarkdown showCursor cursor="block">
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-### 下划线光标
+### Underline Cursor
 
 ```tsx
 <DsMarkdown showCursor cursor="underline">
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-### 圆点光标
+### Circle Cursor
 
 ```tsx
 <DsMarkdown showCursor cursor="circle">
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-## 自定义光标
+## Custom Cursor
 
-你也可以传入自定义的 React 元素作为光标：
+You can also pass a custom React element as the cursor:
 
 ```tsx
 <DsMarkdown 
   showCursor 
   cursor={<span style={{ color: 'red', fontSize: '20px' }}>|</span>}
 >
-  内容...
+  Content...
 </DsMarkdown>
 ```
 
-## 在代码块中使用
+## Usage in Code Blocks
 
-光标会自动适配代码块，显示在代码内容的末尾：
+The cursor will automatically adapt to code blocks, displaying at the end of the code content:
 
 ```tsx
 <DsMarkdown showCursor cursor="block">
@@ -79,7 +79,7 @@ ds-markdown 提供了四种内置光标样式：
 </DsMarkdown>
 ```
 
-## 完整示例
+## Complete Example
 
 ```tsx
 import DsMarkdown from 'ds-markdown';
@@ -87,28 +87,27 @@ import DsMarkdown from 'ds-markdown';
 function App() {
   return (
     <div>
-      <h2>竖线光标</h2>
+      <h2>Line Cursor</h2>
       <DsMarkdown showCursor cursor="line">
-        # 标题
-        这是使用竖线光标的示例。
+        # Title
+        This is an example using line cursor.
       </DsMarkdown>
 
-      <h2>实心块光标</h2>
+      <h2>Block Cursor</h2>
       <DsMarkdown showCursor cursor="block">
-        # 标题
-        这是使用实心块光标的示例。
+        # Title
+        This is an example using block cursor.
       </DsMarkdown>
 
-      <h2>自定义光标</h2>
+      <h2>Custom Cursor</h2>
       <DsMarkdown 
         showCursor 
         cursor={<span style={{ color: '#0070f3' }}>▊</span>}
       >
-        # 标题
-        这是使用自定义光标的示例。
+        # Title
+        This is an example using custom cursor.
       </DsMarkdown>
     </div>
   );
 }
 ```
-
