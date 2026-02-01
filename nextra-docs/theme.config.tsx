@@ -5,21 +5,40 @@ import { useRouter } from 'next/router'
 // 语言切换组件
 function LanguageSwitch() {
   const router = useRouter()
+  const basePath = '/ds-markdown'
   const currentPath = router.asPath || router.pathname
-  // 移除 basePath 前缀来检查语言
-  const pathWithoutBase = currentPath.replace('/ds-markdown', '')
+  
+  // 获取不包含 basePath 的路径
+  let pathWithoutBase = currentPath
+  if (currentPath.startsWith(basePath)) {
+    pathWithoutBase = currentPath.slice(basePath.length) || '/'
+  }
+  
   const isZh = pathWithoutBase.startsWith('/zh')
   
   const switchLanguage = (lang: string) => {
-    let newPath = currentPath
-    // 移除 basePath 前缀
-    const pathWithoutBase = newPath.replace('/ds-markdown', '')
-    
+    // 获取当前路径（不包含 basePath）
     let targetPath = pathWithoutBase
+    
+    // 替换语言前缀
     if (isZh) {
-      targetPath = pathWithoutBase.replace('/zh/', '/en/').replace('/zh', '/en')
+      // 从中文切换到英文
+      if (targetPath === '/zh') {
+        targetPath = '/en'
+      } else if (targetPath.startsWith('/zh/')) {
+        targetPath = targetPath.replace('/zh/', '/en/')
+      } else {
+        targetPath = `/en${targetPath}`
+      }
     } else {
-      targetPath = pathWithoutBase.replace('/en/', '/zh/').replace('/en', '/zh')
+      // 从英文切换到中文
+      if (targetPath === '/en') {
+        targetPath = '/zh'
+      } else if (targetPath.startsWith('/en/')) {
+        targetPath = targetPath.replace('/en/', '/zh/')
+      } else {
+        targetPath = `/zh${targetPath}`
+      }
     }
     
     // 如果路径中没有语言前缀，添加默认语言
@@ -27,8 +46,8 @@ function LanguageSwitch() {
       targetPath = `/${lang}${targetPath === '/' ? '' : targetPath}`
     }
     
-    // 添加回 basePath
-    const finalPath = `/ds-markdown${targetPath}`
+    // 构建最终路径（包含 basePath）
+    const finalPath = `${basePath}${targetPath}`
     router.push(finalPath)
   }
 
@@ -88,8 +107,8 @@ const config: DocsThemeConfig = {
   },
   // 多语言配置 - 告诉 Nextra 支持哪些语言
   i18n: [
-    { locale: 'en', name: 'English', text: 'English' },
-    { locale: 'zh', name: '中文', text: '中文' }
+    { locale: 'en', name: 'English' },
+    { locale: 'zh', name: '中文' }
   ],
   head: (
     <>

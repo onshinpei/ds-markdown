@@ -1,0 +1,29 @@
+{
+  "name": "ds-markdown-docs-zh",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "ds-markdown": "1.0.5-beta.1",
+    "ds-markdown-mermaid-plugin": "^2.0.3",
+    "next": "^14.2.0",
+    "next-themes": "^0.4.0",
+    "nextra": "^3.3.1",
+    "nextra-theme-docs": "^3.3.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-syntax-highlighter": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-syntax-highlighter": "^15.5.0",
+    "typescript": "^5.0.0"
+  }
+}
+

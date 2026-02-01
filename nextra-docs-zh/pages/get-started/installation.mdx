@@ -1,0 +1,57 @@
+# 安装
+
+## 环境要求
+
+- React 18.0.0 或更高版本
+- Node.js 16.0.0 或更高版本
+
+## 使用 npm
+
+```bash
+npm install ds-markdown
+```
+
+## 使用 yarn
+
+```bash
+yarn add ds-markdown
+```
+
+## 使用 pnpm
+
+```bash
+pnpm add ds-markdown
+```
+
+## 引入样式
+
+如果需要使用默认样式，需要引入 CSS 文件：
+
+```tsx
+import 'ds-markdown/style.css';
+```
+
+如果使用数学公式，还需要引入 KaTeX 样式：
+
+```tsx
+import 'ds-markdown/katex.css';
+```
+
+## 验证安装
+
+安装完成后，可以通过以下方式验证：
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20}>
+      # 安装成功！
+      
+      如果你看到这段文字，说明安装成功了。
+    </DsMarkdown>
+  );
+}
+```
+
