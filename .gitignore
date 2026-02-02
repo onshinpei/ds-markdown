@@ -1,0 +1,53 @@
+# 忽略所有文件
+*
+
+# 但跟踪以下根目录文件
+!.gitignore
+!index.html
+!robots.txt
+!sitemap.xml
+!.nojekyll
+
+# 跟踪 en 和 zh 目录及其所有内容（文档构建产物）
+!en/
+!en/**
+!zh/
+!zh/**
+
+# 在 en 和 zh 目录中，忽略 node_modules 和其他不需要的文件
+en/node_modules/
+zh/node_modules/
+**/node_modules/
+
+# 忽略其他分支可能带来的开发文件
+**/.next/
+**/out/
+**/dist/
+**/build/
+**/.cache/
+**/.turbo/
+
+# 忽略开发相关文件（如果其他分支带过来）
+**/package.json
+**/package-lock.json
+**/tsconfig.json
+**/next.config.*
+**/theme.config.*
+**/pages/
+**/components/
+**/README.md
+
+# 忽略系统文件
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*~
+
+# 忽略 IDE 文件
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
