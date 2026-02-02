@@ -1,0 +1,73 @@
+# Props
+
+## Common Props for DsMarkdown and MarkdownCMD
+
+| Prop | Type | Description | Default |
+|------|------|-------------|---------|
+| `interval` | <code>number</code> \| <a href="../types#intervalconfig"><code>IntervalConfig</code></a> | Typing interval configuration, supports fixed interval or dynamic speed control | `30` |
+| `timerType` | `'setTimeout' \| 'requestAnimationFrame'` | Timer type, cannot be modified dynamically | `'setTimeout'` |
+| `answerType` | <a href="../types#answertype"><code>AnswerType</code></a> | Content type (affects style theme), cannot be modified dynamically | `'answer'` |
+| `theme` | <a href="../types#theme"><code>Theme</code></a> | Theme type | `'light'` |
+| `plugins` | <a href="../types#imarkdownplugin"><code>IMarkdownPlugin</code></a>[] | Plugin configuration | `[]` |
+| `math` | <a href="../types#imarkdownmath"><code>IMarkdownMath</code></a> | Math formula configuration | `{ splitSymbol: 'dollar' }` |
+| `showCursor` | `boolean` | Whether to show cursor during typing animation | `false` |
+| `cursor` | `React.ReactNode \| 'line' \| 'block' \| 'underline' \| 'circle'` | Custom cursor element or built-in cursor type | `'line'` (when `showCursor` is `true`) |
+| `onEnd` | <code>(data?: </code><a href="../types#ienddata"><code>IEndData</code></a><code>) => void</code> | Typing completion callback | - |
+| `onStart` | <code>(data?: </code><a href="../types#istartdata"><code>IStartData</code></a><code>) => void</code> | Typing start callback | - |
+| `onBeforeTypedChar` | <code>(data?: </code><a href="../types#ibeforetypedchar"><code>IBeforeTypedChar</code></a><code>) => Promise&lt;void&gt;</code> | Callback before character typing, supports async operations, will block subsequent typing | - |
+| `onTypedChar` | <code>(data?: </code><a href="../types#itypedchar"><code>ITypedChar</code></a><code>) => void</code> | Callback after each character is typed | - |
+| `disableTyping` | `boolean` | Disable typing animation effect | `false` |
+| `autoStartTyping` | `boolean` | Whether to automatically start typing animation, set to false for manual trigger, cannot be modified dynamically | `true` |
+| `codeBlock` | <a href="../types#imarkdowncode"><code>IMarkdownCode</code></a> | Code block configuration | `{headerActions: true}` |
+
+## DsMarkdown Specific Props
+
+| Prop | Type | Description | Default |
+|------|------|-------------|---------|
+| `children` | `string \| undefined` | Markdown content | - |
+
+## MarkdownCMD Specific Props
+
+MarkdownCMD does not require a `children` prop. Content is added dynamically through the `push()` method.
+
+## Usage Examples
+
+### Basic Configuration
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  theme="dark"
+  answerType="answer"
+  showCursor
+  cursor="block"
+>
+  # Content
+</DsMarkdown>
+```
+
+### Dynamic Speed Control
+
+```tsx
+<DsMarkdown 
+  interval={{
+    min: 10,
+    max: 50,
+    curve: 'ease-out'
+  }}
+>
+  Content...
+</DsMarkdown>
+```
+
+### Callback Functions
+
+```tsx
+<DsMarkdown
+  onStart={(data) => console.log('Started', data)}
+  onEnd={(data) => console.log('Completed', data)}
+  onTypedChar={(data) => console.log('Typed', data)}
+>
+  Content...
+</DsMarkdown>
+```

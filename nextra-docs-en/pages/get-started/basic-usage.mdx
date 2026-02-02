@@ -1,0 +1,106 @@
+# Basic Usage
+
+## Simplest Example
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20}>
+      # Hello ds-markdown
+      
+      This is a simple example.
+    </DsMarkdown>
+  );
+}
+```
+
+## Configure Typing Speed
+
+Control typing speed through the `interval` prop:
+
+```tsx
+<DsMarkdown interval={10}>  // Fast typing
+<DsMarkdown interval={50}>  // Slow typing
+<DsMarkdown interval={30}>  // Default speed
+```
+
+## Dynamic Speed Control
+
+Use `IntervalConfig` to achieve dynamic speed:
+
+```tsx
+<DsMarkdown 
+  interval={{
+    min: 10,
+    max: 50,
+    curve: 'ease-out'
+  }}
+>
+  Content...
+</DsMarkdown>
+```
+
+## Theme Configuration
+
+```tsx
+// Light theme (default)
+<DsMarkdown theme="light">
+  Content...
+</DsMarkdown>
+
+// Dark theme
+<DsMarkdown theme="dark">
+  Content...
+</DsMarkdown>
+```
+
+## Disable Typing Animation
+
+```tsx
+<DsMarkdown disableTyping>
+  This content will be displayed immediately without typing animation.
+</DsMarkdown>
+```
+
+## Manual Control
+
+```tsx
+import { useRef } from 'react';
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <button onClick={() => ref.current?.start()}>Start</button>
+      <button onClick={() => ref.current?.stop()}>Pause</button>
+      <button onClick={() => ref.current?.resume()}>Resume</button>
+      <button onClick={() => ref.current?.restart()}>Restart</button>
+      
+      <DsMarkdown 
+        ref={ref}
+        autoStartTyping={false}
+        interval={20}
+      >
+        Content...
+      </DsMarkdown>
+    </>
+  );
+}
+```
+
+## Callback Functions
+
+```tsx
+<DsMarkdown
+  onStart={(data) => console.log('Started typing', data)}
+  onEnd={(data) => console.log('Typing completed', data)}
+  onTypedChar={(data) => console.log('Typed', data)}
+  onBeforeTypedChar={(data) => console.log('About to type', data)}
+>
+  Content...
+</DsMarkdown>
+```

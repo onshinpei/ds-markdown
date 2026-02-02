@@ -1,0 +1,97 @@
+import { TypingAnimationDemo } from '../../components/demos'
+
+# Typing Animation Example
+
+Configure different typing animation effects.
+
+## Live Demo
+
+<TypingAnimationDemo />
+
+## Basic Configuration
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+// Fast typing
+<DsMarkdown interval={10}>
+  Content...
+</DsMarkdown>
+
+// Slow typing
+<DsMarkdown interval={50}>
+  Content...
+</DsMarkdown>
+```
+
+## Dynamic Speed
+
+```tsx
+<DsMarkdown 
+  interval={{
+    min: 10,
+    max: 50,
+    curve: 'ease-out'
+  }}
+>
+  Content...
+</DsMarkdown>
+```
+
+## Show Cursor
+
+```tsx
+// Default line cursor
+<DsMarkdown showCursor>
+  Content...
+</DsMarkdown>
+
+// Block cursor
+<DsMarkdown showCursor cursor="block">
+  Content...
+</DsMarkdown>
+
+// Underline cursor
+<DsMarkdown showCursor cursor="underline">
+  Content...
+</DsMarkdown>
+
+// Circle cursor
+<DsMarkdown showCursor cursor="circle">
+  Content...
+</DsMarkdown>
+```
+
+## Manual Control
+
+```tsx
+import { useRef } from 'react';
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <div>
+        <button onClick={() => ref.current?.start()}>Start</button>
+        <button onClick={() => ref.current?.stop()}>Pause</button>
+        <button onClick={() => ref.current?.resume()}>Resume</button>
+        <button onClick={() => ref.current?.restart()}>Restart</button>
+      </div>
+      
+      <DsMarkdown 
+        ref={ref}
+        autoStartTyping={false}
+        interval={20}
+        showCursor
+        cursor="line"
+      >
+        # Title
+        
+        This content can be controlled via buttons for typing animation.
+      </DsMarkdown>
+    </>
+  );
+}
+```

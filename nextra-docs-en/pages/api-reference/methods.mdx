@@ -1,0 +1,141 @@
+# Methods
+
+Component methods exposed through ref, used to control typing animation.
+
+## DsMarkdown Methods
+
+### start()
+
+Start typing animation, manually trigger animation start.
+
+```tsx
+const ref = useRef(null);
+
+<button onClick={() => ref.current?.start()}>Start</button>
+<DsMarkdown ref={ref} autoStartTyping={false}>
+  Content...
+</DsMarkdown>
+```
+
+### stop()
+
+Pause typing animation, can be called during typing.
+
+```tsx
+<button onClick={() => ref.current?.stop()}>Pause</button>
+```
+
+### resume()
+
+Resume typing animation, used together with `stop()`.
+
+```tsx
+<button onClick={() => ref.current?.resume()}>Resume</button>
+```
+
+### restart()
+
+Restart typing animation, play current content from the beginning.
+
+```tsx
+<button onClick={() => ref.current?.restart()}>Restart</button>
+```
+
+## MarkdownCMD Methods
+
+### push(content, answerType?)
+
+Add content and start typing, supports streaming data.
+
+```tsx
+const ref = useRef(null);
+
+// Add content
+ref.current?.push('# New Title\n\nThis is new content');
+
+// Specify type
+ref.current?.push('Thinking content...', 'thinking');
+ref.current?.push('Answer content...', 'answer');
+```
+
+### clear()
+
+Clear all content and state, reset component.
+
+```tsx
+ref.current?.clear();
+```
+
+### triggerWholeEnd()
+
+Manually trigger completion callback.
+
+```tsx
+ref.current?.triggerWholeEnd();
+```
+
+### start()
+
+Start typing animation, manually trigger animation start.
+
+```tsx
+ref.current?.start();
+```
+
+### stop()
+
+Pause typing animation.
+
+```tsx
+ref.current?.stop();
+```
+
+### resume()
+
+Resume typing animation.
+
+```tsx
+ref.current?.resume();
+```
+
+### restart()
+
+Restart typing animation.
+
+```tsx
+ref.current?.restart();
+```
+
+## Complete Example
+
+```tsx
+import { useRef } from 'react';
+import { MarkdownCMD } from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  const handleStream = (chunk: string) => {
+    ref.current?.push(chunk);
+  };
+
+  return (
+    <div>
+      <div>
+        <button onClick={() => ref.current?.start()}>Start</button>
+        <button onClick={() => ref.current?.stop()}>Pause</button>
+        <button onClick={() => ref.current?.resume()}>Resume</button>
+        <button onClick={() => ref.current?.restart()}>Restart</button>
+        <button onClick={() => ref.current?.clear()}>Clear</button>
+      </div>
+      
+      <MarkdownCMD 
+        ref={ref}
+        interval={20}
+        showCursor
+        cursor="line"
+      />
+    </div>
+  );
+}
+```

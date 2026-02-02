@@ -14,17 +14,15 @@ const withNextra = nextra({
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['ds-markdown-mermaid-plugin', 'ds-markdown'],
-  // GitHub Pages 部署配置
+  // GitHub Pages 部署配置 - 部署到 /ds-markdown/en 目录
   output: 'export',  // 启用静态导出
   images: {
     unoptimized: true,  // 静态导出需要禁用图片优化
   },
   // 部署到 GitHub Pages 子路径
-  basePath: '/ds-markdown',
-  assetPrefix: '/ds-markdown/',
-  // 注意：Nextra 不支持通过文件夹名称（pages/en, pages/zh）实现 i18n
-  // 对于静态导出项目，应该移除 Next.js 的 i18n 配置
-  // Nextra 会根据文件夹结构自动处理多语言
+  basePath: '/ds-markdown/en',
+  assetPrefix: '/ds-markdown/en/',
 }
 
 export default withNextra(nextConfig)
+

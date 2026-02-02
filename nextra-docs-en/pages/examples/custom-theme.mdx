@@ -1,0 +1,56 @@
+import { CustomThemeDemo } from '../../components/demos'
+
+# Custom Theme Example
+
+Configure light and dark themes.
+
+## Live Demo
+
+<CustomThemeDemo />
+
+## Light Theme
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+<DsMarkdown theme="light" interval={20}>
+  # Light Theme
+  
+  This is an example of light theme.
+</DsMarkdown>
+```
+
+## Dark Theme
+
+```tsx
+<DsMarkdown theme="dark" interval={20}>
+  # Dark Theme
+  
+  This is an example of dark theme.
+</DsMarkdown>
+```
+
+## Dynamic Theme Switching
+
+```tsx
+import { useState } from 'react';
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </button>
+      
+      <DsMarkdown theme={theme} interval={20}>
+        # Dynamic Theme
+        
+        Click the button to toggle the theme.
+      </DsMarkdown>
+    </>
+  );
+}
+```

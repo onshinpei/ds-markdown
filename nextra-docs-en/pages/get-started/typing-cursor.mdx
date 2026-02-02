@@ -1,0 +1,113 @@
+# Typing Cursor
+
+ds-markdown supports displaying a cursor during typing animation to enhance visual effects.
+
+## Basic Usage
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown showCursor>
+      This text will show the default cursor effect.
+    </DsMarkdown>
+  );
+}
+```
+
+## Built-in Cursor Styles
+
+ds-markdown provides four built-in cursor styles:
+
+### Line Cursor (default)
+
+```tsx
+<DsMarkdown showCursor cursor="line">
+  Content...
+</DsMarkdown>
+```
+
+### Block Cursor
+
+```tsx
+<DsMarkdown showCursor cursor="block">
+  Content...
+</DsMarkdown>
+```
+
+### Underline Cursor
+
+```tsx
+<DsMarkdown showCursor cursor="underline">
+  Content...
+</DsMarkdown>
+```
+
+### Circle Cursor
+
+```tsx
+<DsMarkdown showCursor cursor="circle">
+  Content...
+</DsMarkdown>
+```
+
+## Custom Cursor
+
+You can also pass a custom React element as the cursor:
+
+```tsx
+<DsMarkdown 
+  showCursor 
+  cursor={<span style={{ color: 'red', fontSize: '20px' }}>|</span>}
+>
+  Content...
+</DsMarkdown>
+```
+
+## Usage in Code Blocks
+
+The cursor will automatically adapt to code blocks, displaying at the end of the code content:
+
+```tsx
+<DsMarkdown showCursor cursor="block">
+  \`\`\`javascript
+  function hello() {
+    console.log('Hello');
+  }
+  \`\`\`
+</DsMarkdown>
+```
+
+## Complete Example
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <div>
+      <h2>Line Cursor</h2>
+      <DsMarkdown showCursor cursor="line">
+        # Title
+        This is an example using line cursor.
+      </DsMarkdown>
+
+      <h2>Block Cursor</h2>
+      <DsMarkdown showCursor cursor="block">
+        # Title
+        This is an example using block cursor.
+      </DsMarkdown>
+
+      <h2>Custom Cursor</h2>
+      <DsMarkdown 
+        showCursor 
+        cursor={<span style={{ color: '#0070f3' }}>▊</span>}
+      >
+        # Title
+        This is an example using custom cursor.
+      </DsMarkdown>
+    </div>
+  );
+}
+```

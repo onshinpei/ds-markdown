@@ -1,0 +1,72 @@
+import { MermaidDemo } from '../../components/demos'
+
+# Mermaid 图表示例
+
+使用 Mermaid 插件渲染各种图表。
+
+## 在线演示
+
+<MermaidDemo />
+
+## 流程图
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import { mermaidPlugin } from 'ds-markdown-mermaid-plugin';
+
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  graph TD
+    A[开始] --> B{判断}
+    B -->|是| C[执行A]
+    B -->|否| D[执行B]
+    C --> E[结束]
+    D --> E
+  \`\`\`
+</DsMarkdown>
+```
+
+## 序列图
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  sequenceDiagram
+    participant A as 用户
+    participant B as 系统
+    A->>B: 请求
+    B-->>A: 响应
+  \`\`\`
+</DsMarkdown>
+```
+
+## 甘特图
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  gantt
+    title 项目计划
+    dateFormat YYYY-MM-DD
+    section 阶段1
+    任务1 :a1, 2024-01-01, 30d
+    任务2 :a2, after a1, 20d
+  \`\`\`
+</DsMarkdown>
+```
+
+## 安装插件
+
+```bash
+npm install ds-markdown-mermaid-plugin
+```
+

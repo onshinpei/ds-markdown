@@ -1,0 +1,57 @@
+import { CustomThemeDemo } from '../../components/demos'
+
+# 自定义主题示例
+
+配置亮色和暗色主题。
+
+## 在线演示
+
+<CustomThemeDemo />
+
+## 亮色主题
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+<DsMarkdown theme="light" interval={20}>
+  # 亮色主题
+  
+  这是亮色主题的示例。
+</DsMarkdown>
+```
+
+## 暗色主题
+
+```tsx
+<DsMarkdown theme="dark" interval={20}>
+  # 暗色主题
+  
+  这是暗色主题的示例。
+</DsMarkdown>
+```
+
+## 动态切换主题
+
+```tsx
+import { useState } from 'react';
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        切换主题
+      </button>
+      
+      <DsMarkdown theme={theme} interval={20}>
+        # 动态主题
+        
+        点击按钮可以切换主题。
+      </DsMarkdown>
+    </>
+  );
+}
+```
+

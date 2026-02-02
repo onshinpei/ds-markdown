@@ -1,0 +1,162 @@
+import { CursorDemo } from '../../components/demos'
+
+# 光标样式示例
+
+ds-markdown 支持在打字动画过程中显示光标，增强视觉效果。
+
+## 在线演示
+
+<CursorDemo />
+
+## 基本用法
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown showCursor>
+      这段文字会显示默认的光标效果。
+    </DsMarkdown>
+  );
+}
+```
+
+## 内置光标样式
+
+ds-markdown 提供了四种内置光标样式：
+
+### 竖线光标（默认）
+
+```tsx
+<DsMarkdown showCursor cursor="line">
+  内容...
+</DsMarkdown>
+```
+
+### 实心块光标
+
+```tsx
+<DsMarkdown showCursor cursor="block">
+  内容...
+</DsMarkdown>
+```
+
+### 下划线光标
+
+```tsx
+<DsMarkdown showCursor cursor="underline">
+  内容...
+</DsMarkdown>
+```
+
+### 圆点光标
+
+```tsx
+<DsMarkdown showCursor cursor="circle">
+  内容...
+</DsMarkdown>
+```
+
+## 自定义光标
+
+你也可以传入自定义的 React 元素作为光标：
+
+```tsx
+<DsMarkdown 
+  showCursor 
+  cursor={<span style={{ color: 'red', fontSize: '20px' }}>|</span>}
+>
+  内容...
+</DsMarkdown>
+```
+
+### 自定义光标示例
+
+```tsx
+// 使用特殊字符
+<DsMarkdown 
+  showCursor 
+  cursor={<span style={{ color: '#0070f3' }}>▊</span>}
+>
+  内容...
+</DsMarkdown>
+
+// 使用 emoji
+<DsMarkdown 
+  showCursor 
+  cursor={<span style={{ fontSize: '1.2em' }}>❯</span>}
+>
+  内容...
+</DsMarkdown>
+
+// 带动画的自定义光标
+<DsMarkdown 
+  showCursor 
+  cursor={
+    <span style={{ 
+      color: '#6366f1',
+      animation: 'blink 1s infinite'
+    }}>
+      |
+    </span>
+  }
+>
+  内容...
+</DsMarkdown>
+```
+
+## 在代码块中使用
+
+光标会自动适配代码块，显示在代码内容的末尾：
+
+```tsx
+<DsMarkdown showCursor cursor="block">
+  \`\`\`javascript
+  function hello() {
+    console.log('Hello');
+  }
+  \`\`\`
+</DsMarkdown>
+```
+
+## 完整示例
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <div>
+      <h2>竖线光标</h2>
+      <DsMarkdown showCursor cursor="line">
+        # 标题
+        这是使用竖线光标的示例。
+      </DsMarkdown>
+
+      <h2>实心块光标</h2>
+      <DsMarkdown showCursor cursor="block">
+        # 标题
+        这是使用实心块光标的示例。
+      </DsMarkdown>
+
+      <h2>自定义光标</h2>
+      <DsMarkdown 
+        showCursor 
+        cursor={<span style={{ color: '#0070f3' }}>▊</span>}
+      >
+        # 标题
+        这是使用自定义光标的示例。
+      </DsMarkdown>
+    </div>
+  );
+}
+```
+
+## 属性说明
+
+| 属性 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `showCursor` | `boolean` | 是否显示光标 | `false` |
+| `cursor` | `'line' \| 'block' \| 'underline' \| 'circle' \| React.ReactNode` | 光标样式或自定义元素 | `'line'` |
+

@@ -1,0 +1,150 @@
+# Type Definitions
+
+## IntervalConfig
+
+Dynamic typing speed configuration.
+
+```tsx
+interface IntervalConfig {
+  max: number;                    // Maximum interval (ms), used when many characters remain
+  min: number;                    // Minimum interval (ms), used when few characters remain
+  curveFn?: (x: number) => number; // Custom curve function, x is remaining ratio [0,1]
+  curve?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end'; // Preset curves
+}
+```
+
+### Example
+
+```tsx
+const intervalConfig: IntervalConfig = {
+  min: 10,
+  max: 50,
+  curve: 'ease-out'
+};
+```
+
+## IMarkdownMath
+
+Math formula configuration.
+
+```tsx
+interface IMarkdownMath {
+  splitSymbol: 'dollar' | 'bracket'; // Math formula delimiter type
+  replaceMathBracket?: (value: string) => string; // Math formula replacement function
+}
+```
+
+### Example
+
+```tsx
+const mathConfig: IMarkdownMath = {
+  splitSymbol: 'dollar' // Use $...$ syntax
+};
+```
+
+## IMarkdownCode
+
+Code block configuration.
+
+```tsx
+interface IMarkdownCode {
+  headerActions?: boolean | React.ReactNode; // Whether to show header action buttons
+}
+```
+
+### Example
+
+```tsx
+const codeConfig: IMarkdownCode = {
+  headerActions: true // Show default action buttons
+};
+
+// Or customize
+const customCodeConfig: IMarkdownCode = {
+  headerActions: <CustomActions />
+};
+```
+
+## IMarkdownPlugin
+
+Plugin configuration.
+
+```tsx
+interface IMarkdownPlugin {
+  remarkPlugin?: unknown;        // remark plugin instance
+  rehypePlugin?: unknown;        // rehype plugin instance
+  type: 'buildIn' | 'custom';   // Plugin type
+  id?: any;                      // Plugin unique identifier
+  components?: Record<string, React.ComponentType<unknown>>; // Custom components
+}
+```
+
+## ITypedChar
+
+Typed character data.
+
+```tsx
+interface ITypedChar {
+  currentIndex: number;    // Current character index in string
+  currentChar: string;     // Character just typed
+  answerType: AnswerType; // Content type (thinking/answer)
+  prevStr: string;        // Prefix string of current type
+  currentStr: string;     // Complete string of current type
+  percent: number;        // Typing progress percentage (0-100)
+}
+```
+
+## IBeforeTypedChar
+
+Pre-typing character data.
+
+```tsx
+interface IBeforeTypedChar {
+  currentIndex: number;    // Current character index in string
+  currentChar: string;     // Character about to be typed
+  answerType: AnswerType; // Content type (thinking/answer)
+  prevStr: string;        // Prefix string of current type
+  percent: number;        // Typing progress percentage (0-100)
+}
+```
+
+## IEndData
+
+Typing end data.
+
+```tsx
+interface IEndData {
+  manual: boolean;      // Whether manually triggered
+  answerStr: string;   // Answer string
+  thinkingStr: string; // Thinking string
+  str: string;         // Typing string, same as answerStr
+}
+```
+
+## IStartData
+
+Typing start data.
+
+```tsx
+interface IStartData {
+  currentIndex: number;    // Current character index in string
+  currentChar: string;    // Current character
+  prevStr: string;        // Prefix string
+}
+```
+
+## AnswerType
+
+Content type.
+
+```tsx
+type AnswerType = 'thinking' | 'answer';
+```
+
+## Theme
+
+Theme type.
+
+```tsx
+type Theme = 'light' | 'dark';
+```

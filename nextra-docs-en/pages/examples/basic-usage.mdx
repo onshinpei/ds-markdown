@@ -1,0 +1,38 @@
+import { BasicUsageDemo } from '../../components/demos'
+
+# Basic Usage Example
+
+The simplest way to use.
+
+## Live Demo
+
+<BasicUsageDemo />
+
+## Code Example
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20} answerType="answer">
+      # Hello ds-markdown
+      
+      This is a **high-performance** typing animation component!
+      
+      ## Features
+      
+      - ⚡ Zero-latency streaming processing
+      - 🎬 Smooth typing animation
+      - 🎯 Perfect syntax support
+      - 📝 Full Markdown support
+    </DsMarkdown>
+  );
+}
+```
+
+## Parameter Description
+
+- `interval={20}` - Set typing interval to 20ms
+- `answerType="answer"` - Use answer style theme
+- Content supports full Markdown syntax

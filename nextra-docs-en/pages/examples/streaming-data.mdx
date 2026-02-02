@@ -1,0 +1,60 @@
+import { StreamingDemo } from '../../components/demos'
+
+# Streaming Data Example
+
+Use the `MarkdownCMD` component to handle streaming data.
+
+## Live Demo
+
+<StreamingDemo />
+
+## Code Example
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { MarkdownCMD } from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    // Simulate streaming data
+    const chunks = [
+      '# Title\n\n',
+      'This is the first paragraph.\n\n',
+      'This is the second paragraph with **bold** and *italic* text.\n\n',
+      '## Subtitle\n\n',
+      '- List item 1\n',
+      '- List item 2\n',
+      '- List item 3\n',
+    ];
+
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < chunks.length) {
+        ref.current?.push(chunks[index]);
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 500);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <MarkdownCMD 
+      ref={ref}
+      interval={20}
+      showCursor
+      cursor="block"
+    />
+  );
+}
+```
+
+## Description
+
+- Use `push()` method to dynamically add content
+- Support streaming data processing
+- Can display typing animation in real-time

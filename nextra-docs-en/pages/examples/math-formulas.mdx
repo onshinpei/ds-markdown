@@ -1,0 +1,56 @@
+import { MathSupportDemo } from '../../components/demos'
+
+# Math Formulas Example
+
+Use KaTeX to render math formulas.
+
+## Live Demo
+
+<MathSupportDemo />
+
+## Inline Formulas
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+<DsMarkdown interval={20}>
+  This is an inline formula: $E = mc^2$
+  
+  Another example: $\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n$
+</DsMarkdown>
+```
+
+## Block Formulas
+
+```tsx
+<DsMarkdown interval={20}>
+  This is a block formula:
+  
+  $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
+  
+  Another example:
+  
+  $$\\begin{pmatrix}
+  a & b \\\\
+  c & d
+  \\end{pmatrix}$$
+</DsMarkdown>
+```
+
+## Configure Delimiters
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  math={{ splitSymbol: 'dollar' }}
+>
+  Use $...$ and $$...$$ syntax
+</DsMarkdown>
+
+<DsMarkdown 
+  interval={20}
+  math={{ splitSymbol: 'bracket' }}
+>
+  Use \\(...\\) and \\[...\\] syntax
+</DsMarkdown>
+```

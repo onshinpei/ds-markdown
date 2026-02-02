@@ -1,0 +1,71 @@
+import { MermaidDemo } from '../../components/demos'
+
+# Mermaid Charts Example
+
+Use Mermaid plugin to render various charts.
+
+## Live Demo
+
+<MermaidDemo />
+
+## Flowchart
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+import { mermaidPlugin } from 'ds-markdown-mermaid-plugin';
+
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Execute A]
+    B -->|No| D[Execute B]
+    C --> E[End]
+    D --> E
+  \`\`\`
+</DsMarkdown>
+```
+
+## Sequence Diagram
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  sequenceDiagram
+    participant A as User
+    participant B as System
+    A->>B: Request
+    B-->>A: Response
+  \`\`\`
+</DsMarkdown>
+```
+
+## Gantt Chart
+
+```tsx
+<DsMarkdown 
+  interval={20}
+  plugins={[mermaidPlugin]}
+>
+  \`\`\`mermaid
+  gantt
+    title Project Plan
+    dateFormat YYYY-MM-DD
+    section Phase 1
+    Task 1 :a1, 2024-01-01, 30d
+    Task 2 :a2, after a1, 20d
+  \`\`\`
+</DsMarkdown>
+```
+
+## Install Plugin
+
+```bash
+npm install ds-markdown-mermaid-plugin
+```

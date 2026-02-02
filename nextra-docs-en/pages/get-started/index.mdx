@@ -1,0 +1,80 @@
+# Get Started
+
+Welcome to ds-markdown! This guide will help you get started quickly.
+
+## Installation
+
+```bash
+npm install ds-markdown
+```
+
+## Basic Usage
+
+The simplest way to use it:
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown interval={20} answerType="answer">
+      # Hello World
+      
+      Welcome to **ds-markdown**!
+    </DsMarkdown>
+  );
+}
+```
+
+## Show Typing Cursor
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  return (
+    <DsMarkdown 
+      interval={20} 
+      answerType="answer"
+      showCursor
+      cursor="block"
+    >
+      # Hello World
+      
+      This text will show typing cursor effect!
+    </DsMarkdown>
+  );
+}
+```
+
+## Streaming Data Support
+
+Use the `MarkdownCMD` component to handle streaming data:
+
+```tsx
+import { MarkdownCMD } from 'ds-markdown';
+import { useRef } from 'react';
+
+function App() {
+  const ref = useRef(null);
+
+  const handleStream = (chunk: string) => {
+    ref.current?.push(chunk);
+  };
+
+  return (
+    <MarkdownCMD 
+      ref={ref}
+      interval={20}
+      showCursor
+      cursor="line"
+    />
+  );
+}
+```
+
+## Next Steps
+
+- Learn [Basic Usage](/get-started/basic-usage)
+- Check [Typing Cursor](/get-started/typing-cursor) configuration
+- Explore [Core Features](/get-started/features)

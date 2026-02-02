@@ -1,0 +1,98 @@
+import { TypingAnimationDemo } from '../../components/demos'
+
+# 打字动画示例
+
+配置不同的打字动画效果。
+
+## 在线演示
+
+<TypingAnimationDemo />
+
+## 基础配置
+
+```tsx
+import DsMarkdown from 'ds-markdown';
+
+// 快速打字
+<DsMarkdown interval={10}>
+  内容...
+</DsMarkdown>
+
+// 慢速打字
+<DsMarkdown interval={50}>
+  内容...
+</DsMarkdown>
+```
+
+## 动态速度
+
+```tsx
+<DsMarkdown 
+  interval={{
+    min: 10,
+    max: 50,
+    curve: 'ease-out'
+  }}
+>
+  内容...
+</DsMarkdown>
+```
+
+## 显示光标
+
+```tsx
+// 默认竖线光标
+<DsMarkdown showCursor>
+  内容...
+</DsMarkdown>
+
+// 实心块光标
+<DsMarkdown showCursor cursor="block">
+  内容...
+</DsMarkdown>
+
+// 下划线光标
+<DsMarkdown showCursor cursor="underline">
+  内容...
+</DsMarkdown>
+
+// 圆点光标
+<DsMarkdown showCursor cursor="circle">
+  内容...
+</DsMarkdown>
+```
+
+## 手动控制
+
+```tsx
+import { useRef } from 'react';
+import DsMarkdown from 'ds-markdown';
+
+function App() {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <div>
+        <button onClick={() => ref.current?.start()}>开始</button>
+        <button onClick={() => ref.current?.stop()}>暂停</button>
+        <button onClick={() => ref.current?.resume()}>继续</button>
+        <button onClick={() => ref.current?.restart()}>重启</button>
+      </div>
+      
+      <DsMarkdown 
+        ref={ref}
+        autoStartTyping={false}
+        interval={20}
+        showCursor
+        cursor="line"
+      >
+        # 标题
+        
+        这段内容可以通过按钮控制打字动画。
+      </DsMarkdown>
+    </>
+  );
+}
+```
+
