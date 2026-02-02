@@ -1,0 +1,50 @@
+# robots.txt for ds-markdown documentation
+# Allow all search engine crawlers to access all content
+
+User-agent: *
+Allow: /
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Baiduspider-image
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: YisouSpider
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Sitemap location (update this when you have a sitemap)
+Sitemap: https://onshinpei.github.io/ds-markdown/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+# Some crawlers respect this to avoid overloading the server
+# Crawl-delay: 1
+
