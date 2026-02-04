@@ -2,6 +2,7 @@ import meta from "../../../pages/_meta.tsx";
 import api_reference_meta from "../../../pages/api-reference/_meta.tsx";
 import examples_meta from "../../../pages/examples/_meta.tsx";
 import get_started_meta from "../../../pages/get-started/_meta.tsx";
+import migration_guide_meta from "../../../pages/migration-guide/_meta.tsx";
 export const pageMap = [{
   data: meta
 }, {
@@ -130,4 +131,16 @@ export const pageMap = [{
   frontMatter: {
     "sidebarTitle": "Index"
   }
+}, {
+  name: "migration-guide",
+  route: "/migration-guide",
+  children: [{
+    data: migration_guide_meta
+  }, {
+    name: "index",
+    route: "/migration-guide",
+    frontMatter: {
+      "sidebarTitle": "Index"
+    }
+  }]
 }];
