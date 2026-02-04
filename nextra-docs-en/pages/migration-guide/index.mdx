@@ -1,0 +1,79 @@
+# v0 to v1 Migration Guide
+
+Help you smoothly transition from v0 to v1
+
+## 📋 Migration Overview
+
+ds-markdown v1 brings many new features and improvements while maintaining most compatibility with v0. This guide will help you quickly understand the major changes and complete the upgrade.
+
+## ⚠️ Breaking Changes
+
+### 1. Default Timer Type Change
+
+The default value of timerType will change from setTimeout to requestAnimationFrame to provide a smoother animation experience.
+
+**v0:**
+
+```tsx
+<DsMarkdown interval={20}>Content</DsMarkdown>
+// Default uses setTimeout
+```
+
+**v1:**
+
+```tsx
+<DsMarkdown interval={20}>Content</DsMarkdown>
+// Will default to requestAnimationFrame
+
+// To keep v0 behavior, explicitly specify:
+<DsMarkdown interval={20} timerType="setTimeout">Content</DsMarkdown>
+```
+
+**Recommended Action:** If you want to keep v0 behavior, please explicitly set `timerType="setTimeout"`.
+
+### 2. Dynamic push Usage Change
+
+Dynamic push usage changed from `push(newChunk, 'answer')` to `push(newChunk)`.
+
+**v0:**
+
+```tsx
+// tsx
+<DsMarkdownCMD ref={markdownRef} />
+
+// Call
+markdownRef.current?.push(newChunk, 'answer');
+```
+
+**v1:**
+
+```tsx
+// tsx
+<DsMarkdownCMD ref={markdownRef} answerType="answer" />
+
+// Call
+markdownRef.current?.push(newChunk);
+```
+
+## ✨ New Features
+
+### 1. Support Auto Import CSS
+
+Support auto import CSS, no need to manually import CSS.
+
+**v0:**
+
+```tsx
+// v0: Manually import CSS
+import 'ds-markdown/style.css';
+
+<DsMarkdown interval={20}>Content</DsMarkdown>
+```
+
+**v1:**
+
+```tsx
+// v1: Support auto import CSS, no need to manually import
+<DsMarkdown interval={20}>Content</DsMarkdown>
+```
+
