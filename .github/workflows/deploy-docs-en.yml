@@ -2,7 +2,7 @@ name: Deploy English Docs to gh-pages
 
 on:
   push:
-    branches: [main, master, feature/opt]
+    branches: [main, master, feature/new-docs]
     paths:
       - 'nextra-docs-en/**'
       - '.github/workflows/deploy-docs-en.yml'

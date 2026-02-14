@@ -2,7 +2,7 @@ name: Deploy Chinese Docs to gh-pages
 
 on:
   push:
-    branches: [main, master, feature/opt]
+    branches:  [main, master, feature/new-docs]
     paths:
       - 'nextra-docs-zh/**'
       - '.github/workflows/deploy-docs-zh.yml'
