@@ -1,7 +1,7 @@
 {
   "name": "ds-markdown",
   "private": false,
-  "version": "1.0.5-beta.1",
+  "version": "1.1.0",
   "main": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",
   "style": "./dist/style.css",
@@ -156,6 +156,6 @@
     "react-markdown"
   ],
   "publishConfig": {
-    "tag": "beta"
+    "tag": "latest"
   }
 }
