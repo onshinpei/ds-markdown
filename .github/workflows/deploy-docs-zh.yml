@@ -2,7 +2,7 @@ name: Deploy Chinese Docs to gh-pages
 
 on:
   push:
-    branches: [main, master, feature/opt]
+    branches:  [main, master, feature/new-docs]
     paths:
       - 'nextra-docs-zh/**'
       - '.github/workflows/deploy-docs-zh.yml'
@@ -37,26 +37,6 @@ jobs:
         run: |
           cd nextra-docs-zh
           npm run build
-
-      - name: Clean zh directory before deployment
-        run: |
-          # 获取 gh-pages 分支并清理 zh 目录
-          git fetch origin gh-pages:gh-pages 2>/dev/null || true
-          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages
-          
-          # 删除 zh 目录的所有内容
-          if [ -d "zh" ]; then
-            rm -rf zh
-            mkdir -p zh
-            # 创建一个 .gitkeep 文件确保目录被跟踪
-            touch zh/.gitkeep
-            git add zh/.gitkeep
-            git commit -m "Clean zh directory" || true
-            git push origin gh-pages || true
-          fi
-          
-          # 切换回原分支
-          git checkout ${{ github.ref_name }} || git checkout main || git checkout master
 
       - name: Deploy to gh-pages branch (zh directory)
         uses: peaceiris/actions-gh-pages@v3

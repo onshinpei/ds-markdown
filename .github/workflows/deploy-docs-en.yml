@@ -2,7 +2,7 @@ name: Deploy English Docs to gh-pages
 
 on:
   push:
-    branches: [main, master, feature/opt]
+    branches: [main, master, feature/new-docs]
     paths:
       - 'nextra-docs-en/**'
       - '.github/workflows/deploy-docs-en.yml'
@@ -37,26 +37,6 @@ jobs:
         run: |
           cd nextra-docs-en
           npm run build
-
-      - name: Clean en directory before deployment
-        run: |
-          # 获取 gh-pages 分支并清理 en 目录
-          git fetch origin gh-pages:gh-pages 2>/dev/null || true
-          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages
-          
-          # 删除 en 目录的所有内容
-          if [ -d "en" ]; then
-            rm -rf en
-            mkdir -p en
-            # 创建一个 .gitkeep 文件确保目录被跟踪
-            touch en/.gitkeep
-            git add en/.gitkeep
-            git commit -m "Clean en directory" || true
-            git push origin gh-pages || true
-          fi
-          
-          # 切换回原分支
-          git checkout ${{ github.ref_name }} || git checkout main || git checkout master
 
       - name: Deploy to gh-pages branch (en directory)
         uses: peaceiris/actions-gh-pages@v3
