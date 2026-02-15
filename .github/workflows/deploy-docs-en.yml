@@ -38,6 +38,10 @@ jobs:
           cd nextra-docs-en
           npm run build
 
+      - name: Add .nojekyll file
+        run: |
+          touch nextra-docs-en/out/.nojekyll
+
       - name: Deploy to gh-pages branch (en directory)
         uses: peaceiris/actions-gh-pages@v3
         with:
