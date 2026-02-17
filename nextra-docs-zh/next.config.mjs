@@ -22,6 +22,7 @@ const nextConfig = {
   // 部署到 GitHub Pages 子路径
   basePath: '/ds-markdown/zh',
   assetPrefix: '/ds-markdown/zh/',
+  distDir: '../docs/zh'
 }
 
 export default withNextra(nextConfig)
