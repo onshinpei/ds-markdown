@@ -25,5 +25,5 @@ dist-ssr
 *.sw?
 es/
 articles/
-docs/en/
-docs/zh/
+# docs/en/
+# docs/zh/
