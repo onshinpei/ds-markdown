@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rimraf ../docs/en && next build",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {

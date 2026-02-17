@@ -65,6 +65,8 @@
   "scripts": {
     "dev": "vite",
     "build:docs": "rimraf docs && vite build",
+    "build:nextra-docs-zh": "rimraf ./docs/zh && cd nextra-docs-zh && npm run build",
+    "build:nextra-docs-en": "rimraf ./docs/en && cd nextra-docs-en && npm run build",
     "build": "node scripts/build-lib-ts.js",
     "build:less": "lessc src/style.less dist/style.css && lessc src/katex.less dist/katex.css",
     "lint": "eslint .",
