@@ -30,11 +30,6 @@ jest.mock('react-markdown-typer', () => {
   };
 });
 
-// Mock getScreenRefreshRate to return a fixed value in tests
-jest.mock('../../src/utils/getScreenRefreshRate', () => ({
-  getScreenRefreshRate: jest.fn(() => 16.67),
-}));
-
 // Mock clipboard API
 Object.assign(navigator, {
   clipboard: {

@@ -11,7 +11,6 @@ interface HighlightCodeProps {
 }
 
 const HighlightCode: React.FC<HighlightCodeProps> = ({ code, language, cursorPlaceholder }) => {
-  console.log('code', code);
   return (
     <SyntaxHighlighter
       useInlineStyles={false}

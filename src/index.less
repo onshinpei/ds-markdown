@@ -115,18 +115,6 @@
   margin: calc(var(--ds-md-zoom) * 16px) 0 calc(var(--ds-md-zoom) * 12px) 0;
 }
 
-.ds-markdown h1,
-.ds-markdown h2,
-.ds-markdown h3,
-.ds-markdown h4,
-.ds-markdown h5,
-.ds-markdown h6 {
-  font-weight: var(--ds-font-weight-strong);
-  font-size: var(--ds-md-font-size);
-  line-height: var(--ds-md-line-height);
-  margin: calc(var(--ds-md-zoom) * 16px) 0 calc(var(--ds-md-zoom) * 12px) 0;
-}
-
 .ds-markdown h1 {
   font-size: calc(var(--ds-md-zoom) * 24px);
   line-height: 1.5;
@@ -273,25 +261,6 @@
   margin-right: 4px;
 }
 
-ds-markdown-math {
-  text-align: center;
-  display: block;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-.ds-markdown > * .ds-markdown-math {
-  margin: calc(var(--ds-md-zoom) * 12px) 0;
-}
-
-.ds-markdown > * .ds-markdown-math:first-child {
-  margin-top: 0;
-}
-
-.ds-markdown > * .ds-markdown-math:last-child {
-  margin-bottom: 0;
-}
-
 .ds-markdown-code-copy-button {
   background-color: rgba(var(--ds-rgba-transparent));
   color: inherit;
@@ -406,10 +375,12 @@ ds-markdown-math {
 
 // Cursor blinking animation
 @keyframes ds-cursor-blink {
-  0%, 50% {
+  0%,
+  50% {
     opacity: 1;
   }
-  51%, 100% {
+  51%,
+  100% {
     opacity: 0;
   }
 }

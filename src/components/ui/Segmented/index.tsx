@@ -8,12 +8,12 @@ export interface SegmentedItem {
 }
 
 export interface SegmentedProps {
-  Segmented: SegmentedItem[];
+  items: SegmentedItem[];
   value?: string;
   onChange?: (value: string) => void;
 }
 
-const Segmented: React.FC<SegmentedProps> = ({ Segmented: segments, value, onChange }) => {
+const Segmented: React.FC<SegmentedProps> = ({ items: segments, value, onChange }) => {
   const handleClick = (itemValue: string) => {
     onChange?.(itemValue);
   };
