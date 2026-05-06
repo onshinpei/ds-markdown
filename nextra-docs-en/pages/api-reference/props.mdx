@@ -19,6 +19,8 @@
 | `disableTyping` | `boolean` | Disable typing animation effect | `false` |
 | `autoStartTyping` | `boolean` | Whether to automatically start typing animation, set to false for manual trigger, cannot be modified dynamically | `true` |
 | `codeBlock` | <a href="../types#imarkdowncode"><code>IMarkdownCode</code></a> | Code block configuration | `{headerActions: true}` |
+| `experimentalIncrementalRender` | `boolean` | **Experimental** incremental render mode. When enabled, avoids full markdown re-parse on every typed character, improving performance for long content | `false` |
+| `incrementalFlushThreshold` | `number` | Tail size threshold for incremental mode flush decisions. Only effective when `experimentalIncrementalRender` is enabled | - |
 
 ## DsMarkdown Specific Props
 

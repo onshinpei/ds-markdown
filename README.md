@@ -154,6 +154,8 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `disableTyping`     | `boolean`                                   | Disable typing animation effects                                                                                        | `false`                                                                       |
 | `autoStartTyping`   | `boolean`                                   | Whether to automatically start typing animation, set to false for manual trigger, does not support dynamic modification | `true`                                                                        |
 | `codeBlock`         | `IMarkdownCode`                             | Code block configuration                                                                                                | `{headerActions: true}`                                                       |
+| `experimentalIncrementalRender` | `boolean`                       | **Experimental** incremental render mode. When enabled, avoids full markdown re-parse on every typed character, improving performance for long content | `false` |
+| `incrementalFlushThreshold`     | `number`                        | Tail size threshold for incremental mode flush decisions. Only effective when `experimentalIncrementalRender` is enabled | -       |
 
 > Note: If `disableTyping` changes from `true` to `false` during typing, it will only continue from the current position and will not replay the skipped animation; to replay from the beginning, please call the instance method `restart()`.
 

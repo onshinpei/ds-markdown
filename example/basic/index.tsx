@@ -73,7 +73,7 @@ const App: React.FC<{
     setIsTyping(true);
   };
 
-  const interval = 16.66;
+  const interval = 5;
   const flag = true;
   const timerType = flag ? 'requestAnimationFrame' : 'setTimeout';
 
@@ -137,6 +137,7 @@ const App: React.FC<{
             autoStartTyping={false}
             showCursor
             cursor="block"
+            experimentalIncrementalRender
           >
             {dataJson.content}
           </Markdown>

@@ -20,7 +20,7 @@ const App = () => {
           errorColor: '#0f0',
         }}
       >
-        <KatexDemo theme={theme} setTheme={setTheme} />
+        <BasicDemo theme={theme} setTheme={setTheme} />
       </ConfigProvider>
     </div>
   );

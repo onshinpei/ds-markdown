@@ -154,6 +154,8 @@ import DsMarkdown, { MarkdownCMD } from 'ds-markdown';
 | `disableTyping`     | `boolean`                                   | 禁用打字动画效果                                              | `false`                                                     |
 | `autoStartTyping`   | `boolean`                                   | 是否自动开始打字动画，设为 false 时需手动触发，不支持动态修改 | `true`                                                      |
 | `codeBlock`         | `IMarkdownCode`                             | 代码块配置                                                    | `{headerActions: true}`                                     |
+| `experimentalIncrementalRender` | `boolean`                   | **实验性** 增量渲染模式。开启后避免每次打字时全量重新解析 Markdown，提升长内容场景下的性能 | `false` |
+| `incrementalFlushThreshold`     | `number`                    | 增量模式下的尾部大小阈值，用于决定何时刷新。仅在 `experimentalIncrementalRender` 开启时有效 | -       |
 
 > 注意：打字进行中将 `disableTyping` 从 `true` 改为 `false` 只会从当前位置继续，不会回放已跳过的动画；若需从头播放，请调用实例方法 `restart()`。
 
