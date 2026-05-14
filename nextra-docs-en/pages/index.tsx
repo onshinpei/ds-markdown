@@ -166,6 +166,17 @@ function HeroTyping({ onEnd }: { onEnd?: () => void }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const [heroFinished, setHeroFinished] = useState(false);
+  const chatSectionRef = useRef<HTMLElement>(null);
+
+  // Hero 打字完成后，平滑滚动到 chat demo
+  useEffect(() => {
+    if (!heroFinished) return;
+    // 等渲染挂载 + fade-in 起始帧后再滚动，体验更顺滑
+    const t = setTimeout(() => {
+      chatSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+    return () => clearTimeout(t);
+  }, [heroFinished]);
   return (
     <>
       <Head>
@@ -225,7 +236,7 @@ export default function HomePage() {
 
         {/* ── Chat Demo（Hero 打字完成后才出现）── */}
         {heroFinished && (
-          <section className="hp-chat-section">
+          <section ref={chatSectionRef} className="hp-chat-section">
             <div className="hp-chat-section-inner hp-fade-in">
               <h2 className="hp-section-title">See it in action</h2>
               <p className="hp-section-sub">A live AI chat demo — watch the streaming typing animation, Markdown rendering and math formulas all working together.</p>

@@ -8,7 +8,7 @@ import { katexPlugin } from 'ds-markdown/plugins';
 
 interface ScriptMessage {
   role: 'user' | 'assistant';
-  content: string; // user 直接展示；assistant 逐块 push
+  content: string;
 }
 
 const CHAT_SCRIPT: ScriptMessage[] = [
@@ -105,7 +105,6 @@ const AssistantBubble: React.FC<{
       setTimeout(push, 18 + Math.random() * 20);
     };
 
-    // 稍作延迟，模拟网络响应
     setTimeout(push, 300);
   }, [isTyping, content, onEnd]);
 
@@ -119,19 +118,21 @@ const AssistantBubble: React.FC<{
   );
 };
 
-// ── 输入框 ────────────────────────────────────────────────────────────────────
+// ── 输入框（受控）─────────────────────────────────────────────────────────────
 
-const ChatInput: React.FC<{
+interface ChatInputProps {
+  value: string;
+  onChange: (v: string) => void;
   onSend: (text: string) => void;
   disabled: boolean;
-}> = ({ onSend, disabled }) => {
-  const [value, setValue] = useState('');
+  placeholder?: string;
+}
 
+const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, disabled, placeholder }) => {
   const handleSend = () => {
     const text = value.trim();
     if (!text || disabled) return;
     onSend(text);
-    setValue('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -146,9 +147,9 @@ const ChatInput: React.FC<{
       <textarea
         className="chat-input-textarea"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Ask something… (or watch the auto demo)"
+        placeholder={placeholder ?? 'Ask something…'}
         disabled={disabled}
         rows={1}
       />
@@ -162,17 +163,38 @@ const ChatInput: React.FC<{
   );
 };
 
+// ── 工具：按字符模拟人类打字写入 input ────────────────────────────────────────
+
+function typeIntoInput(text: string, setInputValue: (updater: (prev: string) => string) => void, onDone: () => void) {
+  let i = 0;
+  // 先清空
+  setInputValue(() => '');
+  const tick = () => {
+    if (i >= text.length) {
+      onDone();
+      return;
+    }
+    const ch = text[i];
+    setInputValue((prev) => prev + ch);
+    i++;
+    // 真人节奏：基础速度 + 随机抖动；空格/标点稍慢
+    const isPause = /[ ,.?!]/.test(ch);
+    const delay = (isPause ? 90 : 38) + Math.random() * 50;
+    setTimeout(tick, delay);
+  };
+  setTimeout(tick, 200);
+}
+
 // ── 主 Demo 组件 ──────────────────────────────────────────────────────────────
 
 export const ChatDemo: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false); // AI 是否正在回复
+  const [isUserTyping, setIsUserTyping] = useState(false); // 自动剧本：用户输入框正在打字
   const [scriptIdx, setScriptIdx] = useState(0);
   const [autoRunning, setAutoRunning] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [inputValue, setInputValue] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // messages 区域不再独立滚动（页面整体滚动），保留 ref 仅供未来扩展。
 
   // 添加一条消息
   const addMessage = useCallback((msg: Omit<ChatMessage, 'id'>) => {
@@ -187,12 +209,23 @@ export const ChatDemo: React.FC = () => {
       if (idx >= CHAT_SCRIPT.length) {
         setAutoRunning(false);
         setIsTyping(false);
+        setIsUserTyping(false);
         return;
       }
       const item = CHAT_SCRIPT[idx];
       if (item.role === 'user') {
-        addMessage({ role: 'user', content: item.content });
-        setTimeout(() => runNext(idx + 1), 600);
+        // 模拟人类打字到输入框，结束后自动发送
+        setIsUserTyping(true);
+        typeIntoInput(item.content, setInputValue, () => {
+          // 短暂停顿，模拟"按回车前的迟疑"
+          setTimeout(() => {
+            // 提交：把当前输入加入消息列表 → 清空 input → 进入下一步
+            addMessage({ role: 'user', content: item.content });
+            setInputValue('');
+            setIsUserTyping(false);
+            setTimeout(() => runNext(idx + 1), 400);
+          }, 350);
+        });
       } else {
         addMessage({ role: 'assistant', content: item.content, isTyping: true });
         setIsTyping(true);
@@ -211,20 +244,22 @@ export const ChatDemo: React.FC = () => {
     }, 800);
   }, [scriptIdx, runNext]);
 
-  // 启动自动演示（force=true 时忽略 autoRunning 防重入，用于 Replay）
+  // 启动自动演示
   const startDemo = useCallback(
     (force = false) => {
       if (autoRunning && !force) return;
       setMessages([]);
       setScriptIdx(0);
+      setInputValue('');
       setAutoRunning(true);
       setIsTyping(false);
+      setIsUserTyping(false);
       setTimeout(() => runNext(0), 400);
     },
     [autoRunning, runNext],
   );
 
-  // 挂载后自动启动，不等视口
+  // 挂载后自动启动
   useEffect(() => {
     const t = setTimeout(() => startDemo(), 800);
     return () => clearTimeout(t);
@@ -235,12 +270,11 @@ export const ChatDemo: React.FC = () => {
   const handleUserSend = useCallback(
     (text: string) => {
       addMessage({ role: 'user', content: text });
-      // 模拟 AI 回复
+      setInputValue('');
       setTimeout(() => {
         const reply = `Got it! You said: **"${text}"**\n\nThis is a simulated reply — in production, connect your AI stream here and push chunks with \`ref.current?.push(chunk, 'answer')\`. ds-markdown handles all the rendering magic. ✨`;
         addMessage({ role: 'assistant', content: reply, isTyping: true });
         setIsTyping(true);
-        // 简单模拟打字结束
         const len = reply.length;
         setTimeout(
           () => {
@@ -253,6 +287,9 @@ export const ChatDemo: React.FC = () => {
     },
     [addMessage],
   );
+
+  // 输入框 disabled：AI 在回复 或 剧本正在自动写
+  const inputDisabled = isTyping || isUserTyping;
 
   return (
     <div className="chat-demo-wrapper">
@@ -286,15 +323,14 @@ export const ChatDemo: React.FC = () => {
 
       {/* Messages */}
       <div className="chat-demo-messages" ref={containerRef}>
-        {messages.length === 0 && <div className="chat-demo-empty">Starting demo…</div>}
+        {messages.length === 0 && !isUserTyping && <div className="chat-demo-empty">Starting demo…</div>}
         {messages.map((msg) =>
           msg.role === 'user' ? <UserBubble key={msg.id} content={msg.content} /> : <AssistantBubble key={msg.id} content={msg.content} isTyping={!!msg.isTyping} onEnd={handleAssistantEnd} />,
         )}
-        <div ref={bottomRef} />
       </div>
 
       {/* Input */}
-      <ChatInput onSend={handleUserSend} disabled={isTyping} />
+      <ChatInput value={inputValue} onChange={setInputValue} onSend={handleUserSend} disabled={inputDisabled} placeholder={isUserTyping ? '' : 'Ask something…'} />
     </div>
   );
 };

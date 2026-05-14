@@ -369,6 +369,7 @@
 .hp-chat-section {
   padding: 80px 48px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+  scroll-margin-top: 64px; /* 自动滚动时让出 navbar 高度 */
 }
 .hp-chat-section-inner {
   max-width: 860px;
@@ -488,7 +489,8 @@
   gap: 10px;
 }
 .chat-row--user {
-  flex-direction: row-reverse;
+  /* 气泡靠右，avatar 在最右侧 */
+  justify-content: flex-end;
 }
 
 /* Avatars */
@@ -531,6 +533,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #e2e8f0;
   border-bottom-left-radius: 4px;
+  width: 80%;
 }
 
 /* Dark markdown inside assistant bubble */
@@ -549,7 +552,6 @@
 }
 .chat-bubble--assistant pre {
   background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   margin: 8px 0;
 }
@@ -670,3 +672,172 @@
   .hp-hero { padding: 120px 16px 60px; }
   .hp-nav-link:not(.hp-nav-github) { display: none; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ds-markdown 深色主题覆盖（统一适配 hero 打字框 / chat AI 气泡）
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* 作用域：hero 打字区 + chat AI 气泡 */
+.hp-typing-body .ds-markdown,
+.chat-bubble--assistant .ds-markdown {
+  /* —— 关键：去掉 ds-markdown 自带的浅色背景 —— */
+  background-color: transparent !important;
+
+  /* —— 颜色变量重映射到深色主题 —— */
+  --dsr-bg: transparent;
+  --ds-rgb-label-1: 226 232 240;          /* 主文字 #e2e8f0 */
+  --ds-rgb-label-2: 148 163 184;          /* 次级文字 #94a3b8 */
+  --ds-rgb-label-3: 100 116 139;          /* 弱化文字 #64748b */
+  --ds-rgb-link: 165 180 252;             /* 链接 #a5b4fc */
+  --ds-rgb-primary: 129 140 248;          /* 主色 #818cf8 */
+  --dsr-border-1: rgba(255, 255, 255, 0.12);
+  --dsr-border-2: rgba(255, 255, 255, 0.08);
+  --ds-md-inline-code-color: rgba(99, 102, 241, 0.18);
+  --ds-button-hover-color: rgba(255, 255, 255, 0.06);
+  --ds-thinking-border-color: rgba(255, 255, 255, 0.1);
+
+  color: #e2e8f0;
+}
+
+/* 标题 */
+.hp-typing-body .ds-markdown h1,
+.hp-typing-body .ds-markdown h2,
+.hp-typing-body .ds-markdown h3,
+.hp-typing-body .ds-markdown h4,
+.chat-bubble--assistant .ds-markdown h1,
+.chat-bubble--assistant .ds-markdown h2,
+.chat-bubble--assistant .ds-markdown h3,
+.chat-bubble--assistant .ds-markdown h4 {
+  color: #f8fafc !important;
+  background: transparent !important;
+}
+
+/* 段落 / 列表项 */
+.hp-typing-body .ds-markdown p,
+.hp-typing-body .ds-markdown li,
+.chat-bubble--assistant .ds-markdown p,
+.chat-bubble--assistant .ds-markdown li {
+  color: #e2e8f0 !important;
+}
+
+/* 加粗 */
+.hp-typing-body .ds-markdown strong,
+.chat-bubble--assistant .ds-markdown strong {
+  color: #f1f5f9 !important;
+}
+
+/* 行内代码 */
+.hp-typing-body .ds-markdown :not(pre) > code,
+.chat-bubble--assistant .ds-markdown :not(pre) > code {
+  background: rgba(99, 102, 241, 0.18) !important;
+  color: #c7d2fe !important;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.92em;
+  border: none !important;
+}
+
+/* 代码块外壳（ds-markdown 自带的 BlockWrap） */
+.hp-typing-body .ds-markdown pre,
+.chat-bubble--assistant .ds-markdown pre {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-radius: 8px;
+}
+.hp-typing-body .ds-markdown pre code,
+.chat-bubble--assistant .ds-markdown pre code {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+/* 代码块外壳（ds-markdown 内置的 BlockWrap + 顶部 banner）
+   ds-markdown 实际生成的 class 是 .md-code-block / .md-code-block-light / .md-code-block-dark */
+.hp-typing-body .md-code-block,
+.chat-bubble--assistant .md-code-block {
+  /* 覆盖外壳/工具栏/边框相关变量，强制使用深色风格 */
+  --ds-md-code-block-border-color: rgba(255, 255, 255, 0.08) !important;
+  --ds-md-code-block-banner-wrap-background-color: rgba(255, 255, 255, 0.04) !important;
+  --ds-md-code-banner-background-color: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  color: #e2e8f0 !important;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden;
+}
+
+/* 工具栏文字（语言名 / 复制 / 下载） */
+.hp-typing-body .md-code-block .md-code-block-banner,
+.hp-typing-body .md-code-block [class*='banner'],
+.chat-bubble--assistant .md-code-block .md-code-block-banner,
+.chat-bubble--assistant .md-code-block [class*='banner'] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #94a3b8 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+.hp-typing-body .md-code-block .md-code-block-banner *,
+.chat-bubble--assistant .md-code-block .md-code-block-banner * {
+  color: #94a3b8 !important;
+}
+
+/* pre/code 容器自身背景 */
+.hp-typing-body .md-code-block pre,
+.hp-typing-body .md-code-block pre[class*='language-'],
+.chat-bubble--assistant .md-code-block pre,
+.chat-bubble--assistant .md-code-block pre[class*='language-'] {
+  background: transparent !important;
+  margin: 0 !important;
+}
+
+/* 表格 */
+.hp-typing-body .ds-markdown-table,
+.chat-bubble--assistant .ds-markdown-table {
+  width: 100% !important;
+}
+.hp-typing-body .ds-markdown table,
+.chat-bubble--assistant .ds-markdown table {
+  width: 100% !important;
+  background: transparent !important;
+  border-collapse: collapse !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.hp-typing-body .ds-markdown th,
+.chat-bubble--assistant .ds-markdown th {
+  background: rgba(99, 102, 241, 0.15) !important;
+  color: #c7d2fe !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.hp-typing-body .ds-markdown td,
+.chat-bubble--assistant .ds-markdown td {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 引用块 */
+.hp-typing-body .ds-markdown blockquote,
+.chat-bubble--assistant .ds-markdown blockquote {
+  background: rgba(99, 102, 241, 0.06) !important;
+  border-left: 3px solid #6366f1 !important;
+  color: #cbd5e1 !important;
+  padding: 8px 14px !important;
+  margin: 8px 0 !important;
+  border-radius: 0 8px 8px 0;
+}
+
+/* 链接 */
+.hp-typing-body .ds-markdown a,
+.chat-bubble--assistant .ds-markdown a {
+  color: #a5b4fc !important;
+}
+
+/* 分割线 */
+.hp-typing-body .ds-markdown hr,
+.chat-bubble--assistant .ds-markdown hr {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* KaTeX 公式颜色 */
+.hp-typing-body .katex,
+.chat-bubble--assistant .katex {
+  color: #e2e8f0 !important;
+}
+
