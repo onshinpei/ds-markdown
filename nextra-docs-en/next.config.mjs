@@ -10,19 +10,22 @@ const withNextra = nextra({
   }
 })
 
+const isDev = process.env.NODE_ENV === 'development'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['ds-markdown-mermaid-plugin', 'ds-markdown'],
-  // GitHub Pages 部署配置 - 部署到 /ds-markdown/en 目录
-  output: 'export',  // 启用静态导出
+  // GitHub Pages 部署配置 - 仅在构建时生效
+  ...(!isDev && {
+    output: 'export',  // 启用静态导出
+    basePath: '/ds-markdown/en',
+    assetPrefix: '/ds-markdown/en/',
+    distDir: '../docs/en',
+  }),
   images: {
     unoptimized: true,  // 静态导出需要禁用图片优化
   },
-  // 部署到 GitHub Pages 子路径
-  basePath: '/ds-markdown/en',
-  assetPrefix: '/ds-markdown/en/',
-  distDir: '../docs/en'
 }
 
 export default withNextra(nextConfig)
