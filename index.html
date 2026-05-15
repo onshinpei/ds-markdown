@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ds-markdown — Documentation</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        min-height: 100vh;
+        background: #080818;
+        color: #e2e8f0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+        padding: 48px 32px;
+        border-radius: 16px;
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        background: rgba(15, 15, 35, 0.9);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      }
+      h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 12px;
+        background: linear-gradient(
+          135deg,
+          #818cf8 0%,
+          #c084fc 50%,
+          #38bdf8 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      p {
+        color: #94a3b8;
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+      .links {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+      a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+        box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+      }
+      a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5);
+      }
+      a.secondary {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #cbd5e1;
+        box-shadow: none;
+      }
+      a.secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .footer {
+        margin-top: 32px;
+        font-size: 12px;
+        color: #475569;
+      }
+      .footer a {
+        display: inline;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+        color: #6366f1;
+        font-weight: 500;
+      }
+      .footer a:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>ds-markdown</h1>
+      <p>
+        React Markdown typing animation component for modern AI applications.
+      </p>
+      <div class="links">
+        <a href="./en/">English Docs</a>
+        <a href="./zh/" class="secondary">中文文档</a>
+      </div>
+      <div class="footer">
+        <a href="https://github.com/onshinpei/ds-markdown" target="_blank"
+          >GitHub</a
+        >
+        · MIT License
+      </div>
+    </div>
+  </body>
+</html>
