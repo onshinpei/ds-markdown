@@ -1,53 +1,60 @@
-name: Deploy English Docs to gh-pages
+name: Deploy English Docs
 
 on:
   push:
-    branches: [main, master, feature/new-docs]
+    branches:
+      - main
     paths:
       - 'nextra-docs-en/**'
       - '.github/workflows/deploy-docs-en.yml'
+  # 允许手动触发
   workflow_dispatch:
 
-# 设置权限
+# 允许并发，但旧的会被新的取消
+concurrency:
+  group: deploy-docs-en
+  cancel-in-progress: true
+
 permissions:
-  contents: write  # 需要写权限以推送到 gh-pages 分支
+  contents: write # 推送到 gh-pages 分支需要
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: nextra-docs-en
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # 需要完整历史记录
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'nextra-docs-en/package-lock.json'
+          cache-dependency-path: nextra-docs-en/package-lock.json
 
       - name: Install dependencies
-        run: |
-          cd nextra-docs-en
-          npm ci --force
+        run: npm ci
 
-      - name: Build English docs
-        run: |
-          cd nextra-docs-en
-          npm run build
+      - name: Build static site
+        run: npm run build
+        env:
+          NODE_ENV: production
 
-      - name: Add .nojekyll file
-        run: |
-          touch nextra-docs-en/out/.nojekyll
-
-      - name: Deploy to gh-pages branch (en directory)
-        uses: peaceiris/actions-gh-pages@v3
+      # 构建产物输出到 ../docs/en（仓库根的 docs/en）
+      - name: Deploy to gh-pages /en
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./nextra-docs-en/out
+          publish_dir: ./docs/en
           publish_branch: gh-pages
           destination_dir: en
-          keep_files: true  # 保留其他目录的文件（如 zh 目录）
-
+          # 保留 gh-pages 中其他子目录（比如 /zh）
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'docs(en): deploy ${{ github.sha }}'
