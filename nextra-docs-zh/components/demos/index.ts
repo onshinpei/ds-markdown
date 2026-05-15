@@ -11,4 +11,5 @@ export { default as MermaidDemo } from './MermaidDemo';
 export { default as StreamingDemo } from './StreamingDemo';
 export { default as TypingAnimationDemo } from './TypingAnimationDemo';
 export { default as CursorDemo } from './CursorDemo';
-
+export { default as HeroDemo } from './HeroDemo';
+export { default as ChatDemo } from './ChatDemo';
